@@ -1,0 +1,512 @@
+name: Smoke
+
+on:
+  push:
+    branches: [ main, pre-release ]
+  workflow_dispatch:
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARLA_QUALITY_LEVEL: Epic
+  WANDB_MODE: offline
+  # The Xet transfer backend stalls silently on some runner networks; plain
+  # HTTPS is slower per file but has never hung.
+  HF_HUB_DISABLE_XET: "1"
+  # Several jobs share one box; one thread per library keeps the expert's
+  # numba kernels, BLAS and torch from oversubscribing the cores. workqueue is
+  # the numba layer that stays safe across forks.
+  OMP_NUM_THREADS: "1"
+  OPENBLAS_NUM_THREADS: "1"
+  MKL_NUM_THREADS: "1"
+  NUMEXPR_NUM_THREADS: "1"
+  NUMBA_NUM_THREADS: "1"
+  NUMBA_THREADING_LAYER: workqueue
+  # Several trainings share one GPU; growable allocator segments keep each
+  # process's reserved memory close to what it uses.
+  PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+  # Every job stages this run's data root on its own machine under
+  # $HOME/ci-cache, from the route roots the collect-data cells left there.
+  RUN_DATA_DIR: smoke/${{ github.run_id }}-${{ github.run_attempt }}
+  # Commit of ln2697/lead-123d the released logs come from.
+  DATASET_REVISION: 49565fcf35fd02b03c322a5ab560631b9c706a53
+  # Commit of ln2697/transfuser-carla-123d the evaluated checkpoints come from.
+  CHECKPOINT_REVISION: 0a7a540df6a9dff6e0f3a64eb03222216b3f430c
+  # Shared by every training command below; a command's own overrides come
+  # after it and win. Small backbones, a few batches, no compile, no wandb,
+  # one loader worker holding one batch, so parallel jobs stay light on RAM.
+  OVERRIDES: >-
+    training.lightning.enable_progress_bar=false
+    training.lightning.limit_train_batches=16
+    training.optimization.batch_size=2
+    training.data.prefetch_batches_per_worker=1
+    training.optimization.use_torch_compile=false
+    training.experiment.log_wandb=false
+    training.num_assigned_cpu_cores=1
+    policy.transfuser.image_architecture=resnet18
+    policy.transfuser.lidar_architecture=resnet18
+
+# Three phases in sequence, each spread over every runner: collect, train,
+# evaluate. The CARLA servers of one phase never overlap another's.
+jobs:
+  plan:
+    runs-on: self-hosted
+    timeout-minutes: 90
+    outputs:
+      routes: ${{ steps.routes.outputs.routes }}
+      checkpoints: ${{ steps.families.outputs.checkpoints }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+
+    - name: Pick the data routes of this branch
+      id: routes
+      run: |
+        case "$GITHUB_REF_NAME" in
+          pre-release) tier=pre_release ;;
+          *)           tier=main ;;
+        esac
+        routes=$(python3 -c 'import json, sys; print(json.dumps([line.strip() for line in open(sys.argv[1]) if line.strip() and not line.startswith("#")]))' ".github/data_routes/$tier")
+        echo "routes=$routes" >> "$GITHUB_OUTPUT"
+        echo "$tier tier: $routes"
+
+    - name: Sync the released checkpoints into this machine's cache
+      # Resumable, so only missing files are fetched; the flock covers
+      # parallel jobs landing on one machine.
+      run: |
+        mkdir -p "$HOME/ci-cache/checkpoints"
+        (
+          flock 9
+          hf download ln2697/transfuser-carla-123d \
+            --revision "$CHECKPOINT_REVISION" \
+            --local-dir "$HOME/ci-cache/checkpoints/$CHECKPOINT_REVISION"
+        ) 9>"$HOME/ci-cache/checkpoints/$CHECKPOINT_REVISION.lock"
+
+    - name: Check that the seeds of every family share one architecture
+      # Emits the first seed of each family; only that seed drives below.
+      id: families
+      run: |
+        python .github/scripts/check_seed_architectures.py \
+          "$HOME/ci-cache/checkpoints/$CHECKPOINT_REVISION" > "$RUNNER_TEMP/families.txt"
+        cat "$RUNNER_TEMP/families.txt"
+        checkpoints=$(python3 -c 'import json, sys; print(json.dumps(sys.stdin.read().split()))' < "$RUNNER_TEMP/families.txt")
+        echo "checkpoints=$checkpoints" >> "$GITHUB_OUTPUT"
+
+  collect-data:
+    needs: plan
+    strategy:
+      fail-fast: false
+      matrix:
+        route: ${{ fromJSON(needs.plan.outputs.routes) }}
+    runs-on: self-hosted
+    timeout-minutes: 120
+    env:
+      LEAD_RUNTIME_TYPE_CHECKING: "true"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Drop the staged data of earlier runs on this machine
+      run: |
+        mkdir -p "$HOME/ci-cache/smoke"
+        find "$HOME/ci-cache/smoke" -mindepth 1 -maxdepth 1 -mtime +0 -exec rm -rf {} +
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+      with:
+        # One root per route: two experts converting the same town map at
+        # once would race on the file. Every later job merges the roots it
+        # finds on its machine.
+        data-root: ${{ env.RUN_DATA_DIR }}/routes/${{ strategy.job-index }}
+
+    - name: Collect expert data on ${{ matrix.route }}
+      run: bash .github/scripts/collect_data.sh "${{ matrix.route }}"
+
+  check-data:
+    needs: collect-data
+    runs-on: self-hosted
+    timeout-minutes: 60
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+      with:
+        data-root: ${{ env.RUN_DATA_DIR }}/data
+
+    - name: Stage this machine's share of the run
+      id: stage
+      run: bash .github/scripts/stage_run_data.sh 3 "$GITHUB_RUN_ID" "$DATASET_REVISION"
+
+    - name: Run E2E tests
+      env:
+        LEAD_E2E_MIN_LOGS: ${{ steps.stage.outputs.expected_log_count }}
+      run: python -m pytest tests/e2e_tests/ -v
+
+    - name: Run notebooks
+      run: jupyter execute notebooks/*.ipynb
+
+  train-pipeline:
+    needs: collect-data
+    runs-on: self-hosted
+    timeout-minutes: 90
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+      with:
+        data-root: ${{ env.RUN_DATA_DIR }}/data
+
+    - name: Stage this machine's share of the run
+      run: bash .github/scripts/stage_run_data.sh 3 "$GITHUB_RUN_ID" "$DATASET_REVISION"
+
+    - name: Build TransFuser training cache
+      # Jobs on one machine share the store: the lock serializes the builds,
+      # and a later one finds every sample cached. The store is fingerprinted
+      # on the config, so the check reads the same overrides.
+      run: |
+        (
+          flock 9
+          python -m lead.training.build_cache $OVERRIDES
+        ) 9>"$PY123D_DATA_ROOT/.cache.lock"
+        test -f "$PY123D_DATA_ROOT/transfuser_training_cache/manifest.yaml"
+        LEAD_CONFIG="$OVERRIDES" python .github/scripts/check_cache_store.py
+
+    - name: Pretrain TransFuser one epoch from the cache (perception only)
+      run: |
+        python -m lead.training.train $OVERRIDES \
+          training.data.read_from_cache_store=true \
+          training.optimization.num_epochs=1 \
+          training.experiment.output_dir="$RUNNER_TEMP/transfuser_pretrain"
+        bash .github/scripts/check_training_artifacts.sh \
+          "$RUNNER_TEMP/transfuser_pretrain" --checkpoint 0000
+
+    - name: Posttrain TransFuser one epoch on the pretrained weights (planning decoder)
+      run: |
+        python -m lead.training.train $OVERRIDES \
+          policy.transfuser.use_planning_decoder=true \
+          training.experiment.initial_weights_file="$RUNNER_TEMP/transfuser_pretrain/model_0000.pth" \
+          training.data.read_from_cache_store=true \
+          training.optimization.num_epochs=1 \
+          training.experiment.output_dir="$RUNNER_TEMP/transfuser_posttrain"
+        bash .github/scripts/check_training_artifacts.sh \
+          "$RUNNER_TEMP/transfuser_posttrain" --checkpoint 0000
+
+    - name: Train ego-status one epoch
+      run: |
+        python -m lead.training.train $OVERRIDES \
+          policy.target=lead.policy.ego_status.ego_status:EgoStatus \
+          training.data.read_from_cache_store=true \
+          training.optimization.num_epochs=1 \
+          training.experiment.output_dir="$RUNNER_TEMP/ego_status_training"
+        bash .github/scripts/check_training_artifacts.sh \
+          "$RUNNER_TEMP/ego_status_training" --checkpoint 0000
+
+  train-variants:
+    needs: collect-data
+    runs-on: self-hosted
+    timeout-minutes: 120
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+      with:
+        data-root: ${{ env.RUN_DATA_DIR }}/data
+
+    - name: Stage this machine's share of the run
+      run: bash .github/scripts/stage_run_data.sh 3 "$GITHUB_RUN_ID" "$DATASET_REVISION"
+
+    - name: Build TransFuser training cache
+      # Jobs on one machine share the store: the lock serializes the builds,
+      # and a later one finds every sample cached.
+      run: |
+        (
+          flock 9
+          python -m lead.training.build_cache $OVERRIDES
+        ) 9>"$PY123D_DATA_ROOT/.cache.lock"
+        test -f "$PY123D_DATA_ROOT/transfuser_training_cache/manifest.yaml"
+
+    - name: Train head and input combinations from the cache
+      run: |
+        # No -e: every variant runs and failures are reported together.
+        set -uo pipefail
+        # name | overrides
+        variants=(
+          "no_semantic|policy.transfuser.use_semantic=false"
+          "no_depth|policy.transfuser.use_depth=false"
+          "no_bev_semantic|policy.transfuser.use_bev_semantic=false"
+          "no_boxes|policy.transfuser.detect_boxes=false"
+          "no_radar|policy.transfuser.use_radar_detection=false"
+          "perception_off|policy.transfuser.use_depth=false policy.transfuser.use_semantic=false policy.transfuser.use_bev_semantic=false policy.transfuser.detect_boxes=false policy.transfuser.use_radar_detection=false"
+          # Radar outlives both box-row producers: its labels are built from them.
+          "radar_without_box_heads|policy.transfuser.use_bev_semantic=false policy.transfuser.detect_boxes=false"
+          "no_target_speed|policy.transfuser.predict_target_speed=false"
+          "no_spatial_path|policy.transfuser.predict_spatial_path=false"
+          "no_waypoints|policy.transfuser.predict_temporal_spatial_waypoints=false"
+          "ltf|policy.transfuser.LTF=true"
+          "frozen_backbone|policy.transfuser.freeze_backbone=true"
+          "minimal_planning_inputs|policy.transfuser.use_previous_target_point=false policy.transfuser.use_next_target_point=false policy.transfuser.use_velocity=false policy.transfuser.smooth_route=false"
+          # The only compiled run: OVERRIDES turns compile off everywhere else.
+          "compiled|training.optimization.use_torch_compile=true"
+        )
+        failed=()
+        for variant in "${variants[@]}"; do
+          IFS='|' read -r name overrides <<<"$variant"
+          read -ra extra <<<"$overrides"
+          echo "::group::$name"
+          python -m lead.training.train $OVERRIDES \
+            policy.transfuser.use_planning_decoder=true \
+            training.data.read_from_cache_store=true \
+            training.lightning.max_steps=2 \
+            training.optimization.save_model_checkpoint=false \
+            training.experiment.output_dir="$RUNNER_TEMP/head_matrix/$name" \
+            "${extra[@]}" \
+          && bash .github/scripts/check_training_artifacts.sh \
+            "$RUNNER_TEMP/head_matrix/$name" || failed+=("$name")
+          echo "::endgroup::"
+        done
+        if [ "${#failed[@]}" -gt 0 ]; then
+          echo "::error::Failing variants: ${failed[*]}"
+          exit 1
+        fi
+        echo "All ${#variants[@]} variants passed."
+
+  train-live:
+    needs: collect-data
+    runs-on: self-hosted
+    timeout-minutes: 60
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+      with:
+        data-root: ${{ env.RUN_DATA_DIR }}/data
+
+    - name: Stage this machine's share of the run
+      run: bash .github/scripts/stage_run_data.sh 3 "$GITHUB_RUN_ID" "$DATASET_REVISION"
+
+    - name: Train from the live builders, without a cache store
+      run: |
+        # No -e: every variant runs and failures are reported together.
+        set -uo pipefail
+        # Cache off is the only path the label builders are on.
+        # name | overrides
+        variants=(
+          "live_labels|"
+          "no_boxes_live_labels|policy.transfuser.detect_boxes=false"
+          "radar_without_box_heads_live_labels|policy.transfuser.use_bev_semantic=false policy.transfuser.detect_boxes=false"
+          "raw_sensor_preprocessing|policy.transfuser.accumulate_lidar_sweeps=false policy.transfuser.merge_radar_into_lidar=false policy.transfuser.remove_lidar_ground_points=false policy.transfuser.duplicate_radar_near_ego=false"
+          "bev_geometry|policy.transfuser.bev_pixels_per_meter=2.0 policy.transfuser.bev_min_x_meter=-32 policy.transfuser.bev_max_x_meter=32 policy.transfuser.bev_min_y_meter=-32 policy.transfuser.bev_max_y_meter=32"
+          "bev_geometry_asymmetric|policy.transfuser.bev_pixels_per_meter=2.0 policy.transfuser.bev_min_x_meter=-40 policy.transfuser.bev_max_x_meter=72 policy.transfuser.bev_min_y_meter=-40 policy.transfuser.bev_max_y_meter=40"
+        )
+        failed=()
+        for variant in "${variants[@]}"; do
+          IFS='|' read -r name overrides <<<"$variant"
+          read -ra extra <<<"$overrides"
+          echo "::group::$name"
+          python -m lead.training.train $OVERRIDES \
+            policy.transfuser.use_planning_decoder=true \
+            training.data.read_from_cache_store=false \
+            training.lightning.max_steps=2 \
+            training.optimization.save_model_checkpoint=false \
+            training.experiment.output_dir="$RUNNER_TEMP/live_matrix/$name" \
+            "${extra[@]}" \
+          && bash .github/scripts/check_training_artifacts.sh \
+            "$RUNNER_TEMP/live_matrix/$name" || failed+=("$name")
+          echo "::endgroup::"
+        done
+        if [ "${#failed[@]}" -gt 0 ]; then
+          echo "::error::Failing live variants: ${failed[*]}"
+          exit 1
+        fi
+        echo "All ${#variants[@]} live variants passed."
+
+  train-cache-matrix:
+    needs: collect-data
+    runs-on: self-hosted
+    timeout-minutes: 60
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+      with:
+        data-root: ${{ env.RUN_DATA_DIR }}/data
+
+    - name: Stage this machine's share of the run
+      run: bash .github/scripts/stage_run_data.sh 3 "$GITHUB_RUN_ID" "$DATASET_REVISION"
+
+    - name: Build and train the cache-config matrix
+      run: |
+        set -uo pipefail
+        # name | overrides
+        variants=(
+          "no_boxes|policy.transfuser.detect_boxes=false"
+          "raw_sensor_preprocessing|policy.transfuser.accumulate_lidar_sweeps=false policy.transfuser.merge_radar_into_lidar=false policy.transfuser.remove_lidar_ground_points=false policy.transfuser.duplicate_radar_near_ego=false"
+          "bev_geometry|policy.transfuser.bev_pixels_per_meter=2.0 policy.transfuser.bev_min_x_meter=-32 policy.transfuser.bev_max_x_meter=32 policy.transfuser.bev_min_y_meter=-32 policy.transfuser.bev_max_y_meter=32"
+          "bev_geometry_asymmetric|policy.transfuser.bev_pixels_per_meter=2.0 policy.transfuser.bev_min_x_meter=-40 policy.transfuser.bev_max_x_meter=72 policy.transfuser.bev_min_y_meter=-40 policy.transfuser.bev_max_y_meter=40"
+        )
+        failed=()
+        for variant in "${variants[@]}"; do
+          IFS='|' read -r name overrides <<<"$variant"
+          read -ra extra <<<"$overrides"
+          store="$RUNNER_TEMP/cache_matrix/$name"
+          echo "::group::$name"
+          python -m lead.training.build_cache $OVERRIDES \
+            policy.transfuser.cache_store_root="$store" \
+            "${extra[@]}" \
+          && test -f "$store/manifest.yaml" \
+          && python -m lead.training.train $OVERRIDES \
+            policy.transfuser.use_planning_decoder=true \
+            training.data.read_from_cache_store=true \
+            policy.transfuser.cache_store_root="$store" \
+            training.lightning.max_steps=2 \
+            training.optimization.save_model_checkpoint=false \
+            training.experiment.output_dir="$store/training" \
+            "${extra[@]}" \
+          && bash .github/scripts/check_training_artifacts.sh \
+            "$store/training" || failed+=("$name")
+          echo "::endgroup::"
+        done
+        if [ "${#failed[@]}" -gt 0 ]; then
+          echo "::error::Failing cache-matrix variants: ${failed[*]}"
+          exit 1
+        fi
+        echo "All ${#variants[@]} cache-matrix variants passed."
+
+  train-normal-view-only:
+    needs: collect-data
+    runs-on: self-hosted
+    timeout-minutes: 45
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+      with:
+        data-root: ${{ env.RUN_DATA_DIR }}/data
+
+    - name: Stage this machine's share of the run
+      run: bash .github/scripts/stage_run_data.sh 3 "$GITHUB_RUN_ID" "$DATASET_REVISION"
+
+    - name: Build and train on a normal-view-only dataset
+      run: |
+        # The perturbated split is an optional download.
+        set -uo pipefail
+        normal_only_root="$RUNNER_TEMP/normal_view_only_data"
+        mkdir -p "$normal_only_root/logs"
+        cp -rs "$PY123D_DATA_ROOT/logs/normal_view" "$normal_only_root/logs/normal_view"
+        cp -rs "$PY123D_DATA_ROOT/maps" "$normal_only_root/maps"
+        # name | overrides
+        variants=(
+          "perturbation_fallback|"
+          "perturbation_off|training.data.use_sensor_perturbation=false"
+        )
+        failed=()
+        for variant in "${variants[@]}"; do
+          IFS='|' read -r name overrides <<<"$variant"
+          read -ra extra <<<"$overrides"
+          store="$RUNNER_TEMP/normal_view_only_cache/$name"
+          echo "::group::$name"
+          python -m lead.training.build_cache $OVERRIDES \
+            training.data.py123d_data_root="$normal_only_root" \
+            policy.transfuser.cache_store_root="$store" \
+            "${extra[@]}" \
+          && test -f "$store/manifest.yaml" \
+          && test ! -e "$store/perturbated_view" \
+          && python -m lead.training.train $OVERRIDES \
+            policy.transfuser.use_planning_decoder=true \
+            training.data.py123d_data_root="$normal_only_root" \
+            training.data.read_from_cache_store=true \
+            policy.transfuser.cache_store_root="$store" \
+            training.lightning.max_steps=2 \
+            training.optimization.save_model_checkpoint=false \
+            training.experiment.output_dir="$store/training" \
+            "${extra[@]}" || failed+=("$name")
+          echo "::endgroup::"
+        done
+        if [ "${#failed[@]}" -gt 0 ]; then
+          echo "::error::Failing normal-view-only variants: ${failed[*]}"
+          exit 1
+        fi
+        echo "All ${#variants[@]} normal-view-only variants passed."
+
+  evaluate:
+    needs: [ plan, check-data, train-pipeline, train-variants, train-live, train-cache-matrix, train-normal-view-only ]
+    # The training phase only orders this one; its failures do not skip it.
+    if: ${{ !cancelled() && needs.plan.result == 'success' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        checkpoint: ${{ fromJSON(needs.plan.outputs.checkpoints) }}
+        # ControlLoss, a scenario type the released checkpoints complete at
+        # driving score 100, on the small maps Town01, Town02 and Town10HD.
+        # Town12/13 cost a CARLA server several GB more.
+        route: [ 24841, 24784, 24340 ]
+    runs-on: self-hosted
+    timeout-minutes: 120
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
+
+    - name: Set up the project
+      uses: ./.github/actions/smoke_setup
+
+    - name: Sync the released checkpoints into this machine's cache
+      # Resumable, so only missing files are fetched; the flock covers
+      # parallel jobs landing on one machine.
+      run: |
+        mkdir -p "$HOME/ci-cache/checkpoints"
+        (
+          flock 9
+          hf download ln2697/transfuser-carla-123d \
+            --revision "$CHECKPOINT_REVISION" \
+            --local-dir "$HOME/ci-cache/checkpoints/$CHECKPOINT_REVISION"
+        ) 9>"$HOME/ci-cache/checkpoints/$CHECKPOINT_REVISION.lock"
+
+    - name: Drive ${{ matrix.checkpoint }} on route ${{ matrix.route }}
+      run: |
+        bash .github/scripts/evaluate_checkpoint.sh \
+          "$HOME/ci-cache/checkpoints/$CHECKPOINT_REVISION/${{ matrix.checkpoint }}" \
+          "${{ matrix.route }}"

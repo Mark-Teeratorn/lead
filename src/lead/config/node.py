@@ -1,6 +1,7 @@
 """Config tree building blocks: nodes, derived properties and override resolution."""
 
 import copy
+import enum
 import functools
 import logging
 from collections.abc import Callable, Mapping
@@ -48,9 +49,47 @@ class overridable_property(property, Generic[KnobValueT]):  # noqa: N801 — dec
     """
 
     def __init__(self, fget: Callable[[Any], KnobValueT]) -> None:
-        super().__init__(fget)
+        name = fget.__name__
+
+        def resolve(obj: ConfigNode) -> KnobValueT:
+            """The coerced override when one is set, else the computed default."""
+            if name not in obj._overrides:
+                return fget(obj)
+            override = obj._overrides[name]
+            try:
+                default = fget(obj)
+            except Exception:
+                # The default may not be computable (e.g. it reads an unset
+                # environment); the override then applies uncoerced.
+                return override
+            return _coerce(default, override)
+
+        # The override lookup lives in the getter itself: torch.compile inlines
+        # ``property.fget`` directly and never calls this descriptor's
+        # ``__get__``, so an override kept only there would vanish inside
+        # compiled code.
+        super().__init__(resolve, doc=fget.__doc__)
         self._fget = fget
-        self._name = fget.__name__
+        self._resolve = resolve
+
+    def coerced_override(self, obj: "ConfigNode", value: Any) -> Any:
+        """Coerce an override at set time when the default is already computable.
+
+        A read then finds a finished value; that matters inside compiled code,
+        where the coercion's enum constructor cannot be traced. A failed
+        coercion is left for the read to raise.
+
+        Args:
+            obj: The node the override is set on.
+            value: The raw override value.
+
+        Returns:
+            The coerced value, or ``value`` when coercion is not yet possible.
+        """
+        try:
+            return _coerce(self._fget(obj), value)
+        except Exception:
+            return value
 
     @overload
     def __get__(
@@ -69,21 +108,27 @@ class overridable_property(property, Generic[KnobValueT]):  # noqa: N801 — dec
     ) -> "KnobValueT | overridable_property[KnobValueT]":
         if obj is None:
             return self
-        if self._name in obj._overrides:
-            override = obj._overrides[self._name]
-            try:
-                default = self._fget(obj)
-            except Exception:
-                # The default may not be computable (e.g. it reads an unset
-                # environment); the override then applies uncoerced.
-                return override
-            return _coerce(default, override)
-        return self._fget(obj)
+        return self._resolve(obj)
+
+
+def _coerce_enum(enum_type: type[enum.Enum], value: Any) -> enum.Enum:
+    """Reconstruct one enum member from the value it is serialized as."""
+    return value if isinstance(value, enum_type) else enum_type(value)
 
 
 def _coerce(default: Any, value: Any) -> Any:
     """Coerce an override value to the type of the declared default."""
-    if default is None or value is None or isinstance(value, type(default)):
+    if default is None or value is None:
+        return value
+    if isinstance(default, enum.Enum):
+        return _coerce_enum(type(default), value)
+    if isinstance(default, list):
+        if default and isinstance(value, list):
+            element_type = type(default[0])
+            if issubclass(element_type, enum.Enum):
+                return [_coerce_enum(element_type, item) for item in value]
+        return value
+    if isinstance(value, type(default)):
         return value
     if isinstance(default, bool):
         if isinstance(value, str):
@@ -92,7 +137,6 @@ def _coerce(default: Any, value: Any) -> Any:
     if isinstance(default, int):
         if isinstance(value, float) and value != int(value):
             raise TypeError(f"Expected an integer override, got {value}.")
-        # Also reconstructs int-enum knobs from their serialized values.
         return type(default)(value)
     if isinstance(default, float | str):
         return type(default)(value)
@@ -205,7 +249,7 @@ class ConfigNode:
         """Set a single knob, honoring the property conventions."""
         declared_default = self._class_attributes()[key]
         if isinstance(declared_default, overridable_property):
-            self._overrides[key] = value
+            self._overrides[key] = declared_default.coerced_override(self, value)
         elif isinstance(declared_default, property | functools.cached_property):
             # Derived values contained in stored configs are skipped on reload.
             if is_user_override:

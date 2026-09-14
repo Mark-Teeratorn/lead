@@ -541,7 +541,17 @@ def main():
 
     statistics_manager = StatisticsManager(arguments.checkpoint, arguments.debug_checkpoint)
     leaderboard_evaluator = LeaderboardEvaluator(arguments, statistics_manager)
-    crashed = leaderboard_evaluator.run(arguments)
+    try:
+        crashed = leaderboard_evaluator.run(arguments)
+    except BaseException:
+        # An exception escaping run() (e.g. the watchdog's SIGINT firing while
+        # a simulator time-out is being handled) skips stop_scenario(), which
+        # leaves the non-daemon watchdog threads alive; normal interpreter
+        # shutdown would then wait on them forever. Exit hard instead.
+        traceback.print_exc()
+        sys.stdout.flush()
+        sys.stderr.flush()
+        os._exit(1)
 
     del leaderboard_evaluator
 

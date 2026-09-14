@@ -1,13 +1,20 @@
 """Radar branch of the TransFuser model."""
 
-from lead.config.node import ConfigNode
+from lead.config.node import ConfigNode, overridable_property
 
 
 class TransfuserRadarConfig(ConfigNode):
     """Radar tokens, transformer, and detection losses."""
 
-    # If true use radar points as additional input to the model.
-    use_radar_detection: bool = True
+    @overridable_property
+    def use_radar_detection(self) -> bool:
+        """If true use radar points as additional input to the model.
+
+        Defaults to whether the sensor rig records radars, so a radar-free
+        rig never builds the radar detector, its labels, or its loss weight.
+        """
+        return self._root.expert.sensor_rig.use_radars
+
     # Fixed number of radar points per sensor.
     num_radar_points_per_sensor: int = 75
     # Number of radar queries in the transformer.

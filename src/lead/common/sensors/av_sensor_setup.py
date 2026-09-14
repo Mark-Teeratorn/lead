@@ -2,6 +2,7 @@
 
 import copy
 import logging
+from collections.abc import Collection
 
 import numpy as np
 from scipy.spatial.transform import Rotation as R
@@ -24,6 +25,7 @@ def av_sensor_setup(
     perturbate: bool,
     sensor_agent: bool,
     radar: bool = False,
+    camera_indices: Collection[int] | None = None,
 ) -> list[SensorSpec]:
     """
     Function to set up sensors for an autonomous vehicle (AV) simulation.
@@ -36,6 +38,7 @@ def av_sensor_setup(
         perturbate: Whether to create perturbated sensor variants
         sensor_agent: Whether this is for a sensor agent (affects which sensors are created)
         radar: Whether to include Radar sensors
+        camera_indices: LEAD indices (1-based) of the cameras to set up; None takes the whole rig
     Returns:
         List of sensor configurations
     """
@@ -45,6 +48,7 @@ def av_sensor_setup(
         perturbation_translation,
         perturbate,
         sensor_agent,
+        camera_indices,
     )
     if lidar:
         result.extend(lidar_sensor_setup(config))
@@ -173,6 +177,7 @@ def _camera_sensor_setup(
     perturbation_translation: float,
     perturbate: bool,
     sensor_agent: bool,
+    camera_indices: Collection[int] | None,
 ) -> list[SensorSpec]:
     """Set up camera sensors for the given configuration.
 
@@ -182,6 +187,7 @@ def _camera_sensor_setup(
         perturbation_translation: Translation perturbation in meters
         perturbate: Whether to create perturbated sensor variants
         sensor_agent: Whether this is for a sensor agent (affects which sensors are created)
+        camera_indices: LEAD indices (1-based) of the cameras to set up; None takes the whole rig
 
     Returns:
         List of camera sensor configurations
@@ -198,6 +204,8 @@ def _camera_sensor_setup(
     )
 
     for idx, cam_config in enumerate(config.sensor_rig.cameras, start=1):
+        if camera_indices is not None and idx not in camera_indices:
+            continue
         cam_pos = cam_config["pos"]
         cam_rot = cam_config["rot"]
         cam_width = cam_config["width"]

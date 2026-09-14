@@ -30,6 +30,11 @@ CAMERA_ID_BY_LEAD_INDEX: dict[int, CameraID] = {
     6: CameraID.PCAM_L1,
 }
 
+# 123D camera ID → LEAD camera index, the inverse of CAMERA_ID_BY_LEAD_INDEX.
+LEAD_INDEX_BY_CAMERA_ID: dict[CameraID, int] = {
+    camera_id: index for index, camera_id in CAMERA_ID_BY_LEAD_INDEX.items()
+}
+
 # LEAD radar index (1-based) → 123D radar ID.
 RADAR_ID_BY_LEAD_INDEX: dict[int, RadarID] = {
     1: RadarID.RADAR_FRONT_LEFT,

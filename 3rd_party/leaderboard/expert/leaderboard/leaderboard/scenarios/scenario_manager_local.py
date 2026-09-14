@@ -12,6 +12,7 @@ It must not be modified and is for reference only!
 
 from __future__ import print_function
 import signal
+import os
 import sys
 import time
 
@@ -210,8 +211,10 @@ class ScenarioManager(object):
             if self._debug_mode > 1:
                 self.compute_duration_time()
 
-                # Update live statistics
+                # Update live statistics. The evaluator exports the route's
+                # date string as ROUTE_INDEX before loading the scenario.
                 self._statistics_manager.compute_route_statistics(
+                    os.environ["ROUTE_INDEX"],
                     self.route_index,
                     self.scenario_duration_system,
                     self.scenario_duration_game,

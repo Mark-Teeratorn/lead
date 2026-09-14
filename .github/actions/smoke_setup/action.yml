@@ -1,0 +1,43 @@
+name: smoke_setup
+description: >-
+  Installs the project into the job's venv, puts scripts/cli on PATH, points
+  .env at the machine-wide CARLA install under /opt (set up once per runner
+  host with scripts/common/setup_carla.sh) and, given data-root, exports
+  PY123D_DATA_ROOT under $HOME/ci-cache. The runners of one repository
+  share the home of one machine, so the jobs of a run see each other's data.
+  Run after python_venv.
+inputs:
+  project-dir:
+    description: Directory holding pyproject.toml, relative to the workspace.
+    required: false
+    default: "."
+  data-root:
+    description: Dataset root to export as PY123D_DATA_ROOT, relative to $HOME/ci-cache.
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: Install project
+      shell: bash
+      working-directory: ${{ inputs.project-dir }}
+      # uv's own cache in ~/.cache/uv persists on the runner, so this is fast.
+      run: |
+        uv pip install -e "."
+        echo "$PWD/scripts/cli" >> "$GITHUB_PATH"
+
+    - name: Configure .env and the data root
+      shell: bash
+      working-directory: ${{ inputs.project-dir }}
+      env:
+        DATA_ROOT: ${{ inputs.data-root }}
+      run: |
+        carla_root=/opt/carla/0916
+        if [ ! -f "$carla_root/.installed" ]; then
+          echo "::error::CARLA not found at $carla_root; install it on this host: sudo bash scripts/common/setup_carla.sh $carla_root && sudo touch $carla_root/.installed"
+          exit 1
+        fi
+        sed -i "s|^CARLA_ROOT=.*|CARLA_ROOT=$carla_root|" .env
+        if [ -n "$DATA_ROOT" ]; then
+          echo "PY123D_DATA_ROOT=$HOME/ci-cache/$DATA_ROOT" >> "$GITHUB_ENV"
+        fi

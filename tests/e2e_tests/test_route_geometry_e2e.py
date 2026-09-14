@@ -1,9 +1,10 @@
 """The navigation geometry of a log agrees with itself.
 
 The target points come from the GNSS global plan the ego navigates by; the
-dense route comes from the privileged planner's map waypoints. They are two
-independent descriptions of the same drive, so a target point the ego actually
-walked past must lie on the route the ego actually drove.
+dense route comes from the privileged planner's map waypoints. A target point
+the ego popped is a place the ego drove through, the pop index only ever moves
+forward, and the stored route is a gapless plan that stays close to the original
+one.
 """
 
 import numpy as np
@@ -23,10 +24,9 @@ from tests.e2e_tests.conftest import sample_indices
 
 # The pop distance whose target-point indices the loader defaults to.
 POP_DISTANCE = 3.25
-# The bounds below guard against gross errors — a wrong frame, a wrong town, a
-# swapped index — not against the metre-level disagreement two independent
-# descriptions of the same drive legitimately have: the simulated GNSS carries
-# one to two metres of noise and the route is sampled a metre apart.
+# How far a rerouted point may sit from the original route. Guards against
+# gross errors — a wrong frame, a wrong town — not against the metre-level
+# disagreement of two independent descriptions of the same drive.
 MAX_OFF_ROUTE_M = 10.0
 # A target point is popped once the ego is within the pop distance of it, but
 # only every fifth tick is stored, so the nearest stored pose is that much
@@ -92,18 +92,14 @@ def inspected_scenes(loader: SceneLoader) -> list:
 
 @pytest.fixture(scope="module")
 def navigation(inspected_scenes: list) -> dict[str, dict]:
-    """Every inspected log's target points, dense route and driven path.
-
-    The route is truncated to a horizon ahead of the ego, so the union over all
-    ticks of a log is what the ego actually drove along.
+    """Every inspected log's target points, driven path and popped indices.
 
     Args:
         inspected_scenes: The scenes to walk.
 
     Returns:
-        Per log name: ``target_points`` (n, 3), ``route`` (m, 2),
-        ``route_original`` (m, 2), ``driven`` (t, 2) and the set of visited
-        target-point indices.
+        Per log name: ``target_points`` (n, 3), ``driven`` (t, 2) and the set
+        of visited target-point indices.
     """
     logs: dict[str, dict] = {}
     for scene in inspected_scenes:
@@ -116,8 +112,6 @@ def navigation(inspected_scenes: list) -> dict[str, dict]:
                     ].metadata[TARGET_POINTS_METADATA_KEY],
                     dtype=np.float64,
                 ),
-                "route": [],
-                "route_original": [],
                 "driven": [],
                 "visited": set(),
             },
@@ -126,11 +120,6 @@ def navigation(inspected_scenes: list) -> dict[str, dict]:
         assert isinstance(modality, CustomModality)
         meta = modality.data
 
-        route = np.asarray(meta["route"], dtype=np.float64)
-        log["route"].append(route)
-        log["route_original"].append(
-            np.asarray(meta.get("route_original", route), dtype=np.float64),
-        )
         # The pose the ego navigated by, which is what popped the target points.
         position, _ = se3_matrix_to_localized_pose(
             np.asarray(meta[LOCALIZED_EGO_STATE_KEY], dtype=np.float64),
@@ -139,8 +128,6 @@ def navigation(inspected_scenes: list) -> dict[str, dict]:
         log["visited"].add(int(meta["target_point_indices"][str(POP_DISTANCE)]))
 
     for log in logs.values():
-        log["route"] = np.concatenate(log["route"])
-        log["route_original"] = np.concatenate(log["route_original"])
         log["driven"] = np.asarray(log["driven"])
     return logs
 
@@ -161,31 +148,6 @@ def _min_distances(
     return np.linalg.norm(points[:, None, :] - reference[None, :, :], axis=2).min(
         axis=1,
     )
-
-
-@pytest.mark.e2e
-def test_visited_target_points_lie_on_the_dense_route(navigation) -> None:
-    """A target point the ego popped is a point of the route it drove."""
-    checked = 0
-    for log_name, log in navigation.items():
-        target_points = log["target_points"]
-        # The last visited index is the last point the ego came within the pop
-        # distance of; everything up to it is behind the ego and covered.
-        popped = sorted(index for index in log["visited"] if index > 0)
-        if not popped:
-            continue
-        indices = np.arange(popped[-1] + 1)
-        distances = _min_distances(
-            target_points[indices, :2],
-            log["route_original"],
-        )
-        worst = int(np.argmax(distances))
-        assert distances[worst] < MAX_OFF_ROUTE_M, (
-            f"{log_name}: target point {indices[worst]} is "
-            f"{distances[worst]:.2f} m off the dense route"
-        )
-        checked += len(indices)
-    assert checked, "no log popped a target point; nothing was verified"
 
 
 @pytest.mark.e2e

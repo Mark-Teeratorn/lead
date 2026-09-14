@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Unit Tests](https://github.com/kesai-labs/lead/actions/workflows/ci.yml/badge.svg)](https://github.com/kesai-labs/lead/actions/workflows/ci.yml)
-[![E2E Test](https://github.com/kesai-labs/lead/actions/workflows/ci_e2e.yml/badge.svg)](https://github.com/kesai-labs/lead/actions/workflows/ci_e2e.yml)
+[![Smoke](https://github.com/kesai-labs/lead/actions/workflows/smoke.yml/badge.svg)](https://github.com/kesai-labs/lead/actions/workflows/smoke.yml)
 [![Python 3.10 - 3.12](https://img.shields.io/badge/Python-3.10%20--%203.12-3776ab)](https://www.python.org/downloads/)
 [![PyTorch 2.8](https://img.shields.io/badge/PyTorch-2.8-ee4c2c)](https://pytorch.org/)
 [![License MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -37,6 +37,7 @@ A short list of highlights, with comparisons against our previous [cvpr2026](htt
 
 Release notes:
 
+- [v1.5.1 on Sep 13, 2026](https://github.com/kesai-labs/lead/releases/tag/v1.5.1): Released checkpoints trained on all cameras.
 - [v1.5.0 on Aug 20, 2026](https://github.com/kesai-labs/lead/releases/tag/v1.5.0): Released more checkpoints and [documentation](docs/speed.md) to tune the training pipeline's efficiency.
 - [v1.4.0 on Aug 9, 2026](https://github.com/kesai-labs/lead/releases/tag/v1.4.0): Initial release of dataset in new format and pre-trained checkpoints.
 
@@ -66,7 +67,7 @@ user@host:~/lead$ bash scripts/common/setup_carla.sh               # CARLA 0.9.1
 user@host:~/lead$ bash scripts/common/setup_carla_fail2drive.sh    # Optional: Fail2Drive CARLA 0.9.15
 ```
 
-If you get stuck, take a look at our [pipeline](.github/workflows/ci_e2e.yml). We dedicate a machine with GPU for testing purpose.
+If you get stuck, take a look at our [smoke pipeline](.github/workflows/smoke.yml). We dedicate a machine with GPU for testing purpose.
 
 ### 🔥 Get the data
 

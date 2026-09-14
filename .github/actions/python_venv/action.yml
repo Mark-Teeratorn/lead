@@ -1,0 +1,43 @@
+name: python_venv
+description: >-
+  Shared micromamba base env on the self-hosted runner's disk, plus a per-job
+  venv for the project. setup-micromamba aborts on a persistent runner once its
+  binary exists, so the runner is provisioned by hand instead. The base env dir
+  is keyed on the package list, so editing it creates a fresh env; the flock
+  covers overlapping runs (matrix cells, concurrent pushes).
+inputs:
+  python-version:
+    description: Python version of the base env and the venv.
+    required: false
+    default: "3.10"
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        PYTHON_VERSION: ${{ inputs.python-version }}
+      run: |
+        _root="$HOME/ci-cache/micromamba"
+        export MAMBA_ROOT_PREFIX="$_root"
+        _pkgs="python=$PYTHON_VERSION ffmpeg parallel tree gcc zip unzip git-lfs uv"
+        _env="$_root/envs/lead-$(echo "$_pkgs" | sha256sum | cut -c1-12)"
+        mkdir -p "$_root"
+        (
+          flock 9
+          if [ ! -x "$_root/bin/micromamba" ]; then
+            curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest \
+              | tar -xj -C "$_root" bin/micromamba
+          fi
+          # The stamp marks a finished env: a cancelled job leaves a partial one.
+          if [ ! -f "$_env/.installed" ]; then
+            # shellcheck disable=SC2086  # word-split the package list on purpose
+            "$_root/bin/micromamba" create -y -p "$_env" -c conda-forge $_pkgs
+            touch "$_env/.installed"
+          fi
+        ) 9>"$_root/.provision-lock"
+        "$_env/bin/uv" venv --python "$_env/bin/python" "$RUNNER_TEMP/venv"
+        cp "$_env/bin/uv" "$RUNNER_TEMP/venv/bin/uv"
+        echo "VIRTUAL_ENV=$RUNNER_TEMP/venv" >> "$GITHUB_ENV"
+        # Each line prepends, so the venv (added last) shadows the base env.
+        echo "$_env/bin" >> "$GITHUB_PATH"
+        echo "$RUNNER_TEMP/venv/bin" >> "$GITHUB_PATH"

@@ -30,8 +30,8 @@ from lead.api.point_cloud_transforms import (
     radar_returns_from_carla_ego_frame,
 )
 from lead.api.py123d_log_api import (
-    CAMERA_ID_BY_LEAD_INDEX,
     CARLA_LINCOLN_MKZ_2020_METADATA,
+    LEAD_INDEX_BY_CAMERA_ID,
     RADAR_ID_BY_LEAD_INDEX,
     RADIAL_VELOCITY_FEATURE,
     ordered_target_points,
@@ -316,13 +316,9 @@ class AbstractDrivingAgent(BaseAgent, autonomous_agent.AutonomousAgent, abc.ABC)
                 self.step * 1e6 / self.lead_config.expert.simulation.carla_fps,
             ),
         )
-        lead_indices = {
-            camera_id: index for index, camera_id in CAMERA_ID_BY_LEAD_INDEX.items()
-        }
-
         cameras: list[Camera] = []
         for camera_id in self.policy.input_cameras:
-            image = sensor_data[f"rgb_{lead_indices[camera_id]}"]
+            image = sensor_data[f"rgb_{LEAD_INDEX_BY_CAMERA_ID[camera_id]}"]
             _, encoded = cv2.imencode(
                 ".jpg",
                 cv2.cvtColor(image, cv2.COLOR_BGR2RGB),
@@ -541,14 +537,21 @@ class AbstractDrivingAgent(BaseAgent, autonomous_agent.AutonomousAgent, abc.ABC)
         self.initialized = True
 
     def sensors(self) -> list[SensorSpec]:
+        """The rig subset the policy reads: its input cameras, both LiDARs and,
+        if the rig has them, the radars. Every camera costs the server GPU
+        memory and render time."""
         return av_sensor_setup(
             config=self.lead_config.expert,
             lidar=True,
-            radar=True,
+            radar=self.lead_config.expert.sensor_rig.use_radars,
             sensor_agent=True,
             perturbate=False,
             perturbation_rotation=0.0,
             perturbation_translation=0.0,
+            camera_indices=[
+                LEAD_INDEX_BY_CAMERA_ID[camera_id]
+                for camera_id in self.policy.input_cameras
+            ],
         )
 
     def check_infractions(self) -> None:

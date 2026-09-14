@@ -267,7 +267,7 @@ class LeadLightningModule(pl.LightningModule):
             prefetch_factor=self.config.training.data.prefetch_batches_per_worker
             if num_workers > 0
             else None,
-            persistent_workers=num_workers > 0,
+            persistent_workers=False,
             in_order=self.config.training.data.loader_in_order,
         )
 

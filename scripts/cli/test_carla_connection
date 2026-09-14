@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Exit 0 when a CARLA server on localhost:<port> answers RPC calls."""
+"""Exit 0 when a CARLA server on localhost:<port> is ready for a client.
+
+Answering RPC calls is not enough: right after boot the server responds while
+the engine is still bringing up its first map, and a load_world in that window
+segfaults it. Ready means the engine ticks and has finished loading a map.
+"""
 
 import sys
 
@@ -12,7 +17,10 @@ def main() -> int:
     client.set_timeout(5.0)
     try:
         client.get_server_version()
-        client.get_world().get_snapshot()
+        world = client.get_world()
+        world.wait_for_tick()
+        world.get_map()
+        world.wait_for_tick()
     except RuntimeError:
         return 1
     return 0

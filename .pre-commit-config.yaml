@@ -4,6 +4,7 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-added-large-files
+        args: [--maxkb=800]
       - id: check-case-conflict
       - id: check-merge-conflict
         args: [--assume-in-merge]
@@ -42,25 +43,10 @@ repos:
     hooks:
       - id: nbstripout
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.10
-    hooks:
-      # fix = true comes from [tool.ruff] in pyproject.toml.
-      - id: ruff
-      - id: ruff-format
-
   - repo: https://github.com/efrecon/pre-commit-hook-lxml
     rev: v0.1.4
     hooks:
       - id: format-xml
-
-  - repo: https://github.com/jsh9/pydoclint
-    rev: 0.8.3
-    hooks:
-      - id: pydoclint
-        # Configured via [tool.pydoclint] in pyproject.toml.
-        args: [--config=pyproject.toml]
-        types: [python]
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
@@ -93,6 +79,25 @@ repos:
 
   - repo: local
     hooks:
+      # language: system so the versions pinned in pyproject.toml are
+      # the single source of truth.
+      - id: ruff
+        name: ruff
+        entry: ruff check --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: pydoclint
+        name: pydoclint
+        entry: pydoclint --config=pyproject.toml
+        language: system
+        types: [python]
       - id: forbid-merge-leftovers
         name: Forbid merge/rebase leftover files
         entry: git merge/rebase leftover file committed
@@ -106,8 +111,8 @@ repos:
         files: ^src/lead/
       - id: basedpyright
         name: basedpyright
-        entry: basedpyright --project .
+        entry: basedpyright --project . --threads=16
         language: system
+        pass_filenames: false
         types: [python]
-        files: ^src/lead/
-        exclude: ^src/lead/expert/
+        files: ^(src/lead|scripts)/

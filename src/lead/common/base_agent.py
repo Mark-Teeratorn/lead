@@ -182,9 +182,9 @@ class BaseAgent:
         # --- Process camera images ---
         # CARLA cameras
         for camera_idx in range(1, self.config_expert.sensor_rig.num_cameras + 1):
-            # The expert's RGB cameras only produce data on save ticks
+            # The expert's RGB cameras only produce data on save ticks, and a
+            # driving agent attaches only the cameras its policy reads.
             if f"rgb_{camera_idx}" not in sensor_data:
-                assert not self.sensor_agent, f"rgb_{camera_idx} missing"
                 continue
             sensor_data[f"rgb_{camera_idx}"] = sensor_data[f"rgb_{camera_idx}"][1][
                 :,

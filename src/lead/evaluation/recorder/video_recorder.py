@@ -65,8 +65,12 @@ class FFmpegVideoWriter:
                 "-",
                 "-c:v",
                 "libx264",
+                # Several encoders run next to CARLA and the model; keep each one
+                # cheap in threads and memory.
                 "-preset",
-                "fast",
+                "veryfast",
+                "-threads",
+                "2",
                 "-crf",
                 str(crf),
                 "-pix_fmt",
@@ -690,8 +694,8 @@ class VideoRecorder:
             # The input image is stitched from multiple cameras horizontally
             # We need to draw on each camera section separately with correct calibration
             input_width = input_image.shape[1]
-            num_cameras = self.lead_config.expert.sensor_rig.num_cameras
-            camera_width = input_width // num_cameras
+            camera_width = self.lead_config.expert.sensor_rig.camera_width
+            num_cameras = input_width // camera_width
 
             # Mapping from image section index to calibration index
             # Image order: [LEFT_FRONT, CENTER_FRONT, RIGHT_FRONT, RIGHT_REAR, CENTER_REAR, LEFT_REAR]

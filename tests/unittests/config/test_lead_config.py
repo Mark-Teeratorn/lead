@@ -1,6 +1,7 @@
 """Tests for the LeadConfig tree: hierarchy, overrides and serialization."""
 
 import pytest
+import torch
 import yaml
 
 from lead.config import (
@@ -38,6 +39,18 @@ class TestHierarchy:
         config.expert.simulation.points_per_meter = 20
         assert config.expert.driving.transition_smoothness_distance == 8 * 20
         assert config.expert.pid.lateral_pid_minimum_lookahead_distance == 2.4 * 20
+
+    def test_radar_detection_follows_sensor_rig(self, config, monkeypatch):
+        assert config.policy.transfuser.use_radar_detection is True
+        config.expert.sensor_rig.use_radars = False
+        assert config.policy.transfuser.use_radar_detection is False
+        assert config.policy.transfuser.per_task_loss_weights(0)["radar_loss"] == 0
+        monkeypatch.setenv(
+            "LEAD_CONFIG",
+            "expert.sensor_rig.use_radars=true "
+            "policy.transfuser.use_radar_detection=false",
+        )
+        assert load_lead_config().policy.transfuser.use_radar_detection is False
 
     def test_unknown_attribute_set_raises(self, config):
         with pytest.raises(AttributeError, match="renamed"):
@@ -78,6 +91,23 @@ class TestOverrides:
         monkeypatch.setenv("LEAD_CONFIG", "training.optimization.batch_size=8")
         config = load_lead_config()
         assert config.training.optimization.batch_size == 8
+
+    def test_overridable_property_override_under_torch_compile(self, monkeypatch):
+        monkeypatch.setenv(
+            "LEAD_CONFIG",
+            "policy.transfuser.input_cameras=[3,2,0,5,6,1]",
+        )
+        transfuser = load_lead_config().policy.transfuser
+
+        def image_tokens(x: torch.Tensor) -> torch.Tensor:
+            return x.new_zeros(
+                transfuser.img_vert_anchors * transfuser.img_horz_anchors,
+            )
+
+        compiled = torch.compile(image_tokens, backend="eager", dynamic=False)
+        assert (
+            compiled(torch.zeros(1)).shape[0] == image_tokens(torch.zeros(1)).shape[0]
+        )
 
     def test_lossy_int_override_raises(self, monkeypatch):
         monkeypatch.setenv("LEAD_CONFIG", "training.optimization.num_epochs=0.5")

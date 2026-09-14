@@ -7,6 +7,7 @@ import numpy as np
 import torch
 
 from lead.api.abstract_driving_agent import AbstractDrivingAgent
+from lead.api.py123d_log_api import LEAD_INDEX_BY_CAMERA_ID
 from lead.common.logging_setup import setup_logging
 from lead.evaluation.inference.trackers import PathSpeedTracker, WaypointTracker
 from lead.policy.transfuser.transfuser import AgentPrediction, Prediction
@@ -223,14 +224,12 @@ class TransfuserAgent(AbstractDrivingAgent):
         if not hasattr(self, "video_recorder"):
             return
 
-        # The uncompressed cameras of this tick, as the simulator produced them.
+        # The uncompressed input cameras of this tick in stitch order, as the
+        # simulator produced them.
         input_image = np.concatenate(
             [
-                sensor_data[f"rgb_{camera_idx}"]
-                for camera_idx in range(
-                    1,
-                    self.lead_config.expert.sensor_rig.num_cameras + 1,
-                )
+                sensor_data[f"rgb_{LEAD_INDEX_BY_CAMERA_ID[camera_id]}"]
+                for camera_id in self.policy.input_cameras
             ],
             axis=1,
         )

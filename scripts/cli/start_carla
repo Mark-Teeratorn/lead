@@ -14,6 +14,7 @@ fi
 # Restrict Vulkan to the NVIDIA GPU: with an AMD iGPU and Mesa's software
 # lavapipe ICD also installed, -graphicsadapter=0 can otherwise select the
 # wrong device and CARLA renders on the CPU.
+# CARLA_QUALITY_LEVEL=Low trades rendering fidelity for speed.
 VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json \
 __NV_PRIME_RENDER_OFFLOAD=1 \
 $(dotenv CARLA_ROOT)/CarlaUE4.sh \
@@ -23,4 +24,5 @@ $(dotenv CARLA_ROOT)/CarlaUE4.sh \
     -nosound \
     -graphicsadapter=0 \
     -carla-streaming-port=$streaming_port \
+    -quality-level="${CARLA_QUALITY_LEVEL:-Epic}" \
     -RenderOffScreen

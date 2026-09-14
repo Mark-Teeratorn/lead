@@ -156,8 +156,10 @@ def yaml_filtered(tree: dict[str, Any]) -> dict[str, Any]:
             continue
         if isinstance(value, enum.Enum):
             value = value.value
-        elif isinstance(value, tuple):
-            value = list(value)
+        elif isinstance(value, tuple | list):
+            value = [
+                item.value if isinstance(item, enum.Enum) else item for item in value
+            ]
         if _yaml_serializable(value):
             out[key] = value
     return out

@@ -11,10 +11,12 @@ concurrency:
 
 jobs:
   unit-tests:
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted
     timeout-minutes: 90
     strategy:
       fail-fast: false
+      # One self-hosted machine runs the legs one at a time.
+      max-parallel: 1
       matrix:
         python: [ "3.10", "3.11", "3.12" ]
         numpy: [ "1.26", "2.2" ]
@@ -28,26 +30,22 @@ jobs:
         cp .env.example .env
         sed -i "s|^CARLA_ROOT=.*|CARLA_ROOT=${GITHUB_WORKSPACE}/3rd_party/CARLA/standard_0916|" .env
 
-    - name: Install micromamba
-      # The env cache is keyed on this workflow file; it determines the tool list.
-      uses: mamba-org/setup-micromamba@v2
+    - name: Provision Python venv
+      uses: ./.github/actions/python_venv
       with:
-        environment-name: lead
-        create-args: python=${{ matrix.python }} -c conda-forge ffmpeg gcc git-lfs uv
-        cache-environment: true
-        cache-environment-key: matrix-py${{ matrix.python }}-${{ hashFiles('.github/workflows/ci_matrix.yml') }}
+        python-version: ${{ matrix.python }}
 
     - name: Install project
-      run: micromamba run -n lead uv pip install -e "." --reinstall-package lead
+      run: uv pip install -e "."
 
     - name: Force the matrix numpy
       # Deliberately overrides the pyproject pin; the cell proves (or disproves)
       # that the installed stack works under this numpy.
-      run: micromamba run -n lead uv pip install "numpy==${{ matrix.numpy }}.*"
+      run: uv pip install "numpy==${{ matrix.numpy }}.*"
 
     - name: Report resolved versions
       run: |
-        micromamba run -n lead python - <<'EOF' | tee -a "$GITHUB_STEP_SUMMARY"
+        python - <<'EOF' | tee -a "$GITHUB_STEP_SUMMARY"
         import sys
         print(f"- python {sys.version.split()[0]}")
         for mod in ("numpy", "torch", "cv2", "scipy", "lightning"):
@@ -61,4 +59,4 @@ jobs:
     - name: Run unit tests
       env:
         LEAD_RUNTIME_TYPE_CHECKING: "true"
-      run: micromamba run -n lead pytest tests/unittests
+      run: pytest tests/unittests
