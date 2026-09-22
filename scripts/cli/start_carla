@@ -1,14 +1,54 @@
 #!/usr/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PATH="$SCRIPT_DIR:$PATH"
+
 port=2000
-# if there is first argument, use it as port
-if [ "$1" != "" ]; then
-	port=$1
+streaming_port=$((port + 1))
+render_offscreen="-RenderOffScreen"
+
+carla_root=""
+
+# Parse arguments: support optional --gui and --fail2drive flags alongside [port] [streaming_port]
+args=()
+for arg in "$@"; do
+	case "$arg" in
+		--gui)
+			render_offscreen=""
+			;;
+		--fail2drive|--f2d)
+			carla_root="$SCRIPT_DIR/../../3rd_party/CARLA/fail2drive_0915"
+			;;
+		*)
+			args+=("$arg")
+			;;
+	esac
+done
+
+if [ -z "$carla_root" ]; then
+	carla_root=$(dotenv CARLA_ROOT)
 fi
 
-streaming_port=$((port + 1))
-if [ "$2" != "" ]; then
-	streaming_port=$2
+if [ ${#args[@]} -ge 1 ]; then
+	port="${args[0]}"
+	streaming_port=$((port + 1))
+fi
+
+if [ ${#args[@]} -ge 2 ]; then
+	streaming_port="${args[1]}"
+fi
+
+if [ "${CARLA_GUI:-0}" = "1" ] || [ "${CARLA_RENDER_OFFSCREEN:-1}" = "0" ]; then
+	render_offscreen=""
+fi
+
+# Auto-configure X11 DISPLAY for GUI mode if needed (e.g. AnyDesk / desktop session)
+if [ -z "$render_offscreen" ] && [ -z "$DISPLAY" ]; then
+	export DISPLAY=:1
+	_uid=$(id -u)
+	if [ -z "$XAUTHORITY" ] && [ -f "/run/user/$_uid/gdm/Xauthority" ]; then
+		export XAUTHORITY="/run/user/$_uid/gdm/Xauthority"
+	fi
 fi
 
 # Restrict Vulkan to the NVIDIA GPU: with an AMD iGPU and Mesa's software
@@ -17,12 +57,12 @@ fi
 # CARLA_QUALITY_LEVEL=Low trades rendering fidelity for speed.
 VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json \
 __NV_PRIME_RENDER_OFFLOAD=1 \
-$(dotenv CARLA_ROOT)/CarlaUE4.sh \
+"$carla_root/CarlaUE4.sh" \
     -world-port=$port \
-    -resx=800 \
-    -resy=600 \
+    -resx="${CARLA_RESX:-800}" \
+    -resy="${CARLA_RESY:-600}" \
     -nosound \
     -graphicsadapter=0 \
     -carla-streaming-port=$streaming_port \
     -quality-level="${CARLA_QUALITY_LEVEL:-Epic}" \
-    -RenderOffScreen
+    $render_offscreen

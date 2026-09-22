@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PATH="$SCRIPT_DIR:$PATH"
+
 # Usage: viser-scene data/LEAD/logs/<split_name>/[<scenario_type>/]<log_name>
 
 DATA_ROOT=$(dotenv PY123D_DATA_ROOT)
