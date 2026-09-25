@@ -11,6 +11,7 @@ It must not be modified and is for reference only!
 """
 
 from __future__ import print_function
+import os
 import signal
 import sys
 import time
@@ -228,12 +229,19 @@ class ScenarioManager(object):
                 self._running = False
 
             ego_trans = self.ego_vehicles[0].get_transform()
-            self._spectator.set_transform(
-                carla.Transform(
-                    ego_trans.location + carla.Location(z=70),
-                    carla.Rotation(pitch=-90),
-                ),
-            )
+            spectator_mode = os.environ.get("CARLA_SPECTATOR_MODE", "chase" if os.environ.get("CARLA_GUI") == "1" else "topdown")
+            if spectator_mode in ("chase", "follow"):
+                fwd = ego_trans.get_forward_vector()
+                chase_loc = ego_trans.location - 8.0 * fwd + carla.Location(z=3.5)
+                chase_rot = carla.Rotation(pitch=-15, yaw=ego_trans.rotation.yaw, roll=0)
+                self._spectator.set_transform(carla.Transform(chase_loc, chase_rot))
+            else:
+                self._spectator.set_transform(
+                    carla.Transform(
+                        ego_trans.location + carla.Location(z=70),
+                        carla.Rotation(pitch=-90),
+                    ),
+                )
 
     def get_running_status(self):
         """

@@ -10,8 +10,16 @@ cd "$_target"
 
 _bucket=https://carla-releases.s3.us-east-005.backblazeb2.com/Linux
 _fetch() {
-	wget -O "$1" --user-agent="Mozilla/5.0" "$2" ||
-		wget -O "$1" --user-agent="Mozilla/5.0" "$_bucket/$3"
+	if [ -f "$1" ] && tar -tzf "$1" >/dev/null 2>&1; then
+		echo "$1 already downloaded and valid, skipping download."
+		return 0
+	fi
+	if command -v aria2c >/dev/null 2>&1; then
+		aria2c -x 16 -s 16 -k 1M -c -o "$1" --user-agent="Mozilla/5.0" "$_bucket/$3" ||
+			wget -c -O "$1" --user-agent="Mozilla/5.0" "$_bucket/$3"
+	else
+		wget -c -O "$1" --user-agent="Mozilla/5.0" "$_bucket/$3"
+	fi
 	tar -tzf "$1" >/dev/null
 }
 

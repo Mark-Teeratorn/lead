@@ -37,6 +37,8 @@ venv/
 *.log
 .env
 /notebooks/*.mp4
+outputs/
+checkpoints/
 
 # Cluster & NFS artifacts
 .nfs*

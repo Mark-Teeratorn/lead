@@ -13,10 +13,17 @@ import socket
 import struct
 import sys
 from collections import deque
+from dataclasses import dataclass
 from typing import Any
 
 import carla
 import numpy as np
+
+
+@dataclass(frozen=True)
+class RawTargetWaypoint:
+    """Minimal waypoint-like target for CARLA VehiclePIDController (Carlamayo style)."""
+    transform: carla.Transform
 
 # NumPy 2.x -> NumPy 1.x pickle compatibility shim.
 # FlashDrive server runs on Python 3.12 with NumPy 2.x (which pickles objects as numpy._core),
@@ -91,19 +98,14 @@ class AlpamayoBridgeAgent(AutonomousAgent):
         # CARLA debug drawing (spectator view)
         self._debug_draw = os.environ.get("ALPAMAYO_DEBUG_DRAW", "1") == "1"
 
-        # PID gains for lateral tracking
-        self.turn_kp = 1.25
-        self.turn_ki = 0.05
-        self.turn_kd = 0.2
-        self.turn_integral = 0.0
-        self.prev_turn_error = 0.0
+        # Official CARLA VehiclePIDController (Carlamayo architecture)
+        self.pid_controller = None
 
-        # PID gains for longitudinal tracking
-        self.speed_kp = 0.5
-        self.speed_ki = 0.02
-        self.speed_kd = 0.05
-        self.speed_integral = 0.0
-        self.prev_speed_error = 0.0
+        # Control smoothing (Carlamayo exponential filter, alpha = 0.25)
+        self.control_smooth_alpha = 0.25
+        self.prev_steer = 0.0
+        self.prev_throttle = 0.0
+        self.prev_brake = 0.0
 
         # IPC connection
         self.sock = None
@@ -140,63 +142,71 @@ class AlpamayoBridgeAgent(AutonomousAgent):
             self.sock = None
 
     def sensors(self):
-        """Configure multi-view camera suite for Alpamayo 1.5."""
+        """Configure multi-view camera suite for Alpamayo 1.5.
+
+        Matches Carlamayo's FOUR_CAMERA_RIG:
+        - Camera 0: cross-left  (120° FOV, yaw=-60°)
+        - Camera 1: front-wide  (120° FOV, yaw=0°)
+        - Camera 2: cross-right (120° FOV, yaw=60°)
+        - Camera 6: front-tele  (30° FOV, yaw=0°)
+        All at z=2.4, 1920x1080 resolution.
+        """
         return [
-            # Front camera (Camera 1)
+            # Camera 0: cross-left 120° FOV
             {
                 "type": "sensor.camera.rgb",
-                "x": 1.3,
+                "x": 1.0,
+                "y": -0.5,
+                "z": 2.4,
+                "roll": 0.0,
+                "pitch": 0.0,
+                "yaw": -60.0,
+                "width": 1920,
+                "height": 1080,
+                "fov": 120,
+                "id": "cross_left",
+            },
+            # Camera 1: front-wide 120° FOV
+            {
+                "type": "sensor.camera.rgb",
+                "x": 1.5,
                 "y": 0.0,
-                "z": 1.6,
+                "z": 2.4,
                 "roll": 0.0,
                 "pitch": 0.0,
                 "yaw": 0.0,
-                "width": 800,
-                "height": 600,
-                "fov": 100,
-                "id": "front",
+                "width": 1920,
+                "height": 1080,
+                "fov": 120,
+                "id": "front_wide",
             },
-            # Front-left camera (Camera 0)
+            # Camera 2: cross-right 120° FOV
             {
                 "type": "sensor.camera.rgb",
-                "x": 1.3,
-                "y": -0.4,
-                "z": 1.6,
+                "x": 1.0,
+                "y": 0.5,
+                "z": 2.4,
                 "roll": 0.0,
                 "pitch": 0.0,
-                "yaw": -55.0,
-                "width": 800,
-                "height": 600,
-                "fov": 100,
-                "id": "front_left",
+                "yaw": 60.0,
+                "width": 1920,
+                "height": 1080,
+                "fov": 120,
+                "id": "cross_right",
             },
-            # Front-right camera (Camera 2)
+            # Camera 6: front-tele 30° FOV
             {
                 "type": "sensor.camera.rgb",
-                "x": 1.3,
-                "y": 0.4,
-                "z": 1.6,
-                "roll": 0.0,
-                "pitch": 0.0,
-                "yaw": 55.0,
-                "width": 800,
-                "height": 600,
-                "fov": 100,
-                "id": "front_right",
-            },
-            # Rear camera (Camera 4)
-            {
-                "type": "sensor.camera.rgb",
-                "x": -1.3,
+                "x": 1.5,
                 "y": 0.0,
-                "z": 1.6,
+                "z": 2.4,
                 "roll": 0.0,
                 "pitch": 0.0,
-                "yaw": 180.0,
-                "width": 800,
-                "height": 600,
-                "fov": 100,
-                "id": "rear",
+                "yaw": 0.0,
+                "width": 1920,
+                "height": 1080,
+                "fov": 30,
+                "id": "front_tele",
             },
             # IMU
             {
@@ -225,32 +235,37 @@ class AlpamayoBridgeAgent(AutonomousAgent):
             },
         ]
 
+    def set_global_plan(self, global_plan_gps, global_plan_world_coord):
+        super().set_global_plan(global_plan_gps, global_plan_world_coord)
+        self._dense_global_plan = list(global_plan_world_coord)
+
     def _get_nav_instruction(self) -> str:
         """Extract high-level route instruction from global route plan."""
-        if not hasattr(self, "_global_plan_world_coord") or not self._global_plan_world_coord:
-            return "Keep straight."
+        plan = getattr(self, "_dense_global_plan", None) or getattr(self, "_global_plan_world_coord", None)
+        if not plan:
+            return "Go straight along the road."
 
         try:
             from agents.navigation.local_planner import RoadOption
             from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
 
             hero = CarlaDataProvider.get_hero_actor()
-            if hero is not None:
+            if hero is not None and hasattr(self, "_dense_global_plan"):
                 ego_loc = hero.get_location()
-
-                # Prune waypoints that are behind or within 5 meters of the ego vehicle
-                while len(self._global_plan_world_coord) > 1:
-                    wp_transform, _ = self._global_plan_world_coord[0]
+                # Prune waypoints that are behind the ego vehicle
+                while len(self._dense_global_plan) > 1:
+                    wp_transform, _ = self._dense_global_plan[0]
                     dist = ego_loc.distance(wp_transform.location)
-                    if dist < 5.0:
-                        self._global_plan_world_coord.pop(0)
-                        if hasattr(self, "_global_plan") and len(self._global_plan) > 1:
-                            self._global_plan.pop(0)
+                    if dist < 4.0:
+                        self._dense_global_plan.pop(0)
                     else:
                         break
+                plan = self._dense_global_plan
 
-            # Look ahead up to 5 waypoints to find the next active command
-            for _, cmd in self._global_plan_world_coord[:5]:
+            # 1. Look ahead up to 25 waypoints (~35-45m) so the turn command activates well in advance of the intersection
+            # NOTE: Every nav string MUST tokenize to exactly 6 tokens to preserve FlashDrive's static KV cache layout!
+
+            for wp_transform, cmd in plan[:25]:
                 if cmd == RoadOption.CHANGELANERIGHT:
                     return "Change lane to the right."
                 elif cmd == RoadOption.CHANGELANELEFT:
@@ -259,12 +274,39 @@ class AlpamayoBridgeAgent(AutonomousAgent):
                     return "Turn right at the intersection."
                 elif cmd == RoadOption.LEFT:
                     return "Turn left at the intersection."
-                elif cmd == RoadOption.STRAIGHT:
-                    return "Go straight at the intersection."
+
+            # 2. Highway exit / branch divergence check
+            # Only check when approaching the exit area (len(plan) < 20, ~35m from end), not on the initial entrance ramp!
+            if len(plan) < 20 and len(plan) >= 8:
+                wp_curr = plan[0][0]
+                wp_near = plan[min(4, len(plan) - 1)][0]
+                wp_far = plan[min(18, len(plan) - 1)][0]
+
+                # Heading of the route segment at the vehicle
+                dx_near = wp_near.location.x - wp_curr.location.x
+                dy_near = wp_near.location.y - wp_curr.location.y
+                heading_near = math.atan2(dy_near, dx_near)
+
+                # Heading of the route segment ahead
+                dx_far = wp_far.location.x - wp_near.location.x
+                dy_far = wp_far.location.y - wp_near.location.y
+                heading_far = math.atan2(dy_far, dx_far)
+
+                # Angle between current road direction and future road branch
+                branch_angle = (heading_far - heading_near + math.pi) % (2 * math.pi) - math.pi
+
+                # If the road ahead genuinely branches/forks (> 7.0 deg), guide the exit (6 tokens)
+                # Normal highway lane curvature is 2-4 deg and should remain "Go straight along the road."
+                if branch_angle > math.radians(7.0):
+                    return "Take exit to the right."
+                elif branch_angle < -math.radians(7.0):
+                    return "Take exit to the left."
+
         except Exception as e:
             print(f"[AlpamayoBridgeAgent] Route parsing error: {e}")
 
-        return "Keep straight."
+        # Default cruising command: exactly 6 tokens to preserve static cache
+        return "Go straight along the road."
 
     def run_step(self, input_data: dict, timestamp: float) -> carla.VehicleControl:
         control = carla.VehicleControl()
@@ -276,13 +318,14 @@ class AlpamayoBridgeAgent(AutonomousAgent):
 
         # 2. Extract cameras (RGB uint8)
         # CARLA outputs BGRA; take first 3 channels (BGR) then flip to RGB
-        # Order: 0: front_left, 1: front, 2: front_right, 4: rear
-        cam_front_left = input_data["front_left"][1][:, :, :3][:, :, ::-1].copy()
-        cam_front = input_data["front"][1][:, :, :3][:, :, ::-1].copy()
-        cam_front_right = input_data["front_right"][1][:, :, :3][:, :, ::-1].copy()
-        cam_rear = input_data["rear"][1][:, :, :3][:, :, ::-1].copy()
+        # Order matches Carlamayo FOUR_CAMERA_RIG:
+        #   0: cross_left, 1: front_wide, 2: cross_right, 6: front_tele
+        cam_cross_left = input_data["cross_left"][1][:, :, :3][:, :, ::-1].copy()
+        cam_front_wide = input_data["front_wide"][1][:, :, :3][:, :, ::-1].copy()
+        cam_cross_right = input_data["cross_right"][1][:, :, :3][:, :, ::-1].copy()
+        cam_front_tele = input_data["front_tele"][1][:, :, :3][:, :, ::-1].copy()
 
-        current_step_cams = [cam_front_left, cam_front, cam_front_right, cam_rear]
+        current_step_cams = [cam_cross_left, cam_front_wide, cam_cross_right, cam_front_tele]
         self.history_frames.append(current_step_cams)
         while len(self.history_frames) < self.num_cam_frames:
             self.history_frames.appendleft(current_step_cams)
@@ -294,13 +337,41 @@ class AlpamayoBridgeAgent(AutonomousAgent):
             for c in range(4)
             for t in range(self.num_cam_frames)
         ]
-        camera_indices = [0, 1, 2, 4]
+        # Canonical Alpamayo 1.5 camera indices: [0, 1, 2, 6]
+        camera_indices = [0, 1, 2, 6]
 
         # 3. Maintain true ego history (16 steps at dt = 0.1s: t0-1.5s .. t0)
         from srunner.scenariomanager.carla_data_provider import CarlaDataProvider
 
         vehicle = CarlaDataProvider.get_hero_actor()
         current_transform = vehicle.get_transform() if vehicle is not None else None
+
+        if self.pid_controller is None and vehicle is not None:
+            try:
+                from agents.navigation.controller import VehiclePIDController
+                # CARLA standard lateral PID parameters (from LocalPlanner / VehiclePIDController)
+                args_lateral = {
+                    "K_P": 1.95,
+                    "K_I": 0.05,
+                    "K_D": 0.2,
+                    "dt": 0.05,
+                }
+                args_longitudinal = {
+                    "K_P": 1.0,
+                    "K_I": 0.05,
+                    "K_D": 0.0,
+                    "dt": 0.05,
+                }
+                self.pid_controller = VehiclePIDController(
+                    vehicle,
+                    args_lateral=args_lateral,
+                    args_longitudinal=args_longitudinal,
+                    max_throttle=0.6,
+                    max_brake=1.0,
+                    max_steering=0.8,
+                )
+            except Exception as e:
+                print(f"[AlpamayoBridgeAgent] Warning: could not initialize VehiclePIDController: {e}")
 
         if current_transform is not None:
             self.pose_history.append((timestamp, current_transform))
@@ -357,6 +428,8 @@ class AlpamayoBridgeAgent(AutonomousAgent):
             self._connect_to_server()
 
         pred_waypoints = None
+        coc_text = ""
+        meta_action = ""
         if self.sock is not None:
             try:
                 req = {
@@ -376,71 +449,167 @@ class AlpamayoBridgeAgent(AutonomousAgent):
                     while pred_xyz.ndim > 2:
                         pred_xyz = pred_xyz[0]
                     pred_waypoints = pred_xyz
+                    coc_text = res.get("cot", "")
+                    meta_action = res.get("meta_action", "")
+                    out_msg = f"[Step {self.step_idx:04d} | {current_speed * 3.6:4.1f} km/h] Command: \"{nav_text}\""
+                    if coc_text:
+                        out_msg += f" | CoC: \"{coc_text}\""
+                    if meta_action:
+                        out_msg += f" | Action: \"{meta_action}\""
+                    print(out_msg, flush=True)
             except Exception as e:
                 print(f"[AlpamayoBridgeAgent] Error communicating with server: {e}")
                 self.sock = None
 
         # 5. Fallback if prefilling or no waypoints
         if pred_waypoints is None or len(pred_waypoints) < 5:
-            control.steer = 0.0
-            control.throttle = 0.35 if current_speed < 3.0 else 0.0
+            control.steer = float(np.clip(self.prev_steer, -1.0, 1.0))
+            control.throttle = float(np.clip(self.prev_throttle if current_speed >= 3.0 else 0.35, 0.0, 1.0))
             control.brake = 0.0
             return control
 
-        # 6. PID Tracking of predicted waypoints
-        # In CARLA coordinates: X is forward, Y is right
-        # In Alpamayo coordinates: X is forward, Y is left
-        # Alpamayo (x, y) -> CARLA (x, -y)
-        carla_pts = np.copy(pred_waypoints[:, :2])
-        carla_pts[:, 1] = -carla_pts[:, 1]
+        # 6. Official CARLA VehiclePIDController (Carlamayo architecture)
+        # Convert Alpamayo local frame (x forward, y left) to CARLA local frame (x forward, y right)
+        wp_local = np.asarray(pred_waypoints, dtype=np.float64).copy()
+        wp_local[:, 1] *= -1.0  # Alpamayo (x, y) -> CARLA (x, -y)
+        carla_pts = wp_local[:, :2]
 
-        # Select lookahead point for steering
-        aim_dist = max(3.5, 0.6 * current_speed)
-        dists = np.linalg.norm(carla_pts, axis=1)
-        valid_idxs = np.where(dists >= aim_dist)[0]
-        aim_idx = valid_idxs[0] if len(valid_idxs) > 0 else len(carla_pts) - 1
-        target_pt = carla_pts[aim_idx]
+        # Transform local waypoints to world frame
+        if current_transform is not None:
+            wp_world = []
+            for p in wp_local:
+                loc_w = current_transform.transform(carla.Location(x=float(p[0]), y=float(p[1]), z=float(p[2])))
+                wp_world.append([loc_w.x, loc_w.y, loc_w.z])
+            wp_world = np.asarray(wp_world, dtype=np.float64)
+        else:
+            wp_world = wp_local
 
-        # Desired heading angle
-        target_angle = math.atan2(target_pt[1], target_pt[0])
+        # Compute cumulative chord distance
+        seg = np.linalg.norm(np.diff(wp_world[:, :2], axis=0), axis=1)
+        cum = np.concatenate([[0.0], np.cumsum(seg)])
+        traj_extent = float(cum[-1])
 
-        # Lateral PID (CARLA ticks at 20 Hz -> dt = 0.05s)
-        turn_error = target_angle
-        self.turn_integral = np.clip(self.turn_integral + turn_error * 0.05, -1.0, 1.0)
-        turn_deriv = (turn_error - self.prev_turn_error) / 0.05
-        self.prev_turn_error = turn_error
+        # Check trajectory curvature in the near-to-mid horizon (0.5s to 3.5s ahead)
+        max_turn_angle = 0.0
+        if len(wp_local) >= 15:
+            angles = [math.atan2(abs(p[1]), max(p[0], 1.0)) for p in wp_local[5:min(35, len(wp_local))]]
+            max_turn_angle = max(angles) if angles else 0.0
 
-        steer = self.turn_kp * turn_error + self.turn_ki * self.turn_integral + self.turn_kd * turn_deriv
+        # Dynamic lookahead: 5.5m to 8.5m on turns to capture the turn arc (commands 0.60-0.75 steer), 5.0m to 12.0m on straightaways
+        is_turning = max_turn_angle > 0.087
+        if is_turning:
+            lookahead_m = float(np.clip(5.5 + 0.3 * current_speed, 5.0, 8.5))
+        else:
+            lookahead_m = float(np.clip(5.0 + 0.4 * current_speed, 5.0, 12.0))
+
+        target_idx = int(min(np.searchsorted(cum, lookahead_m), len(wp_world) - 1))
+        loc = carla.Location(
+            x=float(wp_world[target_idx, 0]),
+            y=float(wp_world[target_idx, 1]),
+            z=float(wp_world[target_idx, 2]),
+        )
+        target_wp = RawTargetWaypoint(carla.Transform(loc, carla.Rotation()))
+
+        # Planned speed to target waypoint (derived purely from action model timeline, 10Hz):
+        t_target = (target_idx + 1) * 0.1
+        s_target = float(cum[target_idx])
+        v_target_planned = (s_target / t_target) * 3.6 if t_target > 0.0 else 0.0
+
+        # Downstream speed & tail velocity profile:
+        idx_downstream = min(24, len(wp_local) - 1)
+        t_downstream = (idx_downstream + 1) * 0.1
+        v_downstream = (float(cum[idx_downstream]) / t_downstream) * 3.6 if t_downstream > 0 else v_target_planned
+        v_tail = float(np.mean(seg[-5:]) / 0.1 * 3.6) if len(seg) >= 5 else v_target_planned
+
+        # Check near-horizon displacement at t = 1.0s (index 9 in 10Hz waypoints)
+        p10_dist = float(np.linalg.norm(wp_local[min(9, len(wp_local) - 1), :2]))
+
+        # Physics-based emergency & safe stopping distances
+        d_stop_min = (current_speed ** 2) / (2.0 * 3.5)
+        d_stop_safe = (current_speed ** 2) / (2.0 * 2.0)
+
+        # Standstill / traffic queue / obstacle stopping condition (BUG 2 FIX):
+        # 1. When stationary (current_speed < 1.0 m/s), vehicle holds standstill only if path ahead is compressed (< 3.0m)
+        # 2. When moving (current_speed >= 1.0 m/s), vehicle stops if:
+        #    a) Trajectory extent terminates within minimum physical stopping distance
+        #    b) Model commands near-zero planned speed (< 2.0 km/h)
+        #    c) Tail waypoints collapse (v_tail < 4.0 km/h AND extent within safe stopping distance)
+        if current_speed < 1.0:
+            is_blocked = (traj_extent < 3.0)
+        else:
+            is_blocked = (
+                (traj_extent < max(2.5, d_stop_min))
+                or (v_target_planned < 2.0)
+                or (v_tail < 4.0 and traj_extent < max(5.0, d_stop_safe + 3.0))
+            )
+
+        if is_blocked:
+            target_speed_kmh = 0.0
+            if current_transform is not None:
+                ahead_loc = current_transform.transform(carla.Location(x=5.0, y=0.0, z=0.0))
+                target_wp = RawTargetWaypoint(carla.Transform(ahead_loc, current_transform.rotation))
+            else:
+                target_wp = RawTargetWaypoint(carla.Transform(carla.Location(5.0, 0.0, 0.0), carla.Rotation()))
+        else:
+            # Model-derived target speed without arbitrary 10 km/h floor (BUG 1 FIX):
+            if v_downstream < v_target_planned:
+                # Deceleration ahead: smoothly track downstream slowdown
+                base_speed = 0.6 * v_downstream + 0.4 * v_target_planned
+            else:
+                base_speed = v_target_planned
+
+            # Kinematic extent limit (v_max = sqrt(2 * a * extent)):
+            v_extent_limit = math.sqrt(max(0.1, 2.0 * 1.8 * traj_extent)) * 3.6
+
+            # Pure action target speed: clipped to [0.0, 35.0] km/h (no artificial 10 km/h floor)
+            target_speed_kmh = float(np.clip(min(base_speed, v_extent_limit), 0.0, 35.0))
+
+            # Curvature-aware speed scaling on sharp turns / curved ramps (slows down to 10-12 km/h on sharp turns)
+            if max_turn_angle > 0.06:  # curve > 3.4 degrees
+                curve_limit_kmh = max(10.0, 35.0 - max_turn_angle * 100.0)
+                target_speed_kmh = min(target_speed_kmh, curve_limit_kmh)
+
+        # Run official CARLA VehiclePIDController
+        if self.pid_controller is not None:
+            raw_control = self.pid_controller.run_step(target_speed_kmh, target_wp)
+            raw_steer = float(raw_control.steer)
+            raw_throttle = float(raw_control.throttle)
+            raw_brake = float(raw_control.brake)
+        else:
+            raw_steer = 0.0
+            raw_throttle = 0.3 if target_speed_kmh > 5.0 else 0.0
+            raw_brake = 1.0 if target_speed_kmh <= 0.0 else 0.0
+
+        # Standstill starting boost: when stationary and path is open (extent >= 4.0m)
+        if current_speed < 1.5 and target_speed_kmh > 5.0 and traj_extent >= 4.0:
+            raw_throttle = max(raw_throttle, 0.45)
+            raw_brake = 0.0
+
+        # Enforce positive stopping when target speed is 0.0
+        if target_speed_kmh <= 0.0:
+            raw_throttle = 0.0
+            raw_brake = max(raw_brake, 0.8)
+
+        # Adaptive steering responsiveness: 0.85 on sharp curves/intersections, 0.60 on straightaways
+        alpha_steer = 0.85 if is_turning else 0.60
+        alpha_pedal = self.control_smooth_alpha
+        steer = (1.0 - alpha_steer) * self.prev_steer + alpha_steer * raw_steer
+        throttle = (1.0 - alpha_pedal) * self.prev_throttle + alpha_pedal * raw_throttle
+        brake = (1.0 - alpha_pedal) * self.prev_brake + alpha_pedal * raw_brake
+
+        # Mutual exclusion: avoid pressing throttle and brake simultaneously
+        if throttle >= brake:
+            brake = 0.0
+        else:
+            throttle = 0.0
+
+        self.prev_steer = steer
+        self.prev_throttle = throttle
+        self.prev_brake = brake
+
         control.steer = float(np.clip(steer, -1.0, 1.0))
-
-        # Longitudinal PID: estimate target speed from waypoint progression
-        # Waypoints are at 10 Hz (dt = 0.1s): index 5 is 0.6s, index 15 is 1.6s
-        idx_near = min(5, len(carla_pts) - 1)
-        idx_far = min(15, len(carla_pts) - 1)
-        if idx_far > idx_near:
-            dt_interval = (idx_far - idx_near) * 0.1
-            target_speed = float(np.linalg.norm(carla_pts[idx_far] - carla_pts[idx_near]) / dt_interval)
-        else:
-            target_speed = float(np.linalg.norm(carla_pts[-1]) / (len(carla_pts) * 0.1))
-
-        # Speed cap suitable for urban & highway (13.5 m/s ≈ 48.6 km/h)
-        target_speed = min(target_speed, 13.5)
-
-        speed_error = target_speed - current_speed
-        self.speed_integral = np.clip(self.speed_integral + speed_error * 0.05, -5.0, 5.0)
-        speed_deriv = (speed_error - self.prev_speed_error) / 0.05
-        self.prev_speed_error = speed_error
-
-        accel = self.speed_kp * speed_error + self.speed_ki * self.speed_integral + self.speed_kd * speed_deriv
-        if accel > 0.0:
-            # Overcome CARLA static friction and rolling resistance
-            min_throttle = 0.30 if (current_speed < 1.5 and target_speed > 0.4) else 0.0
-            control.throttle = float(np.clip(max(accel, min_throttle), 0.0, 0.85))
-            control.brake = 0.0
-        else:
-            control.throttle = 0.0
-            control.brake = float(np.clip(-accel, 0.0, 1.0)) if speed_error < -0.5 else 0.0
-
+        control.throttle = float(np.clip(throttle, 0.0, 1.0))
+        control.brake = float(np.clip(brake, 0.0, 1.0))
         control.hand_brake = False
 
         # 7. Log predicted trajectory for offline evaluation metrics
@@ -455,6 +624,8 @@ class AlpamayoBridgeAgent(AutonomousAgent):
                     "brake": control.brake,
                     "speed": current_speed,
                     "nav_text": nav_text,
+                    "coc": coc_text,
+                    "meta_action": meta_action,
                 }
                 self._traj_log_file.write(json.dumps(log_entry) + "\n")
                 self._traj_log_file.flush()
@@ -495,4 +666,5 @@ class AlpamayoBridgeAgent(AutonomousAgent):
             except Exception:
                 pass
             self.sock = None
+        self.pid_controller = None
         print("[AlpamayoBridgeAgent] Destroyed.")

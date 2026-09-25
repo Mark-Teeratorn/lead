@@ -200,6 +200,16 @@ class LeaderboardWrapper:
                 "carla_path": carla_path,
             }
         if self.leaderboard_type == LeaderboardType.FAIL2DRIVE:
+            egg_file = (
+                self.workspace_root
+                / "3rd_party/CARLA/fail2drive_0915/PythonAPI/carla/dist/carla-0.9.15-py3.10-linux-x86_64.egg"
+            )
+            carla_base = (
+                self.workspace_root / "3rd_party/CARLA/fail2drive_0915/PythonAPI/carla"
+            )
+            carla_path = (
+                f"{egg_file}:{carla_base}" if egg_file.exists() else str(carla_base)
+            )
             return {
                 "leaderboard_root": self.workspace_root
                 / "3rd_party/leaderboard/fail2drive/leaderboard",
@@ -208,8 +218,7 @@ class LeaderboardWrapper:
                 "evaluator_script": self.workspace_root
                 / "3rd_party/leaderboard/fail2drive/leaderboard/leaderboard/leaderboard_evaluator.py",
                 "evaluator_module": "leaderboard.leaderboard_evaluator",
-                "carla_path": self.workspace_root
-                / "3rd_party/CARLA/fail2drive_0915/PythonAPI/carla",
+                "carla_path": carla_path,
             }
         if self.leaderboard_type == LeaderboardType.AUTOPILOT:
             return {

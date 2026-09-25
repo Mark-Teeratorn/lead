@@ -73,8 +73,17 @@ When the route finishes, the results are written to:
   *(Shows `score_route`, `score_composed`, collisions, and completion %)*
 - **Logged Trajectories:** `outputs/local_evaluation/alpamayo_<ROUTE_ID>/predicted_trajectories.jsonl`
 
-cd /home/aimslab/lead
-source .venv/bin/activate
+### Running with 3D GUI Viewport
 
-# Set CARLA_GUI=1 to enable the Unreal Engine 3D viewport window:
-CARLA_GUI=1 bash scripts/common/eval_alpamayo_b2d.sh src/lead/routes/benchmark_routes/bench2drive/23687.xml
+To watch the car drive in real-time in the CARLA 3D window, add the `--gui` flag:
+
+```bash
+cd /home/aimslab/lead
+bash scripts/common/eval_alpamayo_b2d.sh src/lead/routes/benchmark_routes/bench2drive/23687.xml --gui
+```
+
+- **Chase Camera (Default in GUI)**: The viewport automatically follows in 3rd-person perspective right behind the ego vehicle.
+- **Top-Down Camera (Optional)**: If you prefer the bird's-eye view, set `CARLA_SPECTATOR_MODE=topdown`:
+  ```bash
+  CARLA_SPECTATOR_MODE=topdown bash scripts/common/eval_alpamayo_b2d.sh src/lead/routes/benchmark_routes/bench2drive/23687.xml --gui
+  ```
