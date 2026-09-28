@@ -262,17 +262,41 @@ class AlpamayoBridgeAgent(AutonomousAgent):
                         break
                 plan = self._dense_global_plan
 
-            # 1. Look ahead up to 25 waypoints (~35-45m) so the turn command activates well in advance of the intersection
+            # Approach-Aware Navigation Prompting:
+            # At distances > 25m before the intersection, maintain "Go straight along the road."
+            # When ego position reaches within 15m–20m of the turn/stop line, transition to the turn command.
             # NOTE: Every nav string MUST tokenize to exactly 6 tokens to preserve FlashDrive's static KV cache layout!
+            dist_to_turn = None
+            turn_cmd = None
+            cum_dist = 0.0
+            prev_loc = ego_loc if hero is not None else (plan[0][0].location if plan else None)
 
-            for wp_transform, cmd in plan[:25]:
-                if cmd == RoadOption.CHANGELANERIGHT:
+            for wp_transform, cmd in plan[:40]:
+                curr_loc = wp_transform.location
+                if prev_loc is not None:
+                    cum_dist += prev_loc.distance(curr_loc)
+                else:
+                    cum_dist += 1.0
+                prev_loc = curr_loc
+
+                if cmd in (
+                    RoadOption.LEFT,
+                    RoadOption.RIGHT,
+                    RoadOption.CHANGELANELEFT,
+                    RoadOption.CHANGELANERIGHT,
+                ):
+                    dist_to_turn = cum_dist
+                    turn_cmd = cmd
+                    break
+
+            if dist_to_turn is not None and dist_to_turn <= 20.0:
+                if turn_cmd == RoadOption.CHANGELANERIGHT:
                     return "Change lane to the right."
-                elif cmd == RoadOption.CHANGELANELEFT:
+                elif turn_cmd == RoadOption.CHANGELANELEFT:
                     return "Change lane to the left."
-                elif cmd == RoadOption.RIGHT:
+                elif turn_cmd == RoadOption.RIGHT:
                     return "Turn right at the intersection."
-                elif cmd == RoadOption.LEFT:
+                elif turn_cmd == RoadOption.LEFT:
                     return "Turn left at the intersection."
 
             # 2. Highway exit / branch divergence check
@@ -524,52 +548,34 @@ class AlpamayoBridgeAgent(AutonomousAgent):
         # Check near-horizon displacement at t = 1.0s (index 9 in 10Hz waypoints)
         p10_dist = float(np.linalg.norm(wp_local[min(9, len(wp_local) - 1), :2]))
 
-        # Physics-based emergency & safe stopping distances
-        d_stop_min = (current_speed ** 2) / (2.0 * 3.5)
-        d_stop_safe = (current_speed ** 2) / (2.0 * 2.0)
-
-        # Standstill / traffic queue / obstacle stopping condition (BUG 2 FIX):
-        # 1. When stationary (current_speed < 1.0 m/s), vehicle holds standstill only if path ahead is compressed (< 3.0m)
-        # 2. When moving (current_speed >= 1.0 m/s), vehicle stops if:
-        #    a) Trajectory extent terminates within minimum physical stopping distance
-        #    b) Model commands near-zero planned speed (< 2.0 km/h)
-        #    c) Tail waypoints collapse (v_tail < 4.0 km/h AND extent within safe stopping distance)
-        if current_speed < 1.0:
-            is_blocked = (traj_extent < 3.0)
+        # 1. Kinematic speed profile derived naturally from trajectory chord length derivatives & extent
+        if v_downstream < v_target_planned:
+            # Deceleration ahead: smoothly track downstream slowdown
+            base_speed = 0.6 * v_downstream + 0.4 * v_target_planned
         else:
-            is_blocked = (
-                (traj_extent < max(2.5, d_stop_min))
-                or (v_target_planned < 2.0)
-                or (v_tail < 4.0 and traj_extent < max(5.0, d_stop_safe + 3.0))
-            )
+            base_speed = v_target_planned
 
-        if is_blocked:
+        # Kinematic extent limit (v_max = sqrt(2 * a * extent)):
+        v_extent_limit = math.sqrt(max(0.0, 2.0 * 1.8 * traj_extent)) * 3.6
+
+        # Target speed governed naturally by model progression and extent limits:
+        target_speed_kmh = float(np.clip(min(base_speed, v_extent_limit), 0.0, 35.0))
+
+        # Curvature-aware speed scaling on sharp turns / curved ramps (slows down to 10-12 km/h on sharp turns)
+        if max_turn_angle > 0.06:  # curve > 3.4 degrees
+            curve_limit_kmh = max(10.0, 35.0 - max_turn_angle * 100.0)
+            target_speed_kmh = min(target_speed_kmh, curve_limit_kmh)
+
+        # 2. Smooth standstill holding:
+        # When the model explicitly predicts near-zero progress (e.g. traj_extent < 1.5m at red light / stop)
+        is_standstill_intended = (traj_extent < 1.5) or (current_speed < 0.5 and traj_extent < 2.0)
+        if is_standstill_intended:
             target_speed_kmh = 0.0
-            if current_transform is not None:
-                ahead_loc = current_transform.transform(carla.Location(x=5.0, y=0.0, z=0.0))
-                target_wp = RawTargetWaypoint(carla.Transform(ahead_loc, current_transform.rotation))
-            else:
-                target_wp = RawTargetWaypoint(carla.Transform(carla.Location(5.0, 0.0, 0.0), carla.Rotation()))
-        else:
-            # Model-derived target speed without arbitrary 10 km/h floor (BUG 1 FIX):
-            if v_downstream < v_target_planned:
-                # Deceleration ahead: smoothly track downstream slowdown
-                base_speed = 0.6 * v_downstream + 0.4 * v_target_planned
-            else:
-                base_speed = v_target_planned
 
-            # Kinematic extent limit (v_max = sqrt(2 * a * extent)):
-            v_extent_limit = math.sqrt(max(0.1, 2.0 * 1.8 * traj_extent)) * 3.6
+        # Note: target_wp is ALWAYS kept on wp_world (never overridden to straight ahead (5.0, 0.0))
+        # to ensure lateral tracking remains smoothly aligned with the intended trajectory.
 
-            # Pure action target speed: clipped to [0.0, 35.0] km/h (no artificial 10 km/h floor)
-            target_speed_kmh = float(np.clip(min(base_speed, v_extent_limit), 0.0, 35.0))
-
-            # Curvature-aware speed scaling on sharp turns / curved ramps (slows down to 10-12 km/h on sharp turns)
-            if max_turn_angle > 0.06:  # curve > 3.4 degrees
-                curve_limit_kmh = max(10.0, 35.0 - max_turn_angle * 100.0)
-                target_speed_kmh = min(target_speed_kmh, curve_limit_kmh)
-
-        # Run official CARLA VehiclePIDController
+        # 3. Run official CARLA VehiclePIDController
         if self.pid_controller is not None:
             raw_control = self.pid_controller.run_step(target_speed_kmh, target_wp)
             raw_steer = float(raw_control.steer)
@@ -578,17 +584,17 @@ class AlpamayoBridgeAgent(AutonomousAgent):
         else:
             raw_steer = 0.0
             raw_throttle = 0.3 if target_speed_kmh > 5.0 else 0.0
-            raw_brake = 1.0 if target_speed_kmh <= 0.0 else 0.0
+            raw_brake = 0.4 if target_speed_kmh <= 0.0 else 0.0
 
-        # Standstill starting boost: when stationary and path is open (extent >= 4.0m)
-        if current_speed < 1.5 and target_speed_kmh > 5.0 and traj_extent >= 4.0:
-            raw_throttle = max(raw_throttle, 0.45)
-            raw_brake = 0.0
-
-        # Enforce positive stopping when target speed is 0.0
-        if target_speed_kmh <= 0.0:
+        # 4. Standstill holding vs starting:
+        if is_standstill_intended:
             raw_throttle = 0.0
-            raw_brake = max(raw_brake, 0.8)
+            # Apply smooth holding brake without sudden jerky releases or harsh 0.8 spikes
+            raw_brake = 0.45 if current_speed < 0.3 else min(1.0, 0.45 + 0.15 * current_speed)
+        elif current_speed < 1.5 and target_speed_kmh > 4.0 and traj_extent >= 2.5:
+            # Smooth starting torque from standstill when path is open
+            raw_throttle = max(raw_throttle, 0.35)
+            raw_brake = 0.0
 
         # Adaptive steering responsiveness: 0.85 on sharp curves/intersections, 0.60 on straightaways
         alpha_steer = 0.85 if is_turning else 0.60
