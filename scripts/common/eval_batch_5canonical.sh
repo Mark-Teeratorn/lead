@@ -25,53 +25,72 @@ ROUTES=(
     "src/lead/routes/benchmark_routes/bench2drive/3144.xml"
 )
 
-MODE="compare" # default: run stage2 and compare with baseline
+MODE="both" # default: run both base and stage2 together in order
+FORCE=0
+PAIRWISE=0
+
 for arg in "$@"; do
     case "$arg" in
-        --both)   MODE="both" ;;
-        --base)   MODE="base" ;;
-        --stage2) MODE="stage2" ;;
+        --both)       MODE="both" ;;
+        --base)       MODE="base" ;;
+        --stage2)     MODE="stage2" ;;
+        --pairwise|--interleaved) PAIRWISE=1 ;;
+        --force)      FORCE=1 ;;
+        --help|-h)
+            echo "Usage: $0 [--both] [--base] [--stage2] [--pairwise] [--force]"
+            echo "  --both       : Run Baseline then Stage 2 across all routes (default)"
+            echo "  --base       : Run Baseline only"
+            echo "  --stage2     : Run Stage 2 only"
+            echo "  --pairwise   : Run Base then Stage 2 route-by-route"
+            echo "  --force      : Re-evaluate routes even if completed results already exist"
+            exit 0
+            ;;
     esac
 done
 
-STAGE2_MODEL_PATH="/home/aimslab/checkpoints/checkpoint-600"
+STAGE2_MODEL_PATH="/home/aimslab/checkpoints/action_experts/checkpoint-600"
 BASE_MODEL_PATH="z-lab/Alpamayo-1.5-10B"
 
-run_suite() {
+run_single_route() {
     local tag="$1"
     local model_path="$2"
-    local desc="$3"
-    
-    echo ""
-    echo "=========================================================="
-    echo "Starting Batch Evaluation for: $desc (tag=$tag)"
-    echo "=========================================================="
-    
-    for route in "${ROUTES[@]}"; do
-        route_id=$(basename "$route" .xml)
-        echo ""
-        echo "----------------------------------------------------------"
-        echo "[$tag] Starting Route: $route_id ($route)"
-        echo "----------------------------------------------------------"
-        
-        mkdir -p "outputs/local_evaluation/${tag}_${route_id}"
-        log_file="outputs/local_evaluation/${tag}_${route_id}/eval.log"
-        
-        # Kill any active server when switching models to ensure fresh weights load
-        rm -f "/tmp/alpamayo_flashdrive.sock"
-        pkill -f "flashdrive_server.py" 2>/dev/null || true
-        pkill -9 -f "CarlaUE4" 2>/dev/null || true
-        sleep 2
-        
-        MODEL_TAG="$tag" MODEL_PATH="$model_path" bash scripts/common/eval_alpamayo_b2d.sh "$route" > "$log_file" 2>&1 || {
-            echo "[$tag] Route $route_id completed with return code $?."
-        }
-        
-        echo "[$tag] Finished Route: $route_id"
-        
-        ckpt_path="outputs/local_evaluation/${tag}_${route_id}/checkpoint_endpoint.json"
+    local route="$3"
+    local route_id=$(basename "$route" .xml)
+
+    mkdir -p "outputs/local_evaluation/${tag}_${route_id}"
+    local log_file="outputs/local_evaluation/${tag}_${route_id}/eval.log"
+    local ckpt_path="outputs/local_evaluation/${tag}_${route_id}/checkpoint_endpoint.json"
+    local alt_ckpt="outputs/local_evaluation/alpamayo_${route_id}/checkpoint_endpoint.json"
+
+    if [ "$FORCE" -eq 0 ]; then
         if [ -f "$ckpt_path" ]; then
-            python3 -c '
+            echo "[$tag] Existing completed run found for route $route_id ($ckpt_path). Skipping (use --force to re-run)."
+            return 0
+        elif [ "$tag" = "base" ] && [ -f "$alt_ckpt" ]; then
+            echo "[$tag] Existing completed baseline run found for route $route_id ($alt_ckpt). Skipping (use --force to re-run)."
+            return 0
+        fi
+    fi
+
+    echo ""
+    echo "----------------------------------------------------------"
+    echo "[$tag] Starting Route: $route_id ($route)"
+    echo "----------------------------------------------------------"
+
+    # Kill any active server when switching routes/models to ensure fresh weights load
+    rm -f "/tmp/alpamayo_flashdrive.sock"
+    pkill -f "flashdrive_server.py" 2>/dev/null || true
+    pkill -9 -f "CarlaUE4" 2>/dev/null || true
+    sleep 2
+
+    MODEL_TAG="$tag" MODEL_PATH="$model_path" bash scripts/common/eval_alpamayo_b2d.sh "$route" > "$log_file" 2>&1 || {
+        echo "[$tag] Route $route_id completed with return code $?."
+    }
+
+    echo "[$tag] Finished Route: $route_id"
+
+    if [ -f "$ckpt_path" ]; then
+        python3 -c '
 import json, sys
 try:
     with open(sys.argv[1]) as f:
@@ -84,19 +103,40 @@ try:
 except Exception as e:
     print(f"  [{sys.argv[3]}] Error parsing checkpoint: {e}")
 ' "$ckpt_path" "$route_id" "$tag"
-        fi
-        
-        pkill -9 -f "CarlaUE4" 2>/dev/null || true
-        sleep 2
-    done
+    fi
+
+    pkill -9 -f "CarlaUE4" 2>/dev/null || true
+    sleep 2
 }
 
-if [ "$MODE" = "base" ] || [ "$MODE" = "both" ]; then
-    run_suite "base" "$BASE_MODEL_PATH" "Baseline (z-lab/Alpamayo-1.5-10B)"
-fi
+if [ "$PAIRWISE" -eq 1 ]; then
+    echo "=========================================================="
+    echo "Starting Pairwise Route-by-Route Evaluation (Base then Stage 2)"
+    echo "=========================================================="
+    for route in "${ROUTES[@]}"; do
+        run_single_route "base" "$BASE_MODEL_PATH" "$route"
+        run_single_route "stage2" "$STAGE2_MODEL_PATH" "$route"
+    done
+else
+    if [ "$MODE" = "base" ] || [ "$MODE" = "both" ]; then
+        echo ""
+        echo "=========================================================="
+        echo "Starting Batch Evaluation for: Baseline (z-lab/Alpamayo-1.5-10B) (tag=base)"
+        echo "=========================================================="
+        for route in "${ROUTES[@]}"; do
+            run_single_route "base" "$BASE_MODEL_PATH" "$route"
+        done
+    fi
 
-if [ "$MODE" = "stage2" ] || [ "$MODE" = "both" ] || [ "$MODE" = "compare" ]; then
-    run_suite "stage2" "$STAGE2_MODEL_PATH" "Trained Pilot (Stage 2 checkpoint-600)"
+    if [ "$MODE" = "stage2" ] || [ "$MODE" = "both" ]; then
+        echo ""
+        echo "=========================================================="
+        echo "Starting Batch Evaluation for: Trained Pilot (Stage 2 checkpoint-600) (tag=stage2)"
+        echo "=========================================================="
+        for route in "${ROUTES[@]}"; do
+            run_single_route "stage2" "$STAGE2_MODEL_PATH" "$route"
+        done
+    fi
 fi
 
 echo ""
