@@ -43,7 +43,8 @@ if [ "$_gui" = "1" ] || [ "${CARLA_GUI:-0}" = "1" ]; then
 fi
 
 export BENCHMARK_ROUTE_ID=$(basename "$_routes" .xml)
-_evaluation_output_dir="$_lead_output_dir_root/local_evaluation/alpamayo_$BENCHMARK_ROUTE_ID/"
+_tag="${MODEL_TAG:-alpamayo}"
+_evaluation_output_dir="$_lead_output_dir_root/local_evaluation/${_tag}_$BENCHMARK_ROUTE_ID/"
 
 # Python environment paths
 FLASHDRIVE_PYTHON="/home/aimslab/flashdrive/.venv/bin/python"
@@ -87,6 +88,7 @@ if server_is_alive; then
     echo "[eval_alpamayo] Detected active Model Server on $SOCK_PATH. Reusing it."
 else
     rm -f "$SOCK_PATH"
+    pkill -9 -f "flashdrive_server.py" 2>/dev/null || true
     
     # If CARLA is running, temporarily stop it so the 10B model has full 24GB VRAM headroom during load
     if ss -tulpn | grep -q ":2000 "; then
