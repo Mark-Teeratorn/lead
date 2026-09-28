@@ -108,9 +108,12 @@ else
         echo "[eval_alpamayo] Using custom model path: $MODEL_PATH"
     fi
 
+    HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1 \
+    PYTHONUNBUFFERED=1 \
     PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
     PYTORCH_ALLOC_CONF=expandable_segments:True \
-    $FLASHDRIVE_PYTHON /home/aimslab/flashdrive/scripts/flashdrive_server.py $DUMMY_ARG $MODEL_ARG --socket-path "$SOCK_PATH" > /tmp/flashdrive_server.log 2>&1 &
+    $FLASHDRIVE_PYTHON -u /home/aimslab/flashdrive/scripts/flashdrive_server.py $DUMMY_ARG $MODEL_ARG --socket-path "$SOCK_PATH" > /tmp/flashdrive_server.log 2>&1 &
     SERVER_PID=$!
 
     # Wait for server socket to be active (10B model + W4A8 quantization + DFlash takes ~3-5 mins)
