@@ -166,7 +166,8 @@ def get_stats(prefix, r):
             try:
                 with open(p) as f:
                     rec = json.load(f)["_checkpoint"]["global_record"]
-                return rec.get("scores_mean", {}).get("score_route", 0.0), rec.get("scores_mean", {}).get("score_composed", 0.0), rec.get("status", "Unknown")
+                if rec and "scores_mean" in rec and rec["scores_mean"]:
+                    return rec.get("scores_mean", {}).get("score_route", 0.0), rec.get("scores_mean", {}).get("score_composed", 0.0), rec.get("status", "Unknown")
             except Exception:
                 pass
     return None, None, "Not run"
