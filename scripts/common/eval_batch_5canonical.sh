@@ -1,18 +1,29 @@
 #!/bin/bash
-# Evaluates 5 canonical benchmark routes covering all 5 Bench2Drive advanced driving skills:
-# 1. Merging: Route 23687 (HighwayExit)
-# 2. Emergency Brake: Route 14194 (PedestrianCrossing)
-# 3. Overtaking: Route 2513 (ConstructionObstacle)
-# 4. Give Way: Route 2790 (InvadingTurn)
-# 5. Traffic Sign Compliance: Route 3144 (VanillaSignalizedTurnEncounterRedLight)
-#
-# Compares Baseline Z-AI Alpamayo vs. Stage 2 Trained Pilot (checkpoint-600)
+# ==============================================================================
+# 5 Canonical Bench2Drive Benchmark: Baseline vs. Selected Model (by Path)
+# ==============================================================================
+# Evaluates Baseline (Alpamayo 1.5) vs. any selected Action Expert model
+# across the 5 canonical benchmark routes:
+#   1. Merging: Route 23687 (HighwayExit)
+#   2. Emergency Brake: Route 14194 (PedestrianCrossing)
+#   3. Overtaking: Route 2513 (ConstructionObstacle)
+#   4. Give Way: Route 2790 (InvadingTurn)
+#   5. Traffic Signs: Route 3144 (VanillaSignalizedTurnEncounterRedLight)
 #
 # Usage:
-#   bash scripts/common/eval_batch_5canonical.sh            # Run Stage 2 & compare against Baseline
-#   bash scripts/common/eval_batch_5canonical.sh --both     # Run both Baseline and Stage 2 sequentially
-#   bash scripts/common/eval_batch_5canonical.sh --base     # Run Baseline only
-#   bash scripts/common/eval_batch_5canonical.sh --stage2   # Run Stage 2 only
+#   bash scripts/common/eval_batch_5canonical.sh [PATH_TO_MODEL] [--force] [--gui]
+#
+# Examples:
+#   # 1. Test Action Model 2 (Default):
+#   bash scripts/common/eval_batch_5canonical.sh /home/aimslab/checkpoints/action_experts/action_model_2
+#   # (or simply: bash scripts/common/eval_batch_5canonical.sh)
+#
+#   # 2. Test Action Model 1:
+#   bash scripts/common/eval_batch_5canonical.sh /home/aimslab/checkpoints/action_experts/action_model_1
+#
+#   # 3. Via environment variable:
+#   MODEL_PATH="/home/aimslab/checkpoints/action_experts/action_model_2" bash scripts/common/eval_batch_5canonical.sh
+# ==============================================================================
 
 set -e
 cd "$(dirname "$(realpath "${BASH_SOURCE:-$0}")")/../.."
@@ -25,31 +36,97 @@ ROUTES=(
     "src/lead/routes/benchmark_routes/bench2drive/3144.xml"
 )
 
-MODE="both" # default: run both base and stage2 together in order
+BASE_MODEL_PATH="z-lab/Alpamayo-1.5-10B"
+
+# Default target is action_model_2 unless specified
+TARGET_INPUT="${MODEL_PATH:-/home/aimslab/checkpoints/action_experts/action_model_2}"
 FORCE=0
-PAIRWISE=0
+GUI_FLAG=""
 
 for arg in "$@"; do
     case "$arg" in
-        --both)       MODE="both" ;;
-        --base)       MODE="base" ;;
-        --stage2)     MODE="stage2" ;;
-        --pairwise|--interleaved) PAIRWISE=1 ;;
-        --force)      FORCE=1 ;;
+        --force)
+            FORCE=1
+            ;;
+        --gui)
+            GUI_FLAG="--gui"
+            ;;
         --help|-h)
-            echo "Usage: $0 [--both] [--base] [--stage2] [--pairwise] [--force]"
-            echo "  --both       : Run Baseline then Stage 2 across all routes (default)"
-            echo "  --base       : Run Baseline only"
-            echo "  --stage2     : Run Stage 2 only"
-            echo "  --pairwise   : Run Base then Stage 2 route-by-route"
-            echo "  --force      : Re-evaluate routes even if completed results already exist"
+            echo "Usage: $0 [PATH_TO_MODEL] [--force] [--gui]"
+            echo ""
+            echo "Always compares Baseline vs. Selected Model across all 5 canonical routes."
+            echo ""
+            echo "Arguments:"
+            echo "  PATH_TO_MODEL : Path to action expert directory (defaults to action_model_2)"
+            echo "  --force       : Re-evaluate routes even if completed results already exist"
+            echo "  --gui         : Launch with CARLA spectator visual window"
+            echo ""
+            echo "Examples:"
+            echo "  $0 /home/aimslab/checkpoints/action_experts/action_model_2"
+            echo "  $0 /home/aimslab/checkpoints/action_experts/action_model_1"
+            echo "  $0"
             exit 0
+            ;;
+        *)
+            if [ -e "$arg" ] || [ -e "/home/aimslab/checkpoints/action_experts/$arg" ]; then
+                if [ -e "/home/aimslab/checkpoints/action_experts/$arg" ] && [ ! -e "$arg" ]; then
+                    TARGET_INPUT="/home/aimslab/checkpoints/action_experts/$arg"
+                else
+                    TARGET_INPUT="$arg"
+                fi
+            elif [ "$arg" = "1" ]; then
+                TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_1"
+            elif [ "$arg" = "2" ]; then
+                TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_2"
+            elif [ "$arg" = "3" ]; then
+                TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_3"
+            elif [ "$arg" = "4" ] || [ "$arg" = "4_nonema" ] || [ "$arg" = "nonema" ]; then
+                TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_4"
+            elif [ "$arg" = "4_ema" ] || [ "$arg" = "ema" ]; then
+                TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_4_ema"
+            elif [ "$arg" = "1730" ]; then
+                TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_4"
+            else
+                echo "Warning: unrecognized argument '$arg', ignoring."
+            fi
             ;;
     esac
 done
 
-STAGE2_MODEL_PATH="/home/aimslab/checkpoints/action_experts/checkpoint-600"
-BASE_MODEL_PATH="z-lab/Alpamayo-1.5-10B"
+MODEL_PATH="$(realpath "$TARGET_INPUT" 2>/dev/null || echo "$TARGET_INPUT")"
+MODEL_NAME="$(basename "$MODEL_PATH")"
+
+# Derive clean evaluation tag & label
+case "$MODEL_NAME" in
+    action_model_1|checkpoint-600)
+        MODEL_TAG="stage2"
+        MODEL_LABEL="Action Model 1 (Ckpt 600)"
+        ;;
+    action_model_2|checkpoint-640)
+        MODEL_TAG="model2"
+        MODEL_LABEL="Action Model 2 (Ckpt 640)"
+        ;;
+    action_model_3|checkpoint-600\(3\)|checkpoint-600_3)
+        MODEL_TAG="model3"
+        MODEL_LABEL="Action Model 3 (Ckpt 600-3)"
+        ;;
+    action_model_4_ema)
+        MODEL_TAG="model4_ema"
+        MODEL_LABEL="Action Model 4 EMA (Ckpt 1730)"
+        ;;
+    action_model_4|action_model_4_nonema)
+        MODEL_TAG="model4_nonema"
+        MODEL_LABEL="Action Model 4 (Ckpt 1730 Non-EMA)"
+        ;;
+    action_model_4*|checkpoint-1730*|*1730*)
+        MODEL_TAG="model4_nonema"
+        MODEL_LABEL="Action Model 4 (Ckpt 1730)"
+        ;;
+    *)
+        MODEL_TAG="${MODEL_TAG:-$MODEL_NAME}"
+        MODEL_LABEL="$MODEL_NAME"
+        ;;
+esac
 
 run_single_route() {
     local tag="$1"
@@ -67,7 +144,7 @@ run_single_route() {
             echo "[$tag] Existing completed run found for route $route_id ($ckpt_path). Skipping (use --force to re-run)."
             return 0
         elif [ "$tag" = "base" ] && [ -f "$alt_ckpt" ]; then
-            echo "[$tag] Existing completed baseline run found for route $route_id ($alt_ckpt). Skipping (use --force to re-run)."
+            echo "[$tag] Existing completed baseline run found for route $route_id ($alt_ckpt). Reusing existing score."
             return 0
         fi
     fi
@@ -77,13 +154,18 @@ run_single_route() {
     echo "[$tag] Starting Route: $route_id ($route)"
     echo "----------------------------------------------------------"
 
-    # Kill any active server when switching routes/models to ensure fresh weights load
+    # Reset any lingering server sockets and CARLA instances
     rm -f "/tmp/alpamayo_flashdrive.sock"
     pkill -f "flashdrive_server.py" 2>/dev/null || true
     pkill -9 -f "CarlaUE4" 2>/dev/null || true
     sleep 2
 
-    MODEL_TAG="$tag" MODEL_PATH="$model_path" bash scripts/common/eval_alpamayo_b2d.sh "$route" > "$log_file" 2>&1 || {
+    local model_arg=""
+    if [ -n "$model_path" ] && [ "$model_path" != "$BASE_MODEL_PATH" ]; then
+        model_arg="$model_path"
+    fi
+
+    MODEL_TAG="$tag" MODEL_PATH="$model_arg" bash scripts/common/eval_alpamayo_b2d.sh "$route" $GUI_FLAG > "$log_file" 2>&1 || {
         echo "[$tag] Route $route_id completed with return code $?."
     }
 
@@ -99,7 +181,7 @@ try:
     score_route = rec.get("scores_mean", {}).get("score_route", 0.0)
     score_composed = rec.get("scores_mean", {}).get("score_composed", 0.0)
     status = rec.get("status", "Unknown")
-    print(f"  [{sys.argv[3]}] Route {sys.argv[2]}: Completion = {score_route:.1f}%, Score = {score_composed:.1f}, Status = {status}")
+    print(f"  [{sys.argv[3]}] Route {sys.argv[2]}: Route Comp = {score_route:.1f}%, Driving Score = {score_composed:.1f}, Status = {status}")
 except Exception as e:
     print(f"  [{sys.argv[3]}] Error parsing checkpoint: {e}")
 ' "$ckpt_path" "$route_id" "$tag"
@@ -109,43 +191,36 @@ except Exception as e:
     sleep 2
 }
 
-if [ "$PAIRWISE" -eq 1 ]; then
-    echo "=========================================================="
-    echo "Starting Pairwise Route-by-Route Evaluation (Base then Stage 2)"
-    echo "=========================================================="
-    for route in "${ROUTES[@]}"; do
-        run_single_route "base" "$BASE_MODEL_PATH" "$route"
-        run_single_route "stage2" "$STAGE2_MODEL_PATH" "$route"
-    done
-else
-    if [ "$MODE" = "base" ] || [ "$MODE" = "both" ]; then
-        echo ""
-        echo "=========================================================="
-        echo "Starting Batch Evaluation for: Baseline (z-lab/Alpamayo-1.5-10B) (tag=base)"
-        echo "=========================================================="
-        for route in "${ROUTES[@]}"; do
-            run_single_route "base" "$BASE_MODEL_PATH" "$route"
-        done
-    fi
-
-    if [ "$MODE" = "stage2" ] || [ "$MODE" = "both" ]; then
-        echo ""
-        echo "=========================================================="
-        echo "Starting Batch Evaluation for: Trained Pilot (Stage 2 checkpoint-600) (tag=stage2)"
-        echo "=========================================================="
-        for route in "${ROUTES[@]}"; do
-            run_single_route "stage2" "$STAGE2_MODEL_PATH" "$route"
-        done
-    fi
-fi
-
+# 1. Run Baseline (reuses existing results if already completed)
 echo ""
 echo "=========================================================="
-echo "5 Canonical Abilities A/B Comparison: Base vs. Stage 2"
+echo "Batch Evaluation: Baseline (z-lab/Alpamayo-1.5-10B)"
 echo "=========================================================="
+for route in "${ROUTES[@]}"; do
+    run_single_route "base" "$BASE_MODEL_PATH" "$route"
+done
+
+# 2. Run Selected Model
+echo ""
+echo "=========================================================="
+echo "Batch Evaluation: $MODEL_LABEL"
+echo "Model Path:       $MODEL_PATH"
+echo "=========================================================="
+for route in "${ROUTES[@]}"; do
+    run_single_route "$MODEL_TAG" "$MODEL_PATH" "$route"
+done
+
+# 3. Print Side-by-Side Comparison Scorecard
+echo ""
+echo "==================================================================================================="
+echo "              5 CANONICAL ABILITIES SCORECARD: BASELINE vs. $MODEL_LABEL"
+echo "==================================================================================================="
 
 python3 -c '
-import json, os
+import json, os, sys
+
+target_tag = sys.argv[1]
+target_label = sys.argv[2]
 
 routes = ["23687", "14194", "2513", "2790", "3144"]
 categories = {
@@ -173,34 +248,34 @@ def get_stats(prefix, r):
     return None, None, "Not run"
 
 h_route, h_cat, h_sc = "Route", "Ability Category", "Scenario Type"
-h_b_pct, h_s2_pct = "Base %", "Stg2 %"
-h_b_sc, h_s2_sc = "Base DS", "Stg2 DS"
+h_b_pct = "Base %"
+h_t_pct = f"{target_label[:6]} %"
+h_b_sc = "Base DS"
+h_t_sc = f"{target_label[:6]} DS"
 h_diff = "Δ Score"
 
-sep = "_" * 115
-dash = "-"
-
+sep = "-" * 115
 print(sep)
-print(f"| {h_route:<7} | {h_cat:<17} | {h_sc:<28} | {h_b_pct:<8} | {h_s2_pct:<8} | {h_b_sc:<8} | {h_s2_sc:<8} | {h_diff:<8} |")
-print(f"|{dash*9}|{dash*19}|{dash*30}|{dash*10}|{dash*10}|{dash*10}|{dash*10}|{dash*10}|")
+print(f"| {h_route:<7} | {h_cat:<17} | {h_sc:<28} | {h_b_pct:<8} | {h_t_pct:<8} | {h_b_sc:<8} | {h_t_sc:<8} | {h_diff:<8} |")
+print(sep)
 
 for r in routes:
     cat, name = categories[r]
-    b_pct, b_sc, b_st = get_stats("base", r)
-    s2_pct, s2_sc, s2_st = get_stats("stage2", r)
+    b_pct, b_sc, _ = get_stats("base", r)
+    t_pct, t_sc, _ = get_stats(target_tag, r)
     
     b_pct_str = f"{b_pct:>6.1f} %" if b_pct is not None else "Pending"
-    s2_pct_str = f"{s2_pct:>6.1f} %" if s2_pct is not None else "Pending"
+    t_pct_str = f"{t_pct:>6.1f} %" if t_pct is not None else "Pending"
     b_sc_str = f"{b_sc:>8.1f}" if b_sc is not None else "Pending"
-    s2_sc_str = f"{s2_sc:>8.1f}" if s2_sc is not None else "Pending"
+    t_sc_str = f"{t_sc:>8.1f}" if t_sc is not None else "Pending"
     
-    if b_sc is not None and s2_sc is not None:
-        diff = s2_sc - b_sc
+    if b_sc is not None and t_sc is not None:
+        diff = t_sc - b_sc
         diff_str = f"{diff:>+8.1f}"
     else:
         diff_str = "    --  "
         
-    print(f"| {r:<7} | {cat:<17} | {name:<28} | {b_pct_str:<8} | {s2_pct_str:<8} | {b_sc_str:<8} | {s2_sc_str:<8} | {diff_str:<8} |")
+    print(f"| {r:<7} | {cat:<17} | {name:<28} | {b_pct_str:<8} | {t_pct_str:<8} | {b_sc_str:<8} | {t_sc_str:<8} | {diff_str:<8} |")
 
 print(sep)
-'
+' "$MODEL_TAG" "$MODEL_LABEL"
