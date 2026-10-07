@@ -183,6 +183,16 @@ class ScenarioManager(object):
             if self.tick_count > 4000:
                 raise TickRuntimeError("RuntimeError, tick_count > 4000")
 
+            # Standstill watchdog: prevent infinite standstill socket overflow (e.g. on blocked cut-in routes)
+            if self.ego_vehicles:
+                ego_speed = self.ego_vehicles[0].get_velocity().length()
+                if ego_speed < 0.1:
+                    self._standstill_ticks = getattr(self, '_standstill_ticks', 0) + 1
+                    if self._standstill_ticks > 1200: # 60 seconds of complete standstill (1200 ticks @ 20Hz)
+                        raise TickRuntimeError("Standstill limit reached: ego blocked for 60s")
+                else:
+                    self._standstill_ticks = 0
+
             try:
                 self._agent_watchdog.resume()
                 self._agent_watchdog.update()

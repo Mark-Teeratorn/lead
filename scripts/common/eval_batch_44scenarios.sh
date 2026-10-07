@@ -180,6 +180,8 @@ while [[ $# -gt 0 ]]; do
                 TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_4_ema"
             elif [ "$1" = "1730" ]; then
                 TARGET_INPUT="/home/aimslab/checkpoints/action_experts/action_model_4"
+            elif [ "$1" = "5" ] || [ "$1" = "6400" ] || [ "$1" = "checkpoint-6400" ]; then
+                TARGET_INPUT="/home/aimslab/checkpoints/action_experts/checkpoint-6400"
             else
                 echo "Warning: unrecognized argument '$1', ignoring."
             fi
@@ -217,6 +219,10 @@ case "$MODEL_NAME" in
         MODEL_TAG="model4_nonema"
         MODEL_LABEL="Action Model 4 (Ckpt 1730)"
         ;;
+    checkpoint-6400*|*6400*)
+        MODEL_TAG="model_6400"
+        MODEL_LABEL="Action Model v3 (Ckpt 6400)"
+        ;;
     *)
         MODEL_TAG="${MODEL_TAG:-$MODEL_NAME}"
         MODEL_LABEL="$MODEL_NAME"
@@ -243,10 +249,10 @@ run_single_route() {
     local alt_ckpt="outputs/local_evaluation/alpamayo_${route_id}/checkpoint_endpoint.json"
 
     if [ "$FORCE" -eq 0 ]; then
-        if [ -f "$ckpt_path" ]; then
+        if [ -f "$ckpt_path" ] && grep -q '"scores_mean"' "$ckpt_path" 2>/dev/null; then
             echo "[$tag] Existing completed run found for $sc_name (route $route_id). Skipping (use --force to re-run)."
             return 0
-        elif [ "$tag" = "base" ] && [ -f "$alt_ckpt" ]; then
+        elif [ "$tag" = "base" ] && [ -f "$alt_ckpt" ] && grep -q '"scores_mean"' "$alt_ckpt" 2>/dev/null; then
             echo "[$tag] Existing completed baseline run found for $sc_name (route $route_id). Reusing existing score."
             return 0
         fi

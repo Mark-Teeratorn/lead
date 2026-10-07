@@ -218,7 +218,7 @@ class LeaderboardEvaluator(object):
                 # args.traffic_manager_port = find_free_port(args.traffic_manager_port)
                 traffic_manager = client.get_trafficmanager(args.traffic_manager_port)
                 traffic_manager.set_synchronous_mode(True)
-                traffic_manager.set_hybrid_physics_mode(True)
+                traffic_manager.set_hybrid_physics_mode(False) # Disables actor dormancy segfault in Town13
                 print(f"traffic_manager init success, try_time={attempts}", flush=True)
                 traffic_manager_setup_success = True
                 break
@@ -426,7 +426,7 @@ class LeaderboardEvaluator(object):
             return True
 
         except TickRuntimeError:
-            entry_status, crash_message = "Started", "TickRuntime"
+            entry_status, crash_message = "Finished", "TickRuntime"
 
         except Exception:
             print("\n\033[91mError during the simulation:", flush=True)

@@ -168,6 +168,46 @@ user@host:~/lead$ python -m lead --checkpoint <checkpoint dir> --routes src/lead
 
 Routes for Bench2Drive, Town13, longest6, and Fail2Drive ship under `src/lead/routes/benchmark_routes/`. See [evaluation](docs/eval.md) for more information on how to scale evaluation on SLURM.
 
+---
+
+### 🏎️ Alpamayo 1.5 & Bench2Drive Closed-Loop Benchmark
+
+We provide full closed-loop evaluation support for **Alpamayo 1.5-10B** (and fine-tuned Action Expert checkpoints) connected to **CARLA 0.9.15** via the **FlashDrive** ultra-low-latency model server.
+
+#### 1. Quick Route Evaluation
+
+Run a single route (e.g. Route 2534, Accident):
+```bash
+bash scripts/common/eval_alpamayo_b2d.sh src/lead/routes/benchmark_routes/bench2drive/2534.xml
+```
+
+#### 2. Full 44-Scenario Bench2Drive Evaluation
+
+Evaluate all 44 canonical scenarios in detached background mode:
+
+```bash
+mkdir -p outputs
+setsid bash scripts/common/eval_batch_44scenarios.sh 6400 </dev/null >> outputs/eval_44_model_6400.log 2>&1 &
+```
+
+#### Supported Model Shortcuts:
+- `1` : Action Model 1 (Checkpoint 600)
+- `2` : Action Model 2 (Checkpoint 640)
+- `3` : Action Model 3 (Checkpoint 600-3)
+- `4` : Action Model 4 (Checkpoint 1730 Non-EMA)
+- `4_ema` : Action Model 4 EMA (Checkpoint 1730 EMA)
+- `6400` : Action Model v3 (Checkpoint 6400)
+- `/path/to/checkpoint` : Any custom standalone action expert directory
+
+#### Check Progress & Live Scorecards:
+```bash
+# Print comparison table anytime without interrupting the simulation:
+bash scripts/common/eval_batch_44scenarios.sh 6400 --summary-only
+```
+
+> [!TIP]
+> For complete instructions on deploying LEAD, CARLA 0.9.15, and FlashDrive to a new server or cloud VM, see [TRANSFER_GUIDE.md](TRANSFER_GUIDE.md).
+
 ### 📖 Citation
 
 If our work is useful to you, please cite it and leave a star ⭐ on the repository:
