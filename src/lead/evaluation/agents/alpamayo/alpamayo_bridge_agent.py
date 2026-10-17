@@ -101,6 +101,13 @@ class AlpamayoBridgeAgent(AutonomousAgent):
         # Official CARLA VehiclePIDController (Carlamayo architecture)
         self.pid_controller = None
 
+        # Video recording (optional)
+        self._record_video_dir = os.environ.get("RECORD_VIDEO_DIR", None)
+        self._frame_count = 0
+        if self._record_video_dir:
+            os.makedirs(self._record_video_dir, exist_ok=True)
+            print(f"[AlpamayoBridgeAgent] Video recording enabled -> {self._record_video_dir}")
+
         # Control smoothing (Carlamayo exponential filter, alpha = 0.25)
         self.control_smooth_alpha = 0.25
         self.prev_steer = 0.0
@@ -656,6 +663,40 @@ class AlpamayoBridgeAgent(AutonomousAgent):
             except Exception:
                 pass  # non-critical, don't break the agent
 
+        # 9. Record camera frame with telemetry HUD
+        if self._record_video_dir:
+            try:
+                import cv2
+                bgr = input_data["front_wide"][1][:, :, :3].copy()
+                h, w = bgr.shape[:2]
+
+                # Draw bottom telemetry banner (semi-transparent)
+                banner_h = 95
+                overlay = bgr.copy()
+                cv2.rectangle(overlay, (0, h - banner_h), (w, h), (18, 18, 22), -1)
+                cv2.addWeighted(overlay, 0.78, bgr, 0.22, 0, bgr)
+
+                model_lbl = os.environ.get("VIDEO_MODEL_LABEL", "Model 4: Ckpt 1730 (Non-EMA)")
+                sc_lbl = os.environ.get("VIDEO_SCENARIO_LABEL", "InvadingTurn (Route 2790)")
+                speed_kmh = current_speed * 3.6
+
+                # Text overlays
+                cv2.putText(bgr, f"Model: {model_lbl}  |  Scenario: {sc_lbl}", 
+                            (25, h - banner_h + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.82, (0, 225, 255), 2, cv2.LINE_AA)
+                tele_txt = f"Speed: {speed_kmh:4.1f} km/h   Steer: {control.steer:+.2f}   Throttle: {control.throttle:.2f}   Brake: {control.brake:.2f}   Step: {self.step_idx:04d}"
+                cv2.putText(bgr, tele_txt, 
+                            (25, h - banner_h + 60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2, cv2.LINE_AA)
+                if nav_text:
+                    cv2.putText(bgr, f"Nav Command: {nav_text}", 
+                                (25, h - banner_h + 86), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (170, 255, 170), 1, cv2.LINE_AA)
+
+                frame_file = os.path.join(self._record_video_dir, f"frame_{self.step_idx:05d}.jpg")
+                cv2.imwrite(frame_file, bgr, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
+                self._frame_count += 1
+            except Exception as e:
+                if self.step_idx % 50 == 0:
+                    print(f"[AlpamayoBridgeAgent] Warning: frame record error: {e}")
+
         return control
 
     def destroy(self, results=None):
@@ -673,4 +714,25 @@ class AlpamayoBridgeAgent(AutonomousAgent):
                 pass
             self.sock = None
         self.pid_controller = None
+        if self._record_video_dir and getattr(self, "_frame_count", 0) > 0:
+            try:
+                import subprocess
+                fps = int(os.environ.get("VIDEO_FPS", "24"))
+                out_mp4 = os.environ.get("VIDEO_OUTPUT_PATH", os.path.join(self._record_video_dir, "driving_video.mp4"))
+                os.makedirs(os.path.dirname(out_mp4), exist_ok=True)
+                print(f"[AlpamayoBridgeAgent] Compiling {self._frame_count} frames at {fps} FPS into {out_mp4}...")
+                cmd = [
+                    "ffmpeg", "-y",
+                    "-framerate", str(fps),
+                    "-i", os.path.join(self._record_video_dir, "frame_%05d.jpg"),
+                    "-c:v", "libx264",
+                    "-preset", "fast",
+                    "-crf", "18",
+                    "-pix_fmt", "yuv420p",
+                    out_mp4
+                ]
+                subprocess.run(cmd, check=True)
+                print(f"[AlpamayoBridgeAgent] Video successfully created: {out_mp4}")
+            except Exception as e:
+                print(f"[AlpamayoBridgeAgent] Error compiling video: {e}")
         print("[AlpamayoBridgeAgent] Destroyed.")

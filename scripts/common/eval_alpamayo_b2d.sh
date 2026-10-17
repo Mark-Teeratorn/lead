@@ -77,6 +77,7 @@ cleanup() {
     if [ -n "$CARLA_PID" ]; then
         kill $CARLA_PID 2>/dev/null || true
     fi
+    pkill -9 -f "CarlaUE4" 2>/dev/null || true
 }
 trap cleanup EXIT INT TERM
 
@@ -161,7 +162,7 @@ if ! ss -tulpn | grep -q ":2000 "; then
     else
         echo "[eval_alpamayo] Starting CARLA 0.9.15 server in headless mode (Quality: $CARLA_QUALITY_LEVEL)..."
     fi
-    ./scripts/cli/start_carla --fail2drive $CARLA_EXTRA_FLAGS 2000 2001 &
+    ./scripts/cli/start_carla --fail2drive $CARLA_EXTRA_FLAGS 2000 2001 > /tmp/carla_server.log 2>&1 &
     CARLA_PID=$!
     echo "[eval_alpamayo] Waiting for CARLA to listen on port 2000..."
     for i in $(seq 1 60); do
