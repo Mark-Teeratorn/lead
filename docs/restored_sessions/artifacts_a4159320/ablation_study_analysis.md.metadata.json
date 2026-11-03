@@ -1,0 +1,5 @@
+{
+  "summary": "Complete ablation study analysis for the paper 'Few Edge Cases Are All You Need'. Shows all 6 model variants across 44 Bench2Drive routes with paired statistical tests (t-test, Wilcoxon), effect sizes (Cohen's d), and crash analysis. Key finding: Only Golden-curated fine-tuning achieves statistically significant improvement over the base Alpamayo model (p < 0.01), while hazard-flooded fine-tuning fails to reach significance. Scaling from 1,600 to 6,400 samples adds no benefit (p = 0.995).",
+  "updatedAt": "2026-10-20T13:27:09.246029515Z",
+  "userFacing": true
+}
