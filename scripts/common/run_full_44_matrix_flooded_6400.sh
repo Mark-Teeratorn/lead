@@ -26,9 +26,11 @@ SOCK_PATH="/tmp/alpamayo_flashdrive.sock"
 FLASHDRIVE_PYTHON="/home/aimslab/flashdrive/.venv/bin/python"
 MODEL_DIR="/home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400"
 
-# Verify FlashDrive Model Server is responsive
+# Verify FlashDrive Model Server is responsive and running the correct model
 server_is_alive() {
-    [ -S "$SOCK_PATH" ] && python3 -c "import socket; s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM); s.settimeout(2); s.connect('$SOCK_PATH'); s.close()" 2>/dev/null
+    [ -S "$SOCK_PATH" ] && \
+    ps aux | grep -v grep | grep "flashdrive_server.py" | grep -q "extracted_matrix_flooded_6400" && \
+    python3 -c "import socket; s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM); s.settimeout(2); s.connect('$SOCK_PATH'); s.close()" 2>/dev/null
 }
 
 if ! server_is_alive; then
