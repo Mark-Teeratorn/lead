@@ -241,9 +241,10 @@ class RouteScenario(BasicScenario):
                 self.available_parking_locations.remove(slot)
 
         # Add the actors to _parked_ids
-        for response in CarlaDataProvider.get_client().apply_batch_sync(new_parked_vehicles):
-            if not response.error:
-                self._parked_ids.append(response.actor_id)
+        if new_parked_vehicles:
+            for response in CarlaDataProvider.get_client().apply_batch_sync(new_parked_vehicles):
+                if not response.error:
+                    self._parked_ids.append(response.actor_id)
 
     # pylint: disable=no-self-use
     def _draw_waypoints(self, waypoints, vertical_shift, size, downsample=1):

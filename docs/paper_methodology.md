@@ -1,205 +1,81 @@
-# Section 3: Methodology
+# 3. Methodology
 
-In this section, we present the methodology for data-efficient, real-time safety alignment in Vision-Language-Action (VLA) driving models. Our methodology is structured around four interconnected pillars:
-1. **Asymmetry-Free Imitation Learning (Section 3.1 & 3.3):** Leveraging the LEAD framework to extract kinematically feasible expert demonstrations across canonical challenge scenarios.
-2. **Quality-Driven Data Curation (Section 3.2 & 3.3):** The "Golden Ratio" curation framework that mathematically prevents *Prior Collapse* and resolves the *Hazard-Flooding Paradox*.
-3. **Parameter-Isolated Adapter Optimization (Section 3.4):** Freezing the 10-billion parameter vision-language reasoning backbone while isolating gradient descent strictly to the 416-tensor continuous Flow-Matching Action Expert using AdamW and vector field MSE loss.
-4. **Memory-Efficient Hybrid Quantization via PARO (Section 3.5):** Employing Pairwise Rotation Quantization (W4A8) to halve the VLM's memory footprint ($21\text{ GB} \to 11.2\text{ GB}$) with zero degradation in semantic reasoning, enabling closed-loop 10 Hz streaming control on a single consumer GPU.
+## 3.1 Problem Formulation and Dual-System VLA Architecture
 
-```mermaid
-flowchart TD
-    subgraph Pillar1["Pillar 1: Expert Demonstration (LEAD Imitation Learning)"]
-        LEAD["LEAD Privileged CARLA Expert<br>(Zero-Asymmetry Kinematics)"]
-        RawData["Raw Multi-Modal Traces<br>(RGB, Waypoints, Commands)"]
-        LEAD --> RawData
-    end
+Closed-loop autonomous driving requires mapping multi-camera observations, ego-vehicle kinematic history, and navigation commands into dynamically feasible future trajectories under real-time latency bounds. At each discrete control step $t$, the ego vehicle receives a multimodal observation tuple $\mathbf{x}_t = (\mathcal{I}_t, \mathcal{H}_t, c_t)$ consisting of:
+1. **Surround RGB Camera Stream:** $\mathcal{I}_t = \{I_t^{(m)}\}_{m=1}^M$ with $I_t^{(m)} \in \mathbb{R}^{H \times W \times 3}$ across four cameras (cross-left, front-wide, cross-right at $120^\circ$ FOV, and front-telephoto at $30^\circ$ FOV) over a 4-frame window.
+2. **Ego-Vehicle Kinematic History:** $\mathcal{H}_t = \{(\mathbf{p}_\tau, \mathbf{R}_\tau)\}_{\tau=t-15}^t$ sampled at $10\text{ Hz}$ ($\Delta t = 0.1\text{ s}$) over a 16-step ($1.5\text{ s}$) backward horizon in the current ego ISO 8855 frame ($x$ forward, $y$ left, $z$ up), tokenized into 48 discrete history tokens [2].
+3. **High-Level Navigation Command:** $c_t \in \mathcal{C}$ (fixed-length 6-token route instructions such as `Go straight along the road.` or `Turn left at the intersection.`).
 
-    subgraph Pillar2["Pillar 2: Quality-Driven Curation ('Golden Ratio')"]
-        Curation["Distribution-Controlled Filter"]
-        Inv1["Invariant 1: 90% Cruising / <=10% Creep"]
-        Inv2["Invariant 2: 2:1:1 Symmetrical Steering"]
-        Inv3["Invariant 3: Stratified Canonical Edge-Cases"]
-        RawData --> Curation
-        Curation --> Inv1
-        Curation --> Inv2
-        Curation --> Inv3
-    end
-
-    subgraph Pillar3["Pillar 3: Hybrid Quantization & Adapter Architecture"]
-        FrozenVLM["Frozen Reasoning Backbone<br>10B Qwen2-VLM (PARO INT4)<br>VRAM: ~11.2 GB (50% Saved)<br>Orthogonal Rotation W' = W*R"]
-        Adapter["Trainable Action Expert Adapter<br>416 Parameters (~4.25 GB, BF16)<br>Continuous Flow-Matching Denoiser"]
-        FrozenVLM -->|"Semantic Conditioning e_t"| Adapter
-    end
-
-    subgraph Pillar4["Pillar 4: Optimization & Control Deployment"]
-        Loss["Flow-Matching Vector Field MSE Loss<br>L_MSE = E[ || v_theta - (y_1 - y_0) ||^2 ]<br>Optimizer: AdamW (lr=1e-4, wd=1e-2)"]
-        Runtime["FlashDrive Streaming Runtime (10 Hz)<br>KV Sliding Window + 8 Euler Steps"]
-        PID["CARLA Official VehiclePIDController<br>(Lookahead Horizon tau = 1.5s)"]
-        Vehicle["Ego Vehicle Actuation<br>(throttle, steer, brake)"]
-
-        Inv1 & Inv2 & Inv3 --> Loss
-        Loss -.->|"Gradients strictly isolated"| Adapter
-        Adapter --> Runtime
-        Runtime --> PID
-        PID --> Vehicle
-    end
-```
-
----
-
-## 3.1 Problem Formulation & System Architecture
-
-Autonomous vehicle control requires mapping high-dimensional visual observations and topological instructions into smooth, collision-free future trajectories.
-
-### 3.1.1 Multi-Modal State Representation
-At discrete control step $t$, the ego vehicle receives:
-1. **Surround Camera Stream:** $\mathcal{I}_t = \{I_t^{(i)}\}_{i=1}^M$, where $I_t^{(i)} \in \mathbb{R}^{H \times W \times 3}$ denotes the RGB image from camera view $i \in \{1, \dots, M\}$.
-2. **Kinematic History:** $\mathcal{H}_t = \{(x_\tau, y_\tau, \theta_\tau, v_\tau)\}_{\tau=t-T_{\text{hist}}}^t \in \mathbb{R}^{T_{\text{hist}} \times 4}$, representing past vehicle coordinates, yaw orientation, and velocity over an observation buffer of $T_{\text{hist}} = 16$ steps ($1.6\text{ s}$).
-3. **High-Level Navigation Command:** $c_t \in \mathcal{C}$, encoding discrete categorical route directives (e.g., `LANE_FOLLOW`, `TURN_LEFT`, `TURN_RIGHT`, `CHANGE_LANE`).
-
-### 3.1.2 Continuous Action Space via Trajectory Parameterization
-Instead of discretizing continuous motor controls into autoregressive text tokens—which introduces severe compounding discretization error—we parameterize actions as a continuous trajectory in the vehicle's local SE(2) coordinate frame:
+Rather than discretizing motor control into autoregressive action tokens or regressing deterministic waypoints via single-mode Mean Squared Error (MSE), the policy predicts a continuous future trajectory in the ego vehicle's local coordinate frame:
 $$\mathbf{Y} = [\mathbf{y}_1, \mathbf{y}_2, \dots, \mathbf{y}_K]^\top \in \mathbb{R}^{K \times 3}, \quad \mathbf{y}_k = (x_k, y_k, z_k)$$
-where $K = 64$ waypoints spaced at uniform intervals of $\Delta t = 0.1\text{ s}$, defining a continuous temporal planning horizon of $T_{\text{plan}} = 6.4\text{ seconds}$.
+where waypoints are spaced at uniform intervals of $\Delta t = 0.1\text{ s}$ over a planning horizon of $K = 64$ steps ($T_{\text{plan}} = 6.4\text{ s}$) [2].
 
-### 3.1.3 Conditional Flow-Matching Action Expert
-To model multi-modal trajectory distributions without the training instability of standard diffusion or GANs, we formulate trajectory generation via **Conditional Flow Matching (CFM)**. 
-
-Let $p_0(\mathbf{Y}_0) = \mathcal{N}(0, \mathbf{I})$ denote standard Gaussian noise and $p_{\text{data}}(\mathbf{Y}_1)$ denote the distribution of kinematically feasible expert trajectories. A continuous probability path $\mathbf{Y}_s$ for $s \in [0, 1]$ connects noise to clean trajectories via optimal-transport interpolation:
-$$\mathbf{Y}_s = (1 - s)\mathbf{Y}_0 + s\mathbf{Y}_1$$
-The time-dependent vector field governing this flow is parameterized by the Action Expert $v_\theta$:
-$$\frac{d\mathbf{Y}_s}{ds} = v_\theta(\mathbf{Y}_s, s \mid \mathbf{e}_t, \mathcal{H}_t)$$
-where $\mathbf{e}_t = \Phi_{\text{VLM}}(\mathcal{I}_t, \mathcal{H}_t, c_t)$ is the conditioning representation extracted from the vision-language backbone.
-
----
-
-## 3.2 Theoretical Formulation: Prior Collapse & The Hazard-Flooding Paradox
-
-We now formalize the failure mechanism of naive imitation learning when models are over-trained on hazard scenarios.
-
-### 3.2.1 Nominal Cruising Prior
-Under normal road conditions, safe human driving is governed by a mode-stable nominal cruising prior. Let the trajectory velocity components be:
-$$\dot{\mathbf{y}}_k = \left( \dot{x}_k, \dot{y}_k \right) = \left( \frac{x_{k+1} - x_k}{\Delta t}, \frac{y_{k+1} - y_k}{\Delta t} \right)$$
-Nominal driving operates under a narrow Gaussian prior characterized by forward progression and minimal lateral variance:
-$$p_{\text{nom}}(\dot{\mathbf{y}}) = \mathcal{N}\left( \begin{bmatrix} v_{\text{cruise}} \\ 0 \end{bmatrix}, \begin{bmatrix} \sigma_x^2 & 0 \\ 0 & \sigma_y^2 \end{bmatrix} \right), \quad \text{where } \sigma_y^2 \ll \sigma_x^2$$
-
-### 3.2.2 Mechanism of Prior Collapse (Lateral Gradient Leakage)
-When an imitation learning dataset is artificially flooded with safety-critical edge cases (sudden obstacle swerves, cut-in reactions, and panic avoidance), the empirical training distribution shifts to a mixture:
-$$p_{\text{train}}(\mathbf{Y}) = (1 - \alpha) p_{\text{nom}}(\mathbf{Y}) + \alpha p_{\text{hazard}}(\mathbf{Y})$$
-where $\alpha \in [0, 1]$ represents the hazard-flooding proportion.
-
-In hazard scenarios ($p_{\text{hazard}}$), evasive trajectories exhibit massive lateral velocity shifts ($\dot{y} \gg 0$) coupled with emergency decelerations ($\dot{x} \to 0$). When a generative flow field $v_\theta$ is trained on an uncurated mixture where $\alpha$ is high:
-1. **Prior Collapse:** The base velocity distribution $p_{\text{nom}}$ is suppressed, flattening the energy landscape around stable straight cruising.
-2. **Lateral Gradient Leakage:** The vector field learns a non-vanishing lateral velocity gradient during emergency braking states:
-   $$\mathbb{E}_{v_\theta}[\dot{y} \mid \text{hazard}] \neq 0$$
-   Consequently, when the closed-loop agent encounters a sudden obstacle requiring pure in-lane stopping ($\dot{x} \to 0, \dot{y} = 0$), the collapsed prior outputs an erroneous lateral swerve component, causing the downstream controller to steer violently into curbs, parked cars, or oncoming traffic.
-
-### 3.2.3 Formal Statement of the Hazard-Flooding Paradox
-> **The Hazard-Flooding Paradox:** In continuous-action Flow-Matching policies, over-indexing on emergency evasions degrades the mode stability of the nominal cruising prior. Beyond a critical fraction $\alpha^*$, scaling hazard data causes closed-loop collision frequencies to regress toward or exceed the error rate of an unadapted baseline.
-
-This theoretical formulation directly explains the empirical regression observed in Table 2, where quadrupling hazard-flooded data from 1,600 to 6,400 samples caused collisions to surge by $+16.3\%$ ($49 \to 57$), completely regressing to the zero-shot base model error rate.
+Following the Alpamayo 1.5 [2] architecture, the policy decouples scene reasoning from trajectory generation across two modules: a 10-billion-parameter Vision-Language Model (VLM) backbone $\Phi_{\text{VLM}}$ that encodes $(\mathcal{I}_t, \mathcal{H}_t, c_t)$ into a cached key-value conditioning state $\mathbf{e}_t = \Phi_{\text{VLM}}(\mathcal{I}_t, \mathcal{H}_t, c_t)$, and a continuous Action Expert $v_\theta$ that operates in a unicycle acceleration–curvature action space (`UnicycleAccelCurvatureActionSpace`) [2]. Specifically, each 64-step trajectory is represented by a normalized control sequence $\mathbf{A}_1 = [\mathbf{a}_1, \dots, \mathbf{a}_K]^\top \in \mathbb{R}^{K \times 2}$ with per-step longitudinal acceleration $a_k$ and path curvature $\kappa_k$:
+$$\mathbf{a}_k = (\tilde{a}_k, \tilde{\kappa}_k) = \left( \frac{a_k - \mu_a}{\sigma_a},\, \frac{\kappa_k - \mu_\kappa}{\sigma_\kappa} \right)$$
+where $(\mu_a, \sigma_a) = (0.0290, 0.6810)\text{ m/s}^2$ and $(\mu_\kappa, \sigma_\kappa) = (0.000269, 0.0261)\text{ m}^{-1}$ are the action-space normalization constants. Ground-truth demonstration trajectories are mapped to target actions $\mathbf{A}_1$ via regularized finite differences of planar displacements $\Delta \mathbf{p}_k = (x_k - x_{k-1}, y_k - y_{k-1})$ and step velocities $a_k \approx (v_{k+1} - v_k)/\Delta t$, $\kappa_k \approx (\theta_{k+1} - \theta_k)/(v_k \Delta t + \frac{1}{2}a_k \Delta t^2)$ [2]. Conversely, given an initial speed $v_0$ estimated from $\mathcal{H}_t$, any sampled action sequence is mapped back to 64 Cartesian ego-frame waypoints $\mathbf{Y}$ via exact unicycle kinematic integration with trapezoidal quadrature [2]:
+$$v_k = v_0 + \sum_{j=1}^{k} a_j \Delta t, \quad \theta_k = \sum_{j=1}^{k} \kappa_j \left(v_{j-1}\Delta t + \frac{1}{2}a_j \Delta t^2\right)$$
+$$x_k = \sum_{j=1}^{k} \frac{\Delta t}{2}\big(v_{j-1}\cos\theta_{j-1} + v_j\cos\theta_j\big), \quad y_k = \sum_{j=1}^{k} \frac{\Delta t}{2}\big(v_{j-1}\sin\theta_{j-1} + v_j\sin\theta_j\big)$$
+To generate $\mathbf{A}_1$, the Action Expert uses Optimal-Transport Conditional Flow Matching (OT-CFM) [8]. Let $p_0(\mathbf{A}_0) = \mathcal{N}(\mathbf{0}, \mathbf{I})$ denote a standard Gaussian prior and $p_{\text{data}}(\mathbf{A}_1 \mid \mathbf{x}_t)$ denote the conditional distribution of expert demonstrations. Along the linear interpolation path [8]:
+$$\mathbf{A}_s = (1 - s)\mathbf{A}_0 + s\mathbf{A}_1, \quad s \in [0, 1]$$
+the Action Expert parameterizes the conditional velocity vector field [8]:
+$$\frac{d\mathbf{A}_s}{ds} = v_\theta(\mathbf{A}_s, s \mid \mathbf{e}_t, \mathcal{H}_t)$$
+transporting Gaussian noise samples $\mathbf{A}_0$ at $s = 0$ to kinematically feasible control sequences $\hat{\mathbf{A}}_1$ at $s = 1$.
 
 ---
 
-## 3.3 Quality-Driven Data Curation: The "Golden Ratio" Framework
+## 3.2 Longitudinal and Lateral Prior Distortion Under Hazard Flooding
 
-To eliminate Prior Collapse while supplying sufficient coverage of safety-critical edge cases, we formulate the **Distribution-Controlled Curation Framework**. All demonstration traces are collected using the **LEAD** (*Learner-Expert Asymmetry Decoupling*) privileged rule-based expert in CARLA 0.9.15, guaranteeing kinematically optimal, dynamically feasible ground-truth trajectories $\mathbf{Y}_1$.
+While pre-trained foundation VLAs possess broad visual-semantic priors, their continuous action experts require supervised fine-tuning (SFT) to align predicted waypoint kinematics with the target vehicle dynamics and downstream tracking controller. Let the discrete planar waypoint velocity components of a trajectory $\mathbf{Y}$ be given by the first-order forward difference:
+$$\dot{\mathbf{y}}_k = (\dot{x}_k, \dot{y}_k) = \left( \frac{x_{k+1} - x_k}{\Delta t}, \frac{y_{k+1} - y_k}{\Delta t} \right)$$
+Under nominal cruising conditions, expert demonstrations follow a forward-moving prior $p_{\text{nom}}$ with positive longitudinal speed ($\dot{x}_k > 0$) and zero-mean lateral velocity ($\mathbb{E}[\dot{y}_k] = 0$).
 
-The curation framework enforces three strict geometric and behavioral invariants over the training budget ($N = 1,600$ samples):
-
-```mermaid
-graph LR
-    subgraph Inv1["Invariant 1: Cruising vs. Stationary"]
-        C1["Nominal Cruising: >= 90%<br>(v > 0.5 m/s)"]
-        C2["Stationary Cap: <= 10%<br>(v <= 0.5 m/s)"]
-    end
-
-    subgraph Inv2["Invariant 2: Steering Symmetry"]
-        S1["Straight Cruising: 50%<br>(|steer| < 0.05)"]
-        S2["Left Turns & Merges: 25%<br>(steer <= -0.05)"]
-        S3["Right Turns & Merges: 25%<br>(steer >= +0.05)"]
-    end
-
-    subgraph Inv3["Invariant 3: Stratified Scenarios"]
-        SC1["Junctions & Intersections: 28.8%"]
-        SC2["Obstacle Avoidance: 28.8%"]
-        SC3["VRU / Pedestrians: 10.8%"]
-        SC4["Highway Merging: 10.8%"]
-        SC5["Signal Compliance: 7.7%"]
-        SC6["Baseline Cruising: 13.1%"]
-    end
-```
-
-### 3.3.1 Invariant 1: Cruising Prior Anchor & Stationary Cap (90/10 Rule)
-Uncurated urban datasets contain up to $40\%$ zero-velocity frames (waiting at traffic lights, gridlocked queues), which induces an aggressive "creep bias" or premature stop-out behavior. We enforce:
-$$\frac{|\{ (\mathbf{x}, \mathbf{Y}) \in \mathcal{D}_{\text{train}} \mid v_{\text{ego}} > 0.5\text{ m/s} \}|}{|\mathcal{D}_{\text{train}}|} \ge 0.90$$
-$$\frac{|\{ (\mathbf{x}, \mathbf{Y}) \in \mathcal{D}_{\text{train}} \mid v_{\text{ego}} \le 0.5\text{ m/s} \}|}{|\mathcal{D}_{\text{train}}|} \le 0.10$$
-This preserves high-speed cruising stability while restricting stationary frames strictly to legitimate stop-line scenarios.
-
-### 3.3.2 Invariant 2: Bilateral Steering Symmetry (2:1:1 Ratio)
-Naturalistic driving is heavily straight-dominated (>70%), causing uncurated models to develop a severe "straight bias" (blowing through intersections without turning). We enforce a strict **2:1:1 directional ratio**:
-$$P(\text{Straight}) = 0.50, \quad P(\text{Turn Left}) = 0.25, \quad P(\text{Turn Right}) = 0.25$$
-For obstacle detours (`ConstructionObstacle`, `ParkedObstacle`), the initial obstacle bypass is classified under $\mathcal{D}_{\text{left}}$, and the return lane merge is classified under $\mathcal{D}_{\text{right}}$, ensuring exact zero-mean lateral symmetry:
-$$\int_{\mathcal{D}_{\text{train}}} \dot{y}_k \, d\mathcal{D} \approx 0$$
-
-### 3.3.3 Invariant 3: LEAD Stratified Scenario Allocation
-The 1,600 training frames are stratified across the 6 canonical challenge classes defined in LEAD:
-* **Turning & Junctions ($28.8\%$, 460 frames):** Uncontrolled priority yielding and protected signalized turns.
-* **Obstacle Bypass & Avoidance ($28.8\%$, 460 frames):** Static construction detours and parked car bypasses without lane departure.
-* **VRUs & Dynamic Conflicts ($10.8\%$, 173 frames):** Strict in-lane longitudinal emergency braking for crossing pedestrians and cyclists.
-* **Highway Merging & Flow ($10.8\%$, 173 frames):** Gap selection and acceleration on highway on-ramps.
-* **Signal Compliance ($7.7\%$, 124 frames):** Stop-bar compliance at red lights.
-* **General Lane Maintenance ($13.1\%$, 210 frames):** Nominal lane-keeping on open roads.
+When demonstration pools are collected naively from urban edge-case suites—a regime we term **hazard flooding**—the empirical training distribution shifts toward a skewed mixture:
+$$p_{\text{train}}(\mathbf{A}_1 \mid \mathbf{x}_t) = (1 - \alpha_{\text{stat}} - \alpha_{\text{haz}}) p_{\text{nom}} + \alpha_{\text{stat}} p_{\text{stat}} + \alpha_{\text{haz}} p_{\text{haz}}$$
+where $p_{\text{stat}}$ represents stationary or near-stationary states ($v_{\text{ego}} \le 0.5\text{ m/s}$, where $a_k = 0$ and $\dot{x}_k \to 0$ during red-light queues, blocked intersections, or post-brake waiting) and $p_{\text{haz}}$ represents obstacle-evasion maneuvers with asymmetric lateral curvature ($\kappa_k \neq 0, \dot{y}_k \neq 0$). By the conditional expectation property of the $L_2$ Flow Matching loss [8], the Bayes-optimal vector field equals the posterior mean of the target displacement $\mathbf{A}_1 - \mathbf{A}_0$. Under an elevated stationary fraction $\alpha_{\text{stat}}$ (where unnormalized $a_k = 0$, i.e., $\tilde{a}_{\text{stat}} = -\mu_a / \sigma_a$), the conditional expectation of the longitudinal acceleration vector field is pulled downward toward the stationary attractor:
+$$\mathbb{E}\big[v_\theta(\mathbf{A}_s, s \mid \mathbf{e}_t, \mathcal{H}_t)\big]_a = (1 - \alpha_{\text{stat}})\,\mathbb{E}_{p \neq \text{stat}}[\tilde{a}_1 - a_0] + \alpha_{\text{stat}}(\tilde{a}_{\text{stat}} - a_0)$$
+In closed-loop execution, this shrinkage directly triggers the imitation-learning inertia problem [12] and causal confusion [13]: because the unicycle integrator computes future speeds as $v_k = v_0 + \sum_{j=1}^k a_j \Delta t$ starting from the historical ego speed $v_0 \in \mathcal{H}_t$, any deceleration that brings $v_0$ near zero causes the downward-biased acceleration field ($a_j \le 0$) to keep $v_k \approx 0$ across the entire $6.4\text{ s}$ horizon. Consequently, the integrated trajectory $\hat{\mathbf{Y}}_1$ collapses to near-zero arc length ($L_{\text{traj}} = \sum_{k=1}^K \|\hat{\mathbf{y}}_k - \hat{\mathbf{y}}_{k-1}\|_2 \to 0$), locking the downstream controller in prolonged standstill ($v_{\text{ego}} < 0.1\text{ m/s}$). Simultaneously, directional asymmetry in $p_{\text{haz}}$ biases the curvature vector field ($\mathbb{E}[v_\theta]_\kappa \neq 0$) during deceleration. As the dataset scales from $1,600$ to $6,400$ frames, a higher absolute count of stationary and unbalanced hazard frames reinforces these low-velocity attractors rather than resolving them.
 
 ---
 
-## 3.4 Parameter-Isolated Adapter Optimization
+## 3.3 Distribution-Curated Demonstration Design and $2 \times 2$ Factorial Matrix
 
-To prevent catastrophic forgetting of language comprehension and achieve extreme computational efficiency, training is strictly decoupled between the semantic backbone and the action generator.
+To adapt the continuous Action Expert to closed-loop driving while preventing standstill accumulation at scale, we pair learner–expert asymmetry reduction with a distribution-curated sampling protocol. All expert demonstrations are collected in CARLA 0.9.15 [9] using the **LEAD** [10] privileged expert across the LEAD training route pool. To prevent test-route leakage, the training routes are strictly route-disjoint from the `bench2drive220.xml` evaluation suite, while sharing CARLA town environments and the underlying taxonomy of 41 training / 44 evaluation scenario types.
 
-### 3.4.1 Decoupled Parameter Partitioning
-The total model parameter space $\Theta$ is partitioned into two disjoint sets:
-$$\Theta = \Theta_{\text{frozen}} \cup \theta_{\text{expert}}$$
-* **Frozen VLM Backbone ($\Theta_{\text{frozen}}$):** The 10B Vision-Language Model (Qwen2-10B + Vision Transformer) is quantized to 4-bit precision via PARO and completely frozen. No weights or LoRA adapter matrices in $\Theta_{\text{frozen}}$ receive gradient updates.
-* **Trainable Action Expert ($\theta_{\text{expert}}$):** Fine-tuning is isolated strictly to the **416 Action Expert parameter tensors ($\approx 4.25\text{ GB}$ in `bfloat16`)**, which encompass the waypoint input/output projections (`PerWaypointActionInProjV2`), diffusion denoiser transformer blocks, and delta trajectory tokenizer.
+We organize the training pool across six functional scenario groups:
+* **Group A (Obstacle Avoidance & Construction):** `ConstructionObstacle`, `ConstructionObstacleTwoWays`, `ParkedObstacle`, `ParkedObstacleTwoWays`, `VehicleOpensDoorTwoWays`, `StaticCutIn`.
+* **Group B (Junctions & Intersections):** `VehicleTurningRoute`, `BlockedIntersection`, `PriorityAtJunction`, `T_Junction`, `SignalizedJunctionLeftTurn`, `SignalizedJunctionRightTurn`, `NonSignalizedJunctionLeftTurn`, `NonSignalizedJunctionRightTurn`, `SignalizedJunctionLeftTurnEnterFlow`, `NonSignalizedJunctionLeftTurnEnterFlow`.
+* **Group C (Hazards & Emergency Situations):** `Accident`, `AccidentTwoWays`, `ControlLoss`, `HazardAtSideLane`, `HazardAtSideLaneTwoWays`.
+* **Group D (Highway, Traffic Flow & Merging):** `HighwayExit`, `HighwayCutIn`, `MergerIntoSlowTraffic`, `MergerIntoSlowTrafficV2`, `ParkingCutIn`, `InterurbanAdvancedActorFlow`, `InterurbanActorFlow`, `EnterActorFlow`, `EnterActorFlowV2`.
+* **Group E (Vulnerable Road Users & Dynamic Conflicts):** `DynamicObjectCrossing`, `PedestrianCrossing`, `VehicleTurningRoutePedestrian`, `ParkingCrossingPedestrian`, `CrossingBicycleFlow`, `OppositeVehicleRunningRedLight`, `OppositeVehicleTakingPriority`, `InvadingTurn`.
+* **Group F (Baseline & Signal Compliance):** `noScenarios` (open straight lane-keeping), `RedLightWithoutLeadVehicle`, `HardBreakRoute`.
 
-### 3.4.2 Training Objective: Vector Field Flow-Matching MSE Loss
-The Action Expert parameters $\theta_{\text{expert}}$ are optimized using the conditional Flow-Matching Mean Squared Error (MSE) objective:
-$$\mathcal{L}_{\text{MSE}}(\theta_{\text{expert}}) = \mathbb{E}_{s \sim \mathcal{U}[0, 1],\, \mathbf{Y}_0 \sim \mathcal{N}(0, \mathbf{I}),\, (\mathbf{x}, \mathbf{Y}_1) \sim \mathcal{D}_{\text{train}}} \left[ \Big\| v_{\theta_{\text{expert}}}(\mathbf{Y}_s, s \mid \mathbf{e}_t, \mathcal{H}_t) - (\mathbf{Y}_1 - \mathbf{Y}_0) \Big\|_2^2 \right]$$
-where $\mathbf{Y}_s = (1 - s)\mathbf{Y}_0 + s\mathbf{Y}_1$ is the interpolated trajectory state at diffusion time $s \in [0, 1]$.
+To evaluate the effects of dataset scale and curation regime, we construct a **$2 \times 2$ factorial training matrix** crossing **Dataset Scale** ($N = 1,600$ vs. $N = 6,400$ frames) with **Curation Regime** (`Hazard-Flooded` vs. `Distribution-Curated Golden`), alongside the unadapted zero-shot `Base` policy:
 
-### 3.4.3 Optimization Hyperparameters (AdamW)
-Training is performed using the **AdamW** optimizer with decoupled weight decay:
-* **Initial Learning Rate:** $\eta_0 = 1.0 \times 10^{-4}$ with linear warmup over the first $10\%$ of steps, followed by cosine annealing decay to $\eta_{\text{min}} = 1.0 \times 10^{-6}$.
-* **Optimizer Betas:** $\beta_1 = 0.9, \ \beta_2 = 0.95$
-* **Weight Decay:** $\lambda = 1.0 \times 10^{-2}$
-* **Gradient Clipping:** Maximum $\ell_2$-norm threshold $\|g\|_2 \le 1.0$
-* **Compute Cost:** Optimization converges in under **$2\text{ hours}$ on a single consumer GPU (NVIDIA RTX 4090, 24 GB VRAM)**, demonstrating that motor alignment in VLAs does not require large-scale compute clusters.
+| Curation Dimension | Hazard-Flooded Regime (`Flooded-1600` / `Flooded-6400`) | Distribution-Curated Regime (`Golden-1600` / `Golden-6400`) | Behavioral Role |
+| :--- | :---: | :---: | :--- |
+| **1. Stationary Frame Density ($v_{\text{ego}} \le 0.5\text{ m/s}$)** | **10%** (160 / 640 frames; 39% braking) | **2% Cap** (32 / 128 frames; 98% moving, 35% braking) | Prevents low-velocity vector field shrinkage and closed-loop standstill freezing. |
+| **2. Steering Distribution (`Straight : Left : Right`)** | **22% : 51% : 27%** (37% swerve-L, 14% turn-L, 12% swerve-R, 15% turn-R) | **50% : 25% : 25%** (13% swerve-L, 12% turn-L, 13% swerve-R, 12% turn-R) | Restores nominal straight cruising prior and enforces zero-mean lateral symmetry. |
+| **3. Combined Safety Hazards (Groups A + C)** | **57%** (Group A: 35% [560 / 2,240]; Group C: 22% [352 / 1,408]) | **44%** (Group A: 27% [432 / 1,728]; Group C: 17% [272 / 1,088]) | Curbs excessive obstacle-detour flooding while preserving hazard coverage. |
+| **4. Junctions, Highway & VRUs (Groups B, D, E, F)** | **B: 14%, D: 10%, E: 9%, F: 10%** | **B: 18%, D: 14%, E: 14%, F: 10%** | Expands structured intersection turning, merging, and crosswalk compliance. |
+
+Because the `Golden` and `Flooded` regimes co-vary in stationary frame cap, steering symmetry, and scenario stratification, experimental comparisons between them evaluate the combined curation regime as a unified package rather than an isolated single-factor ablation.
 
 ---
 
-## 3.5 Memory-Efficient Hybrid Inference via PARO Quantization & Control Coupling
+## 3.4 Parameter-Isolated Flow-Matching Fine-Tuning and Hybrid PARO Inference
 
-To achieve real-time 10 Hz closed-loop control in CARLA on consumer-grade hardware, we introduce a hybrid-precision inference architecture.
+To preserve the open-world visual-linguistic representations of the foundation backbone while adapting physical trajectory generation on a single 24 GB GPU, we partition the total model parameters $\Theta = \Theta_{\text{frozen}} \cup \theta_{\text{expert}}$ into two disjoint subsets [14, 15]:
 
-### 3.5.1 PARO: Pairwise Rotation Quantization for the VLM Backbone
-Standard INT4 quantization of 10B+ models degrades semantic reasoning due to extreme activation outliers. We employ **PARO** (*Pairwise Rotation Quantization*), which applies learned orthogonal rotation matrices $\mathbf{R} \in \mathbb{R}^{d \times d}$ ($\mathbf{R}\mathbf{R}^\top = \mathbf{I}$) to weight matrices $\mathbf{W}$ and activation vectors $\mathbf{X}$:
-$$\mathbf{W}' = \mathbf{W}\mathbf{R}, \quad \mathbf{X}' = \mathbf{R}^\top \mathbf{X}$$
-Because the transformation is orthogonal:
-$$\mathbf{W}' \mathbf{X}' = (\mathbf{W}\mathbf{R})(\mathbf{R}^\top \mathbf{X}) = \mathbf{W}\mathbf{I}\mathbf{X} = \mathbf{W}\mathbf{X}$$
-This mathematically preserves the linear mapping while rotating paired feature channels to disperse concentrated activation spikes. PARO compresses the 10B VLM to **INT4 (W4A8)** with **zero loss in semantic reasoning accuracy**, slashing the backbone VRAM footprint from **$21\text{ GB}$ to $11.2\text{ GB}$** (a $46.7\%$ reduction).
+1. **Frozen ParoQuant W4A8 VLM Backbone ($\Theta_{\text{frozen}}$):** Direct INT4 quantization of 10B-scale vision-language backbones degrades reasoning due to channel-wise activation outliers. Following ParoQuant [14] and FlashDrive [15], we compress the language layers of the 10B VLM backbone using **Pairwise Rotation Quantization (PARO, W4A8)** via vLLM Marlin kernels, applying 8-layer grouped pairwise orthogonal rotations and channel scales $\mathbf{R} \in \mathbb{R}^{d \times d}$ ($\mathbf{R}\mathbf{R}^\top = \mathbf{I}$) across 128-channel groups:
+   $$\mathbf{W}' = \mathbf{W}\mathbf{R}, \quad \mathbf{X}' = \mathbf{R}^\top \mathbf{X} \implies \mathbf{W}'\mathbf{X}' = \mathbf{W}\mathbf{X}$$
+   This preserves the exact linear mapping while smoothing outlier spikes across rotated channel pairs prior to INT4 weight and dynamic per-token INT8 activation quantization [14]. All backbone parameters $\Theta_{\text{frozen}}$ remain frozen during fine-tuning and inference, reducing the VLM memory footprint from $21.0\text{ GB}$ to $\sim 11.9\text{ GB}$ VRAM [15].
+2. **Trainable Continuous Action Expert ($\theta_{\text{expert}}$):** Gradient updates are isolated exclusively to the **416 parameter tensors ($\sim 2.1\text{B}$ parameters, $4.25\text{ GB}$ in native `bfloat16`)** of the continuous Flow-Matching Action Expert (`expert`, `action_in_proj`, and `action_out_proj`). Noisy action steps $\mathbf{A}_s \in \mathbb{R}^{64 \times 2}$ and flow time $s \in [0, 1]$ are embedded by `PerWaypointActionInProjV2` [2], which applies logarithmically spaced Fourier feature encodings ($\phi(u) = \sqrt{2}\,[\sin(2\pi \mathbf{f} u), \cos(2\pi \mathbf{f} u)]$ with 20 frequencies up to $f_{\max} = 100.0$) followed by a SiLU-RMSNorm MLP and LayerNorm projection into the 2048-dimensional expert hidden space. We optimize $\theta_{\text{expert}}$ by minimizing the Optimal-Transport Conditional Flow Matching vector-field MSE objective [8]:
+   $$\mathcal{L}_{\text{CFM}}(\theta_{\text{expert}}) = \mathbb{E}_{s \sim \mathcal{U}(0,1),\, \mathbf{A}_0 \sim \mathcal{N}(\mathbf{0},\mathbf{I}),\, (\mathbf{x}_t, \mathbf{A}_1) \sim \mathcal{D}_{\text{train}}} \left[ \Big\| v_{\theta_{\text{expert}}}(\mathbf{A}_s, s \mid \mathbf{e}_t, \mathcal{H}_t) - (\mathbf{A}_1 - \mathbf{A}_0) \Big\|_2^2 \right]$$
+   Optimization uses AdamW ($\beta_1 = 0.9, \beta_2 = 0.95$, weight decay $\lambda = 1.0 \times 10^{-2}$, gradient norm clipping $\|\mathbf{g}\|_2 \le 1.0$) with peak learning rate $\eta_0 = 1.0 \times 10^{-4}$, a $10\%$ linear warmup, and cosine annealing to $\eta_{\text{min}} = 1.0 \times 10^{-6}$. Training completes in under $2\text{ hours}$ on a single NVIDIA RTX 4090 ($24\text{ GB}$ VRAM), and the standalone $4.25\text{ GB}$ `action_expert.safetensors` checkpoint is hot-patched directly into the W4A8 base model at runtime.
 
-### 3.5.2 Hybrid-Precision Runtime Architecture
-The deployed inference engine operates under a hybrid-precision split:
-
-| Subsystem | Model Component | Precision | VRAM Footprint | Functional Role |
-| :--- | :--- | :---: | :---: | :--- |
-| **Semantic Reasoning** | VLM Backbone (Qwen2-10B) | **PARO INT4 (W4A8)** | **$\sim 11.2\text{ GB}$** | Frozen semantic reasoning & Chain-of-Thought (zero accuracy drop) |
-| **Continuous Control** | Action Expert (Flow Denoiser) | **Native BF16** | **$\sim 4.25\text{ GB}$** | Fine-tuned 64-waypoint continuous trajectory generation |
-| **Total Model System** | **Hybrid VLA** | **W4A8 + BF16** | **$\approx 15.5\text{ GB}$** | **Fits on a single 24 GB GPU (RTX 4090) with CARLA running** |
-
-### 3.5.3 FlashDrive Streaming & CARLA Closed-Loop Control
-1. **FlashDrive Streaming Engine:** Implements sliding-window KV-cache reuse, executing Euler trajectory integration ($S = 8$ flow steps) at a steady-state latency of **$\sim 45\text{ ms}$ ($\sim 22\text{ FPS}$)**, comfortably satisfying CARLA's 10 Hz real-time requirement.
-2. **Downstream Control Coupling:** The generated 64 waypoints are tracked by CARLA's official `VehiclePIDController` using a dynamic lookahead horizon $d_{\text{lookahead}} = \max(3.5\text{ m}, 1.5\text{ s} \cdot v_{\text{current}})$. Lateral steering is actuated via heading error PID, while longitudinal throttle/braking tracks the target waypoint velocity.
-
-Because the downstream controller is invariant across all evaluations, all gains in driving score and collision avoidance are strictly attributable to the **distribution-controlled curation of the Action Expert**.
+At test time, the FlashDrive streaming server [15] maintains a sliding-window key-value cache and integrates the learned vector field $v_{\theta_{\text{expert}}}$ from $s = 0$ to $s = 1$ using $S = 8$ uniform forward Euler steps ($\Delta s = 1/S = 0.125$, with adaptive velocity caching on steps $i \in \{3, 4, 5, 6\}$) [8, 15]:
+$$\mathbf{A}_{s + \Delta s} = \mathbf{A}_s + \Delta s \cdot v_{\theta_{\text{expert}}}(\mathbf{A}_s, s \mid \mathbf{e}_t, \mathcal{H}_t)$$
+achieving an action-expert denoising latency of $\sim 46.9\text{ ms}$ ($\sim 151\text{ ms}$ total per streaming window) [15]. The resulting 64-waypoint trajectory $\hat{\mathbf{Y}}_1$ is tracked in closed loop by CARLA's official `VehiclePIDController` ($K_P^{\text{lat}} = 1.95, K_I^{\text{lat}} = 0.05, K_D^{\text{lat}} = 0.20$; $K_P^{\text{lon}} = 1.0, K_I^{\text{lon}} = 0.05, K_D^{\text{lon}} = 0.0$). Given the ego speed $v_{\text{ego}}$ (in $\text{m/s}$) and maximum near-horizon trajectory curvature angle $\theta_{\max} = \max_{5 \le k < 35} \operatorname{atan2}(|y_k|, \max(x_k, 1.0))$, the controller selects a target waypoint along the cumulative chord length $s_k = \sum_{j=1}^k \|\hat{\mathbf{y}}_j - \hat{\mathbf{y}}_{j-1}\|_2$ at dynamic lookahead distance:
+$$d_{\text{lookahead}} = \begin{cases} \operatorname{clip}(5.5 + 0.3\,v_{\text{ego}},\, 5.0,\, 8.5)\text{ m}, & \text{if } \theta_{\max} > 0.087\text{ rad} \\ \operatorname{clip}(5.0 + 0.4\,v_{\text{ego}},\, 5.0,\, 12.0)\text{ m}, & \text{otherwise} \end{cases}$$
+with target speed bounded by the kinematic stopping-distance limit $v_{\max} = 3.6\sqrt{\max(0, 2 a_{\text{dec}} L_{\text{traj}})}$ ($a_{\text{dec}} = 1.8\text{ m/s}^2$, capped at $35\text{ km/h}$) and forced to zero ($v_{\text{target}} = 0\text{ km/h}$ with holding brake) whenever the predicted trajectory extent $L_{\text{traj}} = s_{64}$ satisfies $(L_{\text{traj}} < 1.5\text{ m}) \lor (v_{\text{ego}} < 0.5\text{ m/s} \land L_{\text{traj}} < 2.0\text{ m})$. Raw PID outputs are filtered via an exponential moving average $u_t = (1 - \alpha_u)u_{t-1} + \alpha_u u_t^{\text{raw}}$ ($\alpha_{\text{steer}} = 0.85$ when turning and $0.60$ on straightaways; $\alpha_{\text{pedal}} = 0.25$) with mutual throttle–brake exclusion. Because the VLM backbone, Euler solver, and PID tracking controller are held completely fixed across all five evaluated models, all closed-loop behavioral differences arise strictly from the Action Expert training data.

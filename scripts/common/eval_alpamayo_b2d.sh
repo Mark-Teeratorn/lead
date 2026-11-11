@@ -57,7 +57,13 @@ export SCENARIO_RUNNER_ROOT="3rd_party/leaderboard/bench2drive/scenario_runner"
 export IS_BENCH2DRIVE=1
 export SAVE_PATH="$_evaluation_output_dir/"
 export PYTHONUNBUFFERED=1
-export CARLA_QUALITY_LEVEL="${CARLA_QUALITY_LEVEL:-Low}"
+if [ -z "$CARLA_QUALITY_LEVEL" ]; then
+    if grep -qE 'town="Town0[23]"' "$_routes" 2>/dev/null; then
+        export CARLA_QUALITY_LEVEL="Epic"
+    else
+        export CARLA_QUALITY_LEVEL="Low"
+    fi
+fi
 export OMP_NUM_THREADS=4
 export MKL_NUM_THREADS=4
 
@@ -190,7 +196,7 @@ $LEAD_PYTHON 3rd_party/leaderboard/bench2drive/leaderboard/leaderboard/leaderboa
     --record=None \
     --port=2000 \
     --traffic-manager-port=8000 \
-    --timeout=60 \
+    --timeout=180 \
     --traffic-manager-seed=0 \
     --repetitions=1
 

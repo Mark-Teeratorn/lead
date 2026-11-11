@@ -111,3 +111,4 @@ The reporting and manuscript framing will follow these pre-specified rules based
 4. **Data Locking:**
    * Raw simulation outputs (`predicted_trajectories.jsonl` and `checkpoint_endpoint.json`) are preserved unedited.
    * All summary tables are generated automatically via `scripts/evaluation/compute_paper_tables.py`.
+

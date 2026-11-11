@@ -265,10 +265,12 @@ class LeaderboardEvaluator(object):
         print(f"\033[1m>  Load_world time={time.time()-t1}", flush=True)
 
         t2 = time.time()
-        # Large Map settings are always reset, for some reason
         settings = self.world.get_settings()
-        settings.tile_stream_distance = 650
-        settings.actor_active_distance = 650
+        if "Town12" in town or "Town13" in town:
+            settings.tile_stream_distance = 650
+            settings.actor_active_distance = 650
+        settings.synchronous_mode = True
+        settings.fixed_delta_seconds = 1.0 / self.frame_rate
         self.world.apply_settings(settings)
         print(f"\033[1m> Apply settings time={time.time()-t2}", flush=True)
 
@@ -437,7 +439,10 @@ class LeaderboardEvaluator(object):
         # Stop the scenario
         try:
             print("\033[1m> Stopping the route\033[0m", flush=True)
-            self.manager.stop_scenario()
+            try:
+                self.manager.stop_scenario()
+            except Exception as e:
+                print(f"\033[93mWarning during stop_scenario: {e}\033[0m", flush=True)
             result = self._register_statistics(config.index, entry_status, crash_message)
 
             if args.record:
