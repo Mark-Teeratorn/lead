@@ -1,0 +1,165 @@
+#!/bin/bash
+# ==============================================================================
+# Bench2Drive 44 Canonical Scenarios Evaluation - Matrix-Flooded-6400 Run
+# ==============================================================================
+# Model: Alpamayo-1.5-10B-Matrix-Flooded-6400-A15 (Matched Flooded 6,400 Large)
+# Controller: Clean Baseline Controller (VehiclePIDController)
+# Tag: model_matrix_flooded_6400
+# Target Checkpoint: /home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400
+# SHA-256: 5707c517e2a39f8bd2d5bf2840966fd1b5ecb59ddc3d4fd308dffa7401214940
+# ==============================================================================
+
+set -e
+cd /home/aimslab/lead
+
+LOG_FILE="outputs/full_44_matrix_flooded_6400_progress.log"
+mkdir -p outputs/local_evaluation
+touch "$LOG_FILE"
+
+echo "================================================================================" | tee -a "$LOG_FILE"
+echo "Starting Full 44 Evaluation: Alpamayo-1.5-10B-Matrix-Flooded-6400-A15" | tee -a "$LOG_FILE"
+echo "Start Time: $(date)" | tee -a "$LOG_FILE"
+echo "Target Checkpoint: /home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400" | tee -a "$LOG_FILE"
+echo "================================================================================" | tee -a "$LOG_FILE"
+
+SOCK_PATH="/tmp/alpamayo_flashdrive.sock"
+FLASHDRIVE_PYTHON="/home/aimslab/flashdrive/.venv/bin/python"
+MODEL_DIR="/home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400"
+
+# Verify FlashDrive Model Server is responsive
+server_is_alive() {
+    [ -S "$SOCK_PATH" ] && python3 -c "import socket; s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM); s.settimeout(2); s.connect('$SOCK_PATH'); s.close()" 2>/dev/null
+}
+
+if ! server_is_alive; then
+    echo "[Runner] Launching FlashDrive Server with Matrix-Flooded-6400..." | tee -a "$LOG_FILE"
+    rm -f "$SOCK_PATH"
+    pkill -9 -f "flashdrive_server.py" 2>/dev/null || true
+    pkill -9 -f "CarlaUE4" 2>/dev/null || true
+    sleep 2
+
+    HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+    PYTORCH_ALLOC_CONF=expandable_segments:True \
+    $FLASHDRIVE_PYTHON -u /home/aimslab/flashdrive/scripts/flashdrive_server.py \
+        --model-path "$MODEL_DIR" \
+        --socket-path "$SOCK_PATH" > /tmp/flashdrive_server_flooded6400.log 2>&1 &
+    
+    echo "[Runner] Waiting for server to initialize..." | tee -a "$LOG_FILE"
+    for i in $(seq 1 600); do
+        if server_is_alive; then
+            echo "[Runner] Model Server ready!" | tee -a "$LOG_FILE"
+            break
+        fi
+        sleep 1
+    done
+fi
+
+# 44 Canonical Bench2Drive Scenarios
+SCENARIOS=(
+    "Accident:2534"
+    "AccidentTwoWays:1852"
+    "BlockedIntersection:2204"
+    "ConstructionObstacle:2513"
+    "ConstructionObstacleTwoWays:1825"
+    "ControlLoss:3561"
+    "CrossingBicycleFlow:3086"
+    "DynamicObjectCrossing:17752"
+    "EnterActorFlow:2201"
+    "HardBreakRoute:3540"
+    "HazardAtSideLane:1790"
+    "HazardAtSideLaneTwoWays:3436"
+    "HighwayCutIn:2286"
+    "HighwayExit:23687"
+    "InterurbanActorFlow:23901"
+    "InterurbanAdvancedActorFlow:23695"
+    "InvadingTurn:2790"
+    "MergerIntoSlowTraffic:2283"
+    "MergerIntoSlowTrafficV2:23771"
+    "NonSignalizedJunctionLeftTurn:2084"
+    "NonSignalizedJunctionLeftTurnEnterFlow:28087"
+    "NonSignalizedJunctionRightTurn:2115"
+    "OppositeVehicleRunningRedLight:2082"
+    "OppositeVehicleTakingPriority:2127"
+    "ParkedObstacle:1773"
+    "ParkedObstacleTwoWays:2664"
+    "ParkingCrossingPedestrian:3248"
+    "ParkingCutIn:1711"
+    "ParkingExit:1956"
+    "PedestrianCrossing:14194"
+    "SequentialLaneChange:17563"
+    "SignalizedJunctionLeftTurn:3936"
+    "SignalizedJunctionLeftTurnEnterFlow:28099"
+    "SignalizedJunctionRightTurn:2050"
+    "StaticCutIn:2709"
+    "T_Junction:26458"
+    "VanillaNonSignalizedTurn:2390"
+    "VanillaNonSignalizedTurnEncounterStopsign:2416"
+    "VanillaSignalizedTurnEncounterGreenLight:14842"
+    "VanillaSignalizedTurnEncounterRedLight:3144"
+    "VehicleOpensDoorTwoWays:3464"
+    "VehicleTurningRoute:2144"
+    "VehicleTurningRoutePedestrian:2164"
+    "YieldToEmergencyVehicle:3364"
+)
+
+TOTAL=${#SCENARIOS[@]}
+
+for idx in "${!SCENARIOS[@]}"; do
+    ENTRY="${SCENARIOS[$idx]}"
+    SC_NAME="${ENTRY%%:*}"
+    ROUTE_ID="${ENTRY##*:}"
+    CURRENT=$((idx + 1))
+    
+    CKPT_FILE="outputs/local_evaluation/model_matrix_flooded_6400_${ROUTE_ID}/checkpoint_endpoint.json"
+    
+    # Check if already completed
+    if [ -f "$CKPT_FILE" ] && grep -q '"scores_mean"' "$CKPT_FILE" 2>/dev/null; then
+        echo "[$CURRENT/$TOTAL] Route $ROUTE_ID ($SC_NAME) already completed. Skipping." | tee -a "$LOG_FILE"
+        continue
+    fi
+    
+    echo "--------------------------------------------------------------------------------" | tee -a "$LOG_FILE"
+    echo "[$CURRENT/$TOTAL] Starting Route $ROUTE_ID ($SC_NAME)..." | tee -a "$LOG_FILE"
+    echo "--------------------------------------------------------------------------------" | tee -a "$LOG_FILE"
+    
+    # Ensure CARLA is clean
+    pkill -9 -f "CarlaUE4" 2>/dev/null || true
+    pkill -9 -f "leaderboard_evaluator.py" 2>/dev/null || true
+    sleep 2
+    
+    ROUTE_XML="src/lead/routes/benchmark_routes/bench2drive/${ROUTE_ID}.xml"
+    
+    MODEL_TAG="model_matrix_flooded_6400" \
+    MODEL_PATH="$MODEL_DIR" \
+    bash scripts/common/eval_alpamayo_b2d.sh "$ROUTE_XML" >> "$LOG_FILE" 2>&1 || {
+        echo "[$CURRENT/$TOTAL] Route $ROUTE_ID finished with non-zero exit code. Checking logs..." | tee -a "$LOG_FILE"
+    }
+    
+    # Read and report result
+    python3 -c "
+import json
+try:
+    with open('$CKPT_FILE') as f:
+        d = json.load(f)
+    r = d['_checkpoint']['records'][0]
+    ds = r['scores']['score_composed']
+    rc = r['scores']['score_route']
+    inf = r.get('infractions', {})
+    crashes = len(inf.get('collisions_layout', [])) + len(inf.get('collisions_vehicle', [])) + len(inf.get('collisions_pedestrian', []))
+    status = r.get('status', 'Unknown')
+    print(f'>>> RESULT Route $ROUTE_ID ($SC_NAME): DS={ds:6.2f} | RC={rc:5.1f}% | Crashes={crashes} | Status: {status}')
+except Exception as e:
+    print(f'[$CURRENT/$TOTAL] Could not read score for Route $ROUTE_ID: {e}')
+" | tee -a "$LOG_FILE"
+
+    echo "[$CURRENT/$TOTAL] Completed Route $ROUTE_ID ($SC_NAME). Brief pause before next route..." | tee -a "$LOG_FILE"
+    sleep 3
+done
+
+echo "================================================================================" | tee -a "$LOG_FILE"
+echo "All $TOTAL routes finished for Matrix-Flooded-6400!" | tee -a "$LOG_FILE"
+echo "End Time: $(date)" | tee -a "$LOG_FILE"
+echo "================================================================================" | tee -a "$LOG_FILE"
