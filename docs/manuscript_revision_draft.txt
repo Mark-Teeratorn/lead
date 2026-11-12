@@ -44,7 +44,7 @@
 - [24] SimLingo: was "A. He, J. Chen, K. Chitta, ... Interactive Explanations, arXiv:2311.14480, 2023". Now K. Renz, L. Chen, E. Arani, O. Sinavski, "SimLingo: Vision-Only Closed-Loop Autonomous Driving with Language-Action Alignment", CVPR 2025 (arXiv:2503.09594; CVF open access). §2 description corrected (vision-only, language–action alignment).
 - [21] TransFuser: entry unchanged; §2 description corrected to single front camera + LiDAR BEV (reviewer S15; not independently re-checked against the PDF).
 - NEW [26] pi0 (arXiv:2410.24164), [27] ChauffeurNet (RSS XV 2019, doi 10.15607/RSS.2019.XV.031), [28] Keyframe-Focused Visual Imitation Learning (ICML 2021, PMLR 139; arXiv:2106.06452), [29] Diffusion Policy (RSS XIX 2023; arXiv:2303.04137), [30] DiffusionDrive (CVPR 2025, pp. 12037–12047; arXiv:2411.15139), [31] Tong et al., minibatch OT / generalized CFM (TMLR 2024; arXiv:2302.00482), [32] Rectified flow (ICLR 2023; arXiv:2209.03003). All verified by title search. For [26]–[32] the bibliographic record was verified; the content statements attributed to [27] (past-motion dropout) and [12] (speed-prediction branch) are from the authors' knowledge of the papers, not from the search.
-- Not re-verified (not requested; 2026 records): [10], [14], [15], [19], [20].
+- Checked on 12 Nov 2026 by title search and against the upstream README: [10] (authors and CVPR 2026 confirmed), [14] (authors and ICLR 2026 confirmed), [15] (authors and arXiv:2608.12932 confirmed), [19] (`NVlabs/alpamayo1.5`, March 2026, named in the `NVlabs/alpamayo` README; Hugging Face release 19 Mar 2026). [2]: first authors added from the BibTeX entry in the `NVlabs/alpamayo` README. [20]: the personal authors given before ("R. Tian, Y. Wang, et al.") could not be confirmed for the repository, so the entry now has the organisation as author. Page numbers of [3]–[7], [11]–[13], [16], [18], [21], [25] were not re-checked.
 
 (4) INCONSISTENCIES NOTICED IN THE EVIDENCE FILES
 - Base standstill: 40.45 % (paper_reanalysis) vs 40.32 % (confirmatory record), because compute_paper_tables reads base_23687, which has no step log, and scores it 0 %. The draft uses 40.45 %. Same cause for Base stratum values (e.g. Merging 34.1 vs 33.68).
@@ -365,7 +365,7 @@ References
 
 [1] Physical Intelligence, K. Black, N. Brown, J. Darpinian, K. Dhabalia, D. Driess, et al., "π0.5: a Vision-Language-Action Model with Open-World Generalization," arXiv preprint arXiv:2504.16054, Apr. 2025.
 
-[2] NVIDIA, "Alpamayo-R1: Bridging Reasoning and Action Prediction for Generalizable Autonomous Driving in the Long Tail," arXiv preprint arXiv:2511.00088, 2025.
+[2] NVIDIA, Y. Wang, W. Luo, J. Bai, Y. Cao, et al., "Alpamayo-R1: Bridging Reasoning and Action Prediction for Generalizable Autonomous Driving in the Long Tail," arXiv preprint arXiv:2511.00088, 2025.
 
 [3] X. Jia, Z. Yang, Q. Li, Z. Zhang, and J. Yan, "Bench2Drive: Towards multi-ability benchmarking of closed-loop end-to-end autonomous driving," in Advances in Neural Information Processing Systems (NeurIPS), vol. 37, 2024, pp. 819–844.
 
@@ -401,7 +401,7 @@ References
 
 [19] NVIDIA Research (NVlabs), "Alpamayo 1.5 (Alpamayo-1.5-10B): Open-Source Vision-Language-Action Driving Model and Codebase," GitHub and HuggingFace Repository (`NVlabs/alpamayo1.5`, `nvidia/Alpamayo-1.5-10B`), Mar. 2026.
 
-[20] R. Tian, Y. Wang, et al., "Alpamayo Post-Training Recipes: Supervised Fine-Tuning (SFT) and Reinforcement Learning for Reasoning VLA Models," NVIDIA Research (`NVlabs/alpamayo-recipes`), Apr.–May 2026.
+[20] NVIDIA Research (NVlabs), "Alpamayo Recipes: Supervised Fine-Tuning (SFT) and Reinforcement-Learning Post-Training Recipes for Alpamayo Models," GitHub repository (`NVlabs/alpamayo-recipes`, recipe `alpamayo1_sft`), Apr.–May 2026.
 
 [21] A. Prakash, K. Chitta, and A. Geiger, "Multi-Modal Fusion Transformer for End-to-End Autonomous Driving," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 7077–7087.
 
