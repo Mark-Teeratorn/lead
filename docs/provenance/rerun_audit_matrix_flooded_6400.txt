@@ -1,0 +1,30 @@
+# Rerun audit: Matrix-Flooded-6400 confirmatory evaluation (44 canonical routes)
+# RECONSTRUCTED AFTER THE FACT on 2026-11-12 from marker lines of
+#   outputs/full_44_matrix_flooded_6400_progress.log
+#   outputs/watchdog_supervisor_matrix_flooded_6400.log
+# The pre-registration required this log to be written during the run; it was not.
+# Reconstruction read launch / result marker lines only, with scores masked.
+# Format: timestamp(+07) | route | event | detail
+
+2026-11-11 17:20:06 | -     | supervisor start #1 | watchdog launched runner PID 576978
+2026-11-11 17:20:xx | 2534  | launch attempt 1    | launcher reused a model server already on the socket (model not verified); CARLA started; leaderboard evaluator process 577349 was Killed before the agent connected; no steps, no output file
+2026-11-11 17:20:39 | -     | runner restart      | watchdog: "Runner script died unexpectedly", new runner PID 577389
+2026-11-11 17:20:xx | 2534  | launch attempt 2    | launcher started a FlashDrive server with extracted_matrix_flooded_6400; server process 577440 Killed during load; evaluator never launched; "Could not read score ... No such file" (no checkpoint_endpoint.json existed)
+2026-11-11 17:2x:xx | 1852  | launch attempt 1    | runner moved on to route 2/44; server start began; evaluator never launched
+2026-11-11 17:21:04 | -     | supervisor start #2 | manual restart of the watchdog supervisor (not an infrastructure failure listed in the pre-registration)
+2026-11-11 17:31:14 | -     | model server start  | flashdrive_server.py PID 580518, --model-path .../extracted_matrix_flooded_6400 (same process still alive at 2026-11-12 12:5x; no later server restart in the watchdog log)
+2026-11-11 17:38:36 | -     | runner start        | watchdog: server recovered, runner PID 582502
+2026-11-11 17:38:xx | 2534  | launch attempt 3    | evaluator launched, agent connected, route ran to a result (the only scored run of 2534)
+2026-11-11 ..       | 1852  | launch attempt 2    | evaluator launched, route ran to a result (the only scored run of 1852)
+2026-11-11..12      | 42 other routes | single launch each | one evaluator launch and one result each
+2026-11-12 10:53:49 | -     | supervisor success  | 44 / 44 routes with completed checkpoints
+
+# Totals
+# evaluator launches: 45 (route 2534 twice, every other route once)
+# ">>> RESULT" records: 44, exactly one per route (each printed twice by tee)
+# routes scored more than once: 0
+# routes re-run after a score existed: 0
+# CARLA crash / RPC timeout reruns (the only reruns the pre-registration permits): 0
+# restarts that are NOT on the pre-registered permitted list: evaluator/server processes killed during start-up of routes 2534 and 1852 (before any simulation step), and one manual supervisor restart. None occurred after a score.
+# model identity: all 44 scored routes were served by server PID 580518 loaded with extracted_matrix_flooded_6400 (SHA-256 5707c517e2a39f8bd2d5bf2840966fd1b5ecb59ddc3d4fd308dffa7401214940).
+# telemetry completeness: 57,057 logged steps vs 57,108 expected (duration_game x 20); no internal step gaps on any route.
