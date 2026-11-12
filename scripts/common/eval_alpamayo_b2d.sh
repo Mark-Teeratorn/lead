@@ -186,12 +186,15 @@ if ! ss -tulpn | grep -q ":2000 "; then
 fi
 
 # 3. Launch Bench2Drive Leaderboard Evaluator
+# AGENT_FILE selects an alternative controller (default: the hashed production controller).
+_agent_file="${AGENT_FILE:-src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent.py}"
+echo "[eval_alpamayo] Agent file: $_agent_file"
 echo "[eval_alpamayo] Launching Leaderboard Evaluator on route $_routes..."
 $LEAD_PYTHON 3rd_party/leaderboard/bench2drive/leaderboard/leaderboard/leaderboard_evaluator.py \
     --routes="$_routes" \
     --track=SENSORS \
     --checkpoint="$_evaluation_output_dir/checkpoint_endpoint.json" \
-    --agent=src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent.py \
+    --agent="$_agent_file" \
     --debug=0 \
     --record=None \
     --port=2000 \
