@@ -62,3 +62,22 @@ Written before any of these runs started. The primary confirmatory record of Sec
 **5c. Non-overlapping routes.** H1 and H2 are each reported on all 44 routes and on the 37 routes not touched by Matrix training samples (and on the 33 routes not gate-flagged at pool level), as already computed in `docs/provenance/train_eval_overlap_canonical44.json`.
 
 All of Section 5 is exploratory or sensitivity analysis. Rerun rule and provenance recording are those of Section 4c.
+
+## 6. Decoupling arm, decided 12 November 2026, 23:40 (UTC+7), before the model was trained
+
+Written before the training run started. Optional: it is reported only if training finishes within the available A100 window (to 14 November) and the checkpoint can be evaluated; otherwise it is reported as not done. The confirmatory record of Section 1 is not changed.
+
+**Why.** Golden and Flooded differ in three target marginals at once (scenario-group mix, manoeuvre mix, stationary share). The dataset `lead-alpamayo-pai_matrix_floodedgroups_balanced_6400` (built with the other four, same pool, same build seed, never trained on) has Flooded's group mix with Golden's manoeuvre mix and 2 % stationary share. A model trained on it separates the group mix from the manoeuvre-plus-stationary bundle.
+
+**Training.** Same recipe, base weights and schedule as the two 6,400-frame Matrix models: 10 epochs, per-device batch 1, gradient accumulation 8, 8,000 optimizer steps, warmup 200, learning rate 1e-4 to 1e-6, seed 42, VLM frozen; same export procedure. Name: `Matrix-FloodedGroups-Balanced-6400`.
+
+**Evaluation.** All 44 canonical routes, unmodified controller, current harness, one pass, tag `model_matrix_fgbalanced_6400`, after the runs of Section 5. Rerun rule and provenance recording as in Section 4c.
+
+**Analysis (exploratory).** Endpoint: standstill fraction (v < 0.1 m/s). Paired differences Balanced − Flooded-6400-Matched and Balanced − Golden-6400 over the 44 routes, with the Wilcoxon test and BCa interval of Section 1; the comparator is the per-route mean of its two default-controller passes, and each pass separately is given as a sensitivity row. Driving Score, route completion and collision events are reported descriptively. The same comparisons are repeated on the 37 non-overlapping routes.
+
+**Interpretation fixed in advance.**
+- Balanced below Flooded (interval excludes 0) and not separable from Golden: the standstill difference follows the manoeuvre mix and stationary share, not the group mix.
+- Balanced above Golden (interval excludes 0) and not separable from Flooded: it follows the group mix.
+- Anything else, including a value between the two with both intervals containing 0: inconclusive, and reported as such.
+
+One training seed and one evaluation pass; every reading is set against the test–retest spread of Section 5a. No confirmatory claim is made from this arm.
