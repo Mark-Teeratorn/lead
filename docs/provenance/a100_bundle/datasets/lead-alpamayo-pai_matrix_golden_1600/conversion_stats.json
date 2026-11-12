@@ -1,0 +1,234 @@
+{
+ "cell": "lead-alpamayo-pai_matrix_golden_1600",
+ "regime": "golden",
+ "n": 1600,
+ "seed": 0,
+ "optional": false,
+ "source": "dataset/lead_multirig_pai_v4",
+ "source_pool": 34132,
+ "sample_stride_s": 0.4,
+ "determinism": "sha1 order of (seed, clip_id, t0_relative); no RNG",
+ "targets": {
+  "groups": [
+   27.0,
+   18.0,
+   17.0,
+   14.0,
+   14.0,
+   10.0
+  ],
+  "maneuvers": [
+   50.0,
+   13.0,
+   13.0,
+   12.0,
+   12.0
+  ],
+  "stationary_pct": 2.0,
+  "scales": [
+   6400,
+   1600
+  ]
+ },
+ "allocation": [
+  [
+   149,
+   127,
+   88,
+   13,
+   55
+  ],
+  [
+   124,
+   1,
+   0,
+   90,
+   73
+  ],
+  [
+   146,
+   61,
+   42,
+   0,
+   23
+  ],
+  [
+   123,
+   5,
+   66,
+   24,
+   6
+  ],
+  [
+   166,
+   1,
+   3,
+   30,
+   24
+  ],
+  [
+   92,
+   13,
+   9,
+   35,
+   11
+  ]
+ ],
+ "stationary_allocation": null,
+ "realised": {
+  "n": 1600,
+  "by_group": {
+   "A. Obstacle & Construction": 432,
+   "F. Baseline & Signals": 160,
+   "B. Junctions": 288,
+   "C. Hazards & Emergency": 272,
+   "D. Highway & Merging": 224,
+   "E. VRUs & Dynamic Conflicts": 224
+  },
+  "by_group_pct": {
+   "A. Obstacle & Construction": 27.0,
+   "F. Baseline & Signals": 10.0,
+   "B. Junctions": 18.0,
+   "C. Hazards & Emergency": 17.0,
+   "D. Highway & Merging": 14.0,
+   "E. VRUs & Dynamic Conflicts": 14.0
+  },
+  "by_maneuver": {
+   "SWERVE_LEFT": 208,
+   "SWERVE_RIGHT": 208,
+   "TURN_LEFT": 192,
+   "STRAIGHT": 800,
+   "TURN_RIGHT": 192
+  },
+  "by_maneuver_pct": {
+   "SWERVE_LEFT": 13.0,
+   "SWERVE_RIGHT": 13.0,
+   "TURN_LEFT": 12.0,
+   "STRAIGHT": 50.0,
+   "TURN_RIGHT": 12.0
+  },
+  "lateral_left_right_pct": [
+   25.0,
+   25.0
+  ],
+  "flags": {
+   "stationary": 32,
+   "brake": 572,
+   "hazard": 373
+  },
+  "flags_pct": {
+   "stationary": 2.0,
+   "brake": 35.75,
+   "hazard": 23.31
+  },
+  "scenarios_present": 41
+ },
+ "nested_in": "lead-alpamayo-pai_matrix_golden_6400",
+ "val": {
+  "shared": true,
+  "n": 1567,
+  "before": 1720,
+  "after": 1567,
+  "dropped": 153,
+  "overlap_after": {
+   "gate_excluded_routes": 69,
+   "gate_excluded_on_subset": 27,
+   "routes_in_split": 45,
+   "routes_overlapping_full_eval": 4,
+   "routes_overlapping_subset": 2,
+   "routes_overlapping_subset_list": [
+    [
+     "ControlLoss",
+     "Town05_Scenario1_28"
+    ],
+    [
+     "T_Junction",
+     "Town03_Scenario7_40"
+    ]
+   ],
+   "samples": 1567,
+   "samples_overlapping_full_eval": 0,
+   "samples_overlapping_full_eval_pct": 0.0,
+   "samples_overlapping_subset": 0,
+   "samples_overlapping_subset_pct": 0.0,
+   "unresolved_log_names": 0,
+   "note": "lower bound: unresolved log names are counted as non-overlapping"
+  }
+ },
+ "train_eval_overlap": {
+  "gate_excluded_routes": 69,
+  "gate_excluded_on_subset": 27,
+  "routes_in_split": 581,
+  "routes_overlapping_full_eval": 40,
+  "routes_overlapping_subset": 13,
+  "routes_overlapping_subset_list": [
+   [
+    "AccidentTwoWays",
+    "route_001450"
+   ],
+   [
+    "ConstructionObstacleTwoWays",
+    "1145_0"
+   ],
+   [
+    "ConstructionObstacleTwoWays",
+    "route_002712"
+   ],
+   [
+    "ControlLoss",
+    "1662_0"
+   ],
+   [
+    "ControlLoss",
+    "Town10HD_Scenario1_12"
+   ],
+   [
+    "EnterActorFlow",
+    "1382_9"
+   ],
+   [
+    "EnterActorFlowV2",
+    "2509_1"
+   ],
+   [
+    "EnterActorFlowV2",
+    "2509_15"
+   ],
+   [
+    "EnterActorFlowV2",
+    "2509_6"
+   ],
+   [
+    "OppositeVehicleTakingPriority",
+    "2869_1"
+   ],
+   [
+    "OppositeVehicleTakingPriority",
+    "3175_1"
+   ],
+   [
+    "T_Junction",
+    "Town03_Scenario7_61"
+   ],
+   [
+    "VehicleTurningRoute",
+    "Town03_Scenario4_101"
+   ]
+  ],
+  "samples": 1600,
+  "samples_overlapping_full_eval": 114,
+  "samples_overlapping_full_eval_pct": 7.12,
+  "samples_overlapping_subset": 23,
+  "samples_overlapping_subset_pct": 1.44,
+  "unresolved_log_names": 39,
+  "note": "lower bound: unresolved log names are counted as non-overlapping"
+ },
+ "note": null,
+ "self_contained": true,
+ "media": {
+  "repacked_from": "/home/earth/Documents/AD/lead2alpa/dataset/lead_multirig_pai_v4",
+  "clips": 1314,
+  "chunks": 29,
+  "approx_bytes": 52299970224
+ }
+}

@@ -1,0 +1,13 @@
+-rw-r--r-- 1 root root 22157305378 2026-10-01 05:45:40.138539448 +0000 /workspace/Alpamayo-1.5-10B-Lead-Large-EMA-1730.zip
+-rw-r--r-- 1 root root 22157305408 2026-10-01 17:33:51.841959760 +0000 /workspace/Alpamayo-1.5-10B-Lead-Large-NonEMA-1730.zip
+-rw-r--r-- 1 root root 17568159877 2026-10-06 20:44:09.662241789 +0000 /workspace/Alpamayo-1.5-10B-Lead-Large-v3-6400-A15.tar.gz
+-rw-r--r-- 1 root root 17552111240 2026-10-11 17:01:46.003772313 +0000 /workspace/Alpamayo-1.5-10B-Lead-Large-v4-A15.tar.gz
+-rw-r--r-- 1 root root 17617076949 2026-10-17 16:58:01.898454522 +0000 /workspace/Alpamayo-1.5-10B-Matrix-Flooded-1600-A15.tar.gz
+-rw-r--r-- 1 root root 17604928794 2026-10-20 12:34:14.113515041 +0000 /workspace/Alpamayo-1.5-10B-Matrix-Flooded-6400-A15.tar.gz
+-rw-r--r-- 1 root root 22157305420 2026-10-17 07:21:24.346791997 +0000 /workspace/Alpamayo-1.5-10B-Matrix-Golden-1600-A15-stored-22GB.zip
+-rw-r--r-- 1 root root 17616983912 2026-10-17 08:40:54.905920603 +0000 /workspace/Alpamayo-1.5-10B-Matrix-Golden-1600-A15.tar.gz
+-rw-r--r-- 1 root root 17606923476 2026-10-17 02:14:53.108428194 +0000 /workspace/Alpamayo-1.5-10B-Matrix-Golden-1600-A15.zip
+-rw-r--r-- 1 root root 17605502448 2026-10-18 23:14:48.998072357 +0000 /workspace/Alpamayo-1.5-10B-Matrix-Golden-6400-A15.tar.gz
+-rw-r--r-- 1 root root 22157305112 2026-09-29 18:16:41.073214678 +0000 /workspace/checkpoint-600(3).zip
+-rw-r--r-- 1 root root    61884922 2026-08-27 15:55:59.633934361 +0000 /workspace/nexar_extracted.zip
+-rw-r--r-- 1 root root 22157305224 2026-09-29 13:48:27.736290543 +0000 /workspace/stage2_lead_checkpoint_640_a15.zip

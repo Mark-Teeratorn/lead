@@ -1,0 +1,161 @@
+[2026-10-06 10:47:41,408][train][INFO] - [rank: 0] Configs:
+{
+│   'data': {
+│   │   'train_dataset': {
+│   │   │   'vla_preprocess_args': {
+│   │   │   │   '_target_': 'alpamayo.processor.qwen_processor.get_preprocess_data_fn_from_model_config',
+│   │   │   │   'chat_template_version': 'r1_5',
+│   │   │   │   'components_order': [
+│   │   │   │   │   'image',
+│   │   │   │   │   'traj_history',
+│   │   │   │   │   'route',
+│   │   │   │   │   'prompt',
+│   │   │   │   │   'traj_future'
+│   │   │   │   ],
+│   │   │   │   'components_prompt': [
+│   │   │   │   │   'traj_future'
+│   │   │   │   ],
+│   │   │   │   'label_components': [
+│   │   │   │   │   'traj_future'
+│   │   │   │   ],
+│   │   │   │   'include_camera_ids': True,
+│   │   │   │   'include_frame_nums': True,
+│   │   │   │   'generation_mode': False
+│   │   │   },
+│   │   │   '_recursive_': False,
+│   │   │   '_target_': 'alpamayo.data.pai_nav.PAIDatasetWithNav',
+│   │   │   'local_dir': '/workspace/lead-alpamayo-pai_large_v3',
+│   │   │   'chunk_ids': None,
+│   │   │   'use_default_keyframe': True,
+│   │   │   'annotations_path': '/workspace/lead-alpamayo-pai_large_v3/annotations_train.json'
+│   │   },
+│   │   'val_dataset': {
+│   │   │   'vla_preprocess_args': {
+│   │   │   │   '_target_': 'alpamayo.processor.qwen_processor.get_preprocess_data_fn_from_model_config',
+│   │   │   │   'chat_template_version': 'r1_5',
+│   │   │   │   'components_order': [
+│   │   │   │   │   'image',
+│   │   │   │   │   'traj_history',
+│   │   │   │   │   'route',
+│   │   │   │   │   'prompt',
+│   │   │   │   │   'traj_future'
+│   │   │   │   ],
+│   │   │   │   'components_prompt': [
+│   │   │   │   │   'traj_future'
+│   │   │   │   ],
+│   │   │   │   'label_components': [
+│   │   │   │   │   'traj_future'
+│   │   │   │   ],
+│   │   │   │   'include_camera_ids': True,
+│   │   │   │   'include_frame_nums': True,
+│   │   │   │   'generation_mode': True
+│   │   │   },
+│   │   │   '_recursive_': False,
+│   │   │   '_target_': 'alpamayo.data.pai_nav.PAIDatasetWithNav',
+│   │   │   'local_dir': '/workspace/lead-alpamayo-pai_large_v3',
+│   │   │   'chunk_ids': None,
+│   │   │   'use_default_keyframe': True,
+│   │   │   'annotations_path': '/workspace/lead-alpamayo-pai_large_v3/annotations_val.json'
+│   │   },
+│   │   'collate_fn': {
+│   │   │   '_target_': 'alpamayo.processor.qwen_processor.collate_fn_from_model_config',
+│   │   │   '_partial_': True,
+│   │   │   'chat_template_version': 'r1_5'
+│   │   }
+│   },
+│   'paths': {
+│   │   'output_dir': 'output_stage2_lead_v3_resumed'
+│   },
+│   'callbacks': {},
+│   'evaluate': {
+│   │   'max_eval_steps': -1,
+│   │   'torch_dtype': 'bfloat16',
+│   │   'metric_runner': {
+│   │   │   '_target_': 'alpamayo.metrics.metric_runner.MetricRunner',
+│   │   │   'metrics': [
+│   │   │   │   {
+│   │   │   │   │   '_target_': 'alpamayo.metrics.metric_api.ReasoningSampler',
+│   │   │   │   │   'num_traj_sets': 1,
+│   │   │   │   │   'top_p': 0.98,
+│   │   │   │   │   'temperature': 0.6,
+│   │   │   │   │   'traj_only_generation': False,
+│   │   │   │   │   'max_generation_length': 256
+│   │   │   │   },
+│   │   │   │   {
+│   │   │   │   │   '_target_': 'alpamayo.metrics.metric_api.DistanceMetrics'
+│   │   │   │   }
+│   │   │   ]
+│   │   },
+│   │   'eval_ckpt': None
+│   },
+│   'trainer': {
+│   │   'output_dir': 'output_stage2_lead_v3_resumed',
+│   │   'per_device_train_batch_size': 1,
+│   │   'per_device_eval_batch_size': 2,
+│   │   'gradient_accumulation_steps': 8,
+│   │   'learning_rate': 3.5e-05,
+│   │   'warmup_steps': 50,
+│   │   'logging_steps': 5,
+│   │   'save_steps': 400,
+│   │   'save_total_limit': 4,
+│   │   'save_only_model': False,
+│   │   'num_train_epochs': 3,
+│   │   'bf16': True,
+│   │   'dataloader_pin_memory': False,
+│   │   'dataloader_num_workers': 0,
+│   │   'dataloader_persistent_workers': False,
+│   │   'dataloader_prefetch_factor': None,
+│   │   'remove_unused_columns': False,
+│   │   'report_to': 'none',
+│   │   'lr_scheduler_type': 'cosine_warmup_with_min_lr',
+│   │   'lr_scheduler_kwargs': {
+│   │   │   'min_lr': 1e-06
+│   │   },
+│   │   'deepspeed': None,
+│   │   'gradient_checkpointing': False,
+│   │   'gradient_checkpointing_kwargs': {
+│   │   │   'use_reentrant': False
+│   │   },
+│   │   'ddp_find_unused_parameters': True
+│   },
+│   'task_name': 'alpamayo_1_5_sft_stage2_nav',
+│   'run_name': 'alpamayo_1_5_sft_stage2_nav_20261006_104741',
+│   'performance': {
+│   │   'zip_cache': False,
+│   │   'collate_cache': True,
+│   │   'tf32': True,
+│   │   'cudnn_benchmark': True
+│   },
+│   'model': {
+│   │   '_target_': 'alpamayo1_5_sft.models.sft_alpamayo_r1.TrainableAlpamayoR1.from_pretrained',
+│   │   'pretrained_model_name_or_path': '/workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_lead_v3/checkpoint-4000',
+│   │   'dtype': 'auto',
+│   │   'cotrain_vlm': False,
+│   │   'stage1_vlm_checkpoint_path': '/workspace/Alpamayo-1.5-10B-A1-format'
+│   }
+}
+
+[2026-10-06 10:47:42,989][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] Model parameter count:
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] total_params: 11,078,526,194
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] trainable_params: 2,280,592,386
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] vlm.model: 8,160,198,896
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] vlm.lm_head: 637,734,912
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] expert.layers: 2,279,236,608
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] expert.norm: 2,048
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] action_in_proj.encoder: 1,345,536
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] action_in_proj.norm: 4,096
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] action_out_proj.weight: 4,096
+[2026-10-06 10:47:42,992][alpamayo1_5_sft.models.sft_alpamayo_r1][INFO] - [rank: 0] action_out_proj.bias: 2
+[2026-10-06 10:48:08,710][alpamayo1_5_sft.models.sft_base_model][INFO] - [rank: 0] Loaded 750 VLM tensors from /workspace/Alpamayo-1.5-10B-A1-format (missing=0, unexpected=0)
+[2026-10-06 10:48:09,417][alpamayo.data.pai_utils][INFO] - [rank: 0] Loading all chunks
+[2026-10-06 10:48:09,417][alpamayo.data.pai_utils][INFO] - [rank: 0] Loading from /workspace/lead-alpamayo-pai_large_v3 with chunk_ids: None
+[2026-10-06 10:48:10,003][alpamayo.data.pai_utils][INFO] - [rank: 0] Loading all chunks
+[2026-10-06 10:48:10,003][alpamayo.data.pai_utils][INFO] - [rank: 0] Loading from /workspace/lead-alpamayo-pai_large_v3 with chunk_ids: None
+[2026-10-06 10:48:10,530][accelerate.utils.other][WARNING] - [RANK 0] Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[2026-10-06 10:48:19,487][root][INFO] - cc -pthread -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fPIC -fPIC -c /tmp/tmpu0ljntep/test.c -o /tmp/tmpu0ljntep/test.o
+[2026-10-06 10:48:19,503][root][INFO] - cc -pthread /tmp/tmpu0ljntep/test.o -laio -o /tmp/tmpu0ljntep/a.out
+[2026-10-06 10:48:19,514][root][INFO] - cc -pthread -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fPIC -fPIC -c /tmp/tmpcwzy__3c/test.c -o /tmp/tmpcwzy__3c/test.o
+[2026-10-06 10:48:19,523][root][INFO] - cc -pthread /tmp/tmpcwzy__3c/test.o -L/usr/local/cuda -L/usr/local/cuda/lib64 -lcufile -o /tmp/tmpcwzy__3c/a.out
+[2026-10-06 10:48:19,553][root][INFO] - cc -pthread -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fPIC -fPIC -c /tmp/tmp_ap81yt6/test.c -o /tmp/tmp_ap81yt6/test.o
+[2026-10-06 10:48:19,562][root][INFO] - cc -pthread /tmp/tmp_ap81yt6/test.o -laio -o /tmp/tmp_ap81yt6/a.out
+[2026-10-06 10:48:19,957][alpamayo.common.config_utils][INFO] - [rank: 0] Config saved to output_stage2_lead_v3_resumed/config.yaml

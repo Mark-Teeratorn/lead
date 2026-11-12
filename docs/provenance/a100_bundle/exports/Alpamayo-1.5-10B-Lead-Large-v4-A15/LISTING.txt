@@ -1,0 +1,10 @@
+total 44
+drwxr-xr-x  2 root root  4096 2026-10-11 16:27:15.326813199 +0000 .
+drwxr-xr-x 42 root root 12288 2026-11-12 05:55:43.797554384 +0000 ..
+-rw-r--r--  1 root root  3043 2026-10-11 16:27:15.326813199 +0000 config.json
+lrwxrwxrwx  1 root root   123 2026-10-11 16:27:15.326813199 +0000 model-00001-of-00005.safetensors -> /workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_lead_v4/checkpoint-20050/model-00001-of-00005.safetensors
+lrwxrwxrwx  1 root root   123 2026-10-11 16:27:15.326813199 +0000 model-00002-of-00005.safetensors -> /workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_lead_v4/checkpoint-20050/model-00002-of-00005.safetensors
+lrwxrwxrwx  1 root root   123 2026-10-11 16:27:15.326813199 +0000 model-00003-of-00005.safetensors -> /workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_lead_v4/checkpoint-20050/model-00003-of-00005.safetensors
+lrwxrwxrwx  1 root root   123 2026-10-11 16:27:15.326813199 +0000 model-00004-of-00005.safetensors -> /workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_lead_v4/checkpoint-20050/model-00004-of-00005.safetensors
+lrwxrwxrwx  1 root root   123 2026-10-11 16:27:15.326813199 +0000 model-00005-of-00005.safetensors -> /workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_lead_v4/checkpoint-20050/model-00005-of-00005.safetensors
+lrwxrwxrwx  1 root root   119 2026-10-11 16:27:15.326813199 +0000 model.safetensors.index.json -> /workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_lead_v4/checkpoint-20050/model.safetensors.index.json

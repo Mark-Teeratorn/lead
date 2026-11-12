@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-10-20T12:38:50+00:00",
+  "completed_runs": [
+    {
+      "dataset": "golden_1600",
+      "steps": 2000,
+      "status": "COMPLETED",
+      "archive": "/workspace/Alpamayo-1.5-10B-Matrix-Golden-1600-A15.tar.gz",
+      "size_bytes": 17616983912,
+      "integrity": "PASSED"
+    },
+    {
+      "dataset": "flooded_1600",
+      "steps": 2000,
+      "status": "COMPLETED",
+      "archive": "/workspace/Alpamayo-1.5-10B-Matrix-Flooded-1600-A15.tar.gz",
+      "size_bytes": 17617076949,
+      "integrity": "PASSED",
+      "final_loss": 3.9950
+    },
+    {
+      "dataset": "golden_6400",
+      "steps": 8000,
+      "status": "COMPLETED",
+      "archive": "/workspace/Alpamayo-1.5-10B-Matrix-Golden-6400-A15.tar.gz",
+      "size_bytes": 17605502448,
+      "integrity": "PASSED",
+      "final_loss": 3.3108,
+      "checkpoint": "checkpoint-8000"
+    },
+    {
+      "dataset": "flooded_6400",
+      "steps": 8000,
+      "status": "COMPLETED",
+      "archive": "/workspace/Alpamayo-1.5-10B-Matrix-Flooded-6400-A15.tar.gz",
+      "size_bytes": 17604928794,
+      "integrity": "PASSED",
+      "final_loss": 3.0170,
+      "checkpoint": "checkpoint-8000"
+    }
+  ],
+  "active_run": null
+}

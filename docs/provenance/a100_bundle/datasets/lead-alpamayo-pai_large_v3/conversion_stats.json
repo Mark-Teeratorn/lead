@@ -1,0 +1,93 @@
+{
+ "curation_train": {
+  "before": 16977,
+  "unverified_nav_dropped": 3463,
+  "after": 6440,
+  "stationary": 644,
+  "by_maneuver": {
+   "SWERVE_LEFT": 2401,
+   "STRAIGHT": 1398,
+   "TURN_RIGHT": 932,
+   "TURN_LEFT": 932,
+   "SWERVE_RIGHT": 777
+  },
+  "moving_by_maneuver": {
+   "SWERVE_LEFT": 2223,
+   "STRAIGHT": 1398,
+   "SWERVE_RIGHT": 777,
+   "TURN_LEFT": 699,
+   "TURN_RIGHT": 699
+  },
+  "junction_turns": 1864,
+  "junction_left_right": [
+   932,
+   932
+  ],
+  "swerves": 3178,
+  "swerve_left_right": [
+   2401,
+   777
+  ]
+ },
+ "train": {
+  "logs": 601,
+  "clips": 1694,
+  "samples": 6440,
+  "maneuvers": {
+   "SWERVE_LEFT": 2401,
+   "STRAIGHT": 1398,
+   "TURN_RIGHT": 932,
+   "TURN_LEFT": 932,
+   "SWERVE_RIGHT": 777
+  }
+ },
+ "curation_val": {
+  "before": 1483,
+  "unverified_nav_dropped": 216,
+  "after": 626,
+  "stationary": 62,
+  "by_maneuver": {
+   "SWERVE_LEFT": 176,
+   "STRAIGHT": 160,
+   "TURN_LEFT": 102,
+   "TURN_RIGHT": 102,
+   "SWERVE_RIGHT": 86
+  },
+  "moving_by_maneuver": {
+   "STRAIGHT": 160,
+   "SWERVE_LEFT": 158,
+   "SWERVE_RIGHT": 86,
+   "TURN_LEFT": 80,
+   "TURN_RIGHT": 80
+  },
+  "junction_turns": 204,
+  "junction_left_right": [
+   102,
+   102
+  ],
+  "swerves": 262,
+  "swerve_left_right": [
+   176,
+   86
+  ]
+ },
+ "val": {
+  "logs": 45,
+  "clips": 146,
+  "samples": 626,
+  "maneuvers": {
+   "SWERVE_LEFT": 176,
+   "STRAIGHT": 160,
+   "TURN_LEFT": 102,
+   "TURN_RIGHT": 102,
+   "SWERVE_RIGHT": 86
+  }
+ },
+ "autolabel_clips": 1840,
+ "skipped_logs": 73,
+ "errors": 1,
+ "clip_seconds": 20.0,
+ "camera_fps": [
+  10
+ ]
+}

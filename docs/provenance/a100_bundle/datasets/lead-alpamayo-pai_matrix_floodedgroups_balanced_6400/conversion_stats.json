@@ -1,0 +1,276 @@
+{
+ "cell": "lead-alpamayo-pai_matrix_floodedgroups_balanced_6400",
+ "regime": "floodedgroups_balanced",
+ "n": 6400,
+ "seed": 0,
+ "optional": true,
+ "source": "dataset/lead_multirig_pai_v4",
+ "source_pool": 34132,
+ "sample_stride_s": 0.4,
+ "determinism": "sha1 order of (seed, clip_id, t0_relative); no RNG",
+ "targets": {
+  "groups": [
+   35.0,
+   14.0,
+   22.0,
+   10.0,
+   9.0,
+   10.0
+  ],
+  "maneuvers": [
+   50.0,
+   13.0,
+   13.0,
+   12.0,
+   12.0
+  ],
+  "stationary_pct": 2.0,
+  "scales": [
+   6400
+  ]
+ },
+ "allocation": [
+  [
+   868,
+   532,
+   436,
+   92,
+   312
+  ],
+  [
+   360,
+   4,
+   0,
+   324,
+   208
+  ],
+  [
+   828,
+   252,
+   196,
+   0,
+   132
+  ],
+  [
+   364,
+   8,
+   164,
+   88,
+   16
+  ],
+  [
+   416,
+   0,
+   8,
+   96,
+   56
+  ],
+  [
+   364,
+   36,
+   28,
+   168,
+   44
+  ]
+ ],
+ "stationary_allocation": [
+  [
+   6,
+   19,
+   0,
+   0,
+   39
+  ],
+  [
+   16,
+   0,
+   0,
+   8,
+   0
+  ],
+  [
+   12,
+   3,
+   0,
+   0,
+   1
+  ],
+  [
+   4,
+   0,
+   0,
+   0,
+   1
+  ],
+  [
+   0,
+   0,
+   0,
+   4,
+   1
+  ],
+  [
+   7,
+   1,
+   0,
+   6,
+   0
+  ]
+ ],
+ "realised": {
+  "n": 6400,
+  "by_group": {
+   "A. Obstacle & Construction": 2240,
+   "F. Baseline & Signals": 640,
+   "B. Junctions": 896,
+   "C. Hazards & Emergency": 1408,
+   "D. Highway & Merging": 640,
+   "E. VRUs & Dynamic Conflicts": 576
+  },
+  "by_group_pct": {
+   "A. Obstacle & Construction": 35.0,
+   "F. Baseline & Signals": 10.0,
+   "B. Junctions": 14.0,
+   "C. Hazards & Emergency": 22.0,
+   "D. Highway & Merging": 10.0,
+   "E. VRUs & Dynamic Conflicts": 9.0
+  },
+  "by_maneuver": {
+   "SWERVE_LEFT": 832,
+   "SWERVE_RIGHT": 832,
+   "TURN_LEFT": 768,
+   "STRAIGHT": 3200,
+   "TURN_RIGHT": 768
+  },
+  "by_maneuver_pct": {
+   "SWERVE_LEFT": 13.0,
+   "SWERVE_RIGHT": 13.0,
+   "TURN_LEFT": 12.0,
+   "STRAIGHT": 50.0,
+   "TURN_RIGHT": 12.0
+  },
+  "lateral_left_right_pct": [
+   25.0,
+   25.0
+  ],
+  "flags": {
+   "stationary": 128,
+   "brake": 2245,
+   "hazard": 1547
+  },
+  "flags_pct": {
+   "stationary": 2.0,
+   "brake": 35.08,
+   "hazard": 24.17
+  },
+  "scenarios_present": 41
+ },
+ "nested_in": null,
+ "val": {
+  "shared": true,
+  "n": 1567,
+  "before": 1720,
+  "after": 1567,
+  "dropped": 153,
+  "overlap_after": {
+   "gate_excluded_routes": 69,
+   "gate_excluded_on_subset": 27,
+   "routes_in_split": 45,
+   "routes_overlapping_full_eval": 4,
+   "routes_overlapping_subset": 2,
+   "routes_overlapping_subset_list": [
+    [
+     "ControlLoss",
+     "Town05_Scenario1_28"
+    ],
+    [
+     "T_Junction",
+     "Town03_Scenario7_40"
+    ]
+   ],
+   "samples": 1567,
+   "samples_overlapping_full_eval": 0,
+   "samples_overlapping_full_eval_pct": 0.0,
+   "samples_overlapping_subset": 0,
+   "samples_overlapping_subset_pct": 0.0,
+   "unresolved_log_names": 0,
+   "note": "lower bound: unresolved log names are counted as non-overlapping"
+  }
+ },
+ "train_eval_overlap": {
+  "gate_excluded_routes": 69,
+  "gate_excluded_on_subset": 27,
+  "routes_in_split": 581,
+  "routes_overlapping_full_eval": 40,
+  "routes_overlapping_subset": 13,
+  "routes_overlapping_subset_list": [
+   [
+    "AccidentTwoWays",
+    "route_001450"
+   ],
+   [
+    "ConstructionObstacleTwoWays",
+    "1145_0"
+   ],
+   [
+    "ConstructionObstacleTwoWays",
+    "route_002712"
+   ],
+   [
+    "ControlLoss",
+    "1662_0"
+   ],
+   [
+    "ControlLoss",
+    "Town10HD_Scenario1_12"
+   ],
+   [
+    "EnterActorFlow",
+    "1382_9"
+   ],
+   [
+    "EnterActorFlowV2",
+    "2509_1"
+   ],
+   [
+    "EnterActorFlowV2",
+    "2509_15"
+   ],
+   [
+    "EnterActorFlowV2",
+    "2509_6"
+   ],
+   [
+    "OppositeVehicleTakingPriority",
+    "2869_1"
+   ],
+   [
+    "OppositeVehicleTakingPriority",
+    "3175_1"
+   ],
+   [
+    "T_Junction",
+    "Town03_Scenario7_61"
+   ],
+   [
+    "VehicleTurningRoute",
+    "Town03_Scenario4_101"
+   ]
+  ],
+  "samples": 6400,
+  "samples_overlapping_full_eval": 469,
+  "samples_overlapping_full_eval_pct": 7.33,
+  "samples_overlapping_subset": 83,
+  "samples_overlapping_subset_pct": 1.3,
+  "unresolved_log_names": 39,
+  "note": "lower bound: unresolved log names are counted as non-overlapping"
+ },
+ "note": "Optional decoupling cell: Flooded's group mix with Golden's manoeuvre mix and 2 % stationary. It separates group mix from the lateral + stationary bundle, NOT lateral from stationary.",
+ "self_contained": true,
+ "media": {
+  "repacked_from": "/home/earth/Documents/AD/lead2alpa/dataset/lead_multirig_pai_v4",
+  "clips": 1531,
+  "chunks": 29,
+  "approx_bytes": 60631814899
+ }
+}

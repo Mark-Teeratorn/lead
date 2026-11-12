@@ -1,0 +1,95 @@
+/workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_golden_1600/:
+total 40
+drwxr-xr-x  7 root root 4096 2026-10-17 01:43:10.182155246 +0000 .
+drwxr-xr-x 24 root root 4096 2026-10-19 07:53:14.537640715 +0000 ..
+drwxr-xr-x  2 root root 4096 2026-10-16 23:02:41.246705282 +0000 checkpoint-1200
+drwxr-xr-x  2 root root 4096 2026-10-16 23:43:13.065781705 +0000 checkpoint-1400
+drwxr-xr-x  2 root root 4096 2026-10-17 00:23:41.370628222 +0000 checkpoint-1600
+drwxr-xr-x  2 root root 4096 2026-10-17 01:03:24.718243555 +0000 checkpoint-1800
+drwxr-xr-x  2 root root 4096 2026-10-17 01:43:09.910151920 +0000 checkpoint-2000
+-rw-r--r--  1 root root 8294 2026-10-16 21:41:02.704957197 +0000 config.yaml
+
+/workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_golden_1600/checkpoint-1200:
+total 30547020
+drwxr-xr-x 2 root root       4096 2026-10-16 23:02:41.246705282 +0000 .
+drwxr-xr-x 7 root root       4096 2026-10-17 01:43:10.182155246 +0000 ..
+-rw-r--r-- 1 root root       3051 2026-10-16 23:02:11.345835549 +0000 config.json
+-rw-r--r-- 1 root root 4928204944 2026-10-16 23:02:16.789996043 +0000 model-00001-of-00005.safetensors
+-rw-r--r-- 1 root root 4915963032 2026-10-16 23:02:21.766141895 +0000 model-00002-of-00005.safetensors
+-rw-r--r-- 1 root root 4983071160 2026-10-16 23:02:27.194300089 +0000 model-00003-of-00005.safetensors
+-rw-r--r-- 1 root root 4980341192 2026-10-16 23:02:32.262446942 +0000 model-00004-of-00005.safetensors
+-rw-r--r-- 1 root root 2349614920 2026-10-16 23:02:33.942495445 +0000 model-00005-of-00005.safetensors
+-rw-r--r-- 1 root root     105285 2026-10-16 23:02:33.986496715 +0000 model.safetensors.index.json
+-rw-r--r-- 1 root root 9122729878 2026-10-16 23:02:41.242705168 +0000 optimizer.pt
+-rw-r--r-- 1 root root      14709 2026-10-16 23:02:41.246705282 +0000 rng_state.pth
+-rw-r--r-- 1 root root       1465 2026-10-16 23:02:41.242705168 +0000 scheduler.pt
+-rw-r--r-- 1 root root      35803 2026-10-16 23:02:41.246705282 +0000 trainer_state.json
+-rw-r--r-- 1 root root       5905 2026-10-16 23:02:33.990496831 +0000 training_args.bin
+
+/workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_golden_1600/checkpoint-1400:
+total 30547028
+drwxr-xr-x 2 root root       4096 2026-10-16 23:43:13.065781705 +0000 .
+drwxr-xr-x 7 root root       4096 2026-10-17 01:43:10.182155246 +0000 ..
+-rw-r--r-- 1 root root       3051 2026-10-16 23:42:39.961354511 +0000 config.json
+-rw-r--r-- 1 root root 4928204944 2026-10-16 23:42:45.965432013 +0000 model-00001-of-00005.safetensors
+-rw-r--r-- 1 root root 4915963032 2026-10-16 23:42:51.497503413 +0000 model-00002-of-00005.safetensors
+-rw-r--r-- 1 root root 4983071160 2026-10-16 23:42:57.297578263 +0000 model-00003-of-00005.safetensors
+-rw-r--r-- 1 root root 4980341192 2026-10-16 23:43:02.989651710 +0000 model-00004-of-00005.safetensors
+-rw-r--r-- 1 root root 2349614920 2026-10-16 23:43:04.869675967 +0000 model-00005-of-00005.safetensors
+-rw-r--r-- 1 root root     105285 2026-10-16 23:43:04.929676741 +0000 model.safetensors.index.json
+-rw-r--r-- 1 root root 9122729878 2026-10-16 23:43:13.065781705 +0000 optimizer.pt
+-rw-r--r-- 1 root root      14709 2026-10-16 23:43:13.065781705 +0000 rng_state.pth
+-rw-r--r-- 1 root root       1465 2026-10-16 23:43:13.065781705 +0000 scheduler.pt
+-rw-r--r-- 1 root root      41777 2026-10-16 23:43:13.065781705 +0000 trainer_state.json
+-rw-r--r-- 1 root root       5905 2026-10-16 23:43:04.933676793 +0000 training_args.bin
+
+/workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_golden_1600/checkpoint-1600:
+total 30547032
+drwxr-xr-x 2 root root       4096 2026-10-17 00:23:41.370628222 +0000 .
+drwxr-xr-x 7 root root       4096 2026-10-17 01:43:10.182155246 +0000 ..
+-rw-r--r-- 1 root root       3051 2026-10-17 00:23:09.342581944 +0000 config.json
+-rw-r--r-- 1 root root 4928204944 2026-10-17 00:23:15.218589604 +0000 model-00001-of-00005.safetensors
+-rw-r--r-- 1 root root 4915963032 2026-10-17 00:23:20.638597006 +0000 model-00002-of-00005.safetensors
+-rw-r--r-- 1 root root 4983071160 2026-10-17 00:23:26.134604835 +0000 model-00003-of-00005.safetensors
+-rw-r--r-- 1 root root 4980341192 2026-10-17 00:23:31.418612668 +0000 model-00004-of-00005.safetensors
+-rw-r--r-- 1 root root 2349614920 2026-10-17 00:23:33.494615827 +0000 model-00005-of-00005.safetensors
+-rw-r--r-- 1 root root     105285 2026-10-17 00:23:33.554615919 +0000 model.safetensors.index.json
+-rw-r--r-- 1 root root 9122729878 2026-10-17 00:23:41.366628215 +0000 optimizer.pt
+-rw-r--r-- 1 root root      14709 2026-10-17 00:23:41.366628215 +0000 rng_state.pth
+-rw-r--r-- 1 root root       1465 2026-10-17 00:23:41.366628215 +0000 scheduler.pt
+-rw-r--r-- 1 root root      47757 2026-10-17 00:23:41.370628222 +0000 trainer_state.json
+-rw-r--r-- 1 root root       5905 2026-10-17 00:23:33.558615925 +0000 training_args.bin
+
+/workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_golden_1600/checkpoint-1800:
+total 30547040
+drwxr-xr-x 2 root root       4096 2026-10-17 01:03:24.718243555 +0000 .
+drwxr-xr-x 7 root root       4096 2026-10-17 01:43:10.182155246 +0000 ..
+-rw-r--r-- 1 root root       3051 2026-10-17 01:02:55.282062931 +0000 config.json
+-rw-r--r-- 1 root root 4928204944 2026-10-17 01:03:00.702096151 +0000 model-00001-of-00005.safetensors
+-rw-r--r-- 1 root root 4915963032 2026-10-17 01:03:05.662126566 +0000 model-00002-of-00005.safetensors
+-rw-r--r-- 1 root root 4983071160 2026-10-17 01:03:10.766157880 +0000 model-00003-of-00005.safetensors
+-rw-r--r-- 1 root root 4980341192 2026-10-17 01:03:15.526187097 +0000 model-00004-of-00005.safetensors
+-rw-r--r-- 1 root root 2349614920 2026-10-17 01:03:17.202197388 +0000 model-00005-of-00005.safetensors
+-rw-r--r-- 1 root root     105285 2026-10-17 01:03:17.262197756 +0000 model.safetensors.index.json
+-rw-r--r-- 1 root root 9122729878 2026-10-17 01:03:24.714243531 +0000 optimizer.pt
+-rw-r--r-- 1 root root      14709 2026-10-17 01:03:24.718243555 +0000 rng_state.pth
+-rw-r--r-- 1 root root       1465 2026-10-17 01:03:24.714243531 +0000 scheduler.pt
+-rw-r--r-- 1 root root      53719 2026-10-17 01:03:24.718243555 +0000 trainer_state.json
+-rw-r--r-- 1 root root       5905 2026-10-17 01:03:17.266197781 +0000 training_args.bin
+
+/workspace/alpamayo-recipes/recipes/alpamayo1_5_sft/output_stage2_golden_1600/checkpoint-2000:
+total 30547044
+drwxr-xr-x 2 root root       4096 2026-10-17 01:43:09.910151920 +0000 .
+drwxr-xr-x 7 root root       4096 2026-10-17 01:43:10.182155246 +0000 ..
+-rw-r--r-- 1 root root       3051 2026-10-17 01:42:39.925784290 +0000 config.json
+-rw-r--r-- 1 root root 4928204944 2026-10-17 01:42:45.385851367 +0000 model-00001-of-00005.safetensors
+-rw-r--r-- 1 root root 4915963032 2026-10-17 01:42:50.301911711 +0000 model-00002-of-00005.safetensors
+-rw-r--r-- 1 root root 4983071160 2026-10-17 01:42:55.397974212 +0000 model-00003-of-00005.safetensors
+-rw-r--r-- 1 root root 4980341192 2026-10-17 01:43:00.742039700 +0000 model-00004-of-00005.safetensors
+-rw-r--r-- 1 root root 2349614920 2026-10-17 01:43:02.506061305 +0000 model-00005-of-00005.safetensors
+-rw-r--r-- 1 root root     105285 2026-10-17 01:43:02.562061990 +0000 model.safetensors.index.json
+-rw-r--r-- 1 root root 9122729878 2026-10-17 01:43:09.906151871 +0000 optimizer.pt
+-rw-r--r-- 1 root root      14709 2026-10-17 01:43:09.906151871 +0000 rng_state.pth
+-rw-r--r-- 1 root root       1465 2026-10-17 01:43:09.906151871 +0000 scheduler.pt
+-rw-r--r-- 1 root root      59694 2026-10-17 01:43:09.910151920 +0000 trainer_state.json
+-rw-r--r-- 1 root root       5905 2026-10-17 01:43:02.562061990 +0000 training_args.bin

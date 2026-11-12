@@ -1,0 +1,130 @@
+{
+ "curation_train": {
+  "before": 42836,
+  "unverified_nav_dropped": 8704,
+  "after": 16040,
+  "stationary": 272,
+  "by_maneuver": {
+   "STRAIGHT": 8020,
+   "SWERVE_LEFT": 2005,
+   "SWERVE_RIGHT": 2005,
+   "TURN_LEFT": 2005,
+   "TURN_RIGHT": 2005
+  },
+  "moving_by_maneuver": {
+   "STRAIGHT": 8020,
+   "SWERVE_LEFT": 2005,
+   "TURN_LEFT": 2005,
+   "SWERVE_RIGHT": 1938,
+   "TURN_RIGHT": 1800
+  },
+  "junction_turns": 4010,
+  "junction_left_right": [
+   2005,
+   2005
+  ],
+  "swerves": 4010,
+  "swerve_left_right": [
+   2005,
+   2005
+  ],
+  "verified_pool": {
+   "TURN_LEFT": 5264,
+   "TURN_RIGHT": 2375,
+   "SWERVE_LEFT": 6854,
+   "SWERVE_RIGHT": 2005,
+   "STRAIGHT": 17634
+  },
+  "mix": {
+   "TURN_LEFT": 0.125,
+   "TURN_RIGHT": 0.125,
+   "SWERVE_LEFT": 0.125,
+   "SWERVE_RIGHT": 0.125,
+   "STRAIGHT": 0.5
+  },
+  "stationary_frac": 0.017,
+  "equal_lateral_n": 2005,
+  "straight_frac": 0.5,
+  "binding_class": "SWERVE_RIGHT"
+ },
+ "train": {
+  "logs": 601,
+  "clips": 1694,
+  "samples": 16040,
+  "maneuvers": {
+   "STRAIGHT": 8020,
+   "SWERVE_LEFT": 2005,
+   "SWERVE_RIGHT": 2005,
+   "TURN_LEFT": 2005,
+   "TURN_RIGHT": 2005
+  }
+ },
+ "curation_val": {
+  "before": 3736,
+  "unverified_nav_dropped": 542,
+  "after": 1720,
+  "stationary": 9,
+  "by_maneuver": {
+   "STRAIGHT": 860,
+   "SWERVE_LEFT": 215,
+   "SWERVE_RIGHT": 215,
+   "TURN_LEFT": 215,
+   "TURN_RIGHT": 215
+  },
+  "moving_by_maneuver": {
+   "STRAIGHT": 860,
+   "SWERVE_LEFT": 215,
+   "SWERVE_RIGHT": 215,
+   "TURN_LEFT": 215,
+   "TURN_RIGHT": 206
+  },
+  "junction_turns": 430,
+  "junction_left_right": [
+   215,
+   215
+  ],
+  "swerves": 430,
+  "swerve_left_right": [
+   215,
+   215
+  ],
+  "verified_pool": {
+   "TURN_LEFT": 633,
+   "TURN_RIGHT": 260,
+   "SWERVE_LEFT": 531,
+   "SWERVE_RIGHT": 215,
+   "STRAIGHT": 1555
+  },
+  "mix": {
+   "TURN_LEFT": 0.125,
+   "TURN_RIGHT": 0.125,
+   "SWERVE_LEFT": 0.125,
+   "SWERVE_RIGHT": 0.125,
+   "STRAIGHT": 0.5
+  },
+  "stationary_frac": 0.0052,
+  "equal_lateral_n": 215,
+  "straight_frac": 0.5,
+  "binding_class": "SWERVE_RIGHT"
+ },
+ "val": {
+  "logs": 45,
+  "clips": 146,
+  "samples": 1720,
+  "maneuvers": {
+   "STRAIGHT": 860,
+   "SWERVE_LEFT": 215,
+   "SWERVE_RIGHT": 215,
+   "TURN_LEFT": 215,
+   "TURN_RIGHT": 215
+  }
+ },
+ "autolabel_clips": 1840,
+ "skipped_logs": 73,
+ "errors": 1,
+ "clip_seconds": 20.0,
+ "sample_stride_s": 0.4,
+ "camera_fps": [
+  10
+ ]
+}

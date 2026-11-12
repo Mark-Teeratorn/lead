@@ -1,6 +1,8 @@
 # Training provenance reported by the A100 session (12 Nov 2026)
 
-Relayed report from the Claude session on the A100 training machine, produced read-only from trainer artifacts and logs under `/workspace`. The evidence bundle is `/workspace/provenance_bundle.tar.gz` on that machine (2,097,827 bytes, SHA-256 `70597742500d4e9518979098c19f486c5a84164441ce2dcee0564235ed407d0b`, 198 text files, full quoted evidence in its `REPORT.md`). **The bundle has not yet been copied to this repository**; until it is, the values below are a relayed summary.
+Report from the Claude session on the A100 training machine, produced read-only from trainer artifacts and logs under `/workspace`. The evidence bundle was copied to this machine on 12 Nov 2026 and its small text files are in `docs/provenance/a100_bundle/` (191 of 198 files; the five `annotations_train.json`, one `annotations_val.json` and one training log over 1 MB are omitted, the annotation files being the published datasets themselves). Full quoted evidence is in `a100_bundle/REPORT.md`. The values below were re-read from the bundle on this machine: the seven `trainer_state.json` files match the table, and the `config.yaml` files of the two 6,400-frame Matrix runs are identical apart from the dataset name.
+
+The dataset build script (`scripts/build_curation_matrix.py`, in the `ad-research` / `lead2alpa` repository on another machine) was supplied by the author in conversation on 12 Nov 2026; it should be added to this folder as a file. The datasets are published on the Hugging Face Hub as `earth37815/lead-alpamayo-pai_matrix_{golden,flooded}_{1600,6400}` and `earth37815/lead-alpamayo-pai_matrix_floodedgroups_balanced_6400`.
 
 Evidence tags: [A] trainer artifact (`trainer_state.json`, `training_args.bin`, Hydra `config.yaml`); [L] log or launch script; [C] computed by the reporting session.
 
@@ -59,3 +61,26 @@ Among training samples with ego speed ≤ 0.5 m/s at the current frame, the 6.4 
 ## Not found on the A100
 
 The log of flooded_1600's 08:51 / 08:53 attempts (so which attempt wrote checkpoint-250 is unknown); why flooded_1600's first attempt stopped at step 215; why v3 phase 1 stopped at 4,180; the dataset build script. `pipeline_status.json` defines "final_loss" inconsistently across runs and should not be quoted.
+
+## Evaluation-route overlap in the training sets [A: `conversion_stats.json`, dataset `README.md`]
+
+The training splits are **not** route-disjoint from Bench2Drive. Each dataset README says so explicitly ("Eval-route overlap in training — read this before scoring on Bench2Drive"): the eval-overlap filter is not applied to the training split.
+
+| Dataset | Train samples on a route overlapping one of the 220 Bench2Drive eval routes | ... overlapping the 44-route main-test subset |
+|---|---|---|
+| golden_1600 | 114 (7.12 %) | 23 (1.44 %) |
+| flooded_1600 | 117 (7.31 %) | 16 (1.00 %) |
+| golden_6400 | 462 (7.22 %) | 91 (1.42 %) |
+| flooded_6400 | 479 (7.48 %) | 72 (1.12 %) |
+
+40 of 581 training routes overlap the full evaluation set and 13 overlap the 44-route subset. These are lower bounds (39 log names could not be resolved to a route). The overlapping subset routes belong to the scenarios AccidentTwoWays, ConstructionObstacleTwoWays, ControlLoss, EnterActorFlow, EnterActorFlowV2, OppositeVehicleTakingPriority, T_Junction and VehicleTurningRoute. The shared validation split has no overlap (153 samples were removed for that reason).
+
+The exact mapping from these training routes to evaluation route ids needs `lead2hipad/eval/gate_validation_lead.json`, which is not on this machine. As an interim check, H2 was repeated without the seven canonical routes whose scenario type appears in the overlap list (1852, 1825, 3561, 2201, 2127, 26458, 2144): −7.74 pp, 95 % BCa CI [−13.92, −2.36], Wilcoxon p = 0.00046 (N = 37), against −8.06 pp on all 44.
+
+## Other facts from the dataset READMEs and the build script
+
+- "Flooded does not mean uncurated": all cells are curated draws from one pool (the same 1,840 clips over the same 646 routes). Nothing was over-collected.
+- The regimes differ on three things at once: scenario-group mix, lateral balance and stationary share. The stationary target is applied as a within-bucket preference and moves no marginal; `brake` and `hazard` shares are observed outcomes, not targets (brake 35.4 % golden vs 41.3 % flooded at 6,400).
+- Group mix and lateral balance are coupled in the pool (groups A + C hold 88 % of left swerves but 58 % of right swerves).
+- A fifth dataset exists, `floodedgroups_balanced_6400`: Flooded's group mix with Golden's manoeuvre mix and 2 % stationary share. It separates group mix from the lateral-plus-stationary bundle. No model has been trained on it.
+- Selection is deterministic (SHA-1 order salted by seed 0, no random number generator); the 1,600 cells are exact per-bucket quarters of the 6,400 cells.
