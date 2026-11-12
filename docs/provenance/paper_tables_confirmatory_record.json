@@ -1,0 +1,142 @@
+{
+  "Base": {
+    "n_routes": 44,
+    "mean_ds": 38.82122225,
+    "std_ds": 28.80590581536629,
+    "mean_rc": 69.07181818181817,
+    "mean_standstill_pct": 40.31674117550309,
+    "mean_gate_pct": 20.046315890465277,
+    "mean_gate_during_ss_pct": 33.28396156894779,
+    "total_col_veh": 53,
+    "total_col_lay": 4,
+    "total_col_ped": 0,
+    "total_col_all": 57,
+    "strata_standstill_pct": {
+      "Overtaking": 61.42053048807739,
+      "Merging": 33.679665666564716,
+      "Emergency_Braking": 40.33981628630995,
+      "Traffic_Signs": 34.95333500042504,
+      "Give_Way": 11.716358113279755,
+      "Open_Maneuver_25": 43.66637700230928
+    }
+  },
+  "Flooded-1600": {
+    "n_routes": 44,
+    "mean_ds": 45.76895247727273,
+    "std_ds": 31.153642064490413,
+    "mean_rc": 77.44318181818183,
+    "mean_standstill_pct": 33.69124352177722,
+    "mean_gate_pct": 12.979374419317542,
+    "mean_gate_during_ss_pct": 26.93255234906451,
+    "total_col_veh": 47,
+    "total_col_lay": 2,
+    "total_col_ped": 0,
+    "total_col_all": 49,
+    "strata_standstill_pct": {
+      "Overtaking": 40.625040340730166,
+      "Merging": 25.66701454072898,
+      "Emergency_Braking": 34.79930947411852,
+      "Traffic_Signs": 52.08855280468144,
+      "Give_Way": 14.041320763566436,
+      "Open_Maneuver_25": 31.051903828729408
+    }
+  },
+  "Golden-1600": {
+    "n_routes": 44,
+    "mean_ds": 49.8762784090909,
+    "std_ds": 29.49345857267807,
+    "mean_rc": 78.15954545454545,
+    "mean_standstill_pct": 32.36568374381989,
+    "mean_gate_pct": 11.222143697193326,
+    "mean_gate_during_ss_pct": 24.994702716299642,
+    "total_col_veh": 39,
+    "total_col_lay": 5,
+    "total_col_ped": 0,
+    "total_col_all": 44,
+    "strata_standstill_pct": {
+      "Overtaking": 42.56468100540212,
+      "Merging": 23.29866015559091,
+      "Emergency_Braking": 32.9334955780413,
+      "Traffic_Signs": 49.52846070220444,
+      "Give_Way": 12.692571371241932,
+      "Open_Maneuver_25": 30.23442766152295
+    }
+  },
+  "Flooded-6400-Hist": {
+    "n_routes": 44,
+    "mean_ds": 49.03712220454545,
+    "std_ds": 31.96529190118638,
+    "mean_rc": 77.75636363636364,
+    "mean_standstill_pct": 33.908189094666575,
+    "mean_gate_pct": 11.386390337888106,
+    "mean_gate_during_ss_pct": 26.265329272627607,
+    "total_col_veh": 56,
+    "total_col_lay": 1,
+    "total_col_ped": 0,
+    "total_col_all": 57,
+    "strata_standstill_pct": {
+      "Overtaking": 50.10563230340799,
+      "Merging": 30.861982037973554,
+      "Emergency_Braking": 26.376059727688883,
+      "Traffic_Signs": 40.40677771964269,
+      "Give_Way": 14.3356557483002,
+      "Open_Maneuver_25": 37.78969613352995
+    }
+  },
+  "Flooded-6400-Matched": {
+    "n_routes": 44,
+    "mean_ds": 53.088480272727274,
+    "std_ds": 32.864419126492386,
+    "mean_rc": 74.64681818181818,
+    "mean_standstill_pct": 33.776134975367206,
+    "mean_gate_pct": 15.135968617297312,
+    "mean_gate_during_ss_pct": 33.49474978650423,
+    "total_col_veh": 30,
+    "total_col_lay": 6,
+    "total_col_ped": 1,
+    "total_col_all": 37,
+    "strata_standstill_pct": {
+      "Overtaking": 40.79214458065073,
+      "Merging": 32.4128137095254,
+      "Emergency_Braking": 31.76268282662855,
+      "Traffic_Signs": 38.37698783259018,
+      "Give_Way": 13.689242627700182,
+      "Open_Maneuver_25": 35.42937282313053
+    }
+  },
+  "Golden-6400": {
+    "n_routes": 44,
+    "mean_ds": 49.85191961363636,
+    "std_ds": 28.706061367213405,
+    "mean_rc": 82.37704545454545,
+    "mean_standstill_pct": 25.714582138059146,
+    "mean_gate_pct": 3.730363924220029,
+    "mean_gate_during_ss_pct": 13.702755281870004,
+    "total_col_veh": 42,
+    "total_col_lay": 1,
+    "total_col_ped": 3,
+    "total_col_all": 46,
+    "strata_standstill_pct": {
+      "Overtaking": 32.517032466572374,
+      "Merging": 20.236998830606705,
+      "Emergency_Braking": 31.85614830067436,
+      "Traffic_Signs": 22.204349164025583,
+      "Give_Way": 10.850407578761843,
+      "Open_Maneuver_25": 24.65781093955435
+    }
+  },
+  "Comparison_Golden6400_vs_Flooded-6400-Hist": {
+    "standstill_delta_pct": -8.193606956607422,
+    "wilcoxon_stat": 231.0,
+    "wilcoxon_p": 0.0016236099216939692,
+    "bca_ci_95_low": -15.839888210795435,
+    "bca_ci_95_high": -0.7440513954169966
+  },
+  "Comparison_Golden6400_vs_Flooded-6400-Matched": {
+    "standstill_delta_pct": -8.061552837308053,
+    "wilcoxon_stat": 213.0,
+    "wilcoxon_p": 0.0007092337563108231,
+    "bca_ci_95_low": -15.07625363450037,
+    "bca_ci_95_high": -1.2499178480128406
+  }
+}
