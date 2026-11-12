@@ -115,6 +115,8 @@ GATE_SWEEP_L = [0.5, 1.0, 1.5, 2.0, 3.0, 5.0]
 SWEEP_V = [0.01, 0.05, 0.1, 0.2, 0.5, 1.0]
 SENS_V = [0.05, 0.1, 0.2, 0.5]
 COMPARATORS = [FM, FH]
+# Per-step controller fields written only by the gate-off agent (alpamayo_bridge_agent_nogate.py).
+LOGGED_CONTROLLER_FIELDS = ['traj_extent', 'gate_would_fire', 'target_speed_kmh', 'raw_throttle', 'raw_brake']
 
 
 # --------------------------------------------------------------------------- loading
@@ -169,25 +171,38 @@ def load_route(model, route):
     log_dir = _route_dir(prefixes, route, 'predicted_trajectories.jsonl')
     if ep_dir is None or log_dir is None:
         raise RuntimeError(f'missing data for {model} route {route}')
+    return parse_route_dirs(ep_dir, log_dir, f'{model} {route}')
+
+
+def parse_route_dirs(ep_dir, log_dir, label, tolerate_partial_last_line=False):
     rec = json.load(open(ep_dir / 'checkpoint_endpoint.json'))['_checkpoint']['records'][0]
+    model, route = label, ''
     if log_dir != ep_dir:
         # The step log comes from a fallback prefix; require the two endpoint records to agree.
         rec2 = json.load(open(log_dir / 'checkpoint_endpoint.json'))['_checkpoint']['records'][0]
         if rec2['scores'] != rec['scores'] or rec2['infractions'] != rec['infractions']:
             raise RuntimeError(f'{model} {route}: endpoint of {ep_dir.name} differs from {log_dir.name}')
     wps, speed, steer, thr, brk, coc, steps = [], [], [], [], [], [], []
+    extra = {k: [] for k in LOGGED_CONTROLLER_FIELDS}
     with open(log_dir / 'predicted_trajectories.jsonl') as f:
-        for line in f:
-            if not line.strip():
-                continue
+        lines = [ln for ln in f if ln.strip()]
+    for li, line in enumerate(lines):
+        try:
             d = json.loads(line)
-            wps.append(d['pred_waypoints'])
-            speed.append(float(d['speed']))
-            steer.append(float(d['steer']))
-            thr.append(float(d['throttle']))
-            brk.append(float(d['brake']))
-            coc.append(d.get('coc', '') or '')
-            steps.append(int(d['step']))
+        except json.JSONDecodeError:
+            if tolerate_partial_last_line and li == len(lines) - 1:
+                break
+            raise
+        for k in extra:
+            if k in d:
+                extra[k].append(d[k])
+        wps.append(d['pred_waypoints'])
+        speed.append(float(d['speed']))
+        steer.append(float(d['steer']))
+        thr.append(float(d['throttle']))
+        brk.append(float(d['brake']))
+        coc.append(d.get('coc', '') or '')
+        steps.append(int(d['step']))
     wp = np.asarray(wps, dtype=np.float64)
     if wp.ndim != 3 or wp.shape[1] != 64:
         raise RuntimeError(f'{model} {route}: unexpected waypoint array {wp.shape}')
@@ -207,6 +222,7 @@ def load_route(model, route):
         'steer': np.asarray(steer), 'throttle': np.asarray(thr), 'brake': np.asarray(brk),
         'target': target, 'coc': coc,
         'n_steps': len(speed), 'step_gaps': int(np.sum(np.diff(steps) != 1)),
+        'logged_controller': {k: np.asarray(v, dtype=np.float64) for k, v in extra.items() if len(v) == len(speed)},
     }
 
 
@@ -276,7 +292,11 @@ def wilcoxon_full(x, y):
         return out
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        res = stats.wilcoxon(x, y)
+        try:
+            res = stats.wilcoxon(x, y)
+        except ValueError as e:
+            out.update({'status': 'not_computable', 'reason': str(e)})
+            return out
         out['statistic'] = float(res.statistic)
         out['p'] = float(res.pvalue)
         out['p_approx'] = float(stats.wilcoxon(x, y, method='approx').pvalue)
@@ -932,36 +952,7 @@ def analysis_L(data, counts, expo):
         'standstill_pct_as_compute_paper_tables': ('Base only: compute_paper_tables.load_model_data reads '
                                                    'base_23687, which has no step log, and scores it 0 %')}}
     for m in MODELS:
-        rds = [data[m][r] for r in CANONICAL_44]
-        tot = {k: int(sum(c[k] for c in counts[m])) for k in counts[m][0]}
-        pkm, okm = float(expo[m][:, 0].sum()), float(expo[m][:, 1].sum())
-        jerk = [steer_jerk_moving(rd) for rd in rds]
-        ss = np.array([pct(rd['speed'] < SS_V) for rd in rds])
-        ss_ref = np.array([0.0 if rd['steplog_dir'] != rd['endpoint_dir'] else s for rd, s in zip(rds, ss)])
-        inf_count = lambda k: int(sum(len(rd['infractions'].get(k, [])) for rd in rds))  # noqa: E731
-        res['models'][m] = {
-            'mean_ds': float(np.mean([rd['ds'] for rd in rds])),
-            'mean_rc': float(np.mean([rd['rc'] for rd in rds])),
-            'mean_penalty': float(np.mean([rd['penalty'] for rd in rds])),
-            'progress_km': pkm, 'odometer_km': okm,
-            'collisions_raw': tot['raw'], 'collisions_events': tot['events_actor_id'],
-            'collisions_raw_by_class': {c: tot[f'raw_{c}'] for c in COLLISION_KEYS.values()},
-            'collisions_events_by_class': {c: tot[f'events_actor_id_{c}'] for c in COLLISION_KEYS.values()},
-            'events_per_progress_km': tot['events_actor_id'] / pkm, 'events_per_odometer_km': tot['events_actor_id'] / okm,
-            'non_timeout_infractions': tot['non_timeout_raw'],
-            'non_timeout_per_progress_km': tot['non_timeout_raw'] / pkm,
-            'non_timeout_per_odometer_km': tot['non_timeout_raw'] / okm,
-            'standstill_pct': float(ss.mean()),
-            'standstill_pct_as_compute_paper_tables': float(ss_ref.mean()),
-            'routes_with_steplog_from_fallback_prefix': [r for r, rd in zip(CANONICAL_44, rds)
-                                                         if rd['steplog_dir'] != rd['endpoint_dir']],
-            'mean_speed_route_mean': float(np.mean([np.mean(rd['speed']) for rd in rds])),
-            'mean_speed_pooled': float(np.concatenate([rd['speed'] for rd in rds]).mean()),
-            'moving_steer_jerk': float(np.nanmean(jerk)),
-            'hard_brake_pct': float(np.mean([pct(rd['brake'] > 0.5) for rd in rds])),
-            'red_light': inf_count('red_light'), 'stop_infraction': inf_count('stop_infraction'),
-            'outside_route_lanes': inf_count('outside_route_lanes'), 'vehicle_blocked': inf_count('vehicle_blocked'),
-            'min_speed_infractions': inf_count('min_speed_infractions')}
+        res['models'][m] = summary_row([data[m][r] for r in CANONICAL_44], counts[m], expo[m])
     match = {}
     for m, v in MANUSCRIPT_MEAN_SPEED.items():
         e = res['models'][m]
@@ -971,6 +962,39 @@ def analysis_L(data, counts, expo):
                     'matches_pooled': round(e['mean_speed_pooled'], 2) == v}
     res['manuscript_mean_speed_match'] = match
     return res
+
+
+def summary_row(rds, cnts, ex):
+    """One row of summary table L for 44 route records (in CANONICAL_44 order)."""
+    tot = {k: int(sum(c[k] for c in cnts)) for k in cnts[0]}
+    pkm, okm = float(ex[:, 0].sum()), float(ex[:, 1].sum())
+    jerk = [steer_jerk_moving(rd) for rd in rds]
+    ss = np.array([pct(rd['speed'] < SS_V) for rd in rds])
+    ss_ref = np.array([0.0 if rd['steplog_dir'] != rd['endpoint_dir'] else s for rd, s in zip(rds, ss)])
+    inf_count = lambda k: int(sum(len(rd['infractions'].get(k, [])) for rd in rds))  # noqa: E731
+    return {
+        'mean_ds': float(np.mean([rd['ds'] for rd in rds])),
+        'mean_rc': float(np.mean([rd['rc'] for rd in rds])),
+        'mean_penalty': float(np.mean([rd['penalty'] for rd in rds])),
+        'progress_km': pkm, 'odometer_km': okm,
+        'collisions_raw': tot['raw'], 'collisions_events': tot['events_actor_id'],
+        'collisions_raw_by_class': {c: tot[f'raw_{c}'] for c in COLLISION_KEYS.values()},
+        'collisions_events_by_class': {c: tot[f'events_actor_id_{c}'] for c in COLLISION_KEYS.values()},
+        'events_per_progress_km': tot['events_actor_id'] / pkm, 'events_per_odometer_km': tot['events_actor_id'] / okm,
+        'non_timeout_infractions': tot['non_timeout_raw'],
+        'non_timeout_per_progress_km': tot['non_timeout_raw'] / pkm,
+        'non_timeout_per_odometer_km': tot['non_timeout_raw'] / okm,
+        'standstill_pct': float(ss.mean()),
+        'standstill_pct_as_compute_paper_tables': float(ss_ref.mean()),
+        'routes_with_steplog_from_fallback_prefix': [r for r, rd in zip(CANONICAL_44, rds)
+                                                     if rd['steplog_dir'] != rd['endpoint_dir']],
+        'mean_speed_route_mean': float(np.mean([np.mean(rd['speed']) for rd in rds])),
+        'mean_speed_pooled': float(np.concatenate([rd['speed'] for rd in rds]).mean()),
+        'moving_steer_jerk': float(np.nanmean(jerk)),
+        'hard_brake_pct': float(np.mean([pct(rd['brake'] > 0.5) for rd in rds])),
+        'red_light': inf_count('red_light'), 'stop_infraction': inf_count('stop_infraction'),
+        'outside_route_lanes': inf_count('outside_route_lanes'), 'vehicle_blocked': inf_count('vehicle_blocked'),
+        'min_speed_infractions': inf_count('min_speed_infractions')}
 
 
 # --------------------------------------------------------------------------- M
@@ -1221,7 +1245,11 @@ def render(man):
           table(['metric'] + MODELS, [[k] + [f(Lm['models'][m][k], 4) for m in MODELS] for k in keys]
                 + [['collisions raw v/p/l'] + ['/'.join(str(x) for x in Lm['models'][m]['collisions_raw_by_class'].values()) for m in MODELS],
                    ['collisions events v/p/l'] + ['/'.join(str(x) for x in Lm['models'][m]['collisions_events_by_class'].values()) for m in MODELS]]),
-          '', 'Manuscript mean-speed values vs the two definitions:', '',
+          '', *([f"Additional runs with all 44 routes usable: {list(Lm['additional_models'])}", '',
+                table(['metric'] + list(Lm['additional_models']),
+                      [[k] + [f(Lm['additional_models'][m][k], 4) for m in Lm['additional_models']] for k in keys]), '']
+                if Lm.get('additional_models') else []),
+          'Manuscript mean-speed values vs the two definitions:', '',
           table(['model', 'manuscript', 'route mean', 'pooled', 'matches route mean', 'matches pooled'],
                 [[m, v['manuscript'], v['route_mean_2dp'], v['pooled_2dp'], v['matches_route_mean'], v['matches_pooled']]
                  for m, v in Lm['manuscript_mean_speed_match'].items()]), '']
@@ -1234,6 +1262,526 @@ def render(man):
                   f"{v['steps_removed_total']} {v['steps_removed_by_route']}", v['n_routes_with_1200_step_standstill_run']]
                  for m, v in M['models'].items()]), '',
           table(PAIR_HDR, [pair_row(k, v) for k, v in M['pairs_harmonised_standstill'].items()]), '']
+    return '\n'.join(L) + '\n'
+
+
+# --------------------------------------------------------------------------- new runs (N-R)
+
+# Additional result tags (ANALYSIS_ADDENDUM.md sections 4b, 4c, 5a, 5b). Arm name -> directory prefix.
+NEW_RUN_TAGS = {
+    'Golden-6400 rep1': 'model_matrix_golden_6400_rep1',
+    'Flooded-6400-Matched rep1': 'model_matrix_flooded_6400_rep1',
+    'Golden-6400 run2': 'model_matrix_golden_6400_run2',
+    'Flooded-6400-Matched run2': 'model_matrix_flooded_6400_run2',
+    'Golden-6400 nogate': 'model_matrix_golden_6400_nogate',
+    'Flooded-6400-Matched nogate': 'model_matrix_flooded_6400_nogate',
+    'Base run2': 'base_run2',
+}
+# First-pass arms, named the same way (tags from MODEL_PREFIXES).
+RUN1_ARMS = {'Golden-6400 run1': G64, 'Flooded-6400-Matched run1': FM, 'Base run1': BASE,
+             'Golden-1600': G16, 'Flooded-1600': F16}
+# ANALYSIS_ADDENDUM.md section 4b (the 8 listed routes; = first 8 of every fifth CANONICAL_44 entry).
+REPLICATE_ROUTES = ['2534', '3561', '1790', '23695', '28087', '2664', '17563', '26458']
+# docs/provenance/train_eval_overlap_canonical44.json: canonical routes with Matrix training samples
+# ("excluding 7 routes with training samples in the Matrix cells").
+OVERLAP_FILE = ROOT / 'docs/provenance/train_eval_overlap_canonical44.json'
+OVERLAP_7 = ['1852', '1825', '2286', '23901', '23695', '3464', '2164']
+# Same file, "all_canonical_hit_by_any_gate_excluded_route" minus OVERLAP_7 (the 11-route exclusion).
+GATE_FLAGGED_EXTRA_4 = ['2513', '2790', '2283', '23771']
+ROUTE_SUBSETS = {
+    '44 routes': CANONICAL_44,
+    '37 routes (excl. 7 training-overlap routes)': [r for r in CANONICAL_44 if r not in OVERLAP_7],
+    '33 routes (excl. 11 gate-flagged routes)': [r for r in CANONICAL_44 if r not in OVERLAP_7 + GATE_FLAGGED_EXTRA_4],
+}
+P_THRESHOLDS = [0.1, 0.5, 1.0]
+
+
+def check_route_constants():
+    # The addendum lists 8 routes; CANONICAL_44[::5] has a 9th entry (3464, index 40) that it omits.
+    assert REPLICATE_ROUTES == CANONICAL_44[::5][:8], 'REPLICATE_ROUTES != first 8 of CANONICAL_44[::5]'
+    ov = json.load(open(OVERLAP_FILE))
+    sens = ov['sensitivity']
+    ex7 = sens['excluding 7 routes with training samples in the Matrix cells']['excluded']
+    ex11 = sens['excluding all 11 gate-flagged canonical routes']['excluded']
+    assert sorted(ex7) == sorted(OVERLAP_7), 'OVERLAP_7 differs from the provenance file'
+    assert sorted(ex11) == sorted(OVERLAP_7 + GATE_FLAGGED_EXTRA_4), 'GATE_FLAGGED_EXTRA_4 differs from the provenance file'
+    assert [len(v) for v in ROUTE_SUBSETS.values()] == [44, 37, 33]
+    return ov
+
+
+def usable_dir(tag, route):
+    """A route directory is usable only if checkpoint_endpoint.json parses, carries
+    _checkpoint.global_record.scores_mean and a record, and predicted_trajectories.jsonl exists."""
+    d = EVAL_DIR / f'{tag}_{route}'
+    try:
+        ck = json.load(open(d / 'checkpoint_endpoint.json'))['_checkpoint']
+        ok = 'scores_mean' in ck['global_record'] and len(ck['records']) > 0
+    except Exception:
+        return None
+    return d if ok and (d / 'predicted_trajectories.jsonl').exists() else None
+
+
+def load_new_runs():
+    runs, unparsable = {}, {}
+    for name, tag in NEW_RUN_TAGS.items():
+        routes = REPLICATE_ROUTES if name.endswith('rep1') else CANONICAL_44
+        runs[name] = {}
+        for r in routes:
+            d = usable_dir(tag, r)
+            if d is None:
+                continue
+            try:
+                runs[name][r] = parse_route_dirs(d, d, f'{tag} {r}', tolerate_partial_last_line=True)
+            except Exception as e:  # e.g. an empty step log: treated as absent
+                unparsable.setdefault(tag, {})[r] = f'{type(e).__name__}: {e}'
+        print(f'new runs {tag}: {len(runs[name])} usable', flush=True)
+    return runs, unparsable
+
+
+def arm_tag(name):
+    if name in NEW_RUN_TAGS:
+        return NEW_RUN_TAGS[name]
+    return MODEL_PREFIXES[RUN1_ARMS[name]][0]
+
+
+def ended_by_60s_rule(rd):
+    return float(rd['status'] == 'Failed - TickRuntime' and round(rd['duration_game'] * 20) < TICK_CAP)
+
+
+RUN_METRICS = {
+    'standstill_pct': lambda rd: pct(rd['speed'] < SS_V),
+    'driving_score': lambda rd: rd['ds'],
+    'route_completion': lambda rd: rd['rc'],
+    'mean_speed_mps': lambda rd: float(np.mean(rd['speed'])),
+    'collision_events': lambda rd: float(route_counts(rd)['events_actor_id']),
+    'n_steps': lambda rd: float(rd['n_steps']),
+}
+P_METRICS = {
+    **{f'standstill_pct_v<{v}': (lambda rd, v=v: pct(rd['speed'] < v)) for v in P_THRESHOLDS},
+    'mean_speed_mps': RUN_METRICS['mean_speed_mps'],
+    'route_completion': RUN_METRICS['route_completion'],
+    'driving_score': RUN_METRICS['driving_score'],
+    'collision_events': RUN_METRICS['collision_events'],
+    **{f'collision_events_{c}': (lambda rd, c=c: float(route_counts(rd)[f'events_actor_id_{c}']))
+       for c in COLLISION_KEYS.values()},
+    'n_steps': RUN_METRICS['n_steps'],
+    'ended_by_60s_rule': ended_by_60s_rule,
+}
+OBR_METRICS = ['standstill_pct', 'driving_score', 'route_completion', 'collision_events']
+
+
+def vec(arms, name, fn, routes):
+    return np.array([fn(arms[name][r]) for r in routes], dtype=np.float64)
+
+
+def pending(arms, req):
+    """req: list of (arm name, routes). Returns None when every required route is usable."""
+    have, need = {}, {}
+    for name, routes in req:
+        t = arm_tag(name)
+        have[t] = min(have.get(t, 10 ** 9), sum(r in arms[name] for r in routes))
+        need[t] = max(need.get(t, 0), len(routes))
+    if all(have[t] >= need[t] for t in need):
+        return None
+    return {'status': 'pending', 'have': have, 'need': need}
+
+
+def spread(d):
+    d = np.asarray(d, float)
+    return {'n': int(len(d)), 'mean': float(np.mean(d)) if len(d) else None,
+            'sd': float(np.std(d, ddof=1)) if len(d) >= 2 else None,
+            'mean_abs': float(np.mean(np.abs(d))) if len(d) else None}
+
+
+def icc_1_1(a, b):
+    """One-way random-effects, single-measure ICC(1,1) (Shrout & Fleiss 1979):
+    (MSB - MSW) / (MSB + (k - 1) MSW), k = 2 runs, rows = routes."""
+    x = np.column_stack([a, b]).astype(float)
+    n, k = x.shape
+    rm = x.mean(axis=1)
+    msb = k * np.sum((rm - x.mean()) ** 2) / (n - 1)
+    msw = np.sum((x - rm[:, None]) ** 2) / (n * (k - 1))
+    return float((msb - msw) / (msb + (k - 1) * msw)) if (msb + (k - 1) * msw) > 0 else None
+
+
+def decision_case(p):
+    """CONFIRMATORY_PREREGISTRATION_FLOODED_6400.md section 3: A1 CI upper < 0 and diff <= -4;
+    A2 CI upper < 0 and -4 < diff < 0; B diff < 0 and CI includes 0; C diff >= 0."""
+    if not isinstance(p.get('bca95'), list):
+        return 'not_computable'
+    d, hi = p['mean_diff'], p['bca95'][1]
+    if hi < 0:
+        return 'A1' if d <= -4.0 else 'A2'
+    return 'B' if d < 0 else 'C'
+
+
+def status_line(parts):
+    """parts: dict of sub-analysis -> result; complete if none pending."""
+    pend = [k for k, v in parts.items() if isinstance(v, dict) and v.get('status') == 'pending']
+    if not pend:
+        return 'complete'
+    return f'pending: {len(pend)} of {len(parts)} parts ({", ".join(pend)})'
+
+
+def analysis_N(arms):
+    res = {'replicate_routes': REPLICATE_ROUTES, 'models': {},
+           'icc_formula': icc_1_1.__doc__.strip().replace('\n   ', ''),
+           'note': 'run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 44-route pass.'}
+    pend_any = []
+    for short in ('Golden-6400', 'Flooded-6400-Matched'):
+        names = {'run1': f'{short} run1', 'rep1': f'{short} rep1', 'run2': f'{short} run2'}
+        done = {run: sum(r in arms[n] for r in REPLICATE_ROUTES) for run, n in names.items()}
+        tbl = {r: {run: {**{k: fn(arms[n][r]) for k, fn in RUN_METRICS.items()}, 'status': arms[n][r]['status']}
+                   for run, n in names.items() if r in arms[n]} for r in REPLICATE_ROUTES}
+        diffs = {}
+        for a, b in (('rep1', 'run1'), ('run2', 'run1'), ('run2', 'rep1')):
+            routes = [r for r in CANONICAL_44 if r in arms[names[a]] and r in arms[names[b]]]
+            e = {'n_routes': len(routes), 'routes': routes,
+                 'same_status': int(sum(arms[names[a]][r]['status'] == arms[names[b]][r]['status'] for r in routes)),
+                 'metrics': {}}
+            for k, fn in RUN_METRICS.items():
+                d = vec(arms, names[a], fn, routes) - vec(arms, names[b], fn, routes)
+                e['metrics'][k] = {**spread(d), 'per_route': dict(zip(routes, d.tolist()))}
+            diffs[f'{a} - {b}'] = e
+        three = [r for r in CANONICAL_44 if all(r in arms[n] for n in names.values())]
+        sd3 = {}
+        for k, fn in RUN_METRICS.items():
+            per = {r: float(np.std([fn(arms[n][r]) for n in names.values()], ddof=1)) for r in three}
+            sd3[k] = {'per_route_sd': per, 'mean_sd': float(np.mean(list(per.values()))) if per else None}
+        p = pending(arms, [(names['run1'], CANONICAL_44), (names['run2'], CANONICAL_44)])
+        if p:
+            tr = p
+            pend_any.append(short)
+        else:
+            tr = {}
+            for k in ('standstill_pct', 'driving_score', 'route_completion'):
+                x = vec(arms, names['run2'], RUN_METRICS[k], CANONICAL_44)
+                y = vec(arms, names['run1'], RUN_METRICS[k], CANONICAL_44)
+                tr[k] = {'run2_minus_run1': paired(x, y), 'sd_of_per_route_difference': float(np.std(x - y, ddof=1)),
+                         'icc_1_1': icc_1_1(y, x)}
+        res['models'][short] = {
+            'replicate_routes_done': {run: f'{n}/{len(REPLICATE_ROUTES)}' for run, n in done.items()},
+            'per_route_table_replicate_routes': tbl,
+            'run_to_run_differences': diffs,
+            'routes_with_three_runs': three, 'three_run_sd': sd3,
+            'test_retest_44': tr}
+    done_rep = sum(sum(r in arms[f'{s} rep1'] for r in REPLICATE_ROUTES) for s in ('Golden-6400', 'Flooded-6400-Matched'))
+    res['status_line'] = ('complete' if not pend_any and done_rep == 16 else
+                          f'partial: rep1 routes usable {done_rep}/16; 44-route test-retest pending for {pend_any or "none"}')
+    return res
+
+
+def analysis_O(arms):
+    G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
+    comps = {
+        '(i) run2 Golden vs run2 Flooded': ((G2,), (F2,)),
+        '(ii) mean of run1 and run2, Golden vs Flooded': ((G1, G2), (F1, F2)),
+        '(iii-a) run1 Golden vs run2 Flooded': ((G1,), (F2,)),
+        '(iii-b) run2 Golden vs run1 Flooded': ((G2,), (F1,)),
+    }
+    res = {'endpoint': 'standstill_pct (primary); driving_score, route_completion, collision_events secondary',
+           'comparisons': {}}
+    for cname, (ga, fa) in comps.items():
+        out = {}
+        for sname, routes in ROUTE_SUBSETS.items():
+            p = pending(arms, [(n, routes) for n in ga + fa])
+            if p:
+                out[sname] = p
+                continue
+            out[sname] = {k: paired(np.mean([vec(arms, n, RUN_METRICS[k], routes) for n in ga], axis=0),
+                                    np.mean([vec(arms, n, RUN_METRICS[k], routes) for n in fa], axis=0))
+                          for k in OBR_METRICS}
+        if cname.startswith(('(i)', '(ii)')) and 'status' not in out['44 routes']:
+            out['replication_readout_decision_case_44'] = {
+                'case': decision_case(out['44 routes']['standstill_pct']),
+                'label': 'replication readout, not a confirmatory test (rule of the pre-registration, section 3)'}
+        res['comparisons'][cname] = out
+    res['status_line'] = status_line({f'{c} | {s}': v for c, o in res['comparisons'].items()
+                                      for s, v in o.items() if s in ROUTE_SUBSETS})
+    return res
+
+
+def analysis_P(arms):
+    names = {'Golden-6400': ('Golden-6400 nogate', 'Golden-6400 run1', 'Golden-6400 run2'),
+             'Flooded-6400-Matched': ('Flooded-6400-Matched nogate', 'Flooded-6400-Matched run1', 'Flooded-6400-Matched run2')}
+    res = {'metric_definitions': {'ended_by_60s_rule': 'status Failed - TickRuntime with round(duration_game*20) < 4000 (1/0 per route)',
+                                  'collision_events': 'actor-id merged, as in F'}}
+    # (1) per model, gate-off vs default run1, on the usable routes
+    part1 = {}
+    for short, (ng, d1, _) in names.items():
+        routes = [r for r in CANONICAL_44 if r in arms[ng]]
+        e = {'n_routes': len(routes), 'partial': len(routes) < 44,
+             'label': ('complete (44 routes)' if len(routes) == 44 else f'PARTIAL: {len(routes)}/44 routes usable'),
+             'routes': routes}
+        if routes:
+            e['metrics'] = {k: paired(vec(arms, ng, fn, routes), vec(arms, d1, fn, routes))
+                            for k, fn in P_METRICS.items()}
+            e['n_ended_by_60s_rule'] = {'gate_off': int(vec(arms, ng, ended_by_60s_rule, routes).sum()),
+                                        'default': int(vec(arms, d1, ended_by_60s_rule, routes).sum())}
+        part1[short] = e
+    res['(1) gate-off minus default (run1), per model'] = part1
+    GN, FN = names['Golden-6400'][0], names['Flooded-6400-Matched'][0]
+    G1, F1, G2, F2 = names['Golden-6400'][1], names['Flooded-6400-Matched'][1], names['Golden-6400'][2], names['Flooded-6400-Matched'][2]
+    full = lambda *ns: pending(arms, [(n, CANONICAL_44) for n in ns])  # noqa: E731
+    v = lambda n, fn: vec(arms, n, fn, CANONICAL_44)  # noqa: E731
+    p_ng = full(GN, FN)
+    res['(2) Golden minus Flooded, gate-off'] = p_ng or {k: paired(v(GN, fn), v(FN, fn)) for k, fn in P_METRICS.items()}
+    inter_keys = [f'standstill_pct_v<{t}' for t in P_THRESHOLDS] + ['mean_speed_mps']
+    res['(3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1'] = p_ng or {
+        k: paired(v(GN, P_METRICS[k]) - v(FN, P_METRICS[k]), v(G1, P_METRICS[k]) - v(F1, P_METRICS[k])) for k in inter_keys}
+    p_all = full(GN, FN, G2, F2)
+    res['(3) interaction, default = mean of run1 and run2'] = p_all or {
+        k: paired(v(GN, P_METRICS[k]) - v(FN, P_METRICS[k]),
+                  (v(G1, P_METRICS[k]) + v(G2, P_METRICS[k])) / 2 - (v(F1, P_METRICS[k]) + v(F2, P_METRICS[k])) / 2)
+        for k in inter_keys}
+    p_r2 = full(G2, F2)
+    res['(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)'] = p_r2 or {
+        k: paired(v(G2, P_METRICS[k]) - v(F2, P_METRICS[k]), v(G1, P_METRICS[k]) - v(F1, P_METRICS[k])) for k in inter_keys}
+    if p_ng:
+        res['(5) common-window distance (m)'] = p_ng
+    else:
+        dist = {n: [] for n in (GN, FN, G1, F1)}
+        for r in CANONICAL_44:
+            n = min(arms[a][r]['n_steps'] for a in dist)
+            for a in dist:
+                dist[a].append(float(np.sum(arms[a][r]['speed'][:n]) * DT))
+        dist = {a: np.array(x) for a, x in dist.items()}
+        res['(5) common-window distance (m)'] = {
+            'window': 'first n = min over the four arms (both models gate-off and default run1) of logged steps, per route',
+            'Golden-6400 gate-off minus default': paired(dist[GN], dist[G1]),
+            'Flooded-6400-Matched gate-off minus default': paired(dist[FN], dist[F1]),
+            'Golden minus Flooded, gate-off': paired(dist[GN], dist[FN]),
+            'Golden minus Flooded, default': paired(dist[G1], dist[F1]),
+            'interaction': paired(dist[GN] - dist[FN], dist[G1] - dist[F1])}
+    part6 = {}
+    for short, (ng, _, _) in names.items():
+        routes = [r for r in CANONICAL_44 if r in arms[ng]]
+        rds = [arms[ng][r] for r in routes if 'traj_extent' in arms[ng][r]['logged_controller']
+               and 'gate_would_fire' in arms[ng][r]['logged_controller']]
+        e = {'n_routes': len(rds), 'label': 'complete (44 routes)' if len(rds) == 44 else f'PARTIAL: {len(rds)}/44 routes'}
+        if rds:
+            gw_all, gw_ss, band_all, band_share, maxdiff, mism = [], [], [], [], 0.0, 0
+            for rd in rds:
+                lc = rd['logged_controller']
+                gw, ext = lc['gate_would_fire'] > 0.5, lc['traj_extent']
+                ss = rd['speed'] < SS_V
+                gw_all.append(pct(gw))
+                if ss.any():
+                    gw_ss.append(float(np.mean(gw[ss]) * 100.0))
+                b = band_index({'L': ext, 'speed': rd['speed']})
+                band_all.append([pct((b == k) & ss) for k in range(4)])
+                if ss.any():
+                    band_share.append([float(np.mean(b[ss] == k) * 100.0) for k in range(4)])
+                maxdiff = max(maxdiff, float(np.max(np.abs(ext - rd['L']))))
+                mism += int(np.sum(gw != ((ext < 1.5) | ((rd['speed'] < 0.5) & (ext < 2.0)))))
+            e.update({
+                'pct_of_all_steps_gate_would_fire': float(np.mean(gw_all)),
+                'pct_of_standstill_steps_gate_would_fire': float(np.mean(gw_ss)) if gw_ss else None,
+                'band_split_logged_extent': {
+                    'pct_of_all_steps_standstill_and_in_band': dict(zip(BANDS, np.mean(band_all, axis=0).tolist())),
+                    'share_of_standstill_steps_in_band_pct': dict(zip(BANDS, np.mean(band_share, axis=0).tolist())) if band_share else None},
+                'max_abs_diff_logged_extent_vs_waypoint_chord_m': maxdiff,
+                'n_steps_gate_would_fire_disagrees_with_rule_on_logged_extent': mism})
+        part6[short] = e
+    res['(6) gate-off logged fields'] = part6
+    res['status_line'] = status_line({k: v for k, v in res.items() if k.startswith(('(2)', '(3)', '(4)', '(5)'))})
+    if p_ng:
+        res['status_line'] += f"; (1) and (6) partial: Golden {part1['Golden-6400']['n_routes']}/44, Flooded {part1['Flooded-6400-Matched']['n_routes']}/44"
+    return res
+
+
+def analysis_Q(arms, primary_p):
+    B2 = 'Base run2'
+    res = {}
+    routes_u = [r for r in CANONICAL_44 if r in arms[B2]]
+    st = Counter(arms[B2][r]['status'] for r in routes_u)
+    tick = [r for r in routes_u if arms[B2][r]['status'] == 'Failed - TickRuntime']
+    cap = [r for r in tick if round(arms[B2][r]['duration_game'] * 20) >= TICK_CAP]
+    res['base_run2_status'] = {'n_routes_usable': len(routes_u), 'status_counts': dict(sorted(st.items())),
+                               'tickruntime_60s_rule': [r for r in tick if r not in cap], 'tickruntime_4000_cap': cap,
+                               'label': 'complete (44 routes)' if len(routes_u) == 44 else f'PARTIAL: {len(routes_u)}/44 routes'}
+    keys = ['driving_score', 'route_completion', 'standstill_pct']
+    comps = {}
+    for first in ('Golden-1600', 'Flooded-1600'):
+        out = {}
+        for sname, routes in ROUTE_SUBSETS.items():
+            p = pending(arms, [(first, routes), (B2, routes)])
+            out[sname] = p or {k: paired(vec(arms, first, RUN_METRICS[k], routes), vec(arms, B2, RUN_METRICS[k], routes))
+                               for k in keys}
+        comps[f'{first} vs Base run2'] = out
+    res['comparisons'] = comps
+    h1 = comps['Golden-1600 vs Base run2']['44 routes']
+    if 'status' in h1:
+        res['holm_H1_base_run2_and_H2'] = h1
+        res['base_run2_minus_base_original'] = pending(arms, [(B2, CANONICAL_44)])
+    else:
+        raw = [h1['driving_score']['wilcoxon']['p'], primary_p]
+        res['holm_H1_base_run2_and_H2'] = {'tests': ['H1 Golden-1600 vs Base run2 DS (two-sided Wilcoxon)',
+                                                     'H2 Golden-6400 vs Flooded-6400-Matched standstill (primary)'],
+                                           'raw_p': raw, 'holm_p': holm_adjust(raw)}
+        res['base_run2_minus_base_original'] = {
+            'label': 'different termination rule AND a different run: not a pure test-retest',
+            **{k: paired(vec(arms, B2, RUN_METRICS[k], CANONICAL_44), vec(arms, 'Base run1', RUN_METRICS[k], CANONICAL_44),
+                         routes=CANONICAL_44) for k in keys}}
+    res['status_line'] = status_line({f'{c} | {s}': v for c, o in comps.items() for s, v in o.items()})
+    return res
+
+
+def _printed_matches(value, printed):
+    """True if value rounds to the printed string at its printed precision (decimals for
+    differences and CIs, significant digits for p-values)."""
+    return float(printed) == round(value, len(printed.split('.')[1])) if '.' in printed else float(printed) == round(value)
+
+
+def _p_matches(value, printed):
+    sig = len(printed.split('.')[1].lstrip('0'))
+    return float(f'{value:.{sig}g}') == float(printed)
+
+
+def analysis_R(arms, ov):
+    key_by_subset = {'44 routes': 'all 44',
+                     '37 routes (excl. 7 training-overlap routes)': 'excluding 7 routes with training samples in the Matrix cells',
+                     '33 routes (excl. 11 gate-flagged routes)': 'excluding all 11 gate-flagged canonical routes'}
+    pat = re.compile(r'N=(\d+) delta=([-\d.]+) CI\[([-\d.]+),([-\d.]+)\] p=([\d.]+)')
+    res = {'source_of_expected_values': str(OVERLAP_FILE.relative_to(ROOT)), 'subsets': {}}
+    all_ok = True
+    for sname, routes in ROUTE_SUBSETS.items():
+        h1 = paired(vec(arms, 'Golden-1600', RUN_METRICS['driving_score'], routes),
+                    vec(arms, 'Base run1', RUN_METRICS['driving_score'], routes))
+        h2 = paired(vec(arms, 'Golden-6400 run1', RUN_METRICS['standstill_pct'], routes),
+                    vec(arms, 'Flooded-6400-Matched run1', RUN_METRICS['standstill_pct'], routes))
+        e = {'H1 Golden-1600 vs Base (original) DS': h1, 'H2 Golden-6400 vs Flooded-6400-Matched standstill': h2,
+             'reproduction': {}}
+        exp = ov['sensitivity'][key_by_subset[sname]]
+        for lab, p, k in (('H1', h1, 'H1_driving_score'), ('H2', h2, 'H2_standstill_pp')):
+            n, d, lo, hi, pv = pat.search(exp[k]).groups()
+            ok = {'n': int(n) == p['n'], 'delta': _printed_matches(p['mean_diff'], d),
+                  'ci_low': _printed_matches(p['bca95'][0], lo), 'ci_high': _printed_matches(p['bca95'][1], hi),
+                  'p': _p_matches(p['wilcoxon']['p'], pv)}
+            e['reproduction'][lab] = {'expected_text': exp[k], 'matches': ok, 'all_match': all(ok.values())}
+            all_ok &= all(ok.values())
+        res['subsets'][sname] = e
+    res['all_reproduced'] = bool(all_ok)
+    res['status_line'] = 'complete' + ('' if all_ok else ' (NOT all expected values reproduced)')
+    return res
+
+
+def analysis_L_additional(arms):
+    rows = {}
+    for name in NEW_RUN_TAGS:
+        if name.endswith('rep1') or pending(arms, [(name, CANONICAL_44)]):
+            continue
+        rds = [arms[name][r] for r in CANONICAL_44]
+        rows[name] = summary_row(rds, [route_counts(rd) for rd in rds], np.array([exposures(rd) for rd in rds]))
+    return rows
+
+
+# --------------------------------------------------------------------------- report N-R
+
+def is_pending(v):
+    return isinstance(v, dict) and v.get('status') == 'pending'
+
+
+def pending_str(v):
+    return f"pending: have {v['have']}, need {v['need']}"
+
+
+def paired_block(title, obj, nd=3):
+    """Markdown for a dict {label: paired()} or a pending marker."""
+    if is_pending(obj):
+        return [f'**{title}**: {pending_str(obj)}', '']
+    rows = [pair_row(k, v, nd) for k, v in obj.items() if isinstance(v, dict) and 'wilcoxon' in v]
+    return [f'**{title}**', '', table(PAIR_HDR, rows), '']
+
+
+def render_new(man):
+    L = []
+    N = man['N']
+    L += ['## N. Replicates and test–retest', '', f"Status: {N['status_line']}", '', N['note'], '']
+    for short, v in N['models'].items():
+        L += [f"### {short}", '', f"Replicate routes done: {v['replicate_routes_done']}", '']
+        rows = [[r, run, f(x['standstill_pct'], 2), f(x['driving_score'], 2), f(x['route_completion'], 1),
+                 f(x['mean_speed_mps'], 3), int(x['collision_events']), int(x['n_steps']), x['status']]
+                for r, runs in v['per_route_table_replicate_routes'].items() for run, x in runs.items()]
+        L += [table(['route', 'run', 'standstill %', 'DS', 'RC %', 'mean speed', 'coll. events', 'steps', 'status'], rows), '']
+        rows = []
+        for pair, e in v['run_to_run_differences'].items():
+            if not e['n_routes']:
+                rows.append([pair, 0, '-', 'no routes with both runs yet', '', '', ''])
+                continue
+            for k, s in e['metrics'].items():
+                rows.append([pair, e['n_routes'], f"{e['same_status']}/{e['n_routes']}", k, f(s['mean']), f(s['sd']), f(s['mean_abs'])])
+        L += ['Run-to-run differences (all routes with both runs):', '',
+              table(['pair', 'N', 'same status', 'metric', 'mean', 'SD', 'mean |d|'], rows), '']
+        if v['routes_with_three_runs']:
+            L += [f"Three-run per-route SD (routes {v['routes_with_three_runs']}): " +
+                  '; '.join(f"{k}: {f(s['mean_sd'])}" for k, s in v['three_run_sd'].items()), '']
+        tr = v['test_retest_44']
+        if is_pending(tr):
+            L += [f'44-route test–retest: {pending_str(tr)}', '']
+        else:
+            L += table(PAIR_HDR + ['SD of d', 'ICC(1,1)'],
+                       [pair_row(f'{k} run2 - run1', e['run2_minus_run1']) + [f(e['sd_of_per_route_difference']), f(e['icc_1_1'])]
+                        for k, e in tr.items()]).split('\n') + ['']
+    L += [f"ICC formula: {N['icc_formula']}", '']
+
+    O = man['O']
+    L += ['## O. H2 replication', '', f"Status: {O['status_line']}", '', O['endpoint'], '']
+    for c, o in O['comparisons'].items():
+        for s in ROUTE_SUBSETS:
+            L += paired_block(f'{c}, {s}', o[s])
+        if 'replication_readout_decision_case_44' in o:
+            d = o['replication_readout_decision_case_44']
+            L += [f"Decision case (44 routes): **{d['case']}** — {d['label']}", '']
+
+    P = man['P']
+    L += ['## P. Gate-off controller', '', f"Status: {P['status_line']}", '']
+    for short, e in P['(1) gate-off minus default (run1), per model'].items():
+        if e['n_routes']:
+            L += paired_block(f"(1) {short} gate-off minus default — {e['label']}", e['metrics'])
+            L += [f"Routes ended by the 60 s rule: {e['n_ended_by_60s_rule']}", '']
+        else:
+            L += [f"**(1) {short}**: no usable gate-off routes yet", '']
+    for k in [k for k in P if k.startswith(('(2)', '(3)', '(4)'))]:
+        L += paired_block(k, P[k])
+    d5 = P['(5) common-window distance (m)']
+    L += paired_block('(5) common-window distance (m)', d5 if is_pending(d5) else {k: v for k, v in d5.items() if k != 'window'}, 2)
+    for short, e in P['(6) gate-off logged fields'].items():
+        if e['n_routes']:
+            b = e['band_split_logged_extent']
+            L += [f"**(6) {short}** ({e['label']}): gate_would_fire {f(e['pct_of_all_steps_gate_would_fire'], 2)} % of all steps, "
+                  f"{f(e['pct_of_standstill_steps_gate_would_fire'], 2)} % of standstill steps; max |logged traj_extent − waypoint chord| = "
+                  f"{f(e['max_abs_diff_logged_extent_vs_waypoint_chord_m'], 4)} m; steps where gate_would_fire disagrees with the rule: "
+                  f"{e['n_steps_gate_would_fire_disagrees_with_rule_on_logged_extent']}", '',
+                  table(['band', '% all steps standstill ∧ band', 'share of standstill steps %'],
+                        [[bn, f(b['pct_of_all_steps_standstill_and_in_band'][bn], 2),
+                          f(b['share_of_standstill_steps_in_band_pct'][bn], 1) if b['share_of_standstill_steps_in_band_pct'] else 'n/a']
+                         for bn in BANDS]), '']
+        else:
+            L += [f"**(6) {short}**: no usable gate-off routes yet", '']
+
+    Q = man['Q']
+    s = Q['base_run2_status']
+    L += ['## Q. H1 with the re-run Base', '', f"Status: {Q['status_line']}", '',
+          f"base_run2 status ({s['label']}): {s['status_counts']}; TickRuntime by 60 s rule {s['tickruntime_60s_rule']}, by 4000 cap {s['tickruntime_4000_cap']}", '']
+    for c, o in Q['comparisons'].items():
+        for sn in ROUTE_SUBSETS:
+            L += paired_block(f'{c}, {sn}', o[sn])
+    h = Q['holm_H1_base_run2_and_H2']
+    if is_pending(h):
+        L += [f'Holm {{H1 base_run2, H2}}: {pending_str(h)}', '']
+    else:
+        L += [table(['test', 'raw p', 'Holm p'], [[t, fp(a), fp(b)] for t, a, b in zip(h['tests'], h['raw_p'], h['holm_p'])]), '']
+    b = Q['base_run2_minus_base_original']
+    L += paired_block('base_run2 minus original Base' + ('' if is_pending(b) else f" ({b['label']})"), b)
+
+    R = man['R']
+    L += ['## R. Overlap sensitivity (H1, H2 on 44 / 37 / 33 routes)', '', f"Status: {R['status_line']}", '',
+          f"Expected values from `{R['source_of_expected_values']}`; all reproduced at printed precision: {R['all_reproduced']}", '']
+    for sn, e in R['subsets'].items():
+        L += paired_block(sn, {k: v for k, v in e.items() if k != 'reproduction'})
+        L += [f"- {lab}: expected `{x['expected_text']}` → {'reproduced' if x['all_match'] else 'NOT reproduced ' + str(x['matches'])}"
+              for lab, x in e['reproduction'].items()] + ['']
     return '\n'.join(L) + '\n'
 
 
@@ -1281,9 +1829,27 @@ def main():
     man['K'] = analysis_K(vals, data)
     man['L'] = analysis_L(data, counts, expo)
     man['M'] = analysis_M(data)
+
+    # N-R: additional runs (whatever subset is usable now)
+    ov = check_route_constants()
+    runs, unparsable = load_new_runs()
+    arms = {**{n: data[m] for n, m in RUN1_ARMS.items()}, **runs}
+    man['data_checks_new_runs'] = {
+        'usable_routes': {NEW_RUN_TAGS[n]: len(v) for n, v in runs.items()},
+        'usable_route_ids': {NEW_RUN_TAGS[n]: sorted(v) for n, v in runs.items()},
+        'usable_but_unparsable_treated_as_absent': unparsable,
+        'usability_rule': usable_dir.__doc__.strip().replace('\n   ', '')}
+    extra_rows = analysis_L_additional(arms)
+    if extra_rows:
+        man['L']['additional_models'] = extra_rows
+    man['N'] = analysis_N(arms)
+    man['O'] = analysis_O(arms)
+    man['P'] = analysis_P(arms)
+    man['Q'] = analysis_Q(arms, man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']['wilcoxon']['p'])
+    man['R'] = analysis_R(arms, ov)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')

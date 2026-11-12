@@ -11461,5 +11461,1483 @@
     }
    }
   }
+ },
+ "data_checks_new_runs": {
+  "usable_routes": {
+   "model_matrix_golden_6400_rep1": 0,
+   "model_matrix_flooded_6400_rep1": 2,
+   "model_matrix_golden_6400_run2": 0,
+   "model_matrix_flooded_6400_run2": 0,
+   "model_matrix_golden_6400_nogate": 0,
+   "model_matrix_flooded_6400_nogate": 1,
+   "base_run2": 0
+  },
+  "usable_route_ids": {
+   "model_matrix_golden_6400_rep1": [],
+   "model_matrix_flooded_6400_rep1": [
+    "2534",
+    "3561"
+   ],
+   "model_matrix_golden_6400_run2": [],
+   "model_matrix_flooded_6400_run2": [],
+   "model_matrix_golden_6400_nogate": [],
+   "model_matrix_flooded_6400_nogate": [
+    "2534"
+   ],
+   "base_run2": []
+  },
+  "usable_but_unparsable_treated_as_absent": {},
+  "usability_rule": "A route directory is usable only if checkpoint_endpoint.json parses, carries\n_checkpoint.global_record.scores_mean and a record, and predicted_trajectories.jsonl exists."
+ },
+ "N": {
+  "replicate_routes": [
+   "2534",
+   "3561",
+   "1790",
+   "23695",
+   "28087",
+   "2664",
+   "17563",
+   "26458"
+  ],
+  "models": {
+   "Golden-6400": {
+    "replicate_routes_done": {
+     "run1": "8/8",
+     "rep1": "0/8",
+     "run2": "0/8"
+    },
+    "per_route_table_replicate_routes": {
+     "2534": {
+      "run1": {
+       "standstill_pct": 5.269320843091335,
+       "driving_score": 60.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 3.1208998464158255,
+       "collision_events": 1.0,
+       "n_steps": 854.0,
+       "status": "Completed"
+      }
+     },
+     "3561": {
+      "run1": {
+       "standstill_pct": 66.50470695414515,
+       "driving_score": 57.275494,
+       "route_completion": 100.0,
+       "mean_speed_mps": 0.8046858248548734,
+       "collision_events": 1.0,
+       "n_steps": 3293.0,
+       "status": "Completed"
+      }
+     },
+     "1790": {
+      "run1": {
+       "standstill_pct": 14.06926406926407,
+       "driving_score": 4.6656,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.566467978415547,
+       "collision_events": 6.0,
+       "n_steps": 924.0,
+       "status": "Completed"
+      }
+     },
+     "23695": {
+      "run1": {
+       "standstill_pct": 4.158004158004158,
+       "driving_score": 100.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 3.210978800663228,
+       "collision_events": 0.0,
+       "n_steps": 962.0,
+       "status": "Completed"
+      }
+     },
+     "28087": {
+      "run1": {
+       "standstill_pct": 40.27898866608544,
+       "driving_score": 33.648,
+       "route_completion": 56.08,
+       "mean_speed_mps": 1.2276144859211575,
+       "collision_events": 1.0,
+       "n_steps": 1147.0,
+       "status": "Failed - Agent deviated from the route"
+      }
+     },
+     "2664": {
+      "run1": {
+       "standstill_pct": 14.616755793226382,
+       "driving_score": 34.909584,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.366194453036892,
+       "collision_events": 2.0,
+       "n_steps": 1122.0,
+       "status": "Completed"
+      }
+     },
+     "17563": {
+      "run1": {
+       "standstill_pct": 8.31353919239905,
+       "driving_score": 36.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.6867916131784693,
+       "collision_events": 2.0,
+       "n_steps": 842.0,
+       "status": "Completed"
+      }
+     },
+     "26458": {
+      "run1": {
+       "standstill_pct": 28.24858757062147,
+       "driving_score": 100.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.7606475300809121,
+       "collision_events": 0.0,
+       "n_steps": 885.0,
+       "status": "Completed"
+      }
+     }
+    },
+    "run_to_run_differences": {
+     "rep1 - run1": {
+      "n_routes": 0,
+      "routes": [],
+      "same_status": 0,
+      "metrics": {
+       "standstill_pct": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "driving_score": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "route_completion": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "mean_speed_mps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "collision_events": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "n_steps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       }
+      }
+     },
+     "run2 - run1": {
+      "n_routes": 0,
+      "routes": [],
+      "same_status": 0,
+      "metrics": {
+       "standstill_pct": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "driving_score": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "route_completion": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "mean_speed_mps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "collision_events": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "n_steps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       }
+      }
+     },
+     "run2 - rep1": {
+      "n_routes": 0,
+      "routes": [],
+      "same_status": 0,
+      "metrics": {
+       "standstill_pct": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "driving_score": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "route_completion": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "mean_speed_mps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "collision_events": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "n_steps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       }
+      }
+     }
+    },
+    "routes_with_three_runs": [],
+    "three_run_sd": {
+     "standstill_pct": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "driving_score": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "route_completion": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "mean_speed_mps": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "collision_events": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "n_steps": {
+      "per_route_sd": {},
+      "mean_sd": null
+     }
+    },
+    "test_retest_44": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400": 44,
+      "model_matrix_golden_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400": 44,
+      "model_matrix_golden_6400_run2": 44
+     }
+    }
+   },
+   "Flooded-6400-Matched": {
+    "replicate_routes_done": {
+     "run1": "8/8",
+     "rep1": "2/8",
+     "run2": "0/8"
+    },
+    "per_route_table_replicate_routes": {
+     "2534": {
+      "run1": {
+       "standstill_pct": 8.974358974358974,
+       "driving_score": 60.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.637140870944043,
+       "collision_events": 1.0,
+       "n_steps": 1014.0,
+       "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 81.24531132783196,
+       "driving_score": 4.131389,
+       "route_completion": 53.13,
+       "mean_speed_mps": 0.3572941290202034,
+       "collision_events": 4.0,
+       "n_steps": 3999.0,
+       "status": "Failed - TickRuntime"
+      }
+     },
+     "3561": {
+      "run1": {
+       "standstill_pct": 23.476112026359143,
+       "driving_score": 100.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.161252717377821,
+       "collision_events": 0.0,
+       "n_steps": 1214.0,
+       "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 36.30573248407643,
+       "driving_score": 31.640515,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.5332851072563278,
+       "collision_events": 2.0,
+       "n_steps": 1727.0,
+       "status": "Completed"
+      }
+     },
+     "1790": {
+      "run1": {
+       "standstill_pct": 19.061032863849764,
+       "driving_score": 4.6656,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.2292381450354175,
+       "collision_events": 6.0,
+       "n_steps": 1065.0,
+       "status": "Completed"
+      }
+     },
+     "23695": {
+      "run1": {
+       "standstill_pct": 10.850202429149798,
+       "driving_score": 95.483192,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.504521000287112,
+       "collision_events": 0.0,
+       "n_steps": 1235.0,
+       "status": "Completed"
+      }
+     },
+     "28087": {
+      "run1": {
+       "standstill_pct": 26.50130548302872,
+       "driving_score": 34.04,
+       "route_completion": 42.55,
+       "mean_speed_mps": 1.6361138889968816,
+       "collision_events": 0.0,
+       "n_steps": 766.0,
+       "status": "Failed - Agent deviated from the route"
+      }
+     },
+     "2664": {
+      "run1": {
+       "standstill_pct": 18.56,
+       "driving_score": 35.454797,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.1184030922882013,
+       "collision_events": 2.0,
+       "n_steps": 1250.0,
+       "status": "Completed"
+      }
+     },
+     "17563": {
+      "run1": {
+       "standstill_pct": 14.241803278688526,
+       "driving_score": 100.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.317807011344354,
+       "collision_events": 0.0,
+       "n_steps": 976.0,
+       "status": "Completed"
+      }
+     },
+     "26458": {
+      "run1": {
+       "standstill_pct": 89.86175115207374,
+       "driving_score": 31.547869,
+       "route_completion": 40.57,
+       "mean_speed_mps": 0.20650726160516328,
+       "collision_events": 0.0,
+       "n_steps": 3038.0,
+       "status": "Failed - TickRuntime"
+      }
+     }
+    },
+    "run_to_run_differences": {
+     "rep1 - run1": {
+      "n_routes": 2,
+      "routes": [
+       "2534",
+       "3561"
+      ],
+      "same_status": 1,
+      "metrics": {
+       "standstill_pct": {
+        "n": 2,
+        "mean": 42.55028640559513,
+        "sd": 42.03136886624907,
+        "mean_abs": 42.55028640559513,
+        "per_route": {
+         "2534": 72.27095235347298,
+         "3561": 12.829620457717287
+        }
+       },
+       "driving_score": {
+        "n": 2,
+        "mean": -62.114048000000004,
+        "sd": 8.83238170834674,
+        "mean_abs": 62.114048000000004,
+        "per_route": {
+         "2534": -55.868611,
+         "3561": -68.359485
+        }
+       },
+       "route_completion": {
+        "n": 2,
+        "mean": -23.435,
+        "sd": 33.14209483421348,
+        "mean_abs": 23.435,
+        "per_route": {
+         "2534": -46.87,
+         "3561": 0.0
+        }
+       },
+       "mean_speed_mps": {
+        "n": 2,
+        "mean": -1.4539071760226663,
+        "sd": 1.1680549357979861,
+        "mean_abs": 1.4539071760226663,
+        "per_route": {
+         "2534": -2.2798467419238397,
+         "3561": -0.627967610121493
+        }
+       },
+       "collision_events": {
+        "n": 2,
+        "mean": 2.5,
+        "sd": 0.7071067811865476,
+        "mean_abs": 2.5,
+        "per_route": {
+         "2534": 3.0,
+         "3561": 2.0
+        }
+       },
+       "n_steps": {
+        "n": 2,
+        "mean": 1749.0,
+        "sd": 1747.9679630931455,
+        "mean_abs": 1749.0,
+        "per_route": {
+         "2534": 2985.0,
+         "3561": 513.0
+        }
+       }
+      }
+     },
+     "run2 - run1": {
+      "n_routes": 0,
+      "routes": [],
+      "same_status": 0,
+      "metrics": {
+       "standstill_pct": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "driving_score": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "route_completion": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "mean_speed_mps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "collision_events": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "n_steps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       }
+      }
+     },
+     "run2 - rep1": {
+      "n_routes": 0,
+      "routes": [],
+      "same_status": 0,
+      "metrics": {
+       "standstill_pct": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "driving_score": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "route_completion": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "mean_speed_mps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "collision_events": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       },
+       "n_steps": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "mean_abs": null,
+        "per_route": {}
+       }
+      }
+     }
+    },
+    "routes_with_three_runs": [],
+    "three_run_sd": {
+     "standstill_pct": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "driving_score": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "route_completion": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "mean_speed_mps": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "collision_events": {
+      "per_route_sd": {},
+      "mean_sd": null
+     },
+     "n_steps": {
+      "per_route_sd": {},
+      "mean_sd": null
+     }
+    },
+    "test_retest_44": {
+     "status": "pending",
+     "have": {
+      "model_matrix_flooded_6400": 44,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_flooded_6400": 44,
+      "model_matrix_flooded_6400_run2": 44
+     }
+    }
+   }
+  },
+  "icc_formula": "One-way random-effects, single-measure ICC(1,1) (Shrout & Fleiss 1979):\n(MSB - MSW) / (MSB + (k - 1) MSW), k = 2 runs, rows = routes.",
+  "note": "run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 44-route pass.",
+  "status_line": "partial: rep1 routes usable 2/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']"
+ },
+ "O": {
+  "endpoint": "standstill_pct (primary); driving_score, route_completion, collision_events secondary",
+  "comparisons": {
+   "(i) run2 Golden vs run2 Flooded": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400_run2": 44,
+      "model_matrix_flooded_6400_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400_run2": 37,
+      "model_matrix_flooded_6400_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400_run2": 33,
+      "model_matrix_flooded_6400_run2": 33
+     }
+    }
+   },
+   "(ii) mean of run1 and run2, Golden vs Flooded": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400": 44,
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400": 44,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400": 44,
+      "model_matrix_golden_6400_run2": 44,
+      "model_matrix_flooded_6400": 44,
+      "model_matrix_flooded_6400_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400": 37,
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400": 37,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400": 37,
+      "model_matrix_golden_6400_run2": 37,
+      "model_matrix_flooded_6400": 37,
+      "model_matrix_flooded_6400_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400": 33,
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400": 33,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400": 33,
+      "model_matrix_golden_6400_run2": 33,
+      "model_matrix_flooded_6400": 33,
+      "model_matrix_flooded_6400_run2": 33
+     }
+    }
+   },
+   "(iii-a) run1 Golden vs run2 Flooded": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400": 44,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400": 44,
+      "model_matrix_flooded_6400_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400": 37,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400": 37,
+      "model_matrix_flooded_6400_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400": 33,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_6400": 33,
+      "model_matrix_flooded_6400_run2": 33
+     }
+    }
+   },
+   "(iii-b) run2 Golden vs run1 Flooded": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400": 44
+     },
+     "need": {
+      "model_matrix_golden_6400_run2": 44,
+      "model_matrix_flooded_6400": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400": 37
+     },
+     "need": {
+      "model_matrix_golden_6400_run2": 37,
+      "model_matrix_flooded_6400": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_6400_run2": 0,
+      "model_matrix_flooded_6400": 33
+     },
+     "need": {
+      "model_matrix_golden_6400_run2": 33,
+      "model_matrix_flooded_6400": 33
+     }
+    }
+   }
+  },
+  "status_line": "pending: 12 of 12 parts ((i) run2 Golden vs run2 Flooded | 44 routes, (i) run2 Golden vs run2 Flooded | 37 routes (excl. 7 training-overlap routes), (i) run2 Golden vs run2 Flooded | 33 routes (excl. 11 gate-flagged routes), (ii) mean of run1 and run2, Golden vs Flooded | 44 routes, (ii) mean of run1 and run2, Golden vs Flooded | 37 routes (excl. 7 training-overlap routes), (ii) mean of run1 and run2, Golden vs Flooded | 33 routes (excl. 11 gate-flagged routes), (iii-a) run1 Golden vs run2 Flooded | 44 routes, (iii-a) run1 Golden vs run2 Flooded | 37 routes (excl. 7 training-overlap routes), (iii-a) run1 Golden vs run2 Flooded | 33 routes (excl. 11 gate-flagged routes), (iii-b) run2 Golden vs run1 Flooded | 44 routes, (iii-b) run2 Golden vs run1 Flooded | 37 routes (excl. 7 training-overlap routes), (iii-b) run2 Golden vs run1 Flooded | 33 routes (excl. 11 gate-flagged routes))"
+ },
+ "P": {
+  "metric_definitions": {
+   "ended_by_60s_rule": "status Failed - TickRuntime with round(duration_game*20) < 4000 (1/0 per route)",
+   "collision_events": "actor-id merged, as in F"
+  },
+  "(1) gate-off minus default (run1), per model": {
+   "Golden-6400": {
+    "n_routes": 0,
+    "partial": true,
+    "label": "PARTIAL: 0/44 routes usable",
+    "routes": []
+   },
+   "Flooded-6400-Matched": {
+    "n_routes": 1,
+    "partial": true,
+    "label": "PARTIAL: 1/44 routes usable",
+    "routes": [
+     "2534"
+    ],
+    "metrics": {
+     "standstill_pct_v<0.1": {
+      "n": 1,
+      "mean_first": 11.420863309352518,
+      "mean_second": 8.974358974358974,
+      "mean_diff": 2.446504334993543,
+      "n_first_greater": 1,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": 1.0
+      }
+     },
+     "standstill_pct_v<0.5": {
+      "n": 1,
+      "mean_first": 16.366906474820144,
+      "mean_second": 12.52465483234714,
+      "mean_diff": 3.8422516424730038,
+      "n_first_greater": 1,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": 1.0
+      }
+     },
+     "standstill_pct_v<1.0": {
+      "n": 1,
+      "mean_first": 23.381294964028775,
+      "mean_second": 19.230769230769234,
+      "mean_diff": 4.150525733259542,
+      "n_first_greater": 1,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": 1.0
+      }
+     },
+     "mean_speed_mps": {
+      "n": 1,
+      "mean_first": 2.4062010488601273,
+      "mean_second": 2.637140870944043,
+      "mean_diff": -0.23093982208391584,
+      "n_first_greater": 0,
+      "n_first_less": 1,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": -1.0
+      }
+     },
+     "route_completion": {
+      "n": 1,
+      "mean_first": 100.0,
+      "mean_second": 100.0,
+      "mean_diff": 0.0,
+      "n_first_greater": 0,
+      "n_first_less": 0,
+      "n_tie": 1,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 1,
+       "status": "not_computable",
+       "reason": "all differences are zero"
+      }
+     },
+     "driving_score": {
+      "n": 1,
+      "mean_first": 21.6,
+      "mean_second": 60.0,
+      "mean_diff": -38.4,
+      "n_first_greater": 0,
+      "n_first_less": 1,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": -1.0
+      }
+     },
+     "collision_events": {
+      "n": 1,
+      "mean_first": 3.0,
+      "mean_second": 1.0,
+      "mean_diff": 2.0,
+      "n_first_greater": 1,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": 1.0
+      }
+     },
+     "collision_events_vehicle": {
+      "n": 1,
+      "mean_first": 3.0,
+      "mean_second": 1.0,
+      "mean_diff": 2.0,
+      "n_first_greater": 1,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": 1.0
+      }
+     },
+     "collision_events_pedestrian": {
+      "n": 1,
+      "mean_first": 0.0,
+      "mean_second": 0.0,
+      "mean_diff": 0.0,
+      "n_first_greater": 0,
+      "n_first_less": 0,
+      "n_tie": 1,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 1,
+       "status": "not_computable",
+       "reason": "all differences are zero"
+      }
+     },
+     "collision_events_layout": {
+      "n": 1,
+      "mean_first": 0.0,
+      "mean_second": 0.0,
+      "mean_diff": 0.0,
+      "n_first_greater": 0,
+      "n_first_less": 0,
+      "n_tie": 1,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 1,
+       "status": "not_computable",
+       "reason": "all differences are zero"
+      }
+     },
+     "n_steps": {
+      "n": 1,
+      "mean_first": 1112.0,
+      "mean_second": 1014.0,
+      "mean_diff": 98.0,
+      "n_first_greater": 1,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 1.0,
+       "p_approx": 0.31731050786291415,
+       "p_exact": 1.0,
+       "rank_biserial": 1.0
+      }
+     },
+     "ended_by_60s_rule": {
+      "n": 1,
+      "mean_first": 0.0,
+      "mean_second": 0.0,
+      "mean_diff": 0.0,
+      "n_first_greater": 0,
+      "n_first_less": 0,
+      "n_tie": 1,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 1,
+       "status": "not_computable",
+       "reason": "all differences are zero"
+      }
+     }
+    },
+    "n_ended_by_60s_rule": {
+     "gate_off": 0,
+     "default": 0
+    }
+   }
+  },
+  "(2) Golden minus Flooded, gate-off": {
+   "status": "pending",
+   "have": {
+    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_flooded_6400_nogate": 1
+   },
+   "need": {
+    "model_matrix_golden_6400_nogate": 44,
+    "model_matrix_flooded_6400_nogate": 44
+   }
+  },
+  "(3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1": {
+   "status": "pending",
+   "have": {
+    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_flooded_6400_nogate": 1
+   },
+   "need": {
+    "model_matrix_golden_6400_nogate": 44,
+    "model_matrix_flooded_6400_nogate": 44
+   }
+  },
+  "(3) interaction, default = mean of run1 and run2": {
+   "status": "pending",
+   "have": {
+    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_flooded_6400_nogate": 1,
+    "model_matrix_golden_6400_run2": 0,
+    "model_matrix_flooded_6400_run2": 0
+   },
+   "need": {
+    "model_matrix_golden_6400_nogate": 44,
+    "model_matrix_flooded_6400_nogate": 44,
+    "model_matrix_golden_6400_run2": 44,
+    "model_matrix_flooded_6400_run2": 44
+   }
+  },
+  "(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)": {
+   "status": "pending",
+   "have": {
+    "model_matrix_golden_6400_run2": 0,
+    "model_matrix_flooded_6400_run2": 0
+   },
+   "need": {
+    "model_matrix_golden_6400_run2": 44,
+    "model_matrix_flooded_6400_run2": 44
+   }
+  },
+  "(5) common-window distance (m)": {
+   "status": "pending",
+   "have": {
+    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_flooded_6400_nogate": 1
+   },
+   "need": {
+    "model_matrix_golden_6400_nogate": 44,
+    "model_matrix_flooded_6400_nogate": 44
+   }
+  },
+  "(6) gate-off logged fields": {
+   "Golden-6400": {
+    "n_routes": 0,
+    "label": "PARTIAL: 0/44 routes"
+   },
+   "Flooded-6400-Matched": {
+    "n_routes": 1,
+    "label": "PARTIAL: 1/44 routes",
+    "pct_of_all_steps_gate_would_fire": 1.2589928057553956,
+    "pct_of_standstill_steps_gate_would_fire": 9.448818897637794,
+    "band_split_logged_extent": {
+     "pct_of_all_steps_standstill_and_in_band": {
+      "L<0.64": 0.2697841726618705,
+      "0.64<=L<1.5": 0.6294964028776978,
+      "1.5<=L<2.0 & v<0.5": 0.1798561151079137,
+      "gate inactive": 10.341726618705035
+     },
+     "share_of_standstill_steps_in_band_pct": {
+      "L<0.64": 2.3622047244094486,
+      "0.64<=L<1.5": 5.511811023622047,
+      "1.5<=L<2.0 & v<0.5": 1.574803149606299,
+      "gate inactive": 90.5511811023622
+     }
+    },
+    "max_abs_diff_logged_extent_vs_waypoint_chord_m": 0.013168787387044745,
+    "n_steps_gate_would_fire_disagrees_with_rule_on_logged_extent": 0
+   }
+  },
+  "status_line": "pending: 5 of 5 parts ((2) Golden minus Flooded, gate-off, (3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1, (3) interaction, default = mean of run1 and run2, (4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1), (5) common-window distance (m)); (1) and (6) partial: Golden 0/44, Flooded 1/44"
+ },
+ "Q": {
+  "base_run2_status": {
+   "n_routes_usable": 0,
+   "status_counts": {},
+   "tickruntime_60s_rule": [],
+   "tickruntime_4000_cap": [],
+   "label": "PARTIAL: 0/44 routes"
+  },
+  "comparisons": {
+   "Golden-1600 vs Base run2": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_1600": 44,
+      "base_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_1600": 44,
+      "base_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_1600": 37,
+      "base_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_1600": 37,
+      "base_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_golden_1600": 33,
+      "base_run2": 0
+     },
+     "need": {
+      "model_matrix_golden_1600": 33,
+      "base_run2": 33
+     }
+    }
+   },
+   "Flooded-1600 vs Base run2": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_flooded_1600": 44,
+      "base_run2": 0
+     },
+     "need": {
+      "model_matrix_flooded_1600": 44,
+      "base_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_flooded_1600": 37,
+      "base_run2": 0
+     },
+     "need": {
+      "model_matrix_flooded_1600": 37,
+      "base_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_flooded_1600": 33,
+      "base_run2": 0
+     },
+     "need": {
+      "model_matrix_flooded_1600": 33,
+      "base_run2": 33
+     }
+    }
+   }
+  },
+  "holm_H1_base_run2_and_H2": {
+   "status": "pending",
+   "have": {
+    "model_matrix_golden_1600": 44,
+    "base_run2": 0
+   },
+   "need": {
+    "model_matrix_golden_1600": 44,
+    "base_run2": 44
+   }
+  },
+  "base_run2_minus_base_original": {
+   "status": "pending",
+   "have": {
+    "base_run2": 0
+   },
+   "need": {
+    "base_run2": 44
+   }
+  },
+  "status_line": "pending: 6 of 6 parts (Golden-1600 vs Base run2 | 44 routes, Golden-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Golden-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes), Flooded-1600 vs Base run2 | 44 routes, Flooded-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Flooded-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes))"
+ },
+ "R": {
+  "source_of_expected_values": "docs/provenance/train_eval_overlap_canonical44.json",
+  "subsets": {
+   "44 routes": {
+    "H1 Golden-1600 vs Base (original) DS": {
+     "n": 44,
+     "mean_first": 49.87627840909091,
+     "mean_second": 38.82122225,
+     "mean_diff": 11.055056159090908,
+     "n_first_greater": 23,
+     "n_first_less": 12,
+     "n_tie": 9,
+     "bca95": [
+      2.6150132404472473,
+      19.709898052927056
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 9,
+      "statistic": 152.0,
+      "p": 0.0075896370375709635,
+      "p_approx": 0.0075896370375709635,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.5174603174603175
+     }
+    },
+    "H2 Golden-6400 vs Flooded-6400-Matched standstill": {
+     "n": 44,
+     "mean_first": 25.714582138059143,
+     "mean_second": 33.776134975367206,
+     "mean_diff": -8.061552837308053,
+     "n_first_greater": 8,
+     "n_first_less": 36,
+     "n_tie": 0,
+     "bca95": [
+      -15.07625363450037,
+      -1.2499178480128406
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 213.0,
+      "p": 0.0007092337563108231,
+      "p_approx": 0.0009983393445953807,
+      "p_exact": 0.0007092337563108231,
+      "rank_biserial": -0.5696969696969697
+     }
+    },
+    "reproduction": {
+     "H1": {
+      "expected_text": "N=44 delta=11.06 CI[2.62,19.71] p=0.00759",
+      "matches": {
+       "n": true,
+       "delta": true,
+       "ci_low": true,
+       "ci_high": true,
+       "p": true
+      },
+      "all_match": true
+     },
+     "H2": {
+      "expected_text": "N=44 delta=-8.06 CI[-15.08,-1.25] p=0.0007092",
+      "matches": {
+       "n": true,
+       "delta": true,
+       "ci_low": true,
+       "ci_high": true,
+       "p": true
+      },
+      "all_match": true
+     }
+    }
+   },
+   "37 routes (excl. 7 training-overlap routes)": {
+    "H1 Golden-1600 vs Base (original) DS": {
+     "n": 37,
+     "mean_first": 48.81040721621622,
+     "mean_second": 35.144742081081084,
+     "mean_diff": 13.665665135135134,
+     "n_first_greater": 20,
+     "n_first_less": 11,
+     "n_tie": 6,
+     "bca95": [
+      4.903580644843821,
+      23.111405643253896
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 6,
+      "statistic": 109.0,
+      "p": 0.006451217773136428,
+      "p_approx": 0.006451217773136428,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.5604838709677419
+     }
+    },
+    "H2 Golden-6400 vs Flooded-6400-Matched standstill": {
+     "n": 37,
+     "mean_first": 25.331031157833408,
+     "mean_second": 32.55978547277973,
+     "mean_diff": -7.228754314946326,
+     "n_first_greater": 8,
+     "n_first_less": 29,
+     "n_tie": 0,
+     "bca95": [
+      -15.312726616265556,
+      0.6560529403995865
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 174.0,
+      "p": 0.006529042570036836,
+      "p_approx": 0.0074103977166755375,
+      "p_exact": 0.006529042570036836,
+      "rank_biserial": -0.5049786628733998
+     }
+    },
+    "reproduction": {
+     "H1": {
+      "expected_text": "N=37 delta=13.67 CI[4.90,23.11] p=0.006451",
+      "matches": {
+       "n": true,
+       "delta": true,
+       "ci_low": true,
+       "ci_high": true,
+       "p": true
+      },
+      "all_match": true
+     },
+     "H2": {
+      "expected_text": "N=37 delta=-7.23 CI[-15.31,0.66] p=0.006529",
+      "matches": {
+       "n": true,
+       "delta": true,
+       "ci_low": true,
+       "ci_high": true,
+       "p": true
+      },
+      "all_match": true
+     }
+    }
+   },
+   "33 routes (excl. 11 gate-flagged routes)": {
+    "H1 Golden-1600 vs Base (original) DS": {
+     "n": 33,
+     "mean_first": 47.09378990909091,
+     "mean_second": 31.306225969696968,
+     "mean_diff": 15.787563939393939,
+     "n_first_greater": 18,
+     "n_first_less": 10,
+     "n_tie": 5,
+     "bca95": [
+      7.9037433638102295,
+      25.919106725315462
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 5,
+      "statistic": 76.0,
+      "p": 0.003828335605114569,
+      "p_approx": 0.003828335605114569,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.625615763546798
+     }
+    },
+    "H2 Golden-6400 vs Flooded-6400-Matched standstill": {
+     "n": 33,
+     "mean_first": 26.94122883232521,
+     "mean_second": 34.63792857920127,
+     "mean_diff": -7.696699746876071,
+     "n_first_greater": 8,
+     "n_first_less": 25,
+     "n_tie": 0,
+     "bca95": [
+      -16.585445549050522,
+      1.1968206081482886
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 147.0,
+      "p": 0.016054106643423438,
+      "p_approx": 0.0170626383765364,
+      "p_exact": 0.016054106643423438,
+      "rank_biserial": -0.47593582887700536
+     }
+    },
+    "reproduction": {
+     "H1": {
+      "expected_text": "N=33 delta=15.79 CI[7.90,25.92] p=0.003828",
+      "matches": {
+       "n": true,
+       "delta": true,
+       "ci_low": true,
+       "ci_high": true,
+       "p": true
+      },
+      "all_match": true
+     },
+     "H2": {
+      "expected_text": "N=33 delta=-7.70 CI[-16.59,1.20] p=0.01605",
+      "matches": {
+       "n": true,
+       "delta": true,
+       "ci_low": true,
+       "ci_high": true,
+       "p": true
+      },
+      "all_match": true
+     }
+    }
+   }
+  },
+  "all_reproduced": true,
+  "status_line": "complete"
  }
 }
