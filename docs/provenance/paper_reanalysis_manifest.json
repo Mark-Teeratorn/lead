@@ -11465,7 +11465,7 @@
  "data_checks_new_runs": {
   "usable_routes": {
    "model_matrix_golden_6400_rep1": 0,
-   "model_matrix_flooded_6400_rep1": 2,
+   "model_matrix_flooded_6400_rep1": 8,
    "model_matrix_golden_6400_run2": 0,
    "model_matrix_flooded_6400_run2": 0,
    "model_matrix_golden_6400_nogate": 0,
@@ -11475,7 +11475,13 @@
   "usable_route_ids": {
    "model_matrix_golden_6400_rep1": [],
    "model_matrix_flooded_6400_rep1": [
+    "17563",
+    "1790",
+    "23695",
     "2534",
+    "26458",
+    "2664",
+    "28087",
     "3561"
    ],
    "model_matrix_golden_6400_run2": [],
@@ -11788,7 +11794,7 @@
    "Flooded-6400-Matched": {
     "replicate_routes_done": {
      "run1": "8/8",
-     "rep1": "2/8",
+     "rep1": "8/8",
      "run2": "0/8"
     },
     "per_route_table_replicate_routes": {
@@ -11841,6 +11847,15 @@
        "collision_events": 6.0,
        "n_steps": 1065.0,
        "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 47.570977917981075,
+       "driving_score": 12.96,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.4938503218815469,
+       "collision_events": 4.0,
+       "n_steps": 1585.0,
+       "status": "Completed"
       }
      },
      "23695": {
@@ -11851,6 +11866,15 @@
        "mean_speed_mps": 2.504521000287112,
        "collision_events": 0.0,
        "n_steps": 1235.0,
+       "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 8.09943865276664,
+       "driving_score": 87.094984,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.494883951469053,
+       "collision_events": 0.0,
+       "n_steps": 1247.0,
        "status": "Completed"
       }
      },
@@ -11863,6 +11887,15 @@
        "collision_events": 0.0,
        "n_steps": 766.0,
        "status": "Failed - Agent deviated from the route"
+      },
+      "rep1": {
+       "standstill_pct": 51.60866710439921,
+       "driving_score": 60.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.0500017903016134,
+       "collision_events": 1.0,
+       "n_steps": 1523.0,
+       "status": "Completed"
       }
      },
      "2664": {
@@ -11873,6 +11906,15 @@
        "mean_speed_mps": 2.1184030922882013,
        "collision_events": 2.0,
        "n_steps": 1250.0,
+       "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 47.99196787148594,
+       "driving_score": 60.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.3303463367948574,
+       "collision_events": 1.0,
+       "n_steps": 1992.0,
        "status": "Completed"
       }
      },
@@ -11885,6 +11927,15 @@
        "collision_events": 0.0,
        "n_steps": 976.0,
        "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 14.27104722792608,
+       "driving_score": 60.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.3308027133915648,
+       "collision_events": 1.0,
+       "n_steps": 974.0,
+       "status": "Completed"
       }
      },
      "26458": {
@@ -11896,76 +11947,127 @@
        "collision_events": 0.0,
        "n_steps": 3038.0,
        "status": "Failed - TickRuntime"
+      },
+      "rep1": {
+       "standstill_pct": 38.8268156424581,
+       "driving_score": 100.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.4052650564259725,
+       "collision_events": 0.0,
+       "n_steps": 1074.0,
+       "status": "Completed"
       }
      }
     },
     "run_to_run_differences": {
      "rep1 - run1": {
-      "n_routes": 2,
+      "n_routes": 8,
       "routes": [
        "2534",
-       "3561"
+       "3561",
+       "1790",
+       "23695",
+       "28087",
+       "2664",
+       "17563",
+       "26458"
       ],
-      "same_status": 1,
+      "same_status": 5,
       "metrics": {
        "standstill_pct": {
-        "n": 2,
-        "mean": 42.55028640559513,
-        "sd": 42.03136886624907,
-        "mean_abs": 42.55028640559513,
+        "n": 8,
+        "mean": 14.299174002677095,
+        "sd": 35.20050365770564,
+        "mean_abs": 27.745598824176792,
         "per_route": {
          "2534": 72.27095235347298,
-         "3561": 12.829620457717287
+         "3561": 12.829620457717287,
+         "1790": 28.50994505413131,
+         "23695": -2.750763776383158,
+         "28087": 25.10736162137049,
+         "2664": 29.43196787148594,
+         "17563": 0.02924394923755358,
+         "26458": -51.034935509615636
         }
        },
        "driving_score": {
-        "n": 2,
-        "mean": -62.114048000000004,
-        "sd": 8.83238170834674,
-        "mean_abs": 62.114048000000004,
+        "n": 8,
+        "mean": -5.670571250000002,
+        "sd": 46.657291256393556,
+        "mean_abs": 37.48350475,
         "per_route": {
          "2534": -55.868611,
-         "3561": -68.359485
+         "3561": -68.359485,
+         "1790": 8.2944,
+         "23695": -8.388208000000006,
+         "28087": 25.96,
+         "2664": 24.545203,
+         "17563": -40.0,
+         "26458": 68.45213100000001
         }
        },
        "route_completion": {
-        "n": 2,
-        "mean": -23.435,
-        "sd": 33.14209483421348,
-        "mean_abs": 23.435,
+        "n": 8,
+        "mean": 8.751249999999999,
+        "sd": 34.675123416198126,
+        "mean_abs": 20.46875,
         "per_route": {
          "2534": -46.87,
-         "3561": 0.0
+         "3561": 0.0,
+         "1790": 0.0,
+         "23695": 0.0,
+         "28087": 57.45,
+         "2664": 0.0,
+         "17563": 0.0,
+         "26458": 59.43
         }
        },
        "mean_speed_mps": {
-        "n": 2,
-        "mean": -1.4539071760226663,
-        "sd": 1.1680549357979861,
-        "mean_abs": 1.4539071760226663,
+        "n": 8,
+        "mean": -0.47690682266723183,
+        "sd": 0.9794431107342826,
+        "mean_abs": 0.7798451968842368,
         "per_route": {
          "2534": -2.2798467419238397,
-         "3561": -0.627967610121493
+         "3561": -0.627967610121493,
+         "1790": -0.7353878231538706,
+         "23695": -0.009637048818059046,
+         "28087": -0.5861120986952681,
+         "2664": -0.788056755493344,
+         "17563": 0.012995702047210678,
+         "26458": 1.1987577948208092
         }
        },
        "collision_events": {
-        "n": 2,
-        "mean": 2.5,
-        "sd": 0.7071067811865476,
-        "mean_abs": 2.5,
+        "n": 8,
+        "mean": 0.5,
+        "sd": 1.6035674514745464,
+        "mean_abs": 1.25,
         "per_route": {
          "2534": 3.0,
-         "3561": 2.0
+         "3561": 2.0,
+         "1790": -2.0,
+         "23695": 0.0,
+         "28087": 1.0,
+         "2664": -1.0,
+         "17563": 1.0,
+         "26458": 0.0
         }
        },
        "n_steps": {
-        "n": 2,
-        "mean": 1749.0,
-        "sd": 1747.9679630931455,
-        "mean_abs": 1749.0,
+        "n": 8,
+        "mean": 445.375,
+        "sd": 1354.2514999068674,
+        "mean_abs": 936.875,
         "per_route": {
          "2534": 2985.0,
-         "3561": 513.0
+         "3561": 513.0,
+         "1790": 520.0,
+         "23695": 12.0,
+         "28087": 757.0,
+         "2664": 742.0,
+         "17563": -2.0,
+         "26458": -1964.0
         }
        }
       }
@@ -12111,7 +12213,7 @@
   },
   "icc_formula": "One-way random-effects, single-measure ICC(1,1) (Shrout & Fleiss 1979):\n(MSB - MSW) / (MSB + (k - 1) MSW), k = 2 runs, rows = routes.",
   "note": "run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 44-route pass.",
-  "status_line": "partial: rep1 routes usable 2/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']"
+  "status_line": "partial: rep1 routes usable 8/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']"
  },
  "O": {
   "endpoint": "standstill_pct (primary); driving_score, route_completion, collision_events secondary",
