@@ -1,0 +1,428 @@
+%%% REVISION NOTES
+(Strip this block before submission.)
+
+(1) PLACEHOLDERS LEFT, AND WHAT FILLS THEM
+- [[PENDING: H1 on Base-Rerun]] (Abstract, §1, §4.3, §6) — analysis Q (`base_run2`, ANALYSIS_ADDENDUM §5b): Golden-1600 vs Base-Rerun on Driving Score, 44 and 37 routes; Holm 2-test family to be recomputed with it.
+- [[PENDING: Base-Rerun rows]] in Tables 3 and 4 — `base_run2` (analysis Q).
+- [[PENDING: test–retest]] (§4.1, §4.4, Table 5, §5) — analysis N: 8-route replicates (`*_rep1`) and run 1 vs run 2 of both 6,400-frame models (difference of 44-route means, per-route SD of run difference, ICC for standstill, DS, RC).
+- [[PENDING: H2 on run 2 / two-run mean]] (Abstract, §4.4, Table 5) — analysis O, on 44 and 37 routes.
+- [[PENDING: gate-off results]] (Abstract, §4.5, §5) — analysis P (`*_nogate` runs, ANALYSIS_ADDENDUM §4c).
+- [[PENDING: evaluation dates]] for Flooded-1600, Golden-1600 and Flooded-6400-Hist in Table 2 — not in any evidence file; take from result-file timestamps (the old manuscript's dates were not re-verified).
+- [[FIGURE 1–4]] — figure scripts (plan Step 5). Figure 3 needs analysis P.
+- [[PENDING: commit hash]] and [[PENDING: archive DOI]] in §6.
+
+(2) CLAIMS REMOVED OR CHANGED, AND WHY
+- "Across Scale" in the title; "saturating", "does not resolve", "standstill floor" — only two dataset sizes and one seed each (R3).
+- H2 against the historical checkpoint as the primary result (−8.19 pp, p_Holm 0.0032) — that checkpoint has a different, two-phase schedule. Replaced by the confirmatory matched result −8.06 pp (R1).
+- "Hazard flooding = naive / uncurated oversampling of edge-case logs" — both regimes are IPF draws from one verified pool (dataset READMEs; DEVIATIONS B9).
+- Old Table 1 percentages (e.g. "22:51:27 steering", "39% braking") — rebuilt from the dataset READMEs; "50:25:25" was a misreading of 50/13/13/12/12.
+- Old Table 2 (4,800 / 20,050 / 3.1 epochs / batch 1 vs 8; dates) — wrong per trainer artifacts; 20,050 steps belongs to model_v4.
+- "Training routes are route-disjoint from bench2drive220.xml" and "175 unseen holdout routes" — false (7.1–7.5 % of training samples lie on routes overlapping the 220 evaluation routes).
+- The 219-route Golden-1600 check (48.32 / 47.92 DS, Mann–Whitney p = 0.805) — removed: no committed script regenerates it, the routes are not held out, and it covers one model only.
+- "Repeated evaluations are deterministic (28087 vs retest_28087)" — false; replicate of 2534 gave DS 4.1 vs 60.0.
+- "Epic rendering quality" for all models — the launcher sets Low on every canonical route.
+- "Every contact tick registers as an infraction event" — the leaderboard merges contacts (5 s / 5 m).
+- "Hysteretic latch" — the gate is stateless.
+- "Open Maneuver routes have zero signals and zero pedestrians" — false (ANALYSIS_ADDENDUM §2); stratum renamed "Overtaking + Merging".
+- §3.2 "Bayes-optimal field pulls the expected acceleration toward zero" and the 5.44× global prior-odds argument — wrong for a flow-matching sampler (R14); replaced by a sampling-probability hypothesis using conditional low-speed shares.
+- "OT-CFM" naming and "straight paths justify 8 Euler steps" (S16).
+- All safety language: "reduces vehicle collisions", "lowest crash rate per km", "constant per-km crash rates", "does not reflect safer driving" — against the matched model, Golden-6400 has more collision events and lower DS.
+- "Flooded models terminated early on 2164 before the downstream conflict" — trigger-position check shows all models reached the trigger (approximate); exposure account now stated as unsupported.
+- "73.73 % / 86.30 % of standstill with gate inactive; 5.4 of 8.19 pp through the gate" — superseded by the four-band decomposition against the matched model.
+- "Proceed-cued standstill 15.56 % vs 17.24 %", crashes/km 14.91 / 11.57, stratum p 0.000808 / 0.0547, threshold-sweep p ≤ 0.016 vs historical — no generating script (DEVIATIONS C); replaced by regenerated values where kept.
+- 10-route DS-plateau subset (52.8 → 87.9 % RC, P 0.773 → 0.491) — post hoc subset; replaced by all-44-route correlation.
+- Old 4-test Holm values 0.0288 / 0.0323 / 0.0576 — from the uncommitted script; regenerated values used (0.0278 / 0.0319 / 0.0556).
+- "Relative rankings are strictly preserved" (S19).
+- Controller tuning "does not bias pairwise differences" — replaced by the tuning-route exclusion analysis.
+- Reproducibility statement citing `scripts/common/evaluate_confirmatory_plan.py` at `8166a032` — that script was never committed (DEVIATIONS C; R19).
+- "2,280,592,420 parameters" → 2,280,592,386 (trainer artifact). "100 warmup steps" → 100 at 1,600 frames, 200 at 6,400 frames.
+- Data collected in "CARLA 0.9.15" → 0.9.16 per dataset cards (see (4)).
+
+(3) REFERENCES CHANGED (verified by title search against arXiv / CVF open access / proceedings pages on 12 Nov 2026)
+- [22] Roach: was "End-to-End Autonomous Driving with Counterfactual Policy Adaptation". Now Z. Zhang, A. Liniger, D. Dai, F. Yu, L. Van Gool, "End-to-End Urban Driving by Imitating a Reinforcement Learning Coach", ICCV 2021 (arXiv:2108.08265; CVF open access). Page numbers dropped (not verified).
+- [23] Hydra-MDP: was "H. Chen, J. Shao, ... Multi-target Hydration, CVPR 2024". Now Z. Li, K. Li, et al. (incl. J. Kautz, J. M. Alvarez), "Hydra-MDP: End-to-end Multimodal Planning with Multi-target Hydra-Distillation", arXiv:2406.06978, 2024 (arXiv record; NVIDIA research page). Full author list beyond those four not confirmed, hence "et al.". §2 description corrected (multi-target distillation, not "multi-target trajectory generation").
+- [24] SimLingo: was "A. He, J. Chen, K. Chitta, ... Interactive Explanations, arXiv:2311.14480, 2023". Now K. Renz, L. Chen, E. Arani, O. Sinavski, "SimLingo: Vision-Only Closed-Loop Autonomous Driving with Language-Action Alignment", CVPR 2025 (arXiv:2503.09594; CVF open access). §2 description corrected (vision-only, language–action alignment).
+- [21] TransFuser: entry unchanged; §2 description corrected to single front camera + LiDAR BEV (reviewer S15; not independently re-checked against the PDF).
+- NEW [26] pi0 (arXiv:2410.24164), [27] ChauffeurNet (RSS XV 2019, doi 10.15607/RSS.2019.XV.031), [28] Keyframe-Focused Visual Imitation Learning (ICML 2021, PMLR 139; arXiv:2106.06452), [29] Diffusion Policy (RSS XIX 2023; arXiv:2303.04137), [30] DiffusionDrive (CVPR 2025, pp. 12037–12047; arXiv:2411.15139), [31] Tong et al., minibatch OT / generalized CFM (TMLR 2024; arXiv:2302.00482), [32] Rectified flow (ICLR 2023; arXiv:2209.03003). All verified by title search. For [26]–[32] the bibliographic record was verified; the content statements attributed to [27] (past-motion dropout) and [12] (speed-prediction branch) are from the authors' knowledge of the papers, not from the search.
+- Not re-verified (not requested; 2026 records): [10], [14], [15], [19], [20].
+
+(4) INCONSISTENCIES NOTICED IN THE EVIDENCE FILES
+- Base standstill: 40.45 % (paper_reanalysis) vs 40.32 % (confirmatory record), because compute_paper_tables reads base_23687, which has no step log, and scores it 0 %. The draft uses 40.45 %. Same cause for Base stratum values (e.g. Merging 34.1 vs 33.68).
+- Collision merging: DEVIATIONS B4 says the leaderboard merges contacts with the same actor within 5 s / 5 m, but Golden-6400 on route 2164 has two identical log entries (same pedestrian id, identical coordinates). The draft counts them as one event (actor-id merge) and reports both counts.
+- Controller tuning: CONTROLLER_OPTIMIZATION_EXPERIMENT.md describes a turn lookahead of 2.8–5.0 m and alpha_steer 1.0/0.70; the hashed controller used for all runs has the "before" values (5.5–8.5 m, 0.85/0.60). Which controller produced the ctrl_opt result directories cannot be established (reanalysis §H).
+- CARLA version: dataset cards say the LEAD data were collected in CARLA 0.9.16; the old manuscript says 0.9.15 for both collection and evaluation. The draft says 0.9.16 for collection and keeps 0.9.15 for evaluation, which no evidence file contradicts. Please confirm.
+- Overlap counts: dataset READMEs give 91 / 72 samples on the "44-route main-test subset"; the exact canonical mapping gives 78 / 87. The READMEs use a different subset file; the draft uses the canonical mapping.
+- Preregistration text says the historical checkpoint was "checkpoint-6400 trained Oct 7 with 8 epochs / 6,415 steps"; the provenance shows two phases (checkpoint-4000, then checkpoint-2415, 6 Oct), and no checkpoint-6400 exists.
+- Golden-6400 evaluation is dated 19–20 Oct in DEVIATIONS B3, while flooded_6400 training ran 19 Oct 07:52 – 20 Oct 12:25 on the A100; these are different machines, so no conflict, but the old "Oct 19 training" date for Golden-6400 was wrong (17–18 Oct).
+- Route completion: Golden-6400 vs matched flooded +7.73 pp has CI [−0.42, 16.10], p = 0.058, so "higher route completion" is descriptive only; the draft says so.
+- The brief describes the tuning-route exclusion as "excluding 20 routes"; reanalysis §H labels it N = 24 (44 − 20). Consistent.
+%%% END NOTES
+
+Curated Fine-Tuning Data Reduces Closed-Loop Standstill of a Flow-Matching Driving Policy but Not Its Driving Score: A Single-Seed Study at Two Dataset Sizes
+
+
+Abstract
+
+Continuous-action driving policies that pair a vision-language model with a flow-matching action expert are fine-tuned on expert demonstrations whose composition is chosen by the practitioner. We study how that composition affects closed-loop standstill, the failure in which the vehicle stays at rest although it should move. We fine-tune the 2.28B-parameter flow-matching action expert of Alpamayo 1.5 (vision-language backbone frozen) on four datasets drawn from one verified pool of 34,132 CARLA expert samples by iterative proportional fitting to two target mixes at two sizes (1,600 and 6,400 samples): a balanced mix (`Golden`; 50 % straight driving, symmetric lateral manoeuvres, 2 % stationary samples) and an obstacle-heavy mix (`Flooded`; more obstacle and hazard scenario groups, left-skewed lateral manoeuvres, 10 % stationary samples). The two mixes differ in these three factors at once, and each condition has one training seed. Both 6,400-sample models were trained on the same schedule (8,000 optimizer steps). On 44 Bench2Drive routes, one per scenario type, the standstill fraction (share of 20 Hz steps below 0.1 m/s) was chosen as the endpoint after first results, and the comparison of the two 6,400-sample models was specified before that pair was evaluated but after the same routes had been observed for the other models. The curated model spent 8.06 percentage points (pp) less time in standstill (25.72 % vs 33.78 %; 95 % BCa CI [−15.08, −1.25]; paired Wilcoxon p = 0.00071), meeting the pre-specified replication criterion. Seven of the 44 routes are touched by training samples; without them the estimate is −7.23 pp (CI [−15.31, +0.66]). Most of the difference (−7.19 pp) lies in steps where the model's own predicted trajectory is shorter than 0.64 m. The curated model also completed more of each route (82.4 % vs 74.6 %, not significant), but it did not drive better by the benchmark's measure: it had a lower Driving Score (49.85 vs 53.09; p = 0.64) and more collision events (44 vs 36; rate ratio per progress-km 1.12, 95 % CI 0.80–1.68), including two pedestrian contact events against one. We make no safety claim. The closed-loop pipeline is not deterministic; second-pass results are [[PENDING: H2 on run 2 and on the two-run mean, with test–retest spread]], and a run without the controller's standstill gate is [[PENDING: gate-off standstill gap]]. Fine-tuning on 1,600 curated samples raised Driving Score over the unadapted model, [[PENDING: H1 on Base-Rerun]] (+11.06 against an earlier, differently terminated Base run); a 1,600-sample flooded model gained +6.95, so this is an adaptation effect, not a curation effect.
+
+
+1. Introduction
+
+Vision-Language-Action (VLA) models for driving combine a pretrained vision-language model (VLM), which encodes camera images, ego-motion history and a navigation instruction, with an action head that outputs a future trajectory. In dual-system designs such as $\pi_0$ [26], $\pi_{0.5}$ [1] and NVIDIA's Alpamayo family [2, 19], the action head is a continuous flow-matching [8] expert that integrates a learned velocity field from Gaussian noise to a trajectory in a few solver steps. Compared with autoregressive action tokens this avoids sequential decoding, and compared with deterministic regression it can represent several distinct manoeuvres for one scene instead of their average.
+
+Adapting such a policy to a new simulator and vehicle is commonly done by supervised fine-tuning of the action expert with the VLM frozen. The practitioner then decides what the fine-tuning set contains: how much obstacle-avoidance and hazard data, how balanced left and right manoeuvres are, and how many samples show the vehicle standing still. These choices interact with a known weakness of imitation-learned driving policies that observe their own motion history. Such policies can learn that a vehicle at rest tends to stay at rest, the inertia problem [12], a form of causal confusion [13] and of the copycat behaviour described for policies trained on observation histories [25, 28]. In closed loop the result is standstill: the vehicle stops for a legitimate reason and does not restart when the reason has gone.
+
+This paper reports a controlled, single-seed comparison of two fine-tuning mixes for the 2.28B-parameter flow-matching action expert of Alpamayo 1.5, evaluated in closed loop on Bench2Drive [3]. Both mixes are drawn from the same verified pool of CARLA expert samples. The `Golden` mix targets 50 % straight driving, symmetric lateral manoeuvres and 2 % stationary samples; the `Flooded` mix targets a larger share of obstacle and hazard scenario groups, a left-skewed lateral distribution and 10 % stationary samples. We call the second regime hazard flooding in the narrow sense of this target mix; it is not uncurated or over-collected data. Each mix is built at 1,600 and 6,400 samples, and the two 6,400-sample models share an identical training schedule.
+
+We report two primary comparisons and one exploratory one. Both primary comparisons were specified after first results on the same 44 routes were known (Section 4.1):
+- **H1 (adaptation):** fine-tuning on 1,600 curated samples (`Golden-1600`) raises closed-loop Driving Score over the unadapted policy (`Base`).
+- **H2 (curation, primary endpoint standstill):** at 6,400 samples and a matched training schedule, the curated model (`Golden-6400`) spends less route time in standstill than the flooded model (`Flooded-6400`).
+- **H3 (exploratory):** the curated 6,400-sample model moves faster and stands still less than the curated 1,600-sample model without a change in Driving Score.
+
+Contributions. (i) A closed-loop comparison, at matched training schedule, of two fine-tuning mixes for a flow-matching driving action expert, with the endpoint, test and decision rule fixed before the comparator was evaluated, and with the conditions under which this was done stated in full. Prior work identified the inertia shortcut [12, 13, 25] and proposed model-side remedies [12, 27, 28]; we do not claim the mechanism as new, and stationary-frame rebalancing is an existing practice. What we add is a measurement of how a data-composition choice alone moves standstill for this class of policy, and of what it does not move: Driving Score and collision counts. (ii) A diagnostic that splits standstill steps by the length of the trajectory the model itself predicted, which separates standstill that the model planned from standstill that the controller produced. Under it, most of the measured difference lies where the model's own plan already implies near-zero speed. (iii) A hypothesis for why a flow-matching expert produces such plans, stated in terms of the probability of sampling the stay-put mode in low-speed contexts, together with the training-data counts that bear on it. (iv) A list of the protocol facts that limit inference from this kind of study (termination censoring, non-deterministic closed-loop runs, train/evaluation route overlap, controller tuning on evaluation routes) and sensitivity analyses for each.
+
+What the study does not show is also part of the result. The curated model does not have a higher Driving Score or fewer collisions than the matched flooded model; the two regimes differ in three bundled factors; and each condition is a single checkpoint.
+
+
+2. Related Work
+
+End-to-end driving. TransFuser [21] fused a single front camera with a LiDAR bird's-eye-view (BEV) representation through transformer attention and reduced infractions in CARLA closed loop. Roach [22] trained a reinforcement-learning expert on privileged BEV input and used it as a coach for a camera-based imitation agent. UniAD [4] chained tracking, mapping, motion forecasting and occupancy prediction into one planning-oriented network, and VAD [5] replaced dense BEV grids with vectorized scene representations. Hydra-MDP [23] distils human and rule-based teachers into a multi-head trajectory decoder that scores candidate trajectories against several evaluation metrics.
+
+Language in the loop. DriveLM [6] structures perception, prediction and planning as graph-structured visual question answering. LMDrive [7] conditions closed-loop control on natural-language instructions. SimLingo [24] is a vision-only VLM driving model that aligns language and actions and reports results on CARLA and Bench2Drive. Alpamayo-R1 [2] and Alpamayo 1.5 [19] combine chain-of-causation reasoning with a flow-matching action expert; we use the latter.
+
+Generative action heads. Diffusion Policy [29] models robot action sequences with conditional denoising diffusion, and DiffusionDrive [30] adapts truncated diffusion with anchor trajectories to end-to-end driving. $\pi_0$ [26] attaches a flow-matching action expert to a pretrained VLM and generates continuous action chunks. Flow matching [8] regresses a velocity field along a probability path; with a linear path and independent noise–data coupling the learned marginal paths are not straight in general, and straightness is obtained only with additional procedures such as minibatch optimal-transport coupling [31] or rectified-flow reflow [32]. These heads can represent several modes; the question we ask is which mode they sample at low speed, which depends on the training data.
+
+Inertia, copycat behaviour and their mitigations. Codevilla et al. [12] documented the inertia problem in behaviour cloning for driving and proposed an auxiliary speed-prediction branch so that the network must estimate speed from images. de Haan et al. [13] framed the broader failure as causal confusion. Wen et al. [25] analysed copycat agents that exploit observation histories and proposed learning representations that suppress the previous action; their keyframe method [28] upweights demonstration frames at expert action changes and was evaluated in CARLA. ChauffeurNet [27] applied dropout to the past-motion input during training so that the model could not rely on it. On the evaluation side, open-loop planning metrics on nuScenes can be matched by models that use only ego status [17, 18], which is the same shortcut seen from a different angle. Many closed-loop CARLA agents also include controller-side anti-stall rules, such as creeping forward after a fixed time at rest; we do not survey them. All of these remedies act on the model input, the loss or the controller. Our intervention acts only on the composition of the fine-tuning set and leaves the model, loss and controller fixed. We did not run a history-dropout baseline or a creep-rule controller, so we cannot say how a data-side change compares with them; Section 5 lists this as a limitation.
+
+Closed-loop evaluation. Open-loop displacement metrics hide compounding errors [16, 17, 18]. CARLA [9] executes the policy's commands at every tick, and Bench2Drive [3] splits closed-loop evaluation into 220 short routes covering 44 scenario types and five abilities (Merging, Overtaking, Emergency Braking, Give Way, Traffic Signs). LEAD [10] reduces learner–expert asymmetries in CARLA expert data; our demonstrations come from the LEAD expert.
+
+
+3. Methodology
+
+
+## 3.1 Problem Formulation and Dual-System Architecture
+
+At control step $t$ the policy receives $\mathbf{x}_t = (\mathcal{I}_t, \mathcal{H}_t, c_t)$:
+1. **Cameras:** $\mathcal{I}_t$ from four cameras (cross-left, front-wide and cross-right at $120^\circ$ field of view; front-telephoto at $30^\circ$) over a 4-frame window [19].
+2. **Ego-motion history:** $\mathcal{H}_t = \{(\mathbf{p}_\tau, \mathbf{R}_\tau)\}_{\tau=t-15}^{t}$ at $10\text{ Hz}$ over $1.5\text{ s}$ in the current ego frame ($x$ forward, $y$ left), tokenized into 48 history tokens [2, 19].
+3. **Navigation instruction:** $c_t$, a short text such as `Continue straight` or `Turn left in 11m` [19].
+
+The policy outputs $K = 64$ future waypoints at $0.1\text{ s}$ spacing ($6.4\text{ s}$ horizon), $\mathbf{Y} = [\mathbf{y}_1, \dots, \mathbf{y}_K]^\top$, $\mathbf{y}_k = (x_k, y_k, z_k)$ [2, 19].
+
+Alpamayo 1.5 (about 10B parameters) consists of an 8B-parameter VLM backbone $\Phi_{\text{VLM}}$ (`nvidia/Cosmos-Reason2-8B`, Qwen3-VL architecture), which encodes $\mathbf{x}_t$ into a cached key-value state $\mathbf{e}_t$, and a 2.28B-parameter action expert $v_\theta$ that works in a unicycle acceleration–curvature action space [2, 19]. A trajectory is represented by normalized controls $\mathbf{A}_1 = [\mathbf{a}_1, \dots, \mathbf{a}_K]^\top \in \mathbb{R}^{K \times 2}$, $\mathbf{a}_k = \big((a_k - \mu_a)/\sigma_a,\, (\kappa_k - \mu_\kappa)/\sigma_\kappa\big)$, with $(\mu_a, \sigma_a) = (0.0290, 0.6810)\text{ m/s}^2$ and $(\mu_\kappa, \sigma_\kappa) = (0.000269, 0.0261)\text{ m}^{-1}$. Given an initial speed $v_0$ from $\mathcal{H}_t$, controls are mapped to waypoints by unicycle integration with trapezoidal quadrature [2, 19]:
+$$v_k = v_0 + \sum_{j=1}^{k} a_j \Delta t, \quad \theta_k = \sum_{j=1}^{k} \kappa_j \left(v_{j-1}\Delta t + \tfrac{1}{2}a_j \Delta t^2\right)$$
+$$x_k = \sum_{j=1}^{k} \tfrac{\Delta t}{2}\big(v_{j-1}\cos\theta_{j-1} + v_j\cos\theta_j\big), \quad y_k = \sum_{j=1}^{k} \tfrac{\Delta t}{2}\big(v_{j-1}\sin\theta_{j-1} + v_j\sin\theta_j\big)$$
+We call $L = \sum_{k=1}^{K} \lVert \mathbf{y}_k - \mathbf{y}_{k-1} \rVert_2$ the predicted trajectory extent; $L / 6.4\text{ s}$ is the mean speed the plan implies.
+
+The action expert is trained by conditional flow matching with a linear interpolation path and independent coupling [8]: $\mathbf{A}_0 \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ is drawn independently of the demonstration $\mathbf{A}_1$, $\mathbf{A}_s = (1-s)\mathbf{A}_0 + s\mathbf{A}_1$ for $s \in [0,1]$, and the network regresses the conditional velocity $\mathbf{A}_1 - \mathbf{A}_0$:
+$$\mathcal{L}_{\text{CFM}}(\theta) = \mathbb{E}_{s \sim \mathcal{U}(0,1),\, \mathbf{A}_0,\, (\mathbf{x}_t, \mathbf{A}_1) \sim \mathcal{D}} \left[ \lVert v_\theta(\mathbf{A}_s, s \mid \mathbf{e}_t, \mathcal{H}_t) - (\mathbf{A}_1 - \mathbf{A}_0) \rVert_2^2 \right]$$
+At inference the expert integrates $d\mathbf{A}_s/ds = v_\theta(\mathbf{A}_s, s \mid \mathbf{e}_t, \mathcal{H}_t)$ from a noise sample at $s = 0$ to $s = 1$.
+
+---
+
+## 3.2 Why Data Composition Could Change Standstill: A Sampling Hypothesis
+
+The minimiser of $\mathcal{L}_{\text{CFM}}$ is the marginal velocity field $v^*(\mathbf{A}, s \mid \mathbf{c}) = \mathbb{E}[\mathbf{A}_1 - \mathbf{A}_0 \mid \mathbf{A}_s = \mathbf{A}, \mathbf{c}]$, with $\mathbf{c} = (\mathbf{e}_t, \mathcal{H}_t)$. Integrating this field from Gaussian noise transports the noise distribution to the training conditional $p_{\text{train}}(\mathbf{A}_1 \mid \mathbf{c})$, in the limit of exact fit and exact integration [8]. Each inference call therefore returns a sample from the conditional distribution, not its mean. If, in a given context, the training data contain a mixture of futures,
+$$p_{\text{train}}(\mathbf{A}_1 \mid \mathbf{c}) = \sum_{z} \alpha_z(\mathbf{c})\, p_z(\mathbf{A}_1 \mid \mathbf{c}),$$
+then a well-fitted expert returns a future from mode $z$ with probability close to $\alpha_z(\mathbf{c})$. Changing the data composition changes the mixture weights, and therefore how often each mode is sampled. It does not shift every sample toward an average. (The previous version of this manuscript argued the opposite; that argument treated the flow as a regressor and is withdrawn.)
+
+The relevant contexts are low-speed ones. When the ego vehicle is at or near rest, the camera image and the ego history are often compatible with two kinds of future: staying put (waiting at a queue, a signal or behind an obstacle) and starting to move. Define, for training samples with ego speed $\le 0.5\text{ m/s}$ at the current frame, three classes of ground-truth future: stays put ($L < 0.64\text{ m}$ over $6.4\text{ s}$, i.e. a planned mean speed below $0.1\text{ m/s}$), starts moving ($L \ge 2\text{ m}$), and in between. Our hypothesis is:
+
+**Hypothesis (stay-put sampling).** A flow-matching expert trained on data in which a larger share of low-speed samples stay put will, in low-speed closed-loop contexts, sample stay-put trajectories more often. Because the vehicle then remains at low speed, the next query again sees a low-speed context, so repeated stay-put samples extend the time at rest after the reason for stopping has gone.
+
+The relevant share is the conditional share among low-speed samples, not the global stationary share of the dataset. Table 1 gives both. Among low-speed samples, 31.0 % stay put in the flooded 6,400-sample set and 10.9 % in the golden one; at 1,600 samples the shares are 30.6 % and 11.4 %. The hypothesis predicts that the flooded model produces more plans with $L < 0.64\text{ m}$ during standstill, which is what the offline decomposition in Section 4.5 shows. It does not, on its own, predict the 1,600-sample result. There the conditional shares differ almost as much, yet the standstill difference is −1.33 pp with an interval that includes zero (Section 4.6), and the share of standstill steps with $L < 0.64\text{ m}$ is similar for the two 1,600-sample models (5.17 % vs 5.85 % of steps). The hypothesis is therefore at most part of the explanation. How closely the expert fits the low-speed conditional may depend on the amount of data or on the number of optimizer steps, which differ fourfold between the two sizes. A direct test, sampling many noise seeds in logged low-speed states and counting stay-put samples per model, was not performed.
+
+The lateral asymmetry of the flooded mix is a rival explanation for hesitation on obstacle-bypass routes: a model trained mostly on left swerves may be less able to plan a bypass that the route requires. The design bundles both factors, so it cannot separate them (Section 3.3).
+
+---
+
+## 3.3 Fine-Tuning Datasets
+
+Demonstrations come from the LEAD [10] privileged expert, recorded in CARLA 0.9.16 with the four Alpamayo cameras added and converted to the PhysicalAI-AV layout. All four Matrix datasets are drawn from one verified training pool (`lead_multirig_pai_v4`, 34,132 samples at a 0.4 s stride; 1,840 clips over 646 routes). Nothing was collected separately for either regime. Each sample is labelled with a scenario group (A–F; obstacle avoidance and construction, junctions, hazards and emergencies, highway and merging, vulnerable road users and dynamic conflicts, baseline and signal compliance) and a navigation manoeuvre (straight, swerve left, swerve right, turn left, turn right). A sample is stationary if the ego vehicle moves less than 0.5 m over its 6.4 s future.
+
+Each regime is specified by target marginals: the group shares, the manoeuvre shares and the stationary share. The group × manoeuvre allocation is the minimum-divergence point, an iterative proportional fit of the pool's own group × manoeuvre counts onto the target marginals, integerised with every bucket divisible by four. Within each bucket the stationary target is met as a preference, so it moves no group or manoeuvre marginal. Samples are then selected deterministically, by SHA-1 order salted with seed 0 and spread over as many clips as possible. Each 1,600-sample set is the exact per-bucket first quarter of the 6,400-sample set of the same regime. Brake and hazard shares are outcomes of the draw, not targets. The golden and flooded 6,400-sample sets share 4,284 samples (67 % of each). All cells share one validation split of 1,567 samples.
+
+The two regimes differ in three factors at once (group mix, lateral balance and stationary share), and in this pool the factors are coupled: groups A and C hold 88 % of all left swerves but 58 % of right swerves, so raising the hazard share pushes the lateral balance left. Comparisons between regimes therefore estimate the effect of the bundle. A fifth dataset, `floodedgroups_balanced_6400` (the flooded group mix with the golden manoeuvre mix and 2 % stationary share), would separate the group mix from the lateral-plus-stationary bundle. It has been built and published, but no model has been trained on it.
+
+The historical flooded checkpoint used in earlier versions of this work (`Flooded-6400-Hist`) was trained on a different dataset, `large_v3` (6,440 samples, 10.0 % stationary). That dataset was not drawn by the procedure above, and its training schedule differs (Section 3.4). It appears here only as a sensitivity comparator.
+
+Training and evaluation routes overlap. The LEAD datasets are exempt from the evaluation-overlap filter, so 7.1–7.5 % of each training set's samples lie on a route that overlaps one of the 220 Bench2Drive evaluation routes (lower bounds; 39 log names could not be resolved to a route). Mapped exactly to the 44 evaluation routes we use, training samples in the Matrix sets touch seven routes: 1852 (AccidentTwoWays), 1825 (ConstructionObstacleTwoWays), 2286 (HighwayCutIn), 23901 (InterurbanActorFlow), 23695 (InterurbanAdvancedActorFlow), 3464 (VehicleOpensDoorTwoWays) and 2164 (VehicleTurningRoutePedestrian). The number of touching samples is 20 (golden_1600), 19 (flooded_1600), 78 (golden_6400) and 87 (flooded_6400). Four more of the 44 routes are flagged at pool level but are not touched by any selected sample. The validation split has no overlap. Because the overlap is of similar size in both regimes, it bears mainly on comparisons against `Base`. We report H1 and H2 on all 44 routes and on the 37 routes not touched by training samples (Table 5).
+
+Table 1: Composition of the fine-tuning datasets (targets equal realised values for the Matrix sets).
+
+| Property | `Flooded` (1,600 / 6,400) | `Golden` (1,600 / 6,400) | `large_v3` (`Flooded-6400-Hist`) |
+| :--- | :---: | :---: | :---: |
+| Source pool | `lead_multirig_pai_v4`, 34,132 samples | `lead_multirig_pai_v4`, 34,132 samples | v3 conversion, 6,440 samples |
+| Groups A / B / C / D / E / F (%) | 35 / 14 / 22 / 10 / 9 / 10 | 27 / 18 / 17 / 14 / 14 / 10 | not specified |
+| Straight / swerve L / swerve R / turn L / turn R (%) | 22 / 37 / 12 / 14.5 / 14.5 | 50 / 13 / 13 / 12 / 12 | 21.7 / 37.3 / 12.1 / 14.5 / 14.5 |
+| Stationary samples (%) | 10 (160 / 640) | 2 (32 / 128) | 10.0 |
+| Brake / hazard share at 6,400 (%, observed) | 41.3 / 30.8 | 35.4 / 23.8 | not reported |
+| Samples at ≤ 0.5 m/s, 1,600 set: stay put / start / between | 168 / 346 / 35 of 549 (30.6 % stay put) | 44 / 302 / 41 of 387 (11.4 % stay put) | not computed |
+| Samples at ≤ 0.5 m/s, 6,400 set: stay put / start / between | 662 / 1,339 / 137 of 2,138 (31.0 % stay put) | 171 / 1,250 / 147 of 1,568 (10.9 % stay put) | not computed |
+| Training samples touching the 44 evaluation routes | 19 / 87 | 20 / 78 | not computed |
+| Hugging Face dataset | `…_matrix_flooded_1600`, `…_flooded_6400` | `…_matrix_golden_1600`, `…_golden_6400` | — |
+
+---
+
+## 3.4 Fine-Tuning, Inference and Controller
+
+Parameter isolation. The VLM backbone is frozen during fine-tuning (`cotrain_vlm = false`, gradients stopped at the trajectory token) [2, 20]. For deployment on one 24 GB GPU the frozen VLM language layers are quantized with pairwise rotation quantization (ParoQuant, W4A8) [14] and served by the FlashDrive streaming server [15]; the action expert runs in `bfloat16`. Only the action expert is trained: 416 parameter tensors, 2,280,592,386 trainable parameters according to the trainer artifacts. Noisy actions and flow time are embedded by `PerWaypointActionInProjV2` (Fourier features, 20 frequencies up to 100) and projected into the 2,048-dimensional expert hidden space [19]. Training follows the Alpamayo Stage-2 recipe [20]: AdamW (fused; $\beta = (0.9, 0.999)$, $\epsilon = 10^{-8}$, weight decay 0), gradient-norm clipping at 1.0, `bfloat16`, cosine schedule with minimum learning rate from $10^{-4}$ to $10^{-6}$, no exponential moving average.
+
+Schedules. Table 2 is rebuilt from the trainer artifacts (`trainer_state.json`, `training_args.bin`, Hydra configurations) and training logs. All four Matrix models used per-device batch 1 with gradient accumulation 8 (effective batch 8), 10 epochs and seed 42. This gives 2,000 optimizer steps at 1,600 samples and 8,000 at 6,400 samples. The configurations of the two 6,400-sample models are identical except for the dataset name, and both trained without interruption. The two 1,600-sample models share a schedule but were each interrupted and resumed from a saved checkpoint. The historical flooded checkpoint is a two-phase run: 4,000 steps (stopped at epoch 4.97 of 8 planned), followed by a new 2,415-step run (3 epochs, learning rate $3.5 \times 10^{-5} \to 10^{-6}$, warmup 50) initialised from those weights with a fresh optimizer, scheduler and step counter. The "6,415 steps, 8 epochs" given for it previously are sums, not logged counters. The 20,050 steps previously given for `Golden-6400` belong to a different model (`model_v4`, 16,040 samples), which is not part of this study but was used to tune the controller (see below).
+
+Table 2: Training and evaluation provenance of every evaluated checkpoint (one seed per condition).
+
+| Checkpoint | Dataset | Samples | Per-device batch × grad. accum. | Epochs | Optimizer steps | Warmup | Seed | Resume events | Training (UTC) | Closed-loop evaluation | Role |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| `Base` | none (pretrained) | 0 | — | — | 0 | — | — | — | — | 29 Sep–3 Oct 2026 (38 routes, before the 60 s rule); after 4 Oct (6 routes) | H1 reference (sensitivity) |
+| `Base-Rerun` | none (pretrained) | 0 | — | — | 0 | — | — | — | — | [[PENDING: base_run2 dates]] | H1 reference |
+| `Flooded-1600` | `matrix_flooded_1600` | 1,600 | 1 × 8 | 10 | 2,000 | 100 | 42 | first attempt stopped at step 215; resumes from step 250 (log of two attempts missing) | 17 Oct 06:39 → 16:49 | [[PENDING: evaluation dates]] | 1,600-sample flooded |
+| `Golden-1600` | `matrix_golden_1600` | 1,600 | 1 × 8 | 10 | 2,000 | 100 | 42 | several resumes from step 800 (one CUDA out-of-memory); final run 800 → 2,000 | 16 Oct 11:07 → 17 Oct 01:43 | [[PENDING: evaluation dates]] | H1 treatment |
+| `Flooded-6400` | `matrix_flooded_6400` | 6,400 | 1 × 8 | 10 | 8,000 | 200 | 42 | none | 19 Oct 07:52 → 20 Oct 12:25 | 11–12 Nov 2026 | H2 comparator (primary) |
+| `Golden-6400` | `matrix_golden_6400` | 6,400 | 1 × 8 | 10 | 8,000 | 200 | 42 | none | 17 Oct 18:49 → 18 Oct 23:05 | 19–20 Oct 2026 | H2 treatment |
+| `Flooded-6400-Hist` | `large_v3` | 6,440 | 1 × 8 | 4.97 + 3 | 4,000 + 2,415 (two separate runs) | 200; then 50 | 42 | phase 2 is a new run from phase-1 weights, not a resume | 5 Oct 13:13 → 6 Oct 20:08 | [[PENDING: evaluation dates]] | sensitivity only |
+
+Inference. The FlashDrive server [15] keeps a sliding-window key-value cache and integrates the learned field with $S = 8$ uniform forward Euler steps ($\Delta s = 0.125$, with velocity caching on steps 3–6):
+$$\mathbf{A}_{s + \Delta s} = \mathbf{A}_s + \Delta s \cdot v_\theta(\mathbf{A}_s, s \mid \mathbf{e}_t, \mathcal{H}_t)$$
+Eight steps is the server's configuration, not a choice justified by path straightness; with independent coupling the paths need not be straight [31, 32], and we did not measure the discretisation error. The model server does not seed its noise draws, so each inference call uses fresh noise and closed-loop runs are not reproducible step for step (Section 4.1). CARLA runs synchronously at 20 Hz.
+
+Controller. All runs use the same bridge controller (`alpamayo_bridge_agent.py`, SHA-256 `082c6ecc…10d3`). The predicted trajectory is tracked by CARLA's `VehiclePIDController` (lateral $K_P = 1.95, K_I = 0.05, K_D = 0.20$; longitudinal $K_P = 1.0, K_I = 0.05, K_D = 0.0$) towards a target waypoint chosen by a lookahead distance along the trajectory, $\text{clip}(5.5 + 0.3 v, 5.0, 8.5)$ m when the maximum near-horizon turn angle exceeds 0.087 rad and $\text{clip}(5.0 + 0.4 v, 5.0, 12.0)$ m otherwise. The target speed follows the trajectory. For a short trajectory it equals the trajectory's mean planned speed $L / 6.4\text{ s}$. It is capped by the stopping-distance limit $3.6\sqrt{2 \cdot 1.8 \cdot L}$ km/h, by 35 km/h, and by a curve limit. A standstill gate sets the target speed to zero and applies a 0.45 holding brake whenever
+$$(L < 1.5\text{ m}) \;\lor\; (v < 0.5\text{ m/s} \land L < 2.0\text{ m}).$$
+The gate keeps no internal state. Its second clause makes it harder to leave rest: below 0.5 m/s a trajectory up to 2.0 m long is still treated as a stop, and the holding brake keeps the vehicle at rest while the clause holds. (We previously called this a hysteretic latch; that described the effect, not a stored state.) Steering and pedal commands are smoothed by exponential moving averages ($\alpha_{\text{steer}} = 0.85$ when turning, $0.60$ otherwise; $\alpha_{\text{pedal}} = 0.25$), with throttle and brake mutually exclusive. No controller threshold is configurable.
+
+The PID gains and lookahead were tuned before this comparison on 20 of the 44 evaluation routes (14842, 17563, 1773, 1790, 1825, 1852, 1956, 2050, 2144, 2204, 23695, 2416, 2513, 2534, 2664, 2709, 3364, 3436, 3561, 3936), using `model_v4` (checkpoint-20050). Section 4.4 reports H2 on the 24 routes not used for tuning. The controller and the model therefore act together, and standstill is a property of the pair. Section 4.5 separates their contributions as far as the existing logs allow, and a closed-loop run without the gate is pending.
+
+
+4. Experimental Results
+
+
+## 4.1 Evaluation Protocol and Disclosures
+
+Routes. We use 44 Bench2Drive routes, one per scenario type. With a 10B-parameter policy one route takes about 22 minutes on an RTX 4090, which is why the full 220-route suite was not run for every model. Because of this subset and the custom controller, the Driving Scores reported here are not comparable with published 220-route Bench2Drive results.
+
+Simulator settings. CARLA 0.9.15 (evaluation), synchronous mode at 20 Hz, client timeout 180 s. The launcher sets rendering quality Low on every route outside Town02 and Town03; all 44 routes lie in other towns, so every model ran at Low. (Earlier text stating Epic quality was wrong.)
+
+Termination rule and censoring. The harness ends a route after 4,000 ticks (200 s) or after 1,200 consecutive ticks (60 s) with ego speed below 0.1 m/s. Both are logged as `Failed - TickRuntime`. The standstill fraction is therefore censored: a model that stops for good accrues at most 60 s of final standstill. Routes ended by the 60 s rule / by the tick cap were: `Flooded-6400` 7 / 0, `Golden-6400` 3 / 0, `Flooded-6400-Hist` 3 / 1, `Golden-1600` 5 / 0, `Flooded-1600` 1 / 2, `Base` 0 / 7. The 60 s rule entered the harness on 4 Oct 2026. By result-file dates, 38 of the 44 `Base` routes were evaluated before that (29 Sep–3 Oct), so all seven of its `TickRuntime` routes ran to the 4,000-tick cap. This inflates `Base` standstill relative to the fine-tuned models. `Base` is being re-evaluated under the current rule (`Base-Rerun`), and H1 will use that run: [[PENDING: H1 on Base-Rerun]]. The original `Base` run is kept as a sensitivity row.
+
+Harness changes between the H2 arms. On 10 Nov 2026, between the evaluation of `Golden-6400` (19–20 Oct) and that of `Flooded-6400` (11–12 Nov), the evaluator and launcher were changed: large-map streaming settings restricted to Town12/13, synchronous mode and step set explicitly, guards around scenario shutdown and empty parked-vehicle batches, and the client timeout raised from 60 s to 180 s. We expect these changes to be behaviour-neutral on these routes, but this has not been shown. The second pass of both models on the current harness addresses it: [[PENDING: test–retest of Golden-6400 and Flooded-6400 on the current harness]].
+
+Non-determinism. The model server does not seed its noise draws. A replicate of route 2534 with the same checkpoint and controller differed from the stored run from the first step (Driving Score 4.1 vs 60.0; standstill 81 % vs 9 %). An earlier claim that repeated evaluations were deterministic was wrong. Per-route comparisons and small strata are therefore descriptive only, and the route-level tests below treat each route's single run as one draw. The size of run-to-run variation is [[PENDING: replicate spread on 8 routes and run 1 vs run 2 per-route SD and ICC for standstill, DS and RC]].
+
+Collisions. The leaderboard merges repeated contacts with the same actor (within 5 s or 5 m) before logging, so logged collisions are not per-tick counts. We additionally merge, within each route, entries with the same actor identifier and report these as collision events next to the logged counts.
+
+Endpoint history and pre-specification. Driving Score, route completion and collisions were analysed first. The standstill fraction (share of logged 20 Hz steps with ego speed below 0.1 m/s) became the H2 endpoint after the Driving Scores of the first 6,400-sample models were seen to be similar. At that time the standstill difference between `Golden-6400` and `Flooded-6400-Hist` was already known. Before `Flooded-6400` was evaluated, we wrote down the endpoint, test, interval and a decision rule for the comparison `Golden-6400` vs `Flooded-6400` and committed them to the project repository on 11 Nov 2026 (commit `013a12bd`). By then the same 44 routes had been evaluated for the other five models, and the endpoint had been chosen from those results. This is therefore a pre-specified replication test on routes that had already been observed for the other models. It is not a registration prior to all data, and the route set was not held out. An analysis addendum, committed on 12 Nov 2026 after the `Flooded-6400` runs finished but before its standstill was computed, fixed the remaining analysis choices, corrected the stratum definitions and pre-specified the controller experiments. Deviations from the protocol were: rendering quality Low instead of the specified Epic; a rerun audit log reconstructed afterwards instead of written during the run; three pre-simulation restarts (route 2534 launched three times and 1852 twice before any simulation step, and one manual watchdog restart); and an incorrect description of the "Open Maneuver" routes. The reconstructed audit shows 45 evaluator launches, 44 results, no route scored twice, and the correct checkpoint served throughout.
+
+Statistics. Route-level differences are paired over the 44 routes. Tests are two-sided Wilcoxon signed-rank tests (`scipy.stats.wilcoxon` defaults: zero differences dropped, exact p-value when there are no zeros and n ≤ 50, normal approximation otherwise). We report the statistic $W$, the number of zero differences, the matched-pairs rank-biserial correlation $r_{rb}$, and two-sided 95 % BCa bootstrap intervals (20,000 resamples, seed 0). Absolute differences in percentages are given in percentage points (pp). The pre-specified family for Holm correction is {H1, H2}. H1's p-value was known before the family was declared, so the correction offers no protection for H2; we report it as specified. We also report the earlier 4-test family, which included two Driving Score equivalence and non-inferiority tests. All other p-values are unadjusted and labelled as such. Each condition is one trained checkpoint (seed 42), so every test compares two specific checkpoints across routes and says nothing about variation between training runs.
+
+---
+
+## 4.2 Overall Results
+
+Table 3 gives the leaderboard metrics, collision counts and kinematics; Table 4 gives the standstill decomposition and strata. The `Base` rows were measured mostly under the earlier termination rule (Section 4.1).
+
+Table 3: Closed-loop results on 44 routes (one run per model; † = `Base` measured mostly before the 60 s termination rule).
+
+| Model | Driving Score | Route compl. (%) | Infraction mult. | Progress / odometer (km) | Collisions logged (veh / ped / layout) | Collision events (veh / ped / layout) | Events per progress-km [95 % CI] | Non-timeout infractions (per progress-km) | Standstill < 0.1 m/s (%) | Mean speed (m/s) | Moving steer jerk | Hard brake (%) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `Base` † | 38.82 | 69.07 | 0.593 | 3.40 / 3.77 | 57 (53 / 0 / 4) | 50 (46 / 0 / 4) | 14.70 [9.85, 20.24] | 92 (27.05) | 40.45 | 1.47 | 0.0576 | 4.67 |
+| `Base-Rerun` | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] |
+| `Flooded-1600` | 45.77 | 77.44 | 0.592 | 3.82 / 4.06 | 49 (47 / 0 / 2) | 44 (42 / 0 / 2) | 11.51 [7.87, 16.07] | 86 (22.51) | 33.69 | 1.67 | 0.0499 | 5.49 |
+| `Golden-1600` | 49.88 | 78.16 | 0.654 | 3.76 / 4.07 | 44 (39 / 0 / 5) | 42 (37 / 0 / 5) | 11.16 [7.84, 15.12] | 75 (19.92) | 32.37 | 1.70 | 0.0484 | 5.23 |
+| `Flooded-6400` | 53.09 | 74.65 | 0.708 | 3.64 / 4.01 | 37 (30 / 1 / 6) | 36 (30 / 1 / 5) | 9.88 [5.94, 14.92] | 69 (18.95) | 33.78 | 1.64 | 0.0472 | 4.85 |
+| `Golden-6400` | 49.85 | 82.38 | 0.631 | 3.98 / 4.26 | 46 (42 / 3 / 1) | 44 (41 / 2 / 1) | 11.07 [7.45, 15.45] | 73 (18.36) | 25.72 | 1.96 | 0.0471 | 4.46 |
+| `Flooded-6400-Hist` | 49.04 | 77.76 | 0.649 | 3.82 / 4.17 | 57 (56 / 0 / 1) | 51 (50 / 0 / 1) | 13.34 [8.33, 19.23] | 87 (22.75) | 33.91 | 1.61 | 0.0491 | 5.20 |
+
+Definitions: progress distance = route completion × route length; odometer = $\sum v\,\Delta t$. Event-rate intervals are percentile intervals from 20,000 route resamples. Non-timeout infractions exclude minimum-speed, scenario-timeout and route-timeout entries. Mean speed is the mean over routes of each route's mean logged speed (pooled over all steps it is lower, e.g. 1.70 m/s for `Golden-6400`). Steer jerk is averaged over moving steps; hard brake is the share of steps with brake > 0.5.
+
+Table 4: Standstill decomposition and frozen strata (% of logged steps; strata are standstill %, exploratory and descriptive; † as in Table 3).
+
+| Model | Standstill | Gate active, all steps | Gate active, share of standstill | Mean $L$ (m) | Standstill with $L < 0.64$ m | … $0.64 \le L < 1.5$ m | … $1.5 \le L < 2.0$ m, $v < 0.5$ | … gate inactive | Overtaking (9) | Merging (16) | Overtaking + Merging (25) | Emerg. Brake (12) | Traffic Signs (5) | Give Way (2) | No junction control (17) | Bypass, single-direction (4) | Bypass, two-way (5) | Ended by 60 s rule / tick cap |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `Base` † | 40.45 | 20.06 | 33.4 | 24.30 | 11.82 | 5.52 | 2.33 | 20.79 | 61.4 | 34.1 | 43.9 | 40.3 | 35.0 | 11.7 | 44.0 | 49.1 | 71.3 | 0 / 7 |
+| `Base-Rerun` | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] | [[PENDING]] |
+| `Flooded-1600` | 33.69 | 12.98 | 26.9 | 26.80 | 5.85 | 4.68 | 2.05 | 21.11 | 40.6 | 25.7 | 31.1 | 34.8 | 52.1 | 14.0 | 34.0 | 19.9 | 57.2 | 1 / 2 |
+| `Golden-1600` | 32.37 | 11.22 | 25.0 | 28.23 | 5.17 | 3.83 | 1.83 | 21.54 | 42.6 | 23.3 | 30.2 | 32.9 | 49.5 | 12.7 | 33.6 | 16.1 | 63.7 | 5 / 0 |
+| `Flooded-6400` | 33.78 | 15.14 | 33.5 | 25.24 | 7.93 | 4.71 | 1.97 | 19.17 | 40.8 | 32.4 | 35.4 | 31.8 | 38.4 | 13.7 | 34.1 | 18.2 | 58.9 | 7 / 0 |
+| `Golden-6400` | 25.72 | 3.73 | 13.7 | 30.99 | 0.75 | 1.60 | 1.19 | 22.18 | 32.5 | 20.2 | 24.7 | 31.9 | 22.2 | 10.9 | 25.8 | 13.0 | 48.1 | 3 / 0 |
+| `Flooded-6400-Hist` | 33.91 | 11.39 | 26.3 | 26.58 | 5.53 | 3.60 | 1.73 | 23.05 | 50.1 | 30.9 | 37.8 | 26.4 | 40.4 | 14.3 | 36.4 | 41.4 | 57.1 | 3 / 1 |
+
+The four standstill bands sum to the standstill column. Strata use the primary-ability rule (each route assigned to the first ability, in the order Overtaking, Merging, Emergency Braking, Give Way, Traffic Signs, whose official scenario list contains its scenario). "No junction control" (17 routes, defined post hoc from scenario type, not verified against the map) and the bypass split by oncoming flow (post hoc) are descriptive.
+
+[[FIGURE 1: Paired per-route standstill fraction of Golden-6400 and Flooded-6400 on the 44 routes (one line per route), with the 7 routes touched by training samples and the 20 controller-tuning routes marked.]]
+
+---
+
+## 4.3 Primary Results
+
+**H2 (curation at matched schedule, standstill).** `Golden-6400` spent 25.72 % of logged steps below 0.1 m/s and `Flooded-6400` 33.78 %. The paired difference is **−8.06 pp**, 95 % BCa CI **[−15.08, −1.25]**, Wilcoxon $W = 213$, no zero differences, exact two-sided **p = 0.00071** (asymptotic 0.00100), $r_{rb} = -0.57$; `Golden-6400` had less standstill on 36 of 44 routes. Under the pre-specified rule (A1: interval upper bound below zero and point estimate ≤ −4.0 pp) this is case **A1, replicated**. Holm over {H1, H2} gives 0.0014 for H2 (with H1 from the original `Base` run; to be recomputed with `Base-Rerun`). In the earlier 4-test family (H1; H2; `Golden-6400` vs `Golden-1600` Driving Score equivalence; `Golden-1600` vs `Flooded-6400` Driving Score non-inferiority, both with an 8-point margin), the Holm-adjusted values are 0.0228, 0.0028, 0.0556 and 0.1587. The 8-point margin was not derived from a power calculation or from seed variance and has no formal justification; neither margin test is significant after adjustment. This result compares two checkpoints, one per regime, on one run per route.
+
+Other endpoints for the same pair (unadjusted). Mean speed was higher for `Golden-6400` by 0.31 m/s (CI [0.12, 0.49], p = 0.0003). Route completion was higher by 7.73 pp (82.38 % vs 74.65 %; CI [−0.42, 16.10], p = 0.058; 22 routes tied). **Driving Score was lower** by 3.24 points (49.85 vs 53.09; CI [−13.83, 6.41], $W = 375$, 4 zeros, p = 0.64). Collisions are reported in Section 4.7.
+
+**H1 (adaptation, Driving Score).** [[PENDING: H1 = Golden-1600 vs Base-Rerun, Driving Score, all 44 and 37 non-overlapping routes]]. Against the original `Base` run, which used the earlier termination rule on 38 routes, `Golden-1600` scored +11.06 points higher (49.88 vs 38.82; CI [2.62, 19.71]; $W = 152$, 9 zero differences, asymptotic p = 0.0076; $r_{rb} = 0.52$). The gain is not specific to curation. `Flooded-1600` gained +6.95 over the same `Base` (CI [−0.86, 14.80], p = 0.064, unadjusted), and `Golden-1600` vs `Flooded-1600` differs by +4.11 points (CI [−5.42, 13.70], p = 0.20, unadjusted). H1 is an adaptation result.
+
+---
+
+## 4.4 Sensitivity of H2
+
+Table 5: Sensitivity analyses for the H2 comparison (Golden-6400 minus Flooded-6400 unless stated; p unadjusted except the first row).
+
+| Analysis | N routes | Difference | 95 % BCa CI | Wilcoxon p |
+| :--- | :---: | :---: | :---: | :---: |
+| Primary (confirmatory record) | 44 | −8.06 pp | [−15.08, −1.25] | 0.00071 |
+| Without the 7 routes touched by training samples | 37 | −7.23 pp | [−15.31, +0.66] | 0.0065 |
+| Without all 11 pool-flagged routes | 33 | −7.70 pp | [−16.59, +1.20] | 0.016 |
+| Without the 20 controller-tuning routes | 24 | −13.65 pp | [−24.79, −3.73] | 0.0059 |
+| Common tick window (first $\min(n_G, n_F)$ steps per route) | 44 | −5.61 pp | [−9.28, −2.13] | 0.0014 |
+| Standstill in seconds per route | 44 | −7.98 s | [−19.42, +3.93] | 0.0088 |
+| Logs truncated at the first 60 s standstill run (harmonised rule) | 44 | −8.03 pp | [−15.01, −1.23] | 0.00071 |
+| Threshold $v < 0.05$ m/s | 44 | −7.14 pp | [−14.60, −0.14] | 0.0033 |
+| Threshold $v < 0.2$ m/s | 44 | −8.26 pp | [−15.14, −1.58] | 0.00053 |
+| Threshold $v < 0.5$ m/s | 44 | −8.55 pp | [−15.02, −2.15] | 0.00037 |
+| Historical comparator: Golden-6400 vs Flooded-6400-Hist | 44 | −8.19 pp | [−15.84, −0.74] | 0.0016 |
+| Flooded-6400-Hist vs Flooded-6400 | 44 | +0.13 pp | [−6.57, +8.04] | 0.15 |
+| Second pass (run 2 only) | 44 / 37 | [[PENDING]] | [[PENDING]] | [[PENDING]] |
+| Mean of runs 1 and 2 per route | 44 / 37 | [[PENDING]] | [[PENDING]] | [[PENDING]] |
+
+On the 37 routes not touched by training samples, the point estimate and the Wilcoxon test are essentially unchanged, but the BCa interval includes zero. Restricting to a common tick window per route, which removes most of the effect of the termination rule, reduces the estimate to −5.61 pp and keeps the interval below zero. Measured in seconds, the interval includes zero. Excluding the controller-tuning routes increases the estimate. The historical checkpoint, trained on a different dataset and a two-phase schedule, gives almost the same difference as the matched model (−8.19 pp), and the two flooded checkpoints do not differ in standstill. The difference has the same sign at every speed threshold. A wider sweep (24 specifications over extent and speed thresholds, both flooded comparators) gave p-values between $1.7 \times 10^{-10}$ and 0.016, all unadjusted. Whether the result holds across closed-loop runs is [[PENDING: test–retest spread, H2 on run 2 and on the two-run mean, read against the run-to-run per-route SD]].
+
+---
+
+## 4.5 Where the Standstill Difference Lies: Model Plans and Controller
+
+Offline decomposition. Every standstill step was assigned to one of four bands by the predicted extent $L$ at that step (pre-specified in the analysis addendum):
+- $L < 0.64$ m: the plan's own mean speed is below 0.1 m/s, so the model planned to stay put and the gate is not needed to explain the stop;
+- $0.64 \le L < 1.5$ m: the gate overrides a planned crawl;
+- $1.5 \le L < 2.0$ m with $v < 0.5$ m/s: only the low-speed clause of the gate applies;
+- gate inactive.
+
+The band differences sum exactly to the total. For `Golden-6400` minus `Flooded-6400` they are **−7.19 pp** for $L < 0.64$ m (0.75 % vs 7.93 % of steps; CI [−11.26, −4.49]; lower on 41 routes, higher on 2, 1 tie), −3.11 pp for $0.64 \le L < 1.5$ m (CI [−4.72, −1.88]), −0.78 pp for the low-speed clause (CI [−1.30, −0.29]), and **+3.01 pp** with the gate inactive (22.18 % vs 19.17 %; CI [−1.37, 8.53], p = 0.58), all unadjusted. Most of the difference therefore lies in steps where the model itself predicted a trajectory of less than 0.64 m. This is the pattern the stay-put sampling hypothesis of Section 3.2 predicts. In those steps the gate would set the same target speed as the plan does. The gate-active bands together account for a further −3.89 pp, and standstill with the gate inactive is slightly higher for the curated model. Against the historical checkpoint the $L < 0.64$ m band accounts for −4.78 of the −8.19 pp. The gate was active in 3.73 % of all steps for `Golden-6400` and 15.14 % for `Flooded-6400` (difference −11.41 pp, CI [−17.25, −7.26], p = $6.5 \times 10^{-9}$, unadjusted), and mean predicted extent was 5.75 m longer (30.99 vs 25.24 m; CI [3.77, 7.87]).
+
+This is accounting, not a causal test. The trajectories were recorded with the gate in the loop, and the gate's holding brake keeps the vehicle at low speed, which shapes the context the model sees next. The decomposition cannot say what the model would have planned without the gate.
+
+What binds when the gate is inactive. For standstill steps with the gate inactive, we recomputed the controller's target speed before the gate from the logged waypoints (an approximation; the controller uses world coordinates, and the PID output was not re-simulated). For no model was this target below 0.1 m/s. The logged command in these steps was throttle in 69–90 % of them and brake in the rest. `Golden-6400` had fewer such steps with brake (3.21 % vs 5.90 % of all steps; −2.69 pp, CI [−3.87, −1.88]) and more with throttle (18.97 % vs 13.27 %; CI [1.11, 11.76], p = 0.22). Most gate-inactive standstill is therefore not a planned stop: the controller commands throttle while the vehicle is still below 0.1 m/s, for example when starting from rest.
+
+Closed-loop gate-off experiment. To separate the model from the gate, both 6,400-sample models are being re-run on all 44 routes with a controller identical to the hashed one except that the forced zero target speed and the holding brake under the gate condition are removed. Speed cap, curve limit, PID gains, lookahead, smoothing and start-assist are unchanged. Endpoints are standstill at 0.1, 0.5 and 1.0 m/s, mean speed, route completion, distance travelled in a common tick window, terminations by the 60 s rule, and collisions by class. The analyses are the Golden − Flooded difference under the gate-off controller and the model × controller interaction (paired difference of differences), both read against the run-to-run spread. The interpretation was fixed in advance. Without the gate the controller still tracks the model's planned speed, so a gap that persists supports a model-side origin, and a gap that shrinks toward the noise floor indicates that the gate amplifies it. Result: [[PENDING: gate-off standstill gap, model × controller difference of differences, and secondary endpoints]].
+
+[[FIGURE 2: Distribution of predicted trajectory extent L during standstill steps for Golden-6400 and Flooded-6400, with the 0.64, 1.5 and 2.0 m band boundaries.]]
+
+[[FIGURE 3: Standstill fraction of Golden-6400 and Flooded-6400 under the default and gate-off controllers (model × controller), with run-to-run spread.]]
+
+Proceed-cued standstill (keyword heuristic). Classifying each standstill step by keywords in the model's chain-of-causation text, which is not a validated classifier, standstill with a "proceed" rationale (for example "the lane is clear") was 3.21 % of steps for `Golden-6400` and 5.26 % for `Flooded-6400` (−2.05 pp, CI [−7.05, 0.43], p = 0.026, unadjusted). Standstill with a "caution" rationale was 20.97 % vs 28.23 % (−7.26 pp, CI [−14.10, −0.83]). The curated model has less standstill in both classes, not only in the "proceed" class.
+
+---
+
+## 4.6 Strata and the 2 × 2 Contrasts (Exploratory, Unadjusted)
+
+Strata. The routes previously called "Open Maneuver" are the 25 Overtaking and Merging routes, renamed "Overtaking + Merging". Contrary to the earlier description, they include signalized and non-signalized junction routes, a bicycle-flow route and five two-way routes with oncoming traffic. On them, `Golden-6400` vs `Flooded-6400` standstill was −10.77 pp (24.7 % vs 35.4 %; CI [−19.58, −5.45]; p = 0.00063). Separately, Overtaking (9 routes) gave −8.28 pp (p = 0.0039) and Merging (16) −12.18 pp (p = 0.034). On Emergency Braking (12 routes) the difference was +0.09 pp (CI [−17.37, 18.97], p = 0.68). On Traffic Signs (5 routes) it was −16.17 pp (p = 0.19), and with the official multi-label assignment (19 routes) −8.67 pp (CI [−21.55, 4.68], p = 0.10). We do not interpret these strata as separating unproductive freezing from legitimate stops: the bridge does not log signal state, actor distances or conflict-zone occupancy, so we cannot tell when stopping was required.
+
+Gap-waiting. On routes with oncoming or crossing flow, waiting for a gap is correct behaviour, so less standstill may partly mean accepting gaps sooner. Splitting the obstacle-bypass routes by oncoming flow (post hoc, descriptive only) gives 13.0 % vs 18.2 % on four single-direction routes and 48.1 % vs 58.9 % on five two-way routes. Both differences favour the curated model, but with four and five routes and non-deterministic runs they do not separate gap-waiting from freezing. Time-to-pass or gap-acceptance measures would require clearance logs we do not have.
+
+1,600 samples and the 2 × 2 contrasts. At 1,600 samples the regimes differ by −1.33 pp in standstill (CI [−8.26, 6.29], p = 0.11). The difference of differences for standstill, (Golden-6400 − Golden-1600) − (Flooded-6400 − Flooded-1600), is −6.74 pp (CI [−16.60, 2.25], p = 0.079), so an interaction between regime and dataset size is not established. For mean speed the difference of differences is +0.28 m/s (CI [0.03, 0.52], p = 0.017). Dataset size and optimizer steps grow together (2,000 vs 8,000 steps at 10 epochs), so these contrasts cannot separate more data from longer training. With one seed per cell, two sizes do not establish a trend.
+
+**H3 (exploratory, `Golden-6400` vs `Golden-1600`).** The larger curated model had less standstill (−6.65 pp, CI [−12.90, −1.74], p = 0.00059), higher mean speed (+0.25 m/s, CI [0.11, 0.40], p = 0.00019), less gate activity (−7.49 pp, p = $2.2 \times 10^{-8}$) and longer predicted extent (+2.76 m, p = 0.00064). Driving Score did not change (−0.02, CI [−8.60, 7.58], p = 0.75), nor did collision events per progress-km (rate ratio 0.99, CI [0.67, 1.46]). Across all 44 routes, the per-route change in route completion and the per-route change in the infraction multiplier are negatively correlated (Spearman ρ = −0.52, p = 0.00033, asymptotic). Since Driving Score is the product of the two, routes on which the larger model gets further also tend to accumulate more infractions. This is consistent with an unchanged Driving Score despite faster progress. A rival reading is equally consistent with these data: the benchmark is correctly reporting that the extra progress was bought with extra infractions. The data do not favour one reading over the other. (An earlier version used a 10-route subset selected after inspection; it is withdrawn.) For the matched 6,400-sample pair the same correlation is weak (ρ = −0.18, p = 0.25).
+
+---
+
+## 4.7 Collisions and Pedestrian Contacts
+
+Against the matched flooded model, the curated model had **more** collision events: 44 vs 36 (logged entries 46 vs 37). Per progress-km the event rates were 11.07 (CI [7.45, 15.45]) and 9.88 (CI [5.94, 14.92]), a rate ratio of **1.12 (95 % CI 0.80–1.68)**. Per odometer-km the ratio was 1.15 (CI 0.82–1.72), and the per-route event counts did not differ detectably (Wilcoxon p = 0.35). Non-timeout infractions per progress-km had a rate ratio of 0.97 (CI 0.74–1.30). There is no detectable difference in collision rate between the two models. With about 4 km of driving per model, the study is not powered to show that the rates are equal, and no non-inferiority margin was specified. Against the historical checkpoint the event-rate ratio was 0.83 (CI 0.57–1.21), also with no detectable difference. Statements in the earlier version that the curated model had a constant, reduced or lowest crash rate are withdrawn.
+
+Pedestrian contacts. `Golden-6400` had three logged pedestrian contacts, forming two events. On route 17752 (DynamicObjectCrossing) it struck a pedestrian once; all six models completed this route, and no other model made contact. On route 2164 (VehicleTurningRoutePedestrian) the log has two identical entries for one pedestrian at one position, one event. `Flooded-6400` and `Flooded-6400-Hist` left that route at 50.3 % completion ("agent deviated from the route"), and `Golden-1600` and `Base` completed it without contact. `Flooded-6400` had one pedestrian contact event, on route 3248 (ParkingCrossingPedestrian), where every model completed the route and no other model made contact. Projecting each route's scenario trigger onto the route polyline (approximate), the trigger lies at 7–9 % of the route on all three routes, so every model reached it. The earlier explanation for route 2164, that the flooded models ended before the conflict and were therefore not exposed to it, is not supported by this check. Minimum distances to pedestrians were not logged. Two events against one, on three routes, support no conclusion either way. We report them because they are the only pedestrian contacts among the six models.
+
+
+5. Discussion and Limitations
+
+At a matched training schedule, the curated fine-tuning mix reduced closed-loop standstill by about 8 pp relative to the flooded mix, and the reduction met a pre-specified replication rule. Most of the difference lies in steps where the model's own plan implies near-zero speed. This is consistent with the hypothesis that a flow-matching expert samples stay-put futures in low-speed contexts at a rate that tracks their share in the training data, and the training sets do differ threefold in that share. The reduction did not translate into a better benchmark result. Against the matched flooded model, the curated model completed more of each route and drove faster, but had a slightly lower Driving Score and a collision-event rate that is not distinguishable from the comparator's and is nominally higher. The practical reading is narrow: data composition is a lever on standstill for this class of policy, and reducing standstill does not by itself improve driving as Bench2Drive scores it.
+
+Limitations.
+1. **One training seed per condition.** Each cell is one checkpoint (seed 42), and the 1,600-sample runs were interrupted and resumed. All intervals describe route-to-route variation for these checkpoints, not variation between training runs. The H2 interval upper bound (−1.25 pp) is close to zero. We did not train further seeds.
+2. **Bundled treatment.** The regimes differ in group mix, lateral balance and stationary share together, and these are coupled in the pool. The left-skewed lateral distribution is a rival explanation for hesitation on bypass routes. The decoupling dataset `floodedgroups_balanced_6400` exists, but no model has been trained on it; separating lateral balance from the stationary share would need a further dataset.
+3. **Endpoint and route set not held out.** The endpoint was chosen after first results, and the pre-specification was committed after the same 44 routes had been observed for the other models. The confirmatory pair was not evaluated on the remaining Bench2Drive routes.
+4. **Run-to-run variation and harness changes.** Closed-loop runs are not deterministic, and the two H2 arms were evaluated three weeks apart with harness changes between them: [[PENDING: test–retest results]].
+5. **Train/evaluation overlap.** Seven of the 44 routes are touched by training samples. Without them, the H2 interval includes zero.
+6. **Controller.** The PID and lookahead were tuned on 20 of the 44 routes with another checkpoint. The standstill gate and holding brake are in the loop for every result in Section 4.3, and the offline decomposition cannot remove them: [[PENDING: gate-off results]]. We did not compare against controller-side anti-stall rules or model-side remedies such as history dropout [27] or speed prediction [12].
+7. **Censoring and termination.** The 60 s standstill rule censors the standstill fraction. `Base` was mostly evaluated before that rule existed, so H1 awaits the re-run.
+8. **Benchmark scope.** A 44-route subset, a custom controller, Low rendering quality and CARLA 0.9.15 at evaluation (data recorded in 0.9.16) make the Driving Scores non-comparable with published 220-route results. Collisions are leaderboard-merged events, and the bridge logs neither signal state nor actor distances.
+9. **Streaming and quantization.** Inference uses a W4A8-quantized VLM and streaming key-value cache reuse, whereas training uses full-context BF16. The comparisons are internally valid for this harness; transfer to unquantized or non-streaming inference is untested.
+
+Future work follows from these limits: further seeds for the 6,400-sample pair; a model trained on the decoupling dataset; per-context sampling of many noise seeds at logged low-speed states to measure the stay-put sampling rate directly; evaluation of the matched pair on the remaining routes; and a comparison with history dropout and with a creep-style controller.
+
+[[FIGURE 4: Pipeline from dataset draw to closed loop (pool → IPF target mixes → fine-tuning → VLM + flow-matching expert → controller with standstill gate → CARLA), with the gate condition and holding brake shown.]]
+
+
+6. Conclusion, Availability and Disclosures
+
+We compared two fine-tuning mixes, drawn from the same verified pool, for the flow-matching action expert of Alpamayo 1.5 at two dataset sizes with one seed each. At 6,400 samples and a matched schedule, the curated mix reduced closed-loop standstill on 44 Bench2Drive routes by 8.06 pp (95 % CI [−15.08, −1.25]), a pre-specified replication on previously observed routes. Most of the difference lies where the model's own plans imply near-zero speed. The curated model did not have a higher Driving Score or fewer collisions than the matched flooded model, and we make no safety claim. At 1,600 samples the two mixes did not differ detectably. Fine-tuning itself raised Driving Score over the unadapted policy ([[PENDING: H1 on Base-Rerun]]).
+
+**Data availability.** The four Matrix fine-tuning datasets and the decoupling dataset are on the Hugging Face Hub as `earth37815/lead-alpamayo-pai_matrix_golden_1600`, `earth37815/lead-alpamayo-pai_matrix_golden_6400`, `earth37815/lead-alpamayo-pai_matrix_flooded_1600`, `earth37815/lead-alpamayo-pai_matrix_flooded_6400` and `earth37815/lead-alpamayo-pai_matrix_floodedgroups_balanced_6400`. Each dataset card states its composition, construction and evaluation-route overlap. Route-level records, step logs and trainer artifacts are archived at [[PENDING: archive DOI]].
+
+**Code availability.** The primary analysis is `scripts/evaluation/compute_paper_tables.py`, run unmodified at the pre-specification commit; its output is kept as the confirmatory record. All other analyses in this paper are produced by `scripts/evaluation/paper_reanalysis.py`, which writes a manifest containing every reported number. Both scripts are in the project repository at commit [[PENDING: commit hash]]. The script cited in the previous version (`scripts/common/evaluate_confirmatory_plan.py`) was never committed and is no longer used. Fine-tuning follows the open-source Alpamayo recipe (`NVlabs/alpamayo-recipes`, seed 42) [20].
+
+**AI assistance disclosure.** Generative AI tools were used for prose editing, equation formatting, writing the re-analysis scripts, checking statistical tables and bibliography entries against logs and publisher records, and drafting this revision. All experimental designs, code, numerical results and conclusions were checked by the authors.
+
+
+References
+
+[1] Physical Intelligence, K. Black, N. Brown, J. Darpinian, K. Dhabalia, D. Driess, et al., "π0.5: a Vision-Language-Action Model with Open-World Generalization," arXiv preprint arXiv:2504.16054, Apr. 2025.
+
+[2] NVIDIA, "Alpamayo-R1: Bridging Reasoning and Action Prediction for Generalizable Autonomous Driving in the Long Tail," arXiv preprint arXiv:2511.00088, 2025.
+
+[3] X. Jia, Z. Yang, Q. Li, Z. Zhang, and J. Yan, "Bench2Drive: Towards multi-ability benchmarking of closed-loop end-to-end autonomous driving," in Advances in Neural Information Processing Systems (NeurIPS), vol. 37, 2024, pp. 819–844.
+
+[4] Y. Hu et al., "Planning-oriented Autonomous Driving," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Vancouver, BC, Canada, 2023, pp. 17853–17862.
+
+[5] B. Jiang et al., "VAD: Vectorized Scene Representation for Efficient Autonomous Driving," in Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), 2023, pp. 8306–8316.
+
+[6] C. Sima et al., "DriveLM: Driving with Graph Visual Question Answering," in Computer Vision – ECCV 2024, Cham, Switzerland: Springer, 2024, pp. 256–274, doi: 10.1007/978-3-031-72943-0_15.
+
+[7] H. Shao, Y. Hu, L. Wang, G. Song, S. L. Waslander, Y. Liu, and H. Li, "LMDrive: Closed-Loop End-to-End Driving with Large Language Models," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2024, pp. 15120–15130.
+
+[8] Y. Lipman, R. T. Q. Chen, H. Ben-Hamu, M. Nickel, and M. Le, "Flow Matching for Generative Modeling," in Proc. Int. Conf. Learn. Represent. (ICLR), 2023.
+
+[9] A. Dosovitskiy, G. Ros, F. Codevilla, A. Lopez, and V. Koltun, "CARLA: An open urban driving simulator," in Proc. 1st Annu. Conf. Robot Learning (CoRL), 2017, pp. 1–16.
+
+[10] L. Nguyen, M. Fauth, B. Jaeger, D. Dauner, M. Igl, A. Geiger, and K. Chitta, "LEAD: Minimizing Learner–Expert Asymmetry in End-to-End Driving," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2026, arXiv:2512.20563.
+
+[11] H. Caesar, V. Bankiti, A. H. Lang, S. Vora, V. E. Liong, Q. Xu, A. Krishnan, Y. Pan, G. Baldan, and O. Beijbom, "nuScenes: A multimodal dataset for autonomous driving," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2020, pp. 11621–11631.
+
+[12] F. Codevilla, E. Santana, A. M. López, and A. Gaidon, "Exploring the Limitations of Behavior Cloning for Autonomous Driving," in Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), 2019, pp. 9329–9338.
+
+[13] P. de Haan, D. Jayaraman, and S. Levine, "Causal Confusion in Imitation Learning," in Advances in Neural Information Processing Systems (NeurIPS), vol. 32, 2019, pp. 11698–11709.
+
+[14] Y. Liang, H. Chen, Z. Zhang, S. Han, and Z. Liu, "ParoQuant: Pairwise Rotation Quantization for Efficient Reasoning LLM Inference," in Proc. Int. Conf. Learn. Represent. (ICLR), 2026, arXiv:2511.10645.
+
+[15] Z. Li, Y. Liang, H. Zhang, J. Chen, Y. Liang, and Z. Liu, "FlashDrive: Flash Vision-Language-Action Inference for Autonomous Driving," arXiv preprint arXiv:2608.12932, 2026.
+
+[16] S. Ross, G. J. Gordon, and J. A. Bagnell, "A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning," in Proceedings of the Fourteenth International Conference on Artificial Intelligence and Statistics (AISTATS), PMLR, vol. 15, 2011, pp. 627–635.
+
+[17] J.-T. Zhai, Z. Feng, J. Du, Y. Mao, J.-J. Liu, Z. Tan, Y. Zhang, X. Ye, and J. Wang, "Rethinking the Open-Loop Evaluation of End-to-End Autonomous Driving in nuScenes," arXiv preprint arXiv:2305.10430, 2023.
+
+[18] Z. Li, Z. Yu, S. Lan, J. Li, J. Kautz, T. Lu, and J. M. Álvarez, "Is Ego Status All You Need for Open-Loop End-to-End Autonomous Driving?" in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2024, pp. 14864–14873.
+
+[19] NVIDIA Research (NVlabs), "Alpamayo 1.5 (Alpamayo-1.5-10B): Open-Source Vision-Language-Action Driving Model and Codebase," GitHub and HuggingFace Repository (`NVlabs/alpamayo1.5`, `nvidia/Alpamayo-1.5-10B`), Mar. 2026.
+
+[20] R. Tian, Y. Wang, et al., "Alpamayo Post-Training Recipes: Supervised Fine-Tuning (SFT) and Reinforcement Learning for Reasoning VLA Models," NVIDIA Research (`NVlabs/alpamayo-recipes`), Apr.–May 2026.
+
+[21] A. Prakash, K. Chitta, and A. Geiger, "Multi-Modal Fusion Transformer for End-to-End Autonomous Driving," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021, pp. 7077–7087.
+
+[22] Z. Zhang, A. Liniger, D. Dai, F. Yu, and L. Van Gool, "End-to-End Urban Driving by Imitating a Reinforcement Learning Coach," in Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV), 2021, arXiv:2108.08265.
+
+[23] Z. Li, K. Li, et al., "Hydra-MDP: End-to-end Multimodal Planning with Multi-target Hydra-Distillation," arXiv preprint arXiv:2406.06978, 2024.
+
+[24] K. Renz, L. Chen, E. Arani, and O. Sinavski, "SimLingo: Vision-Only Closed-Loop Autonomous Driving with Language-Action Alignment," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025, arXiv:2503.09594.
+
+[25] C. Wen, J. Lin, T. Darrell, D. Jayaraman, and Y. Gao, "Fighting Copycat Agents in Behavioral Cloning from Observation Histories," in Advances in Neural Information Processing Systems (NeurIPS), vol. 33, 2020, pp. 2564–2575.
+
+[26] K. Black et al. (Physical Intelligence), "π0: A Vision-Language-Action Flow Model for General Robot Control," arXiv preprint arXiv:2410.24164, 2024.
+
+[27] M. Bansal, A. Krizhevsky, and A. Ogale, "ChauffeurNet: Learning to Drive by Imitating the Best and Synthesizing the Worst," in Proceedings of Robotics: Science and Systems XV (RSS), 2019, doi: 10.15607/RSS.2019.XV.031.
+
+[28] C. Wen, J. Lin, J. Qian, Y. Gao, and D. Jayaraman, "Keyframe-Focused Visual Imitation Learning," in Proceedings of the 38th International Conference on Machine Learning (ICML), PMLR, vol. 139, 2021, arXiv:2106.06452.
+
+[29] C. Chi et al., "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion," in Proceedings of Robotics: Science and Systems XIX (RSS), 2023, arXiv:2303.04137.
+
+[30] B. Liao et al., "DiffusionDrive: Truncated Diffusion Model for End-to-End Autonomous Driving," in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025, pp. 12037–12047.
+
+[31] A. Tong, K. Fatras, N. Malkin, et al., "Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport," Transactions on Machine Learning Research (TMLR), 2024, arXiv:2302.00482.
+
+[32] X. Liu, C. Gong, and Q. Liu, "Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow," in Proc. Int. Conf. Learn. Represent. (ICLR), 2023, arXiv:2209.03003.
