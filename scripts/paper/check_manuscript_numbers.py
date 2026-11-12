@@ -22,6 +22,12 @@ DEFAULT_SOURCES = [ROOT / "docs/provenance/paper_reanalysis_manifest.json",
 UNIT_WORDS = ["routes", "route", "steps", "step", "models", "model", "tests", "test", "seeds", "seed",
               "km/h", "Hz", "m", "s", "epochs", "epoch"]
 YEARS = range(2019, 2028)
+# Constants and sums that no analysis output contains: (token, text that must be on the same line, reason).
+ALLOW = [
+    ("220", "220-route", "size of the full Bench2Drive suite"),
+    ("−4.0", "point estimate ≤", "threshold of the pre-registered decision rule"),
+    ("−3.89", "gate-active bands together", "sum of two reported band differences (−3.11 and −0.78)"),
+]
 
 RULES = """\
 Scope: text from the line matching '^4\\. [A-Z]' up to the line starting 'References';
@@ -35,6 +41,7 @@ Ignored tokens:
   4. route ids (the 44 in CANONICAL_44, or any number right after the word Route/route)
   5. integers < 100 directly followed by one of: @UNITS@
   6. digits glued to letters/hyphens (model names such as Golden-6400, W4A8)
+  7. the constants listed in ALLOW (token plus required words on the same line)
 Supported if a source value s, |s|, 100*s or 100*|s| rounds to the token at its printed
   precision (d decimals -> round to d decimals; scientific -> 2 significant digits).
 Exit status: 1 if any token is unsupported, else 0.
@@ -125,6 +132,9 @@ def ignore_reason(line, m, tok, val, d, sci, route_ids):
         return "small integer + unit"
     if re.search(r"[A-Za-z]-$", pre):
         return "glued to name"
+    for t, needle, reason in ALLOW:
+        if tok == t and needle in line:
+            return f"allowed constant: {reason}"
     return None
 
 
