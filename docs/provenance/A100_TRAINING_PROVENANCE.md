@@ -75,7 +75,30 @@ The training splits are **not** route-disjoint from Bench2Drive. Each dataset RE
 
 40 of 581 training routes overlap the full evaluation set and 13 overlap the 44-route subset. These are lower bounds (39 log names could not be resolved to a route). The overlapping subset routes belong to the scenarios AccidentTwoWays, ConstructionObstacleTwoWays, ControlLoss, EnterActorFlow, EnterActorFlowV2, OppositeVehicleTakingPriority, T_Junction and VehicleTurningRoute. The shared validation split has no overlap (153 samples were removed for that reason).
 
-The exact mapping from these training routes to evaluation route ids needs `lead2hipad/eval/gate_validation_lead.json`, which is not on this machine. As an interim check, H2 was repeated without the seven canonical routes whose scenario type appears in the overlap list (1852, 1825, 3561, 2201, 2127, 26458, 2144): −7.74 pp, 95 % BCa CI [−13.92, −2.36], Wilcoxon p = 0.00046 (N = 37), against −8.06 pp on all 44.
+**Exact mapping to the 44 canonical routes** (computed on 12 Nov 2026 from `gate_validation_lead.json`, `audit_curation_matrix.route_key` and each cell's `annotations_train.json`; result in `train_eval_overlap_canonical44.json`). The gate flags 69 training routes, which touch 57 evaluation route ids, 11 of them canonical: 1852, 2513, 1825, 2286, 23901, 23695, 2790, 2283, 23771, 3464, 2164. Training samples that are actually in the Matrix cells touch seven of those:
+
+| Canonical eval route (scenario) | golden_1600 | flooded_1600 | golden_6400 | flooded_6400 |
+|---|---|---|---|---|
+| 1852 (AccidentTwoWays) | 1 | 2 | 3 | 7 |
+| 1825 (ConstructionObstacleTwoWays) | 2 | 4 | 6 | 13 |
+| 2286 (HighwayCutIn) | 6 | 2 | 21 | 15 |
+| 23901 (InterurbanActorFlow) | 1 | 1 | 4 | 4 |
+| 23695 (InterurbanAdvancedActorFlow) | 1 | 1 | 4 | 4 |
+| 3464 (VehicleOpensDoorTwoWays) | 5 | 7 | 23 | 38 |
+| 2164 (VehicleTurningRoutePedestrian) | 4 | 2 | 17 | 6 |
+| Samples touching any canonical route | 20 | 19 | 78 | 87 |
+
+(The dataset READMEs report 91 and 72 samples for a "44-route main-test subset"; that subset file is not the canonical list used in the paper, so the counts differ.) Unresolved log names: 25 to 117 samples per cell, counted as non-overlapping.
+
+Sensitivity of the two primary hypotheses to excluding overlapped routes:
+
+| Routes | H2: Golden-6400 minus matched Flooded-6400, standstill (pp) | H1: Golden-1600 minus Base, Driving Score |
+|---|---|---|
+| all 44 | −8.06, CI [−15.08, −1.25], p = 0.00071 | +11.06, CI [2.62, 19.71], p = 0.0076 |
+| without the 7 routes touched by Matrix training samples (N = 37) | −7.23, CI [−15.31, +0.66], p = 0.0065 | +13.67, CI [4.90, 23.11], p = 0.0065 |
+| without all 11 gate-flagged canonical routes (N = 33) | −7.70, CI [−16.59, +1.20], p = 0.016 | +15.79, CI [7.90, 25.92], p = 0.0038 |
+
+On non-overlapping routes the H2 point estimate is essentially unchanged and the Wilcoxon test remains significant, but the BCa interval reaches zero with the smaller N. H1 is not driven by the overlapped routes. (An earlier interim check in this file used scenario type as a proxy and is superseded by this table.)
 
 ## Other facts from the dataset READMEs and the build script
 
