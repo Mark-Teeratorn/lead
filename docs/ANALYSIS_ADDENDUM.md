@@ -96,7 +96,7 @@ Post hoc and exploratory. No new runs; existing per-step logs only (`predicted_t
 - *resumed, long*: ends before the last logged step, 200 steps or longer;
 - *terminal, 60 s*: runs to the last logged step and is at least 1,190 steps long (the route was ended by the 60 s rule);
 - *terminal, other*: runs to the last logged step, shorter than 1,190 steps.
-Standstill steps outside any episode (runs under 1 s) are reported as *brief*. Per route and model, standstill time in each class is expressed as a percentage of the route's logged steps, so the classes add up to the standstill fraction of Section 1. Also reported: episodes per route, median episode duration, and within each class the share of steps with L < 0.64 m (the plan itself is to stay), 0.64 ≤ L < 2.0 m, and L ≥ 2.0 m (the plan is to move while the vehicle does not).
+An episode that both begins at the first logged step and runs to the last one is classed as terminal, not as start (clarification added 13 November, 22:50, before any episode statistic was computed). Standstill steps outside any episode (runs under 1 s) are reported as *brief*. Per route and model, standstill time in each class is expressed as a percentage of the route's logged steps, so the classes add up to the standstill fraction of Section 1. Also reported: episodes per route, median episode duration, and within each class the share of steps with L < 0.64 m (the plan itself is to stay), 0.64 ≤ L < 2.0 m, and L ≥ 2.0 m (the plan is to move while the vehicle does not).
 
 Comparisons: paired Golden − Flooded difference of standstill time per class (mean, BCa interval), for the default controller (run 1; run 2 and the two-run mean when available) and for the gate-off controller.
 
