@@ -11506,7 +11506,7 @@
    "model_matrix_flooded_6400_rep1": 8,
    "model_matrix_golden_6400_run2": 0,
    "model_matrix_flooded_6400_run2": 0,
-   "model_matrix_golden_6400_nogate": 0,
+   "model_matrix_golden_6400_nogate": 20,
    "model_matrix_flooded_6400_nogate": 44,
    "base_run2": 0,
    "model_matrix_fgbalanced_6400": 0
@@ -11534,7 +11534,28 @@
    ],
    "model_matrix_golden_6400_run2": [],
    "model_matrix_flooded_6400_run2": [],
-   "model_matrix_golden_6400_nogate": [],
+   "model_matrix_golden_6400_nogate": [
+    "17752",
+    "1790",
+    "1825",
+    "1852",
+    "2084",
+    "2201",
+    "2204",
+    "2283",
+    "2286",
+    "23687",
+    "23695",
+    "23771",
+    "23901",
+    "2513",
+    "2534",
+    "2790",
+    "3086",
+    "3436",
+    "3540",
+    "3561"
+   ],
    "model_matrix_flooded_6400_nogate": [
     "14194",
     "14842",
@@ -12607,10 +12628,286 @@
   },
   "(1) gate-off minus default (run1), per model": {
    "Golden-6400": {
-    "n_routes": 0,
+    "n_routes": 20,
     "partial": true,
-    "label": "PARTIAL: 0/44 routes usable",
-    "routes": []
+    "label": "PARTIAL: 20/44 routes usable",
+    "routes": [
+     "2534",
+     "1852",
+     "2204",
+     "2513",
+     "1825",
+     "3561",
+     "3086",
+     "17752",
+     "2201",
+     "3540",
+     "1790",
+     "3436",
+     "2286",
+     "23687",
+     "23901",
+     "23695",
+     "2790",
+     "2283",
+     "23771",
+     "2084"
+    ],
+    "metrics": {
+     "standstill_pct_v<0.1": {
+      "n": 20,
+      "mean_first": 26.807936743748154,
+      "mean_second": 24.62482322876658,
+      "mean_diff": 2.1831135149815792,
+      "n_first_greater": 10,
+      "n_first_less": 10,
+      "n_tie": 0,
+      "bca95": [
+       -5.432881063188391,
+       9.598810435461333
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 84.0,
+       "p": 0.4523754119873047,
+       "p_approx": 0.43304828842793475,
+       "p_exact": 0.4523754119873047,
+       "rank_biserial": 0.2
+      }
+     },
+     "standstill_pct_v<0.5": {
+      "n": 20,
+      "mean_first": 32.247721202642126,
+      "mean_second": 29.40703959268808,
+      "mean_diff": 2.8406816099540437,
+      "n_first_greater": 11,
+      "n_first_less": 9,
+      "n_tie": 0,
+      "bca95": [
+       -3.6798289657613776,
+       10.420291971834716
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 75.0,
+       "p": 0.2773551940917969,
+       "p_approx": 0.26272224684071965,
+       "p_exact": 0.2773551940917969,
+       "rank_biserial": 0.2857142857142857
+      }
+     },
+     "standstill_pct_v<1.0": {
+      "n": 20,
+      "mean_first": 38.496640427677576,
+      "mean_second": 35.36735361357088,
+      "mean_diff": 3.1292868141067105,
+      "n_first_greater": 13,
+      "n_first_less": 7,
+      "n_tie": 0,
+      "bca95": [
+       -2.970337869418756,
+       9.590729143791197
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 66.0,
+       "p": 0.15364646911621094,
+       "p_approx": 0.14539977506508558,
+       "p_exact": 0.15364646911621094,
+       "rank_biserial": 0.37142857142857144
+      }
+     },
+     "mean_speed_mps": {
+      "n": 20,
+      "mean_first": 1.9440965947511781,
+      "mean_second": 2.07580184156963,
+      "mean_diff": -0.1317052468184512,
+      "n_first_greater": 6,
+      "n_first_less": 14,
+      "n_tie": 0,
+      "bca95": [
+       -0.32273504540343195,
+       0.07585159755531322
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 51.0,
+       "p": 0.04405403137207031,
+       "p_approx": 0.04380372353657391,
+       "p_exact": 0.04405403137207031,
+       "rank_biserial": -0.5142857142857142
+      }
+     },
+     "route_completion": {
+      "n": 20,
+      "mean_first": 83.855,
+      "mean_second": 84.928,
+      "mean_diff": -1.073,
+      "n_first_greater": 5,
+      "n_first_less": 4,
+      "n_tie": 11,
+      "bca95": [
+       -9.330858151868235,
+       6.083860119496209
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 11,
+       "statistic": 22.0,
+       "p": 0.9527650219907529,
+       "p_approx": 0.9527650219907529,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": -0.022222222222222223
+      }
+     },
+     "driving_score": {
+      "n": 20,
+      "mean_first": 45.2311332,
+      "mean_second": 51.8729244,
+      "mean_diff": -6.641791200000003,
+      "n_first_greater": 8,
+      "n_first_less": 10,
+      "n_tie": 2,
+      "bca95": [
+       -19.758794721525067,
+       5.041203502380524
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 2,
+       "statistic": 62.0,
+       "p": 0.30587354826583746,
+       "p_approx": 0.30587354826583746,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": -0.27485380116959063
+      }
+     },
+     "collision_events": {
+      "n": 20,
+      "mean_first": 1.45,
+      "mean_second": 1.2,
+      "mean_diff": 0.25,
+      "n_first_greater": 6,
+      "n_first_less": 6,
+      "n_tie": 8,
+      "bca95": [
+       -0.3,
+       0.9
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 8,
+       "statistic": 31.5,
+       "p": 0.542303507343371,
+       "p_approx": 0.542303507343371,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.19230769230769232
+      }
+     },
+     "collision_events_vehicle": {
+      "n": 20,
+      "mean_first": 1.25,
+      "mean_second": 1.1,
+      "mean_diff": 0.15,
+      "n_first_greater": 5,
+      "n_first_less": 6,
+      "n_tie": 9,
+      "bca95": [
+       -0.45,
+       0.8
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 9,
+       "statistic": 29.0,
+       "p": 0.716689022378584,
+       "p_approx": 0.716689022378584,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.12121212121212122
+      }
+     },
+     "collision_events_pedestrian": {
+      "n": 20,
+      "mean_first": 0.05,
+      "mean_second": 0.05,
+      "mean_diff": 0.0,
+      "n_first_greater": 0,
+      "n_first_less": 0,
+      "n_tie": 20,
+      "bca95": {
+       "status": "not_computable",
+       "reason": "all paired differences identical"
+      },
+      "wilcoxon": {
+       "n_zero_differences": 20,
+       "status": "not_computable",
+       "reason": "all differences are zero"
+      }
+     },
+     "collision_events_layout": {
+      "n": 20,
+      "mean_first": 0.15,
+      "mean_second": 0.05,
+      "mean_diff": 0.1,
+      "n_first_greater": 3,
+      "n_first_less": 1,
+      "n_tie": 16,
+      "bca95": [
+       -0.15,
+       0.25
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 16,
+       "statistic": 2.5,
+       "p": 0.31731050786291415,
+       "p_approx": 0.31731050786291415,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.5
+      }
+     },
+     "n_steps": {
+      "n": 20,
+      "mean_first": 1291.65,
+      "mean_second": 1278.7,
+      "mean_diff": 12.95,
+      "n_first_greater": 12,
+      "n_first_less": 7,
+      "n_tie": 1,
+      "bca95": [
+       -290.1251647038496,
+       291.073757509017
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 1,
+       "statistic": 73.0,
+       "p": 0.3759797524564171,
+       "p_approx": 0.3759797524564171,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.23157894736842105
+      }
+     },
+     "ended_by_60s_rule": {
+      "n": 20,
+      "mean_first": 0.1,
+      "mean_second": 0.1,
+      "mean_diff": 0.0,
+      "n_first_greater": 1,
+      "n_first_less": 1,
+      "n_tie": 18,
+      "bca95": [
+       -0.2,
+       0.1
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 18,
+       "statistic": 1.5,
+       "p": 1.0,
+       "p_approx": 1.0,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.0
+      }
+     }
+    },
+    "n_ended_by_60s_rule": {
+     "gate_off": 2,
+     "default": 2
+    }
    },
    "Flooded-6400-Matched": {
     "n_routes": 44,
@@ -12925,7 +13222,7 @@
   "(2) Golden minus Flooded, gate-off": {
    "status": "pending",
    "have": {
-    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_golden_6400_nogate": 20,
     "model_matrix_flooded_6400_nogate": 44
    },
    "need": {
@@ -12936,7 +13233,7 @@
   "(3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1": {
    "status": "pending",
    "have": {
-    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_golden_6400_nogate": 20,
     "model_matrix_flooded_6400_nogate": 44
    },
    "need": {
@@ -12947,7 +13244,7 @@
   "(3) interaction, default = mean of run1 and run2": {
    "status": "pending",
    "have": {
-    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_golden_6400_nogate": 20,
     "model_matrix_flooded_6400_nogate": 44,
     "model_matrix_golden_6400_run2": 0,
     "model_matrix_flooded_6400_run2": 0
@@ -12973,7 +13270,7 @@
   "(5) common-window distance (m)": {
    "status": "pending",
    "have": {
-    "model_matrix_golden_6400_nogate": 0,
+    "model_matrix_golden_6400_nogate": 20,
     "model_matrix_flooded_6400_nogate": 44
    },
    "need": {
@@ -12983,8 +13280,26 @@
   },
   "(6) gate-off logged fields": {
    "Golden-6400": {
-    "n_routes": 0,
-    "label": "PARTIAL: 0/44 routes"
+    "n_routes": 20,
+    "label": "PARTIAL: 20/44 routes",
+    "pct_of_all_steps_gate_would_fire": 4.047166738921392,
+    "pct_of_standstill_steps_gate_would_fire": 10.699985327288589,
+    "band_split_logged_extent": {
+     "pct_of_all_steps_standstill_and_in_band": {
+      "L<0.64": 0.6871651230199839,
+      "0.64<=L<1.5": 1.8098789258094485,
+      "1.5<=L<2.0 & v<0.5": 1.3440128456300684,
+      "gate inactive": 22.966879849288652
+     },
+     "share_of_standstill_steps_in_band_pct": {
+      "L<0.64": 1.7784737740374699,
+      "0.64<=L<1.5": 4.95502889394022,
+      "1.5<=L<2.0 & v<0.5": 3.9664826593108975,
+      "gate inactive": 89.3000146727114
+     }
+    },
+    "max_abs_diff_logged_extent_vs_waypoint_chord_m": 0.19723768915606854,
+    "n_steps_gate_would_fire_disagrees_with_rule_on_logged_extent": 0
    },
    "Flooded-6400-Matched": {
     "n_routes": 44,
@@ -13009,7 +13324,7 @@
     "n_steps_gate_would_fire_disagrees_with_rule_on_logged_extent": 0
    }
   },
-  "status_line": "pending: 5 of 5 parts ((2) Golden minus Flooded, gate-off, (3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1, (3) interaction, default = mean of run1 and run2, (4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1), (5) common-window distance (m)); (1) and (6) partial: Golden 0/44, Flooded 44/44"
+  "status_line": "pending: 5 of 5 parts ((2) Golden minus Flooded, gate-off, (3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1, (3) interaction, default = mean of run1 and run2, (4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1), (5) common-window distance (m)); (1) and (6) partial: Golden 20/44, Flooded 44/44"
  },
  "Q": {
   "base_run2_status": {
@@ -13569,5 +13884,539 @@
    }
   },
   "status_line": "pending: 18 of 18 parts (Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 44 routes, Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 33 routes (excl. 11 gate-flagged routes), Balanced minus Flooded-6400-Matched run1 | 44 routes, Balanced minus Flooded-6400-Matched run1 | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched run1 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Flooded-6400-Matched run2 | 44 routes, Balanced minus Flooded-6400-Matched run2 | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched run2 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 (mean of run1 and run2) | 44 routes, Balanced minus Golden-6400 (mean of run1 and run2) | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 (mean of run1 and run2) | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 run1 | 44 routes, Balanced minus Golden-6400 run1 | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 run1 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 run2 | 44 routes, Balanced minus Golden-6400 run2 | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 run2 | 33 routes (excl. 11 gate-flagged routes))"
+ },
+ "T": {
+  "label": "post hoc, exploratory; section 7a was first looked at on a partial route set before it was written down",
+  "definitions": {
+   "episode": "Maximal runs of consecutive logged steps with speed < 0.1 m/s as (first, end_exclusive, class).\nRuns under 20 steps are 'brief'. A run reaching the last step is terminal even if it begins at step 0.",
+   "classes": {
+    "start": "begins at the first logged step",
+    "resumed_short": "ends before the last step, < 200 steps",
+    "resumed_long": "ends before the last step, >= 200 steps",
+    "terminal_60s": "runs to the last step, >= 1190 steps",
+    "terminal_other": "runs to the last step, < 1190 steps",
+    "brief": "run under 20 steps"
+   },
+   "freeze_sum": [
+    "resumed_long",
+    "terminal_60s"
+   ],
+   "wait_sum": [
+    "start",
+    "resumed_short",
+    "brief"
+   ],
+   "terminal_60s_note": "counted from the step log; wider than the status-based ended_by_60s_rule of analysis P, which misses routes whose final status is \"Agent got blocked\" or \"Completed\" although the log ends with 1,200 or more standstill steps"
+  },
+  "golden_minus_flooded": {
+   "default controller, run1": {
+    "plan_rate_L<1.5_pct": {
+     "n": 44,
+     "mean_first": 2.4711111875846017,
+     "mean_second": 13.03418588338493,
+     "mean_diff": -10.563074695800331,
+     "n_first_greater": 2,
+     "n_first_less": 42,
+     "n_tie": 0,
+     "bca95": [
+      -16.016503536964965,
+      -6.773241941562753
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 36.0,
+      "p": 5.659330781782046e-10,
+      "p_approx": 8.479394724853e-08,
+      "p_exact": 5.659330781782046e-10,
+      "rank_biserial": -0.9272727272727272
+     }
+    },
+    "plan_rate_L<0.64_pct": {
+     "n": 44,
+     "mean_first": 0.7644769047553449,
+     "mean_second": 8.023607345969754,
+     "mean_diff": -7.25913044121441,
+     "n_first_greater": 2,
+     "n_first_less": 41,
+     "n_tie": 1,
+     "bca95": [
+      -11.311356697136867,
+      -4.568959024004381
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 1,
+      "statistic": 27.0,
+      "p": 7.2272146945626e-08,
+      "p_approx": 7.2272146945626e-08,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.9429175475687104
+     }
+    },
+    "plan_rate_L<2.0_pct": {
+     "n": 44,
+     "mean_first": 3.7573650935685747,
+     "mean_second": 15.211199454554588,
+     "mean_diff": -11.45383436098601,
+     "n_first_greater": 3,
+     "n_first_less": 41,
+     "n_tie": 0,
+     "bca95": [
+      -17.313867050389636,
+      -7.3030314134229455
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 51.0,
+      "p": 4.051571522722952e-09,
+      "p_approx": 2.200312932128657e-07,
+      "p_exact": 4.051571522722952e-09,
+      "rank_biserial": -0.896969696969697
+     }
+    },
+    "standstill_pct": {
+     "n": 44,
+     "mean_first": 25.714582138059143,
+     "mean_second": 33.776134975367206,
+     "mean_diff": -8.061552837308053,
+     "n_first_greater": 8,
+     "n_first_less": 36,
+     "n_tie": 0,
+     "bca95": [
+      -15.07625363450037,
+      -1.2499178480128406
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 213.0,
+      "p": 0.0007092337563108231,
+      "p_approx": 0.0009983393445953807,
+      "p_exact": 0.0007092337563108231,
+      "rank_biserial": -0.5696969696969697
+     }
+    },
+    "time_start_pct": {
+     "n": 44,
+     "mean_first": 0.2802538344932527,
+     "mean_second": 0.8995281170417865,
+     "mean_diff": -0.6192742825485338,
+     "n_first_greater": 3,
+     "n_first_less": 16,
+     "n_tie": 25,
+     "bca95": [
+      -0.9930720259310587,
+      -0.2669514845491377
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 25,
+      "statistic": 23.0,
+      "p": 0.0037622518256999957,
+      "p_approx": 0.0037622518256999957,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.7578947368421053
+     }
+    },
+    "time_resumed_short_pct": {
+     "n": 44,
+     "mean_first": 5.207248892419965,
+     "mean_second": 12.003901429679486,
+     "mean_diff": -6.7966525372595195,
+     "n_first_greater": 7,
+     "n_first_less": 30,
+     "n_tie": 7,
+     "bca95": [
+      -10.060349432078725,
+      -3.6774033566392976
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 7,
+      "statistic": 109.0,
+      "p": 0.0002537706829014447,
+      "p_approx": 0.0002537706829014447,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.689900426742532
+     }
+    },
+    "time_resumed_long_pct": {
+     "n": 44,
+     "mean_first": 4.10643495696397,
+     "mean_second": 2.7419078385291282,
+     "mean_diff": 1.3645271184348426,
+     "n_first_greater": 4,
+     "n_first_less": 4,
+     "n_tie": 36,
+     "bca95": [
+      -2.876463290823015,
+      6.886652285559426
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 36,
+      "statistic": 13.0,
+      "p": 0.4838398513935682,
+      "p_approx": 0.4838398513935682,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.2777777777777778
+     }
+    },
+    "time_terminal_60s_pct": {
+     "n": 44,
+     "mean_first": 6.4286028094612995,
+     "mean_second": 11.40731557081975,
+     "mean_diff": -4.978712761358451,
+     "n_first_greater": 4,
+     "n_first_less": 6,
+     "n_tie": 34,
+     "bca95": [
+      -12.135593544238425,
+      0.9366146250350609
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 34,
+      "statistic": 16.0,
+      "p": 0.24112136827741826,
+      "p_approx": 0.24112136827741826,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.41818181818181815
+     }
+    },
+    "time_terminal_other_pct": {
+     "n": 44,
+     "mean_first": 0.0,
+     "mean_second": 0.0,
+     "mean_diff": 0.0,
+     "n_first_greater": 0,
+     "n_first_less": 0,
+     "n_tie": 44,
+     "bca95": {
+      "status": "not_computable",
+      "reason": "all paired differences identical"
+     },
+     "wilcoxon": {
+      "n_zero_differences": 44,
+      "status": "not_computable",
+      "reason": "all differences are zero"
+     }
+    },
+    "time_brief_pct": {
+     "n": 44,
+     "mean_first": 9.692041644720662,
+     "mean_second": 6.723482019297053,
+     "mean_diff": 2.9685596254236084,
+     "n_first_greater": 29,
+     "n_first_less": 15,
+     "n_tie": 0,
+     "bca95": [
+      1.558998758003605,
+      4.463691629226961
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 215.0,
+      "p": 0.0007802155257650156,
+      "p_approx": 0.0010844288164801696,
+      "p_exact": 0.0007802155257650156,
+      "rank_biserial": 0.5656565656565656
+     }
+    },
+    "time_freeze_sum_pct": {
+     "n": 44,
+     "mean_first": 10.53503776642527,
+     "mean_second": 14.149223409348878,
+     "mean_diff": -3.614185642923608,
+     "n_first_greater": 5,
+     "n_first_less": 8,
+     "n_tie": 31,
+     "bca95": [
+      -11.933911847542634,
+      3.8151577790149744
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 31,
+      "statistic": 32.0,
+      "p": 0.3454475304692258,
+      "p_approx": 0.3454475304692258,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.2967032967032967
+     }
+    },
+    "time_wait_sum_pct": {
+     "n": 44,
+     "mean_first": 15.179544371633881,
+     "mean_second": 19.626911566018325,
+     "mean_diff": -4.447367194384445,
+     "n_first_greater": 10,
+     "n_first_less": 34,
+     "n_tie": 0,
+     "bca95": [
+      -6.885031551375222,
+      -1.7976848133581362
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 206.0,
+      "p": 0.0005044429769895942,
+      "p_approx": 0.000744388839501383,
+      "p_exact": 0.0005044429769895942,
+      "rank_biserial": -0.5838383838383838
+     }
+    },
+    "episodes_per_route": {
+     "n": 44,
+     "mean_first": 2.272727272727273,
+     "mean_second": 5.2272727272727275,
+     "mean_diff": -2.9545454545454546,
+     "n_first_greater": 5,
+     "n_first_less": 30,
+     "n_tie": 9,
+     "bca95": [
+      -4.25,
+      -1.5909090909090908
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 9,
+      "statistic": 80.5,
+      "p": 0.00011980527652211709,
+      "p_approx": 0.00011980527652211709,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.7444444444444445
+     }
+    }
+   },
+   "default controller, run2": {
+    "status": "pending",
+    "have": {
+     "model_matrix_golden_6400_run2": 0,
+     "model_matrix_flooded_6400_run2": 0
+    },
+    "need": {
+     "model_matrix_golden_6400_run2": 44,
+     "model_matrix_flooded_6400_run2": 44
+    }
+   },
+   "default controller, mean of run1 and run2": {
+    "status": "pending",
+    "have": {
+     "model_matrix_golden_6400": 44,
+     "model_matrix_golden_6400_run2": 0,
+     "model_matrix_flooded_6400": 44,
+     "model_matrix_flooded_6400_run2": 0
+    },
+    "need": {
+     "model_matrix_golden_6400": 44,
+     "model_matrix_golden_6400_run2": 44,
+     "model_matrix_flooded_6400": 44,
+     "model_matrix_flooded_6400_run2": 44
+    }
+   },
+   "gate-off controller": {
+    "status": "pending",
+    "have": {
+     "model_matrix_golden_6400_nogate": 20,
+     "model_matrix_flooded_6400_nogate": 44
+    },
+    "need": {
+     "model_matrix_golden_6400_nogate": 44,
+     "model_matrix_flooded_6400_nogate": 44
+    }
+   }
+  },
+  "descriptives": {
+   "Golden-6400 run1": {
+    "start": {
+     "n_runs": 5,
+     "median_duration_s": 1.0,
+     "steps": 103,
+     "plan_L<0.64_pct": 6.796116504854369,
+     "plan_0.64<=L<2.0_pct": 18.446601941747574,
+     "plan_L>=2.0_pct": 74.75728155339806
+    },
+    "resumed_short": {
+     "n_runs": 78,
+     "median_duration_s": 1.4,
+     "steps": 3103,
+     "plan_L<0.64_pct": 5.865291653238802,
+     "plan_0.64<=L<2.0_pct": 18.143731872381565,
+     "plan_L>=2.0_pct": 75.99097647437964
+    },
+    "resumed_long": {
+     "n_runs": 13,
+     "median_duration_s": 19.4,
+     "steps": 5222,
+     "plan_L<0.64_pct": 1.7617770968977404,
+     "plan_0.64<=L<2.0_pct": 6.913060130218307,
+     "plan_L>=2.0_pct": 91.32516277288396
+    },
+    "terminal_60s": {
+     "n_runs": 4,
+     "median_duration_s": 60.0,
+     "steps": 4800,
+     "plan_L<0.64_pct": 1.6875,
+     "plan_0.64<=L<2.0_pct": 6.416666666666666,
+     "plan_L>=2.0_pct": 91.89583333333333
+    },
+    "terminal_other": {
+     "n_runs": 0,
+     "median_duration_s": null,
+     "steps": 0,
+     "plan_L<0.64_pct": null,
+     "plan_0.64<=L<2.0_pct": null,
+     "plan_L>=2.0_pct": null
+    },
+    "brief": {
+     "n_runs": 446,
+     "median_duration_s": 0.55,
+     "steps": 4301,
+     "plan_L<0.64_pct": 2.0460358056265986,
+     "plan_0.64<=L<2.0_pct": 9.5559172285515,
+     "plan_L>=2.0_pct": 88.39804696582189
+    }
+   },
+   "Flooded-6400-Matched run1": {
+    "start": {
+     "n_runs": 18,
+     "median_duration_s": 1.125,
+     "steps": 453,
+     "plan_L<0.64_pct": 18.101545253863137,
+     "plan_0.64<=L<2.0_pct": 17.880794701986755,
+     "plan_L>=2.0_pct": 64.01766004415012
+    },
+    "resumed_short": {
+     "n_runs": 196,
+     "median_duration_s": 1.45,
+     "steps": 6519,
+     "plan_L<0.64_pct": 19.51219512195122,
+     "plan_0.64<=L<2.0_pct": 21.920539960116585,
+     "plan_L>=2.0_pct": 58.56726491793219
+    },
+    "resumed_long": {
+     "n_runs": 7,
+     "median_duration_s": 20.6,
+     "steps": 3341,
+     "plan_L<0.64_pct": 38.58126309488178,
+     "plan_0.64<=L<2.0_pct": 24.03472014366956,
+     "plan_L>=2.0_pct": 37.38401676144867
+    },
+    "terminal_60s": {
+     "n_runs": 9,
+     "median_duration_s": 60.0,
+     "steps": 10949,
+     "plan_L<0.64_pct": 35.95762170061193,
+     "plan_0.64<=L<2.0_pct": 21.58187962370993,
+     "plan_L>=2.0_pct": 42.460498675678146
+    },
+    "terminal_other": {
+     "n_runs": 0,
+     "median_duration_s": null,
+     "steps": 0,
+     "plan_L<0.64_pct": null,
+     "plan_0.64<=L<2.0_pct": null,
+     "plan_L>=2.0_pct": null
+    },
+    "brief": {
+     "n_runs": 359,
+     "median_duration_s": 0.45,
+     "steps": 3288,
+     "plan_L<0.64_pct": 5.413625304136254,
+     "plan_0.64<=L<2.0_pct": 13.777372262773724,
+     "plan_L>=2.0_pct": 80.80900243309003
+    }
+   },
+   "Golden-6400 run2": {
+    "status": "pending",
+    "have": {
+     "model_matrix_golden_6400_run2": 0
+    },
+    "need": {
+     "model_matrix_golden_6400_run2": 44
+    }
+   },
+   "Flooded-6400-Matched run2": {
+    "status": "pending",
+    "have": {
+     "model_matrix_flooded_6400_run2": 0
+    },
+    "need": {
+     "model_matrix_flooded_6400_run2": 44
+    }
+   },
+   "Golden-6400 nogate": {
+    "status": "pending",
+    "have": {
+     "model_matrix_golden_6400_nogate": 20
+    },
+    "need": {
+     "model_matrix_golden_6400_nogate": 44
+    }
+   },
+   "Flooded-6400-Matched nogate": {
+    "start": {
+     "n_runs": 16,
+     "median_duration_s": 1.0750000000000002,
+     "steps": 361,
+     "plan_L<0.64_pct": 22.99168975069252,
+     "plan_0.64<=L<2.0_pct": 16.06648199445983,
+     "plan_L>=2.0_pct": 60.94182825484764
+    },
+    "resumed_short": {
+     "n_runs": 99,
+     "median_duration_s": 1.3,
+     "steps": 4123,
+     "plan_L<0.64_pct": 23.74484598593257,
+     "plan_0.64<=L<2.0_pct": 27.819548872180448,
+     "plan_L>=2.0_pct": 48.43560514188698
+    },
+    "resumed_long": {
+     "n_runs": 5,
+     "median_duration_s": 16.0,
+     "steps": 2360,
+     "plan_L<0.64_pct": 20.127118644067796,
+     "plan_0.64<=L<2.0_pct": 18.983050847457626,
+     "plan_L>=2.0_pct": 60.889830508474574
+    },
+    "terminal_60s": {
+     "n_runs": 3,
+     "median_duration_s": 60.0,
+     "steps": 3600,
+     "plan_L<0.64_pct": 45.75,
+     "plan_0.64<=L<2.0_pct": 12.611111111111112,
+     "plan_L>=2.0_pct": 41.638888888888886
+    },
+    "terminal_other": {
+     "n_runs": 0,
+     "median_duration_s": null,
+     "steps": 0,
+     "plan_L<0.64_pct": null,
+     "plan_0.64<=L<2.0_pct": null,
+     "plan_L>=2.0_pct": null
+    },
+    "brief": {
+     "n_runs": 659,
+     "median_duration_s": 0.45,
+     "steps": 5654,
+     "plan_L<0.64_pct": 9.656880084895649,
+     "plan_0.64<=L<2.0_pct": 21.75451008135833,
+     "plan_L>=2.0_pct": 68.58860983374602
+    }
+   }
+  },
+  "prespecified_reading_run1": {
+   "reading": "mixed",
+   "standstill_diff_pp": -8.061552837308053,
+   "freeze_sum_diff_pp": -3.614185642923608,
+   "freeze_sum_bca95": [
+    -11.933911847542634,
+    3.8151577790149744
+   ],
+   "freeze_share_of_diff": 0.44832375546774583,
+   "wait_sum_diff_pp": -4.447367194384445,
+   "wait_sum_bca95": [
+    -6.885031551375222,
+    -1.7976848133581362
+   ],
+   "wait_share_of_diff": 0.5516762445322543,
+   "terminal_other_diff_pp": 0.0,
+   "rule": "freeze-type: resumed_long + terminal_60s >= 2/3 of the difference and interval excludes 0; wait-type: start + resumed_short + brief >= 2/3 and interval excludes 0; otherwise mixed",
+   "caveat": "duration and ending are proxies; the logs do not record whether a hazard was ahead"
+  },
+  "status_line": "pending: 3 of 4 parts (default controller, run2, default controller, mean of run1 and run2, gate-off controller)"
  }
 }

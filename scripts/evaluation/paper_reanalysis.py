@@ -1727,6 +1727,120 @@ def analysis_S(arms):
     return res
 
 
+EP_MIN, EP_LONG, EP_60S = 20, 200, 1190   # steps at 20 Hz: 1 s, 10 s, 59.5 s (ANALYSIS_ADDENDUM.md section 7b)
+EP_CLASSES = ['start', 'resumed_short', 'resumed_long', 'terminal_60s', 'terminal_other', 'brief']
+EP_FREEZE, EP_WAIT = ['resumed_long', 'terminal_60s'], ['start', 'resumed_short', 'brief']
+PLAN_THRESHOLDS = [1.5, 0.64, 2.0]
+
+
+def stop_episodes(rd):
+    """Maximal runs of consecutive logged steps with speed < 0.1 m/s as (first, end_exclusive, class).
+    Runs under 20 steps are 'brief'. A run reaching the last step is terminal even if it begins at step 0."""
+    ss = np.asarray(rd['speed']) < SS_V
+    n, out, i = len(ss), [], 0
+    while i < n:
+        if not ss[i]:
+            i += 1
+            continue
+        j = i
+        while j < n and ss[j]:
+            j += 1
+        ln = j - i
+        if ln < EP_MIN:
+            c = 'brief'
+        elif j == n:
+            c = 'terminal_60s' if ln >= EP_60S else 'terminal_other'
+        elif i == 0:
+            c = 'start'
+        else:
+            c = 'resumed_long' if ln >= EP_LONG else 'resumed_short'
+        out.append((i, j, c))
+        i = j
+    return out
+
+
+def episode_time_pct(rd, classes):
+    return float(sum(j - i for i, j, c in stop_episodes(rd) if c in classes) / rd['n_steps'] * 100.0)
+
+
+T_METRICS = {
+    **{f'plan_rate_L<{t}_pct': (lambda rd, t=t: pct(rd['L'] < t)) for t in PLAN_THRESHOLDS},
+    'standstill_pct': RUN_METRICS['standstill_pct'],
+    **{f'time_{c}_pct': (lambda rd, c=c: episode_time_pct(rd, [c])) for c in EP_CLASSES},
+    'time_freeze_sum_pct': lambda rd: episode_time_pct(rd, EP_FREEZE),
+    'time_wait_sum_pct': lambda rd: episode_time_pct(rd, EP_WAIT),
+    'episodes_per_route': lambda rd: float(sum(c != 'brief' for _, _, c in stop_episodes(rd))),
+}
+
+
+def episode_descriptives(arm, routes):
+    """Pooled over routes: episode counts, median duration (s) and plan state within each class."""
+    out = {}
+    for c in EP_CLASSES:
+        durs, Ls = [], []
+        for r in routes:
+            rd = arm[r]
+            for i, j, cc in stop_episodes(rd):
+                if cc == c:
+                    durs.append((j - i) / 20.0)
+                    Ls.append(np.asarray(rd['L'])[i:j])
+        Lc = np.concatenate(Ls) if Ls else np.array([])
+        out[c] = {'n_runs': len(durs), 'median_duration_s': float(np.median(durs)) if durs else None,
+                  'steps': int(len(Lc)),
+                  'plan_L<0.64_pct': pct(Lc < 0.64) if len(Lc) else None,
+                  'plan_0.64<=L<2.0_pct': pct((Lc >= 0.64) & (Lc < 2.0)) if len(Lc) else None,
+                  'plan_L>=2.0_pct': pct(Lc >= 2.0) if len(Lc) else None}
+    return out
+
+
+def analysis_T(arms):
+    """ANALYSIS_ADDENDUM.md section 7: near-stationary plan rate (7a) and stop episodes (7b).
+    Post hoc, exploratory, existing step logs only. Golden minus Flooded, paired over the 44 routes."""
+    G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
+    GN, FN = 'Golden-6400 nogate', 'Flooded-6400-Matched nogate'
+    rows = {'default controller, run1': ((G1,), (F1,)), 'default controller, run2': ((G2,), (F2,)),
+            'default controller, mean of run1 and run2': ((G1, G2), (F1, F2)), 'gate-off controller': ((GN,), (FN,))}
+    res = {'label': 'post hoc, exploratory; section 7a was first looked at on a partial route set before it was written down',
+           'definitions': {'episode': stop_episodes.__doc__.strip().replace('\n   ', ''),
+                           'classes': {'start': 'begins at the first logged step', 'resumed_short': 'ends before the last step, < 200 steps',
+                                       'resumed_long': 'ends before the last step, >= 200 steps',
+                                       'terminal_60s': 'runs to the last step, >= 1190 steps',
+                                       'terminal_other': 'runs to the last step, < 1190 steps', 'brief': 'run under 20 steps'},
+                           'freeze_sum': EP_FREEZE, 'wait_sum': EP_WAIT,
+                           'terminal_60s_note': 'counted from the step log; wider than the status-based ended_by_60s_rule of analysis P, which misses routes whose final status is "Agent got blocked" or "Completed" although the log ends with 1,200 or more standstill steps'},
+           'golden_minus_flooded': {}, 'descriptives': {}}
+    for row, (ga, fa) in rows.items():
+        p = pending(arms, [(n, CANONICAL_44) for n in ga + fa])
+        if p:
+            res['golden_minus_flooded'][row] = p
+            continue
+        res['golden_minus_flooded'][row] = {
+            k: paired(np.mean([vec(arms, n, fn, CANONICAL_44) for n in ga], axis=0),
+                      np.mean([vec(arms, n, fn, CANONICAL_44) for n in fa], axis=0)) for k, fn in T_METRICS.items()}
+    for name in (G1, F1, G2, F2, GN, FN):
+        p = pending(arms, [(name, CANONICAL_44)])
+        res['descriptives'][name] = p if p else episode_descriptives(arms[name], CANONICAL_44)
+    r1 = res['golden_minus_flooded']['default controller, run1']
+    tot = r1['standstill_pct']['mean_diff']
+    parts = sum(r1[f'time_{c}_pct']['mean_diff'] for c in EP_CLASSES)
+    assert abs(tot - parts) < 1e-6, 'episode classes do not add up to the standstill difference'
+    fz, wt = r1['time_freeze_sum_pct'], r1['time_wait_sum_pct']
+    excl = lambda p: isinstance(p.get('bca95'), list) and (p['bca95'][1] < 0 or p['bca95'][0] > 0)
+    share_f, share_w = fz['mean_diff'] / tot, wt['mean_diff'] / tot
+    reading = ('freeze-type' if share_f >= 2 / 3 and excl(fz) else
+               'wait-type' if share_w >= 2 / 3 and excl(wt) else 'mixed')
+    res['prespecified_reading_run1'] = {
+        'reading': reading, 'standstill_diff_pp': tot,
+        'freeze_sum_diff_pp': fz['mean_diff'], 'freeze_sum_bca95': fz.get('bca95'), 'freeze_share_of_diff': share_f,
+        'wait_sum_diff_pp': wt['mean_diff'], 'wait_sum_bca95': wt.get('bca95'), 'wait_share_of_diff': share_w,
+        'terminal_other_diff_pp': r1['time_terminal_other_pct']['mean_diff'],
+        'rule': 'freeze-type: resumed_long + terminal_60s >= 2/3 of the difference and interval excludes 0; '
+                'wait-type: start + resumed_short + brief >= 2/3 and interval excludes 0; otherwise mixed',
+        'caveat': 'duration and ending are proxies; the logs do not record whether a hazard was ahead'}
+    res['status_line'] = status_line(res['golden_minus_flooded'])
+    return res
+
+
 # --------------------------------------------------------------------------- report N-S
 
 def is_pending(v):
@@ -1840,6 +1954,21 @@ def render_new(man):
             L += paired_block(f'{c}, {sn}', o[sn])
     r = S['prespecified_reading_44']
     L += [f"Pre-specified reading (44 routes): {pending_str(r) if is_pending(r) else r['reading']}", '']
+    T = man['T']
+    L += ['## T. Near-stationary plans and stop episodes (Golden minus Flooded)', '', f"Status: {T['status_line']}", '', T['label'], '']
+    for row, o in T['golden_minus_flooded'].items():
+        L += paired_block(row, o, 2)
+    for name, d in T['descriptives'].items():
+        if is_pending(d):
+            L += [f'**{name}**: {pending_str(d)}', '']
+            continue
+        L += [f'**{name}** (pooled over 44 routes)', '',
+              table(['class', 'runs', 'median s', 'steps', 'L<0.64 %', '0.64<=L<2.0 %', 'L>=2.0 %'],
+                    [[c, x['n_runs'], f(x['median_duration_s'], 1), x['steps'], f(x['plan_L<0.64_pct'], 1),
+                      f(x['plan_0.64<=L<2.0_pct'], 1), f(x['plan_L>=2.0_pct'], 1)] for c, x in d.items()]), '']
+    r = T['prespecified_reading_run1']
+    L += [f"Pre-specified reading (default controller, run 1): **{r['reading']}** — freeze share {f(r['freeze_share_of_diff'], 2)}, "
+          f"wait share {f(r['wait_share_of_diff'], 2)} of {f(r['standstill_diff_pp'], 2)} pp. {r['caveat']}.", '']
     return '\n'.join(L) + '\n'
 
 
@@ -1906,6 +2035,7 @@ def main():
     man['Q'] = analysis_Q(arms, man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']['wilcoxon']['p'])
     man['R'] = analysis_R(arms, ov)
     man['S'] = analysis_S(arms)
+    man['T'] = analysis_T(arms)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man))
