@@ -662,33 +662,33 @@ All 44 routes; no subset selection.
 | collisions raw v/p/l | 53/0/4 | 47/0/2 | 39/0/5 | 56/0/1 | 30/1/6 | 42/3/1 |
 | collisions events v/p/l | 46/0/4 | 42/0/2 | 37/0/5 | 50/0/1 | 30/1/5 | 41/2/1 |
 
-Additional runs with all 44 routes usable: ['Flooded-6400-Matched nogate']
+Additional runs with all 44 routes usable: ['Golden-6400 nogate', 'Flooded-6400-Matched nogate']
 
-| metric | Flooded-6400-Matched nogate |
-|---|---|
-| mean_ds | 47.9530 |
-| mean_rc | 81.1570 |
-| mean_penalty | 0.6199 |
-| progress_km | 3.9150 |
-| odometer_km | 4.2054 |
-| collisions_raw | 53 |
-| collisions_events | 51 |
-| events_per_progress_km | 13.0268 |
-| events_per_odometer_km | 12.1273 |
-| non_timeout_infractions | 80 |
-| non_timeout_per_progress_km | 20.4342 |
-| non_timeout_per_odometer_km | 19.0233 |
-| standstill_pct | 24.5659 |
-| standstill_pct_as_compute_paper_tables | 24.5659 |
-| mean_speed_route_mean | 1.7690 |
-| mean_speed_pooled | 1.6049 |
-| moving_steer_jerk | 0.0471 |
-| hard_brake_pct | 5.1758 |
-| red_light | 2 |
-| stop_infraction | 1 |
-| outside_route_lanes | 10 |
-| vehicle_blocked | 1 |
-| min_speed_infractions | 678 |
+| metric | Golden-6400 nogate | Flooded-6400-Matched nogate |
+|---|---|---|
+| mean_ds | 45.6931 | 47.9530 |
+| mean_rc | 76.4350 | 81.1570 |
+| mean_penalty | 0.6082 | 0.6199 |
+| progress_km | 3.7673 | 3.9150 |
+| odometer_km | 4.1118 | 4.2054 |
+| collisions_raw | 54 | 53 |
+| collisions_events | 51 | 51 |
+| events_per_progress_km | 13.5377 | 13.0268 |
+| events_per_odometer_km | 12.4033 | 12.1273 |
+| non_timeout_infractions | 81 | 80 |
+| non_timeout_per_progress_km | 21.5010 | 20.4342 |
+| non_timeout_per_odometer_km | 19.6994 | 19.0233 |
+| standstill_pct | 27.4153 | 24.5659 |
+| standstill_pct_as_compute_paper_tables | 27.4153 | 24.5659 |
+| mean_speed_route_mean | 1.8533 | 1.7690 |
+| mean_speed_pooled | 1.5773 | 1.6049 |
+| moving_steer_jerk | 0.0465 | 0.0471 |
+| hard_brake_pct | 4.3835 | 5.1758 |
+| red_light | 2 | 2 |
+| stop_infraction | 1 | 1 |
+| outside_route_lanes | 9 | 10 |
+| vehicle_blocked | 2 | 1 |
+| min_speed_infractions | 638 | 678 |
 
 Manuscript mean-speed values vs the two definitions:
 
@@ -838,26 +838,26 @@ standstill_pct (primary); driving_score, route_completion, collision_events seco
 
 ## P. Gate-off controller
 
-Status: pending: 5 of 5 parts ((2) Golden minus Flooded, gate-off, (3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1, (3) interaction, default = mean of run1 and run2, (4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1), (5) common-window distance (m)); (1) and (6) partial: Golden 20/44, Flooded 44/44
+Status: pending: 2 of 5 parts ((3) interaction, default = mean of run1 and run2, (4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1))
 
-**(1) Golden-6400 gate-off minus default — PARTIAL: 20/44 routes usable**
+**(1) Golden-6400 gate-off minus default — complete (44 routes)**
 
 | comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| standstill_pct_v<0.1 | 26.808 | 24.625 | 2.183 | [-5.433, 9.599] | 84.0 | 0 | 0.4524 | 0.4524 | 0.4330 | 10/10/0 | 0.200 |
-| standstill_pct_v<0.5 | 32.248 | 29.407 | 2.841 | [-3.680, 10.420] | 75.0 | 0 | 0.2774 | 0.2774 | 0.2627 | 11/9/0 | 0.286 |
-| standstill_pct_v<1.0 | 38.497 | 35.367 | 3.129 | [-2.970, 9.591] | 66.0 | 0 | 0.1536 | 0.1536 | 0.1454 | 13/7/0 | 0.371 |
-| mean_speed_mps | 1.944 | 2.076 | -0.132 | [-0.323, 0.076] | 51.0 | 0 | 0.0441 | 0.0441 | 0.0438 | 6/14/0 | -0.514 |
-| route_completion | 83.855 | 84.928 | -1.073 | [-9.331, 6.084] | 22.0 | 11 | 0.9528 | n/a | 0.9528 | 5/4/11 | -0.022 |
-| driving_score | 45.231 | 51.873 | -6.642 | [-19.759, 5.041] | 62.0 | 2 | 0.3059 | n/a | 0.3059 | 8/10/2 | -0.275 |
-| collision_events | 1.450 | 1.200 | 0.250 | [-0.300, 0.900] | 31.5 | 8 | 0.5423 | n/a | 0.5423 | 6/6/8 | 0.192 |
-| collision_events_vehicle | 1.250 | 1.100 | 0.150 | [-0.450, 0.800] | 29.0 | 9 | 0.7167 | n/a | 0.7167 | 5/6/9 | 0.121 |
-| collision_events_pedestrian | 0.050 | 0.050 | 0.000 | n/a | n/a | 20 | n/a | n/a | n/a | 0/0/20 | n/a |
-| collision_events_layout | 0.150 | 0.050 | 0.100 | [-0.150, 0.250] | 2.5 | 16 | 0.3173 | n/a | 0.3173 | 3/1/16 | 0.500 |
-| n_steps | 1291.650 | 1278.700 | 12.950 | [-290.125, 291.074] | 73.0 | 1 | 0.3760 | n/a | 0.3760 | 12/7/1 | 0.232 |
-| ended_by_60s_rule | 0.100 | 0.100 | 0.000 | [-0.200, 0.100] | 1.5 | 18 | 1.0000 | n/a | 1.0000 | 1/1/18 | 0.000 |
+| standstill_pct_v<0.1 | 27.415 | 25.715 | 1.701 | [-5.027, 8.749] | 467.0 | 0 | 0.7507 | 0.7507 | 0.7438 | 16/28/0 | -0.057 |
+| standstill_pct_v<0.5 | 33.086 | 30.780 | 2.305 | [-3.943, 8.995] | 477.0 | 0 | 0.8398 | 0.8398 | 0.8336 | 21/23/0 | 0.036 |
+| standstill_pct_v<1.0 | 40.167 | 37.459 | 2.709 | [-2.909, 8.619] | 428.0 | 0 | 0.4415 | 0.4415 | 0.4343 | 24/20/0 | 0.135 |
+| mean_speed_mps | 1.853 | 1.956 | -0.103 | [-0.273, 0.071] | 348.0 | 0 | 0.0874 | 0.0874 | 0.0863 | 16/28/0 | -0.297 |
+| route_completion | 76.435 | 82.377 | -5.942 | [-13.955, 1.305] | 71.0 | 23 | 0.1219 | n/a | 0.1219 | 8/13/23 | -0.385 |
+| driving_score | 45.693 | 49.852 | -4.159 | [-12.559, 5.015] | 253.5 | 8 | 0.2116 | n/a | 0.2116 | 15/21/8 | -0.239 |
+| collision_events | 1.159 | 1.000 | 0.159 | [-0.182, 0.523] | 166.0 | 17 | 0.5576 | n/a | 0.5576 | 14/13/17 | 0.122 |
+| collision_events_vehicle | 0.977 | 0.932 | 0.045 | [-0.295, 0.432] | 126.0 | 22 | 0.9866 | n/a | 0.9866 | 10/12/22 | 0.004 |
+| collision_events_pedestrian | 0.045 | 0.045 | 0.000 | [-0.091, 0.045] | 1.5 | 42 | 1.0000 | n/a | 1.0000 | 1/1/42 | 0.000 |
+| collision_events_layout | 0.136 | 0.023 | 0.114 | [0.000, 0.227] | 4.0 | 37 | 0.0588 | n/a | 0.0588 | 6/1/37 | 0.714 |
+| n_steps | 1184.955 | 1137.591 | 47.364 | [-189.668, 311.642] | 413.5 | 1 | 0.4725 | n/a | 0.4725 | 24/19/1 | 0.126 |
+| ended_by_60s_rule | 0.091 | 0.068 | 0.023 | [-0.068, 0.091] | 2.0 | 41 | 0.5637 | n/a | 0.5637 | 2/1/41 | 0.333 |
 
-Routes ended by the 60 s rule: {'gate_off': 2, 'default': 2}
+Routes ended by the 60 s rule: {'gate_off': 4, 'default': 3}
 
 **(1) Flooded-6400-Matched gate-off minus default — complete (44 routes)**
 
@@ -878,24 +878,54 @@ Routes ended by the 60 s rule: {'gate_off': 2, 'default': 2}
 
 Routes ended by the 60 s rule: {'gate_off': 2, 'default': 7}
 
-**(2) Golden minus Flooded, gate-off**: pending: have {'model_matrix_golden_6400_nogate': 20, 'model_matrix_flooded_6400_nogate': 44}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
+**(2) Golden minus Flooded, gate-off**
 
-**(3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1**: pending: have {'model_matrix_golden_6400_nogate': 20, 'model_matrix_flooded_6400_nogate': 44}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| standstill_pct_v<0.1 | 27.415 | 24.566 | 2.849 | [-2.704, 10.322] | 377.0 | 0 | 0.1720 | 0.1720 | 0.1685 | 15/29/0 | -0.238 |
+| standstill_pct_v<0.5 | 33.086 | 32.568 | 0.518 | [-4.841, 7.354] | 323.0 | 0 | 0.0446 | 0.0446 | 0.0447 | 14/30/0 | -0.347 |
+| standstill_pct_v<1.0 | 40.167 | 41.497 | -1.330 | [-6.080, 4.525] | 304.0 | 0 | 0.0252 | 0.0252 | 0.0258 | 13/31/0 | -0.386 |
+| mean_speed_mps | 1.853 | 1.769 | 0.084 | [-0.088, 0.225] | 306.0 | 0 | 0.0268 | 0.0268 | 0.0274 | 32/12/0 | 0.382 |
+| route_completion | 76.435 | 81.157 | -4.722 | [-14.592, 4.440] | 91.0 | 24 | 0.6012 | n/a | 0.6012 | 10/10/24 | -0.133 |
+| driving_score | 45.693 | 47.953 | -2.260 | [-10.410, 5.666] | 263.0 | 10 | 0.5553 | n/a | 0.5553 | 16/18/10 | -0.116 |
+| collision_events | 1.159 | 1.159 | 0.000 | [-0.364, 0.318] | 161.5 | 19 | 0.9775 | n/a | 0.9775 | 13/12/19 | -0.006 |
+| collision_events_vehicle | 0.977 | 1.023 | -0.045 | [-0.409, 0.318] | 92.5 | 24 | 0.6315 | n/a | 0.6315 | 9/11/24 | -0.119 |
+| collision_events_pedestrian | 0.045 | 0.045 | 0.000 | [-0.091, 0.045] | 1.5 | 42 | 1.0000 | n/a | 1.0000 | 1/1/42 | 0.000 |
+| collision_events_layout | 0.136 | 0.091 | 0.045 | [-0.114, 0.159] | 22.0 | 34 | 0.5271 | n/a | 0.5271 | 6/4/34 | 0.200 |
+| n_steps | 1184.955 | 1191.068 | -6.114 | [-155.761, 293.397] | 292.0 | 0 | 0.0178 | n/a | 0.0178 | 13/31/0 | -0.410 |
+| ended_by_60s_rule | 0.091 | 0.045 | 0.045 | [0.000, 0.114] | 0.0 | 42 | 0.1573 | n/a | 0.1573 | 2/0/42 | 1.000 |
 
-**(3) interaction, default = mean of run1 and run2**: pending: have {'model_matrix_golden_6400_nogate': 20, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**(3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| standstill_pct_v<0.1 | 2.849 | -8.062 | 10.911 | [2.020, 20.264] | 290.0 | 0 | 0.0160 | 0.0160 | 0.0167 | 29/15/0 | 0.414 |
+| standstill_pct_v<0.5 | 0.518 | -8.547 | 9.065 | [0.762, 17.697] | 286.0 | 0 | 0.0139 | 0.0139 | 0.0147 | 30/14/0 | 0.422 |
+| standstill_pct_v<1.0 | -1.330 | -8.710 | 7.380 | [-0.063, 14.827] | 306.0 | 0 | 0.0268 | 0.0268 | 0.0274 | 29/15/0 | 0.382 |
+| mean_speed_mps | 0.084 | 0.313 | -0.229 | [-0.458, 0.009] | 321.0 | 0 | 0.0421 | 0.0421 | 0.0423 | 15/29/0 | -0.352 |
+
+**(3) interaction, default = mean of run1 and run2**: pending: have {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
 **(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)**: pending: have {'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**(5) common-window distance (m)**: pending: have {'model_matrix_golden_6400_nogate': 20, 'model_matrix_flooded_6400_nogate': 44}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
+**(5) common-window distance (m)**
 
-**(6) Golden-6400** (PARTIAL: 20/44 routes): gate_would_fire 4.05 % of all steps, 10.70 % of standstill steps; max |logged traj_extent − waypoint chord| = 0.1972 m; steps where gate_would_fire disagrees with the rule: 0
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Golden-6400 gate-off minus default | 86.68 | 88.56 | -1.87 | [-6.28, 2.03] | 439.0 | 0 | 0.5209 | 0.5209 | 0.5134 | 21/23/0 | -0.113 |
+| Flooded-6400-Matched gate-off minus default | 78.26 | 76.63 | 1.62 | [-3.95, 6.78] | 406.0 | 0 | 0.3049 | 0.3049 | 0.2990 | 25/19/0 | 0.180 |
+| Golden minus Flooded, gate-off | 86.68 | 78.26 | 8.43 | [2.71, 14.84] | 161.0 | 0 | 4.26e-05 | 4.26e-05 | 9.71e-05 | 35/9/0 | 0.675 |
+| Golden minus Flooded, default | 88.56 | 76.63 | 11.93 | [6.46, 16.58] | 154.0 | 0 | 2.76e-05 | 2.76e-05 | 6.91e-05 | 33/11/0 | 0.689 |
+| interaction | 8.43 | 11.93 | -3.50 | [-11.67, 2.78] | 411.0 | 0 | 0.3332 | 0.3332 | 0.3269 | 18/26/0 | -0.170 |
+
+**(6) Golden-6400** (complete (44 routes)): gate_would_fire 4.39 % of all steps, 13.62 % of standstill steps; max |logged traj_extent − waypoint chord| = 0.1972 m; steps where gate_would_fire disagrees with the rule: 0
 
 | band | % all steps standstill ∧ band | share of standstill steps % |
 |---|---|---|
-| L<0.64 | 0.69 | 1.8 |
-| 0.64<=L<1.5 | 1.81 | 5.0 |
-| 1.5<=L<2.0 & v<0.5 | 1.34 | 4.0 |
-| gate inactive | 22.97 | 89.3 |
+| L<0.64 | 0.61 | 2.2 |
+| 0.64<=L<1.5 | 1.94 | 6.3 |
+| 1.5<=L<2.0 & v<0.5 | 1.58 | 5.1 |
+| gate inactive | 23.29 | 86.4 |
 
 **(6) Flooded-6400-Matched** (complete (44 routes)): gate_would_fire 10.73 % of all steps, 33.00 % of standstill steps; max |logged traj_extent − waypoint chord| = 0.2960 m; steps where gate_would_fire disagrees with the rule: 0
 
@@ -1010,7 +1040,7 @@ Pre-specified reading (44 routes): pending: have {'model_matrix_fgbalanced_6400'
 
 ## T. Near-stationary plans and stop episodes (Golden minus Flooded)
 
-Status: pending: 3 of 4 parts (default controller, run2, default controller, mean of run1 and run2, gate-off controller)
+Status: pending: 2 of 4 parts (default controller, run2, default controller, mean of run1 and run2)
 
 post hoc, exploratory; section 7a was first looked at on a partial route set before it was written down
 
@@ -1036,7 +1066,23 @@ post hoc, exploratory; section 7a was first looked at on a partial route set bef
 
 **default controller, mean of run1 and run2**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**gate-off controller**: pending: have {'model_matrix_golden_6400_nogate': 20, 'model_matrix_flooded_6400_nogate': 44}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
+**gate-off controller**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| plan_rate_L<1.5_pct | 2.72 | 8.94 | -6.22 | [-11.27, -3.71] | 85.0 | 0 | 1.45e-07 | 1.45e-07 | 1.71e-06 | 3/41/0 | -0.828 |
+| plan_rate_L<0.64_pct | 0.65 | 4.75 | -4.10 | [-8.34, -2.35] | 0.0 | 0 | 1.14e-13 | 1.14e-13 | 7.62e-09 | 0/44/0 | -1.000 |
+| plan_rate_L<2.0_pct | 4.44 | 10.81 | -6.37 | [-11.46, -3.53] | 115.0 | 0 | 1.82e-06 | 1.82e-06 | 9.22e-06 | 3/41/0 | -0.768 |
+| standstill_pct | 27.42 | 24.57 | 2.85 | [-2.70, 10.32] | 377.0 | 0 | 0.1720 | 0.1720 | 0.1685 | 15/29/0 | -0.238 |
+| time_start_pct | 0.11 | 0.79 | -0.68 | [-1.14, -0.40] | 1.0 | 28 | 5.31e-04 | n/a | 5.31e-04 | 1/15/28 | -0.985 |
+| time_resumed_short_pct | 2.81 | 5.85 | -3.03 | [-6.68, -0.24] | 98.0 | 18 | 0.0490 | n/a | 0.0490 | 9/17/18 | -0.442 |
+| time_resumed_long_pct | 4.58 | 2.08 | 2.50 | [-1.49, 8.30] | 6.0 | 38 | 0.3454 | n/a | 0.3454 | 4/2/38 | 0.429 |
+| time_terminal_60s_pct | 9.45 | 4.45 | 5.00 | [-0.61, 12.83] | 5.0 | 37 | 0.1282 | n/a | 0.1282 | 6/1/37 | 0.643 |
+| time_terminal_other_pct | 0.13 | 0.00 | 0.13 | [0.00, 0.38] | 0.0 | 43 | 0.3173 | n/a | 0.3173 | 1/0/43 | 1.000 |
+| time_brief_pct | 10.33 | 11.39 | -1.06 | [-2.21, 0.25] | 314.0 | 0 | 0.0342 | 0.0342 | 0.0347 | 17/27/0 | -0.366 |
+| time_freeze_sum_pct | 14.04 | 6.53 | 7.50 | [1.35, 15.95] | 8.0 | 33 | 0.0262 | n/a | 0.0262 | 10/1/33 | 0.758 |
+| time_wait_sum_pct | 13.25 | 18.03 | -4.78 | [-8.48, -1.91] | 139.0 | 0 | 1.03e-05 | 1.03e-05 | 3.26e-05 | 8/36/0 | -0.719 |
+| episodes_per_route | 1.23 | 2.80 | -1.57 | [-3.77, -0.34] | 73.5 | 16 | 0.0029 | n/a | 0.0029 | 4/24/16 | -0.638 |
 
 **Golden-6400 run1** (pooled over 44 routes)
 
@@ -1064,7 +1110,16 @@ post hoc, exploratory; section 7a was first looked at on a partial route set bef
 
 **Flooded-6400-Matched run2**: pending: have {'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_flooded_6400_run2': 44}
 
-**Golden-6400 nogate**: pending: have {'model_matrix_golden_6400_nogate': 20}, need {'model_matrix_golden_6400_nogate': 44}
+**Golden-6400 nogate** (pooled over 44 routes)
+
+| class | runs | median s | steps | L<0.64 % | 0.64<=L<2.0 % | L>=2.0 % |
+|---|---|---|---|---|---|---|
+| start | 2 | 1.0 | 41 | 19.5 | 12.2 | 68.3 |
+| resumed_short | 35 | 2.5 | 2321 | 2.3 | 12.8 | 84.9 |
+| resumed_long | 10 | 18.3 | 5060 | 1.6 | 14.4 | 84.1 |
+| terminal_60s | 6 | 60.0 | 7201 | 1.6 | 12.7 | 85.8 |
+| terminal_other | 1 | 11.2 | 223 | 16.1 | 54.7 | 29.1 |
+| brief | 543 | 0.5 | 4736 | 2.1 | 13.0 | 84.9 |
 
 **Flooded-6400-Matched nogate** (pooled over 44 routes)
 
@@ -1078,4 +1133,115 @@ post hoc, exploratory; section 7a was first looked at on a partial route set bef
 | brief | 659 | 0.5 | 5654 | 9.7 | 21.8 | 68.6 |
 
 Pre-specified reading (default controller, run 1): **mixed** — freeze share 0.45, wait share 0.55 of -8.06 pp. duration and ending are proxies; the logs do not record whether a hazard was ahead.
+
+## U. Driven standstill ("blocked" time), addendum section 8
+
+Status: pending: 2 of 4 parts (default controller, run2, default controller, mean of run1 and run2)
+
+post hoc, exploratory; written down (section 8) after a per-episode listing of long stops had been seen
+
+driven: speed < 0.1 m/s, throttle >= 0.35, brake == 0 (logged final command); blocked: driven steps in a run of >= 100 consecutive driven steps; driven_transient: driven steps not in such a run; not_driven: all other standstill steps; caveat: inferred from the command log, not from a contact sensor
+
+**Golden minus Flooded, default controller, run1**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| standstill_pct | 25.71 | 33.78 | -8.06 | [-15.08, -1.25] | 213.0 | 0 | 7.09e-04 | 7.09e-04 | 9.98e-04 | 8/36/0 | -0.570 |
+| time_blocked_pct | 7.75 | 0.18 | 7.57 | [2.84, 16.11] | 1.0 | 37 | 0.0280 | n/a | 0.0280 | 6/1/37 | 0.929 |
+| time_driven_transient_pct | 8.47 | 8.97 | -0.50 | [-5.68, 3.64] | 446.0 | 0 | 0.5749 | 0.5749 | 0.5674 | 22/22/0 | 0.099 |
+| time_not_driven_pct | 9.49 | 24.62 | -15.13 | [-22.37, -10.04] | 40.0 | 0 | 9.89e-10 | 9.89e-10 | 1.10e-07 | 5/39/0 | -0.919 |
+| standstill_without_blocked_pct | 17.97 | 33.59 | -15.63 | [-24.95, -7.98] | 170.0 | 0 | 7.28e-05 | 7.28e-05 | 1.49e-04 | 8/36/0 | -0.657 |
+
+**Golden minus Flooded, default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+
+**Golden minus Flooded, default controller, mean of run1 and run2**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
+
+**Golden minus Flooded, gate-off controller**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| standstill_pct | 27.42 | 24.57 | 2.85 | [-2.70, 10.32] | 377.0 | 0 | 0.1720 | 0.1720 | 0.1685 | 15/29/0 | -0.238 |
+| time_blocked_pct | 14.05 | 2.89 | 11.16 | [5.68, 19.19] | 0.0 | 32 | 0.0022 | n/a | 0.0022 | 12/0/32 | 1.000 |
+| time_driven_transient_pct | 6.88 | 8.09 | -1.21 | [-3.90, 0.67] | 425.0 | 0 | 0.4211 | 0.4211 | 0.4140 | 19/25/0 | -0.141 |
+| time_not_driven_pct | 6.48 | 13.59 | -7.10 | [-13.00, -4.41] | 30.0 | 0 | 2.31e-10 | 2.31e-10 | 5.74e-08 | 4/40/0 | -0.939 |
+| standstill_without_blocked_pct | 13.36 | 21.68 | -8.31 | [-13.81, -5.16] | 78.0 | 0 | 7.48e-08 | 7.48e-08 | 1.14e-06 | 6/38/0 | -0.842 |
+
+**Golden-6400: gate-off minus default (run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| standstill_pct | 27.42 | 25.71 | 1.70 | [-5.03, 8.75] | 467.0 | 0 | 0.7507 | 0.7507 | 0.7438 | 16/28/0 | -0.057 |
+| time_blocked_pct | 14.05 | 7.75 | 6.30 | [1.14, 13.72] | 21.0 | 30 | 0.0480 | n/a | 0.0480 | 11/3/30 | 0.600 |
+| time_driven_transient_pct | 6.88 | 8.47 | -1.59 | [-5.28, 0.72] | 392.0 | 0 | 0.2342 | 0.2342 | 0.2294 | 17/27/0 | -0.208 |
+| time_not_driven_pct | 6.48 | 9.49 | -3.01 | [-4.52, -1.90] | 148.0 | 0 | 1.88e-05 | 1.88e-05 | 5.13e-05 | 9/35/0 | -0.701 |
+| standstill_without_blocked_pct | 13.36 | 17.97 | -4.60 | [-8.80, -1.82] | 202.0 | 0 | 4.13e-04 | 4.13e-04 | 6.28e-04 | 8/36/0 | -0.592 |
+
+**Flooded-6400-Matched: gate-off minus default (run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| standstill_pct | 24.57 | 33.78 | -9.21 | [-15.57, -4.35] | 191.0 | 0 | 2.34e-04 | 2.34e-04 | 3.89e-04 | 10/34/0 | -0.614 |
+| time_blocked_pct | 2.89 | 0.18 | 2.71 | [-0.18, 10.03] | 1.0 | 41 | 0.2850 | n/a | 0.2850 | 2/1/41 | 0.667 |
+| time_driven_transient_pct | 8.09 | 8.97 | -0.88 | [-6.14, 2.21] | 447.0 | 0 | 0.5828 | 0.5828 | 0.5754 | 24/20/0 | 0.097 |
+| time_not_driven_pct | 13.59 | 24.62 | -11.03 | [-17.40, -6.79] | 93.0 | 0 | 2.98e-07 | 2.98e-07 | 2.71e-06 | 8/36/0 | -0.812 |
+| standstill_without_blocked_pct | 21.68 | 33.59 | -11.92 | [-19.97, -6.24] | 182.0 | 0 | 1.44e-04 | 1.44e-04 | 2.59e-04 | 10/34/0 | -0.632 |
+
+**Interaction (G_nogate - F_nogate) - (G_default - F_default), run 1**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| standstill_pct | 2.85 | -8.06 | 10.91 | [2.02, 20.26] | 290.0 | 0 | 0.0160 | 0.0160 | 0.0167 | 29/15/0 | 0.414 |
+| time_blocked_pct | 11.16 | 7.57 | 3.60 | [-3.92, 11.20] | 43.0 | 29 | 0.3343 | n/a | 0.3343 | 10/5/29 | 0.283 |
+| time_driven_transient_pct | -1.21 | -0.50 | -0.71 | [-5.46, 5.43] | 373.0 | 0 | 0.1576 | 0.1576 | 0.1545 | 18/26/0 | -0.246 |
+| time_not_driven_pct | -7.10 | -15.13 | 8.02 | [3.61, 14.36] | 221.0 | 0 | 0.0010 | 0.0010 | 0.0014 | 32/12/0 | 0.554 |
+| standstill_without_blocked_pct | -8.31 | -15.63 | 7.31 | [0.03, 16.17] | 333.0 | 0 | 0.0590 | 0.0590 | 0.0587 | 27/17/0 | 0.327 |
+
+**Sensitivity (run>=40 steps), Golden minus Flooded, default controller, run1**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 8.93 | 1.15 | 7.77 | [2.73, 15.70] | 3.0 | 35 | 0.0209 | n/a | 0.0209 | 8/1/35 | 0.867 |
+| standstill_without_blocked_pct | 16.79 | 32.62 | -15.84 | [-24.67, -8.83] | 150.0 | 0 | 2.14e-05 | 2.14e-05 | 5.67e-05 | 7/37/0 | -0.697 |
+
+**Sensitivity (run>=200 steps), Golden minus Flooded, default controller, run1**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 6.42 | 0.00 | 6.42 | [2.34, 14.13] | 0.0 | 38 | 0.0277 | n/a | 0.0277 | 6/0/38 | 1.000 |
+| standstill_without_blocked_pct | 19.30 | 33.78 | -14.48 | [-23.42, -6.79] | 192.0 | 0 | 2.47e-04 | 2.47e-04 | 4.06e-04 | 8/36/0 | -0.612 |
+
+**Sensitivity (throttle>=0.2), Golden minus Flooded, default controller, run1**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 9.65 | 2.09 | 7.56 | [2.43, 14.84] | 3.0 | 35 | 0.0209 | n/a | 0.0209 | 8/1/35 | 0.867 |
+| standstill_without_blocked_pct | 16.06 | 31.69 | -15.62 | [-23.80, -9.48] | 134.0 | 0 | 7.33e-06 | 7.33e-06 | 2.52e-05 | 7/37/0 | -0.729 |
+
+**Sensitivity (run>=40 steps), Golden minus Flooded, gate-off controller**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 15.25 | 3.58 | 11.68 | [6.03, 20.13] | 1.0 | 30 | 0.0012 | n/a | 0.0012 | 13/1/30 | 0.981 |
+| standstill_without_blocked_pct | 12.16 | 20.99 | -8.83 | [-14.63, -5.68] | 26.0 | 0 | 1.22e-10 | 1.22e-10 | 4.42e-08 | 3/41/0 | -0.947 |
+
+**Sensitivity (run>=200 steps), Golden minus Flooded, gate-off controller**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 12.71 | 2.76 | 9.95 | [4.89, 17.49] | 0.0 | 34 | 0.0051 | n/a | 0.0051 | 10/0/34 | 1.000 |
+| standstill_without_blocked_pct | 14.70 | 21.81 | -7.10 | [-12.57, -4.16] | 105.0 | 0 | 8.24e-07 | 8.24e-07 | 5.33e-06 | 7/37/0 | -0.788 |
+
+**Sensitivity (throttle>=0.2), Golden minus Flooded, gate-off controller**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 14.99 | 4.11 | 10.88 | [5.30, 19.53] | 0.0 | 32 | 0.0022 | n/a | 0.0022 | 12/0/32 | 1.000 |
+| standstill_without_blocked_pct | 12.43 | 20.46 | -8.03 | [-13.63, -4.91] | 71.0 | 0 | 3.73e-08 | 3.73e-08 | 7.49e-07 | 6/38/0 | -0.857 |
+
+| arm | routes with blocked time | of these with a collision event | other routes with a collision event | blocked runs | mean blocked % | mean standstill % |
+|---|---|---|---|---|---|---|
+| Golden-6400 run1 | 6 | 6 | 20 of 38 | 22 | 7.75 | 25.71 |
+| Flooded-6400-Matched run1 | 1 | 1 | 21 of 43 | 2 | 0.18 | 33.78 |
+| Golden-6400 nogate | 12 | 12 | 17 of 32 | 25 | 14.05 | 27.42 |
+| Flooded-6400-Matched nogate | 2 | 2 | 23 of 42 | 6 | 2.89 | 24.57 |
 

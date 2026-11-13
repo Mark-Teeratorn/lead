@@ -1841,6 +1841,93 @@ def analysis_T(arms):
     return res
 
 
+# section 8 of ANALYSIS_ADDENDUM.md: driven standstill ("blocked" time)
+U_THR, U_RUN = 0.35, 100
+U_CLASSES = ['blocked', 'driven_transient', 'not_driven']
+U_SENS = {'run>=40 steps': (0.35, 40), 'run>=200 steps': (0.35, 200), 'throttle>=0.2': (0.2, 100)}
+
+
+def blocked_masks(rd, thr=U_THR, run=U_RUN):
+    """Standstill steps split by the logged final command: (blocked, driven_transient, not_driven) boolean masks.
+    driven = speed < 0.1 m/s, throttle >= thr, brake == 0; blocked = driven steps in a run of >= `run` consecutive driven steps."""
+    ss = np.asarray(rd['speed']) < SS_V
+    drv = ss & (np.asarray(rd['throttle']) >= thr) & (np.asarray(rd['brake']) == 0)
+    blk = np.zeros(len(ss), bool)
+    i, n = 0, len(ss)
+    while i < n:
+        if not drv[i]:
+            i += 1
+            continue
+        j = i
+        while j < n and drv[j]:
+            j += 1
+        if j - i >= run:
+            blk[i:j] = True
+        i = j
+    return blk, drv & ~blk, ss & ~drv
+
+
+def u_metrics(thr=U_THR, run=U_RUN):
+    return {'standstill_pct': RUN_METRICS['standstill_pct'],
+            **{f'time_{c}_pct': (lambda rd, k=k: pct(blocked_masks(rd, thr, run)[k])) for k, c in enumerate(U_CLASSES)},
+            'standstill_without_blocked_pct': lambda rd: pct((np.asarray(rd['speed']) < SS_V) & ~blocked_masks(rd, thr, run)[0])}
+
+
+def analysis_U(arms):
+    """ANALYSIS_ADDENDUM.md section 8. Post hoc, exploratory, existing step logs only."""
+    G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
+    GN, FN = 'Golden-6400 nogate', 'Flooded-6400-Matched nogate'
+    rows = {'default controller, run1': ((G1,), (F1,)), 'default controller, run2': ((G2,), (F2,)),
+            'default controller, mean of run1 and run2': ((G1, G2), (F1, F2)), 'gate-off controller': ((GN,), (FN,))}
+    M = u_metrics()
+    mean_vec = lambda names, fn: np.mean([vec(arms, n, fn, CANONICAL_44) for n in names], axis=0)
+    res = {'label': 'post hoc, exploratory; written down (section 8) after a per-episode listing of long stops had been seen',
+           'definitions': {'driven': f'speed < {SS_V} m/s, throttle >= {U_THR}, brake == 0 (logged final command)',
+                           'blocked': f'driven steps in a run of >= {U_RUN} consecutive driven steps',
+                           'driven_transient': 'driven steps not in such a run',
+                           'not_driven': 'all other standstill steps',
+                           'caveat': 'inferred from the command log, not from a contact sensor'},
+           'golden_minus_flooded': {}, 'gate_off_minus_default_run1': {}, 'interaction_run1': {}, 'sensitivity_golden_minus_flooded': {},
+           'routes_with_blocked_time': {}}
+    for row, (ga, fa) in rows.items():
+        p = pending(arms, [(n, CANONICAL_44) for n in ga + fa])
+        if p:
+            res['golden_minus_flooded'][row] = p
+            continue
+        res['golden_minus_flooded'][row] = {k: paired(mean_vec(ga, fn), mean_vec(fa, fn)) for k, fn in M.items()}
+        r = res['golden_minus_flooded'][row]
+        assert abs(r['standstill_pct']['mean_diff'] - sum(r[f'time_{c}_pct']['mean_diff'] for c in U_CLASSES)) < 1e-6
+        res['sensitivity_golden_minus_flooded'][row] = {
+            lab: {k: paired(mean_vec(ga, fn), mean_vec(fa, fn)) for k, fn in u_metrics(t, n).items()
+                  if k in ('time_blocked_pct', 'standstill_without_blocked_pct')} for lab, (t, n) in U_SENS.items()}
+    p = pending(arms, [(n, CANONICAL_44) for n in (G1, F1, GN, FN)])
+    if p:
+        res['gate_off_minus_default_run1'] = res['interaction_run1'] = p
+    else:
+        for lab, (a, b) in {'Golden-6400': (GN, G1), 'Flooded-6400-Matched': (FN, F1)}.items():
+            res['gate_off_minus_default_run1'][lab] = {k: paired(vec(arms, a, fn, CANONICAL_44), vec(arms, b, fn, CANONICAL_44))
+                                                       for k, fn in M.items()}
+        res['interaction_run1'] = {k: paired(vec(arms, GN, fn, CANONICAL_44) - vec(arms, FN, fn, CANONICAL_44),
+                                             vec(arms, G1, fn, CANONICAL_44) - vec(arms, F1, fn, CANONICAL_44)) for k, fn in M.items()}
+    for name in (G1, F1, G2, F2, GN, FN):
+        p = pending(arms, [(name, CANONICAL_44)])
+        if p:
+            res['routes_with_blocked_time'][name] = p
+            continue
+        blk = vec(arms, name, M['time_blocked_pct'], CANONICAL_44) > 0
+        col = vec(arms, name, RUN_METRICS['collision_events'], CANONICAL_44) > 0
+        runs = [int(np.sum(np.diff(np.concatenate([[0], blocked_masks(arms[name][r])[0].astype(int)])) == 1)) for r in CANONICAL_44]
+        res['routes_with_blocked_time'][name] = {
+            'n_routes_with_blocked_time': int(blk.sum()), 'blocked_routes_with_collision_event': int((blk & col).sum()),
+            'n_routes_without_blocked_time': int((~blk).sum()), 'other_routes_with_collision_event': int((~blk & col).sum()),
+            'routes': [r for r, b in zip(CANONICAL_44, blk) if b], 'n_blocked_runs': int(sum(runs)),
+            'mean_blocked_pct': float(np.mean(vec(arms, name, M['time_blocked_pct'], CANONICAL_44))),
+            'mean_standstill_pct': float(np.mean(vec(arms, name, M['standstill_pct'], CANONICAL_44)))}
+    res['status_line'] = status_line(res['golden_minus_flooded'])
+    return res
+
+
+
 # --------------------------------------------------------------------------- report N-S
 
 def is_pending(v):
@@ -1969,6 +2056,26 @@ def render_new(man):
     r = T['prespecified_reading_run1']
     L += [f"Pre-specified reading (default controller, run 1): **{r['reading']}** — freeze share {f(r['freeze_share_of_diff'], 2)}, "
           f"wait share {f(r['wait_share_of_diff'], 2)} of {f(r['standstill_diff_pp'], 2)} pp. {r['caveat']}.", '']
+    U = man['U']
+    L += ['## U. Driven standstill ("blocked" time), addendum section 8', '', f"Status: {U['status_line']}", '', U['label'], '',
+          '; '.join(f'{k}: {v}' for k, v in U['definitions'].items()), '']
+    for row, o in U['golden_minus_flooded'].items():
+        L += paired_block('Golden minus Flooded, ' + row, o, 2)
+    if is_pending(U['interaction_run1']):
+        L += [f"Gate-off minus default: {pending_str(U['interaction_run1'])}", '']
+    else:
+        for lab, o in U['gate_off_minus_default_run1'].items():
+            L += paired_block(f'{lab}: gate-off minus default (run 1)', o, 2)
+        L += paired_block('Interaction (G_nogate - F_nogate) - (G_default - F_default), run 1', U['interaction_run1'], 2)
+    for row, o in U['sensitivity_golden_minus_flooded'].items():
+        for lab, oo in o.items():
+            L += paired_block(f'Sensitivity ({lab}), Golden minus Flooded, {row}', oo, 2)
+    rows_u = [[n, d['n_routes_with_blocked_time'], d['blocked_routes_with_collision_event'],
+               f"{d['other_routes_with_collision_event']} of {d['n_routes_without_blocked_time']}", d['n_blocked_runs'],
+               f(d['mean_blocked_pct'], 2), f(d['mean_standstill_pct'], 2)]
+              for n, d in U['routes_with_blocked_time'].items() if not is_pending(d)]
+    L += [table(['arm', 'routes with blocked time', 'of these with a collision event', 'other routes with a collision event',
+                'blocked runs', 'mean blocked %', 'mean standstill %'], rows_u), '']
     return '\n'.join(L) + '\n'
 
 
@@ -2036,6 +2143,7 @@ def main():
     man['R'] = analysis_R(arms, ov)
     man['S'] = analysis_S(arms)
     man['T'] = analysis_T(arms)
+    man['U'] = analysis_U(arms)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man))
