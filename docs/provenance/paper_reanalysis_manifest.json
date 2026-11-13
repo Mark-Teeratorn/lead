@@ -11502,7 +11502,7 @@
  },
  "data_checks_new_runs": {
   "usable_routes": {
-   "model_matrix_golden_6400_rep1": 0,
+   "model_matrix_golden_6400_rep1": 8,
    "model_matrix_flooded_6400_rep1": 8,
    "model_matrix_golden_6400_run2": 0,
    "model_matrix_flooded_6400_run2": 0,
@@ -11511,7 +11511,16 @@
    "base_run2": 0
   },
   "usable_route_ids": {
-   "model_matrix_golden_6400_rep1": [],
+   "model_matrix_golden_6400_rep1": [
+    "17563",
+    "1790",
+    "23695",
+    "2534",
+    "26458",
+    "2664",
+    "28087",
+    "3561"
+   ],
    "model_matrix_flooded_6400_rep1": [
     "17563",
     "1790",
@@ -11591,7 +11600,7 @@
    "Golden-6400": {
     "replicate_routes_done": {
      "run1": "8/8",
-     "rep1": "0/8",
+     "rep1": "8/8",
      "run2": "0/8"
     },
     "per_route_table_replicate_routes": {
@@ -11604,6 +11613,15 @@
        "collision_events": 1.0,
        "n_steps": 854.0,
        "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 6.089193825042882,
+       "driving_score": 7.776,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.2871497535945764,
+       "collision_events": 5.0,
+       "n_steps": 1166.0,
+       "status": "Completed"
       }
      },
      "3561": {
@@ -11614,6 +11632,15 @@
        "mean_speed_mps": 0.8046858248548734,
        "collision_events": 1.0,
        "n_steps": 3293.0,
+       "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 56.52343749999999,
+       "driving_score": 54.550806,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.0387987194685018,
+       "collision_events": 1.0,
+       "n_steps": 2560.0,
        "status": "Completed"
       }
      },
@@ -11626,6 +11653,15 @@
        "collision_events": 6.0,
        "n_steps": 924.0,
        "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 46.248462484624845,
+       "driving_score": 12.96,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.4559903173759132,
+       "collision_events": 4.0,
+       "n_steps": 1626.0,
+       "status": "Completed"
       }
      },
      "23695": {
@@ -11636,6 +11672,15 @@
        "mean_speed_mps": 3.210978800663228,
        "collision_events": 0.0,
        "n_steps": 962.0,
+       "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 7.295081967213115,
+       "driving_score": 85.159639,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.637159511742507,
+       "collision_events": 0.0,
+       "n_steps": 1220.0,
        "status": "Completed"
       }
      },
@@ -11648,6 +11693,15 @@
        "collision_events": 1.0,
        "n_steps": 1147.0,
        "status": "Failed - Agent deviated from the route"
+      },
+      "rep1": {
+       "standstill_pct": 29.84790874524715,
+       "driving_score": 58.068142,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.4531194288950404,
+       "collision_events": 1.0,
+       "n_steps": 1052.0,
+       "status": "Completed"
       }
      },
      "2664": {
@@ -11658,6 +11712,15 @@
        "mean_speed_mps": 2.366194453036892,
        "collision_events": 2.0,
        "n_steps": 1122.0,
+       "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 44.226327944572745,
+       "driving_score": 60.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.5260759253362979,
+       "collision_events": 1.0,
+       "n_steps": 1732.0,
        "status": "Completed"
       }
      },
@@ -11670,6 +11733,15 @@
        "collision_events": 2.0,
        "n_steps": 842.0,
        "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 8.827085852478838,
+       "driving_score": 36.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.723310539042645,
+       "collision_events": 2.0,
+       "n_steps": 827.0,
+       "status": "Completed"
       }
      },
      "26458": {
@@ -11681,56 +11753,128 @@
        "collision_events": 0.0,
        "n_steps": 885.0,
        "status": "Completed"
+      },
+      "rep1": {
+       "standstill_pct": 30.235439900867412,
+       "driving_score": 50.523205,
+       "route_completion": 52.2,
+       "mean_speed_mps": 1.7002533310642496,
+       "collision_events": 0.0,
+       "n_steps": 807.0,
+       "status": "Failed - Agent deviated from the route"
       }
      }
     },
     "run_to_run_differences": {
      "rep1 - run1": {
-      "n_routes": 0,
-      "routes": [],
-      "same_status": 0,
+      "n_routes": 8,
+      "routes": [
+       "2534",
+       "3561",
+       "1790",
+       "23695",
+       "28087",
+       "2664",
+       "17563",
+       "26458"
+      ],
+      "same_status": 6,
       "metrics": {
        "standstill_pct": {
-        "n": 0,
-        "mean": null,
-        "sd": null,
-        "mean_abs": null,
-        "per_route": {}
+        "n": 8,
+        "mean": 5.97922137165124,
+        "sd": 16.25412825550249,
+        "mean_abs": 11.082308715397101,
+        "per_route": {
+         "2534": 0.8198729819515469,
+         "3561": -9.981269454145156,
+         "1790": 32.17919841536077,
+         "23695": 3.1370778092089564,
+         "28087": -10.43107992083829,
+         "2664": 29.609572151346363,
+         "17563": 0.513546660079788,
+         "26458": 1.9868523302459415
+        }
        },
        "driving_score": {
-        "n": 0,
-        "mean": null,
-        "sd": null,
-        "mean_abs": null,
-        "per_route": {}
+        "n": 8,
+        "mean": -7.682610750000002,
+        "sd": 29.8219693155537,
+        "mean_abs": 22.133850250000002,
+        "per_route": {
+         "2534": -52.224000000000004,
+         "3561": -2.7246880000000004,
+         "1790": 8.2944,
+         "23695": -14.840361000000001,
+         "28087": 24.420142,
+         "2664": 25.090415999999998,
+         "17563": 0.0,
+         "26458": -49.476795
+        }
        },
        "route_completion": {
-        "n": 0,
-        "mean": null,
-        "sd": null,
-        "mean_abs": null,
-        "per_route": {}
+        "n": 8,
+        "mean": -0.48499999999999943,
+        "sd": 24.529645620875044,
+        "mean_abs": 11.465,
+        "per_route": {
+         "2534": 0.0,
+         "3561": 0.0,
+         "1790": 0.0,
+         "23695": 0.0,
+         "28087": 43.92,
+         "2664": 0.0,
+         "17563": 0.0,
+         "26458": -47.8
+        }
        },
        "mean_speed_mps": {
-        "n": 0,
-        "mean": null,
-        "sd": null,
-        "mean_abs": null,
-        "per_route": {}
+        "n": 8,
+        "mean": -0.3653028757558967,
+        "sd": 0.5353824346787379,
+        "mean_abs": 0.4893370666188185,
+        "per_route": {
+         "2534": -0.8337500928212491,
+         "3561": 0.2341128946136284,
+         "1790": -1.1104776610396339,
+         "23695": -0.573819288920721,
+         "28087": 0.2255049429738829,
+         "2664": -0.8401185277005943,
+         "17563": 0.0365189258641756,
+         "26458": -0.06039419901666254
+        }
        },
        "collision_events": {
-        "n": 0,
-        "mean": null,
-        "sd": null,
-        "mean_abs": null,
-        "per_route": {}
+        "n": 8,
+        "mean": 0.125,
+        "sd": 1.7268882005337975,
+        "mean_abs": 0.875,
+        "per_route": {
+         "2534": 4.0,
+         "3561": 0.0,
+         "1790": -2.0,
+         "23695": 0.0,
+         "28087": 0.0,
+         "2664": -1.0,
+         "17563": 0.0,
+         "26458": 0.0
+        }
        },
        "n_steps": {
-        "n": 0,
-        "mean": null,
-        "sd": null,
-        "mean_abs": null,
-        "per_route": {}
+        "n": 8,
+        "mean": 120.125,
+        "sd": 457.63286517219706,
+        "mean_abs": 350.375,
+        "per_route": {
+         "2534": 312.0,
+         "3561": -733.0,
+         "1790": 702.0,
+         "23695": 258.0,
+         "28087": -95.0,
+         "2664": 610.0,
+         "17563": -15.0,
+         "26458": -78.0
+        }
        }
       }
      },
@@ -12294,7 +12438,7 @@
   },
   "icc_formula": "One-way random-effects, single-measure ICC(1,1) (Shrout & Fleiss 1979):\n(MSB - MSW) / (MSB + (k - 1) MSW), k = 2 runs, rows = routes.",
   "note": "run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 44-route pass.",
-  "status_line": "partial: rep1 routes usable 8/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']"
+  "status_line": "partial: rep1 routes usable 16/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']"
  },
  "O": {
   "endpoint": "standstill_pct (primary); driving_score, route_completion, collision_events secondary",

@@ -723,30 +723,43 @@ Truncate each step log after the first step that completes 1,200 consecutive log
 
 ## N. Replicates and test–retest
 
-Status: partial: rep1 routes usable 8/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']
+Status: partial: rep1 routes usable 16/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']
 
 run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 44-route pass.
 
 ### Golden-6400
 
-Replicate routes done: {'run1': '8/8', 'rep1': '0/8', 'run2': '0/8'}
+Replicate routes done: {'run1': '8/8', 'rep1': '8/8', 'run2': '0/8'}
 
 | route | run | standstill % | DS | RC % | mean speed | coll. events | steps | status |
 |---|---|---|---|---|---|---|---|---|
 | 2534 | run1 | 5.27 | 60.00 | 100.0 | 3.121 | 1 | 854 | Completed |
+| 2534 | rep1 | 6.09 | 7.78 | 100.0 | 2.287 | 5 | 1166 | Completed |
 | 3561 | run1 | 66.50 | 57.28 | 100.0 | 0.805 | 1 | 3293 | Completed |
+| 3561 | rep1 | 56.52 | 54.55 | 100.0 | 1.039 | 1 | 2560 | Completed |
 | 1790 | run1 | 14.07 | 4.67 | 100.0 | 2.566 | 6 | 924 | Completed |
+| 1790 | rep1 | 46.25 | 12.96 | 100.0 | 1.456 | 4 | 1626 | Completed |
 | 23695 | run1 | 4.16 | 100.00 | 100.0 | 3.211 | 0 | 962 | Completed |
+| 23695 | rep1 | 7.30 | 85.16 | 100.0 | 2.637 | 0 | 1220 | Completed |
 | 28087 | run1 | 40.28 | 33.65 | 56.1 | 1.228 | 1 | 1147 | Failed - Agent deviated from the route |
+| 28087 | rep1 | 29.85 | 58.07 | 100.0 | 1.453 | 1 | 1052 | Completed |
 | 2664 | run1 | 14.62 | 34.91 | 100.0 | 2.366 | 2 | 1122 | Completed |
+| 2664 | rep1 | 44.23 | 60.00 | 100.0 | 1.526 | 1 | 1732 | Completed |
 | 17563 | run1 | 8.31 | 36.00 | 100.0 | 2.687 | 2 | 842 | Completed |
+| 17563 | rep1 | 8.83 | 36.00 | 100.0 | 2.723 | 2 | 827 | Completed |
 | 26458 | run1 | 28.25 | 100.00 | 100.0 | 1.761 | 0 | 885 | Completed |
+| 26458 | rep1 | 30.24 | 50.52 | 52.2 | 1.700 | 0 | 807 | Failed - Agent deviated from the route |
 
 Run-to-run differences (all routes with both runs):
 
 | pair | N | same status | metric | mean | SD | mean |d| |
 |---|---|---|---|---|---|---|
-| rep1 - run1 | 0 | - | no routes with both runs yet |  |  |  |
+| rep1 - run1 | 8 | 6/8 | standstill_pct | 5.979 | 16.254 | 11.082 |
+| rep1 - run1 | 8 | 6/8 | driving_score | -7.683 | 29.822 | 22.134 |
+| rep1 - run1 | 8 | 6/8 | route_completion | -0.485 | 24.530 | 11.465 |
+| rep1 - run1 | 8 | 6/8 | mean_speed_mps | -0.365 | 0.535 | 0.489 |
+| rep1 - run1 | 8 | 6/8 | collision_events | 0.125 | 1.727 | 0.875 |
+| rep1 - run1 | 8 | 6/8 | n_steps | 120.125 | 457.633 | 350.375 |
 | run2 - run1 | 0 | - | no routes with both runs yet |  |  |  |
 | run2 - rep1 | 0 | - | no routes with both runs yet |  |  |  |
 
