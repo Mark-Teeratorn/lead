@@ -4,7 +4,8 @@
 figure_1.png  fig_pipeline: inference/control pipeline schematic
 figure_2.png  fig_paired_standstill: per-route standstill dumbbell (Golden-6400 vs Flooded-6400-Matched)
 figure_3.png  fig_extent_cdf: empirical CDFs of predicted trajectory extent L
-figure_4.png  fig_model_by_controller: model x controller standstill (only if the gate-off runs are complete)
+figure_4.png  fig_model_by_controller: model x controller standstill, split into blocked time and the rest
+              (only if the gate-off runs are complete; needs analysis U in the manifest)
 """
 import json
 import sys
@@ -92,6 +93,7 @@ def route_bootstrap_ci(vals, n=10000, seed=0):
 
 
 def fig_model_by_controller():
+    """Standstill by model and controller, split into blocked time (analysis U of the manifest) and the rest."""
     pref = {"Golden": "model_matrix_golden_6400_nogate", "Flooded": "model_matrix_flooded_6400_nogate"}
     nog = {k: load_model_data([p]) for k, p in pref.items()}
     if any(len(v) < len(CANONICAL_44) for v in nog.values()):
@@ -100,22 +102,29 @@ def fig_model_by_controller():
         return
     dflt = {"Golden": load_model_data(MODEL_PREFIXES["Golden-6400"]),
             "Flooded": load_model_data(MODEL_PREFIXES["Flooded-6400-Matched"])}
-    fig, ax = plt.subplots(figsize=(6, 4))
+    U = json.loads(MANIFEST.read_text())["U"]["routes_with_blocked_time"]
+    arm = {("Golden", 0): "Golden-6400 run1", ("Flooded", 0): "Flooded-6400-Matched run1",
+           ("Golden", 1): "Golden-6400 nogate", ("Flooded", 1): "Flooded-6400-Matched nogate"}
+    fig, ax = plt.subplots(figsize=(6, 4.2))
     x, w = np.arange(2), 0.36
-    for j, (ctrl, data, hatch) in enumerate((("Default controller", dflt, None), ("Gate-off controller", nog, "//"))):
+    for j, data in enumerate((dflt, nog)):
         for i, k in enumerate(("Golden", "Flooded")):
             v = [data[k][r]["standstill_fraction"] * 100 for r in CANONICAL_44]
             m, (lo, hi) = np.mean(v), route_bootstrap_ci(v)
-            ax.bar(x[i] + (j - 0.5) * w, m, w, color=(C_GOLD, C_FLOOD)[i], hatch=hatch, edgecolor="white",
-                   label=ctrl if i == 0 else None)
-            ax.errorbar(x[i] + (j - 0.5) * w, m, yerr=[[m - lo], [hi - m]], color="k", capsize=3, lw=1)
+            u = U[arm[(k, j)]]
+            assert abs(u["mean_standstill_pct"] - m) < 1e-6, "manifest and step logs disagree on mean standstill"
+            blk = u["mean_blocked_pct"]
+            c, xpos = (C_GOLD, C_FLOOD)[i], x[j] + (i - 0.5) * w
+            ax.bar(xpos, m - blk, w, color=c, edgecolor="white", label=LABEL[(NAME_G, NAME_F)[i]] if j == 0 else None)
+            ax.bar(xpos, blk, w, bottom=m - blk, color=c, alpha=0.45, hatch="///", edgecolor="white")
+            ax.errorbar(xpos, m, yerr=[[m - lo], [hi - m]], color="k", capsize=3, lw=1)
+            print(f"fig_model_by_controller: {arm[(k, j)]}: standstill {m:.2f} %, of which blocked {blk:.2f} %")
+    ax.bar(0, 0, 0, color="0.6", alpha=0.45, hatch="///", edgecolor="white", label="of which blocked time")
     ax.set_xticks(x)
-    ax.set_xticklabels(["Golden-6400", "Flooded-6400"])
+    ax.set_xticklabels(["Default controller", "Gate-off controller"])
     ax.set_ylabel("Standstill time (% of route steps)")
-    h, l = ax.get_legend_handles_labels()
-    ax.legend(h, l, frameon=False)
-    for hh in ax.get_legend().legend_handles:
-        hh.set_color("0.5")
+    ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.14), ncol=3, fontsize=9.5,
+              columnspacing=1.2, handlelength=1.6)
     save(fig, "figure_4.png")
 
 
