@@ -11508,7 +11508,8 @@
    "model_matrix_flooded_6400_run2": 0,
    "model_matrix_golden_6400_nogate": 0,
    "model_matrix_flooded_6400_nogate": 44,
-   "base_run2": 0
+   "base_run2": 0,
+   "model_matrix_fgbalanced_6400": 0
   },
   "usable_route_ids": {
    "model_matrix_golden_6400_rep1": [
@@ -11580,7 +11581,8 @@
     "3561",
     "3936"
    ],
-   "base_run2": []
+   "base_run2": [],
+   "model_matrix_fgbalanced_6400": []
   },
   "usable_but_unparsable_treated_as_absent": {},
   "usability_rule": "A route directory is usable only if checkpoint_endpoint.json parses, carries\n_checkpoint.global_record.scores_mean and a record, and predicted_trajectories.jsonl exists."
@@ -13321,5 +13323,251 @@
   },
   "all_reproduced": true,
   "status_line": "complete"
+ },
+ "S": {
+  "endpoint": "standstill_pct (v < 0.1 m/s); driving_score, route_completion, collision_events descriptive",
+  "label": "exploratory; one training seed, one evaluation pass of the Balanced model",
+  "comparisons": {
+   "Balanced minus Flooded-6400-Matched (mean of run1 and run2)": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400": 44,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 44,
+      "model_matrix_flooded_6400": 44,
+      "model_matrix_flooded_6400_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400": 37,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 37,
+      "model_matrix_flooded_6400": 37,
+      "model_matrix_flooded_6400_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400": 33,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 33,
+      "model_matrix_flooded_6400": 33,
+      "model_matrix_flooded_6400_run2": 33
+     }
+    }
+   },
+   "Balanced minus Flooded-6400-Matched run1": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400": 44
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 44,
+      "model_matrix_flooded_6400": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400": 37
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 37,
+      "model_matrix_flooded_6400": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400": 33
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 33,
+      "model_matrix_flooded_6400": 33
+     }
+    }
+   },
+   "Balanced minus Flooded-6400-Matched run2": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 44,
+      "model_matrix_flooded_6400_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 37,
+      "model_matrix_flooded_6400_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_flooded_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 33,
+      "model_matrix_flooded_6400_run2": 33
+     }
+    }
+   },
+   "Balanced minus Golden-6400 (mean of run1 and run2)": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400": 44,
+      "model_matrix_golden_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 44,
+      "model_matrix_golden_6400": 44,
+      "model_matrix_golden_6400_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400": 37,
+      "model_matrix_golden_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 37,
+      "model_matrix_golden_6400": 37,
+      "model_matrix_golden_6400_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400": 33,
+      "model_matrix_golden_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 33,
+      "model_matrix_golden_6400": 33,
+      "model_matrix_golden_6400_run2": 33
+     }
+    }
+   },
+   "Balanced minus Golden-6400 run1": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400": 44
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 44,
+      "model_matrix_golden_6400": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400": 37
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 37,
+      "model_matrix_golden_6400": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400": 33
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 33,
+      "model_matrix_golden_6400": 33
+     }
+    }
+   },
+   "Balanced minus Golden-6400 run2": {
+    "44 routes": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 44,
+      "model_matrix_golden_6400_run2": 44
+     }
+    },
+    "37 routes (excl. 7 training-overlap routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 37,
+      "model_matrix_golden_6400_run2": 37
+     }
+    },
+    "33 routes (excl. 11 gate-flagged routes)": {
+     "status": "pending",
+     "have": {
+      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_golden_6400_run2": 0
+     },
+     "need": {
+      "model_matrix_fgbalanced_6400": 33,
+      "model_matrix_golden_6400_run2": 33
+     }
+    }
+   }
+  },
+  "prespecified_reading_44": {
+   "status": "pending",
+   "have": {
+    "model_matrix_fgbalanced_6400": 0,
+    "model_matrix_flooded_6400": 44,
+    "model_matrix_flooded_6400_run2": 0,
+    "model_matrix_golden_6400": 44,
+    "model_matrix_golden_6400_run2": 0
+   },
+   "need": {
+    "model_matrix_fgbalanced_6400": 44,
+    "model_matrix_flooded_6400": 44,
+    "model_matrix_flooded_6400_run2": 44,
+    "model_matrix_golden_6400": 44,
+    "model_matrix_golden_6400_run2": 44
+   }
+  },
+  "status_line": "pending: 18 of 18 parts (Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 44 routes, Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 33 routes (excl. 11 gate-flagged routes), Balanced minus Flooded-6400-Matched run1 | 44 routes, Balanced minus Flooded-6400-Matched run1 | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched run1 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Flooded-6400-Matched run2 | 44 routes, Balanced minus Flooded-6400-Matched run2 | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched run2 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 (mean of run1 and run2) | 44 routes, Balanced minus Golden-6400 (mean of run1 and run2) | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 (mean of run1 and run2) | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 run1 | 44 routes, Balanced minus Golden-6400 run1 | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 run1 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 run2 | 44 routes, Balanced minus Golden-6400 run2 | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 run2 | 33 routes (excl. 11 gate-flagged routes))"
  }
 }

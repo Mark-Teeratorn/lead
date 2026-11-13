@@ -1276,6 +1276,7 @@ NEW_RUN_TAGS = {
     'Golden-6400 nogate': 'model_matrix_golden_6400_nogate',
     'Flooded-6400-Matched nogate': 'model_matrix_flooded_6400_nogate',
     'Base run2': 'base_run2',
+    'Balanced-6400 run1': 'model_matrix_fgbalanced_6400',   # ANALYSIS_ADDENDUM.md section 6
 }
 # First-pass arms, named the same way (tags from MODEL_PREFIXES).
 RUN1_ARMS = {'Golden-6400 run1': G64, 'Flooded-6400-Matched run1': FM, 'Base run1': BASE,
@@ -1676,7 +1677,57 @@ def analysis_L_additional(arms):
     return rows
 
 
-# --------------------------------------------------------------------------- report N-R
+def analysis_S(arms):
+    """Decoupling arm (ANALYSIS_ADDENDUM.md section 6): Matrix-FloodedGroups-Balanced-6400, one pass,
+    against each 6,400-frame model. Comparator = per-route mean of its two default-controller passes;
+    each pass separately as a sensitivity row. Exploratory."""
+    B = 'Balanced-6400 run1'
+    comparators = {'Flooded-6400-Matched': ('Flooded-6400-Matched run1', 'Flooded-6400-Matched run2'),
+                   'Golden-6400': ('Golden-6400 run1', 'Golden-6400 run2')}
+    res = {'endpoint': 'standstill_pct (v < 0.1 m/s); driving_score, route_completion, collision_events descriptive',
+           'label': 'exploratory; one training seed, one evaluation pass of the Balanced model',
+           'comparisons': {}}
+    for cmp_name, (r1, r2) in comparators.items():
+        for row, comp_arms in ((f'Balanced minus {cmp_name} (mean of run1 and run2)', (r1, r2)),
+                               (f'Balanced minus {cmp_name} run1', (r1,)),
+                               (f'Balanced minus {cmp_name} run2', (r2,))):
+            out = {}
+            for sname, routes in ROUTE_SUBSETS.items():
+                p = pending(arms, [(n, routes) for n in (B,) + comp_arms])
+                if p:
+                    out[sname] = p
+                    continue
+                out[sname] = {k: paired(vec(arms, B, RUN_METRICS[k], routes),
+                                        np.mean([vec(arms, n, RUN_METRICS[k], routes) for n in comp_arms], axis=0))
+                              for k in OBR_METRICS}
+            res['comparisons'][row] = out
+    # Reading fixed in the addendum, on 44 routes with the two-run-mean comparators.
+    vf = res['comparisons']['Balanced minus Flooded-6400-Matched (mean of run1 and run2)']['44 routes']
+    vg = res['comparisons']['Balanced minus Golden-6400 (mean of run1 and run2)']['44 routes']
+    if is_pending(vf) or is_pending(vg):
+        res['prespecified_reading_44'] = {'status': 'pending', 'have': {**vf.get('have', {}), **vg.get('have', {})},
+                                          'need': {**vf.get('need', {}), **vg.get('need', {})}}
+    else:
+        cf, cg = vf['standstill_pct']['bca95'], vg['standstill_pct']['bca95']
+        below_f, sep_g_above = cf[1] < 0, cg[0] > 0
+        sep_f, sep_g = (cf[1] < 0 or cf[0] > 0), (cg[1] < 0 or cg[0] > 0)
+        if below_f and not sep_g:
+            reading = 'follows manoeuvre mix and stationary share, not the group mix'
+        elif sep_g_above and not sep_f:
+            reading = 'follows the group mix'
+        else:
+            reading = 'inconclusive'
+        res['prespecified_reading_44'] = {
+            'reading': reading, 'balanced_minus_flooded_bca95': cf, 'balanced_minus_golden_bca95': cg,
+            'rule': 'Balanced below Flooded (interval excludes 0) and not separable from Golden -> manoeuvre mix and '
+                    'stationary share; Balanced above Golden (interval excludes 0) and not separable from Flooded -> '
+                    'group mix; anything else -> inconclusive'}
+    res['status_line'] = status_line({f'{c} | {s}': v for c, o in res['comparisons'].items()
+                                      for s, v in o.items() if s in ROUTE_SUBSETS})
+    return res
+
+
+# --------------------------------------------------------------------------- report N-S
 
 def is_pending(v):
     return isinstance(v, dict) and v.get('status') == 'pending'
@@ -1782,6 +1833,13 @@ def render_new(man):
         L += paired_block(sn, {k: v for k, v in e.items() if k != 'reproduction'})
         L += [f"- {lab}: expected `{x['expected_text']}` → {'reproduced' if x['all_match'] else 'NOT reproduced ' + str(x['matches'])}"
               for lab, x in e['reproduction'].items()] + ['']
+    S = man['S']
+    L += ['## S. Decoupling arm (FloodedGroups-Balanced-6400)', '', f"Status: {S['status_line']}", '', S['label'], '']
+    for c, o in S['comparisons'].items():
+        for sn in ROUTE_SUBSETS:
+            L += paired_block(f'{c}, {sn}', o[sn])
+    r = S['prespecified_reading_44']
+    L += [f"Pre-specified reading (44 routes): {pending_str(r) if is_pending(r) else r['reading']}", '']
     return '\n'.join(L) + '\n'
 
 
@@ -1830,7 +1888,7 @@ def main():
     man['L'] = analysis_L(data, counts, expo)
     man['M'] = analysis_M(data)
 
-    # N-R: additional runs (whatever subset is usable now)
+    # N-S: additional runs (whatever subset is usable now)
     ov = check_route_constants()
     runs, unparsable = load_new_runs()
     arms = {**{n: data[m] for n, m in RUN1_ARMS.items()}, **runs}
@@ -1847,6 +1905,7 @@ def main():
     man['P'] = analysis_P(arms)
     man['Q'] = analysis_Q(arms, man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']['wilcoxon']['p'])
     man['R'] = analysis_R(arms, ov)
+    man['S'] = analysis_S(arms)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man))

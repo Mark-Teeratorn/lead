@@ -940,3 +940,47 @@ Expected values from `docs/provenance/train_eval_overlap_canonical44.json`; all 
 - H1: expected `N=33 delta=15.79 CI[7.90,25.92] p=0.003828` → reproduced
 - H2: expected `N=33 delta=-7.70 CI[-16.59,1.20] p=0.01605` → reproduced
 
+## S. Decoupling arm (FloodedGroups-Balanced-6400)
+
+Status: pending: 18 of 18 parts (Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 44 routes, Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched (mean of run1 and run2) | 33 routes (excl. 11 gate-flagged routes), Balanced minus Flooded-6400-Matched run1 | 44 routes, Balanced minus Flooded-6400-Matched run1 | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched run1 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Flooded-6400-Matched run2 | 44 routes, Balanced minus Flooded-6400-Matched run2 | 37 routes (excl. 7 training-overlap routes), Balanced minus Flooded-6400-Matched run2 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 (mean of run1 and run2) | 44 routes, Balanced minus Golden-6400 (mean of run1 and run2) | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 (mean of run1 and run2) | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 run1 | 44 routes, Balanced minus Golden-6400 run1 | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 run1 | 33 routes (excl. 11 gate-flagged routes), Balanced minus Golden-6400 run2 | 44 routes, Balanced minus Golden-6400 run2 | 37 routes (excl. 7 training-overlap routes), Balanced minus Golden-6400 run2 | 33 routes (excl. 11 gate-flagged routes))
+
+exploratory; one training seed, one evaluation pass of the Balanced model
+
+**Balanced minus Flooded-6400-Matched (mean of run1 and run2), 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
+
+**Balanced minus Flooded-6400-Matched (mean of run1 and run2), 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 37, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_flooded_6400': 37, 'model_matrix_flooded_6400_run2': 37}
+
+**Balanced minus Flooded-6400-Matched (mean of run1 and run2), 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 33, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_flooded_6400': 33, 'model_matrix_flooded_6400_run2': 33}
+
+**Balanced minus Flooded-6400-Matched run1, 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 44}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400': 44}
+
+**Balanced minus Flooded-6400-Matched run1, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 37}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_flooded_6400': 37}
+
+**Balanced minus Flooded-6400-Matched run1, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 33}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_flooded_6400': 33}
+
+**Balanced minus Flooded-6400-Matched run2, 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400_run2': 44}
+
+**Balanced minus Flooded-6400-Matched run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_flooded_6400_run2': 37}
+
+**Balanced minus Flooded-6400-Matched run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_flooded_6400_run2': 33}
+
+**Balanced minus Golden-6400 (mean of run1 and run2), 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
+
+**Balanced minus Golden-6400 (mean of run1 and run2), 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 37}
+
+**Balanced minus Golden-6400 (mean of run1 and run2), 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 33}
+
+**Balanced minus Golden-6400 run1, 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 44}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400': 44}
+
+**Balanced minus Golden-6400 run1, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 37}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_golden_6400': 37}
+
+**Balanced minus Golden-6400 run1, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 33}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400': 33}
+
+**Balanced minus Golden-6400 run2, 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400_run2': 44}
+
+**Balanced minus Golden-6400 run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_golden_6400_run2': 37}
+
+**Balanced minus Golden-6400 run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400_run2': 33}
+
+Pre-specified reading (44 routes): pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
+
