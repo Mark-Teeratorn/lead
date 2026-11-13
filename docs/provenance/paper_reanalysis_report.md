@@ -662,6 +662,34 @@ All 44 routes; no subset selection.
 | collisions raw v/p/l | 53/0/4 | 47/0/2 | 39/0/5 | 56/0/1 | 30/1/6 | 42/3/1 |
 | collisions events v/p/l | 46/0/4 | 42/0/2 | 37/0/5 | 50/0/1 | 30/1/5 | 41/2/1 |
 
+Additional runs with all 44 routes usable: ['Flooded-6400-Matched nogate']
+
+| metric | Flooded-6400-Matched nogate |
+|---|---|
+| mean_ds | 47.9530 |
+| mean_rc | 81.1570 |
+| mean_penalty | 0.6199 |
+| progress_km | 3.9150 |
+| odometer_km | 4.2054 |
+| collisions_raw | 53 |
+| collisions_events | 51 |
+| events_per_progress_km | 13.0268 |
+| events_per_odometer_km | 12.1273 |
+| non_timeout_infractions | 80 |
+| non_timeout_per_progress_km | 20.4342 |
+| non_timeout_per_odometer_km | 19.0233 |
+| standstill_pct | 24.5659 |
+| standstill_pct_as_compute_paper_tables | 24.5659 |
+| mean_speed_route_mean | 1.7690 |
+| mean_speed_pooled | 1.6049 |
+| moving_steer_jerk | 0.0471 |
+| hard_brake_pct | 5.1758 |
+| red_light | 2 |
+| stop_infraction | 1 |
+| outside_route_lanes | 10 |
+| vehicle_blocked | 1 |
+| min_speed_infractions | 678 |
+
 Manuscript mean-speed values vs the two definitions:
 
 | model | manuscript | route mean | pooled | matches route mean | matches pooled |
@@ -797,49 +825,49 @@ standstill_pct (primary); driving_score, route_completion, collision_events seco
 
 ## P. Gate-off controller
 
-Status: pending: 5 of 5 parts ((2) Golden minus Flooded, gate-off, (3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1, (3) interaction, default = mean of run1 and run2, (4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1), (5) common-window distance (m)); (1) and (6) partial: Golden 0/44, Flooded 1/44
+Status: pending: 5 of 5 parts ((2) Golden minus Flooded, gate-off, (3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1, (3) interaction, default = mean of run1 and run2, (4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1), (5) common-window distance (m)); (1) and (6) partial: Golden 0/44, Flooded 44/44
 
 **(1) Golden-6400**: no usable gate-off routes yet
 
-**(1) Flooded-6400-Matched gate-off minus default — PARTIAL: 1/44 routes usable**
+**(1) Flooded-6400-Matched gate-off minus default — complete (44 routes)**
 
 | comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| standstill_pct_v<0.1 | 11.421 | 8.974 | 2.447 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 1/0/0 | 1.000 |
-| standstill_pct_v<0.5 | 16.367 | 12.525 | 3.842 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 1/0/0 | 1.000 |
-| standstill_pct_v<1.0 | 23.381 | 19.231 | 4.151 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 1/0/0 | 1.000 |
-| mean_speed_mps | 2.406 | 2.637 | -0.231 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 0/1/0 | -1.000 |
-| route_completion | 100.000 | 100.000 | 0.000 | n/a | n/a | 1 | n/a | n/a | n/a | 0/0/1 | n/a |
-| driving_score | 21.600 | 60.000 | -38.400 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 0/1/0 | -1.000 |
-| collision_events | 3.000 | 1.000 | 2.000 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 1/0/0 | 1.000 |
-| collision_events_vehicle | 3.000 | 1.000 | 2.000 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 1/0/0 | 1.000 |
-| collision_events_pedestrian | 0.000 | 0.000 | 0.000 | n/a | n/a | 1 | n/a | n/a | n/a | 0/0/1 | n/a |
-| collision_events_layout | 0.000 | 0.000 | 0.000 | n/a | n/a | 1 | n/a | n/a | n/a | 0/0/1 | n/a |
-| n_steps | 1112.000 | 1014.000 | 98.000 | n/a | 0.0 | 0 | 1.0000 | 1.0000 | 0.3173 | 1/0/0 | 1.000 |
-| ended_by_60s_rule | 0.000 | 0.000 | 0.000 | n/a | n/a | 1 | n/a | n/a | n/a | 0/0/1 | n/a |
+| standstill_pct_v<0.1 | 24.566 | 33.776 | -9.210 | [-15.565, -4.350] | 191.0 | 0 | 2.34e-04 | 2.34e-04 | 3.89e-04 | 10/34/0 | -0.614 |
+| standstill_pct_v<0.5 | 32.568 | 39.328 | -6.760 | [-12.720, -2.106] | 259.0 | 0 | 0.0052 | 0.0052 | 0.0059 | 12/32/0 | -0.477 |
+| standstill_pct_v<1.0 | 41.497 | 46.168 | -4.671 | [-9.996, -0.502] | 333.0 | 0 | 0.0590 | 0.0590 | 0.0587 | 16/28/0 | -0.327 |
+| mean_speed_mps | 1.769 | 1.643 | 0.126 | [-0.003, 0.291] | 398.0 | 0 | 0.2629 | 0.2629 | 0.2576 | 23/21/0 | 0.196 |
+| route_completion | 81.157 | 74.647 | 6.510 | [-0.449, 15.229] | 62.0 | 25 | 0.1842 | n/a | 0.1842 | 11/8/25 | 0.347 |
+| driving_score | 47.953 | 53.088 | -5.135 | [-14.771, 4.566] | 242.0 | 9 | 0.2318 | n/a | 0.2318 | 12/23/9 | -0.232 |
+| collision_events | 1.159 | 0.818 | 0.341 | [-0.091, 0.795] | 110.0 | 19 | 0.1466 | n/a | 0.1466 | 16/9/19 | 0.323 |
+| collision_events_vehicle | 1.023 | 0.682 | 0.341 | [-0.045, 0.773] | 62.5 | 24 | 0.1046 | n/a | 0.1046 | 13/7/24 | 0.405 |
+| collision_events_pedestrian | 0.045 | 0.023 | 0.023 | [0.000, 0.068] | 0.0 | 43 | 0.3173 | n/a | 0.3173 | 1/0/43 | 1.000 |
+| collision_events_layout | 0.091 | 0.114 | -0.023 | [-0.182, 0.091] | 20.0 | 35 | 0.7389 | n/a | 0.7389 | 4/5/35 | -0.111 |
+| n_steps | 1191.068 | 1296.750 | -105.682 | [-302.539, 50.337] | 375.0 | 0 | 0.1647 | 0.1647 | 0.1614 | 17/27/0 | -0.242 |
+| ended_by_60s_rule | 0.045 | 0.159 | -0.114 | [-0.273, -0.068] | 0.0 | 39 | 0.0253 | n/a | 0.0253 | 0/5/39 | -1.000 |
 
-Routes ended by the 60 s rule: {'gate_off': 0, 'default': 0}
+Routes ended by the 60 s rule: {'gate_off': 2, 'default': 7}
 
-**(2) Golden minus Flooded, gate-off**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 1}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
+**(2) Golden minus Flooded, gate-off**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 44}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
 
-**(3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 1}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
+**(3) interaction (G_nogate - F_nogate) - (G_default - F_default), default = run1**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 44}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
 
-**(3) interaction, default = mean of run1 and run2**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 1, 'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**(3) interaction, default = mean of run1 and run2**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
 **(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)**: pending: have {'model_matrix_golden_6400_run2': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**(5) common-window distance (m)**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 1}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
+**(5) common-window distance (m)**: pending: have {'model_matrix_golden_6400_nogate': 0, 'model_matrix_flooded_6400_nogate': 44}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44}
 
 **(6) Golden-6400**: no usable gate-off routes yet
 
-**(6) Flooded-6400-Matched** (PARTIAL: 1/44 routes): gate_would_fire 1.26 % of all steps, 9.45 % of standstill steps; max |logged traj_extent − waypoint chord| = 0.0132 m; steps where gate_would_fire disagrees with the rule: 0
+**(6) Flooded-6400-Matched** (complete (44 routes)): gate_would_fire 10.73 % of all steps, 33.00 % of standstill steps; max |logged traj_extent − waypoint chord| = 0.2960 m; steps where gate_would_fire disagrees with the rule: 0
 
 | band | % all steps standstill ∧ band | share of standstill steps % |
 |---|---|---|
-| L<0.64 | 0.27 | 2.4 |
-| 0.64<=L<1.5 | 0.63 | 5.5 |
-| 1.5<=L<2.0 & v<0.5 | 0.18 | 1.6 |
-| gate inactive | 10.34 | 90.6 |
+| L<0.64 | 4.55 | 13.0 |
+| 0.64<=L<1.5 | 3.53 | 13.5 |
+| 1.5<=L<2.0 & v<0.5 | 1.49 | 6.5 |
+| gate inactive | 14.99 | 67.0 |
 
 ## Q. H1 with the re-run Base
 
