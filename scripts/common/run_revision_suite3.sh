@@ -22,6 +22,8 @@ MAX_ATTEMPTS=3              # launches per route; only routes with no score are 
 FLOODED_DIR="/home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400"
 GOLDEN_DIR="/home/aimslab/checkpoints/action_experts/Alpamayo-1.5-10B-Matrix-Golden-6400-A15"
 FGBAL_DIR="${FGBAL_DIR:-/mnt/disk2/checkpoints/action_experts/extracted_matrix_fgbalanced_6400}"
+FGBAL_EXPORT_DIR="${FGBAL_EXPORT_DIR:-/mnt/disk2/fgbalanced_unpacked/Alpamayo-1.5-10B-Matrix-FloodedGroups-Balanced-6400-A15}"
+LEAD_PYTHON="/home/aimslab/lead/.venv/bin/python"
 AGENT_DEFAULT="src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent.py"
 AGENT_NOGATE="src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent_nogate.py"
 
@@ -58,10 +60,12 @@ ensure_server() {   # $1 = model dir
     pkill -9 -f "$SERVER_PAT" 2>/dev/null || true
     rm -f "$SOCK_PATH"
     sleep 5
-    HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONUNBUFFERED=1 \
-    PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True PYTORCH_ALLOC_CONF=expandable_segments:True \
     local model_arg=""
     [ "$model_dir" != "BASE" ] && model_arg="--model-path $model_dir"
+    # The environment prefix must sit directly on the server command (it was on the `local` line before 13 Nov 23:30,
+    # which left the server without these variables; fixed before this suite started any job).
+    HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONUNBUFFERED=1 \
+    PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True PYTORCH_ALLOC_CONF=expandable_segments:True \
     setsid nohup $FLASHDRIVE_PYTHON -u /home/aimslab/flashdrive/scripts/flashdrive_server.py \
         $model_arg --socket-path "$SOCK_PATH" > /tmp/flashdrive_server_revision3.log 2>&1 &
     for i in $(seq 1 900); do
@@ -158,8 +162,27 @@ PY
 while kill -0 "$PART2_PID" 2>/dev/null; do sleep 60; done
 
 audit "- | suite3 start | git_head=$(git rev-parse HEAD) pid=$$"
-if [ ! -f "$FGBAL_DIR/action_expert.safetensors" ]; then
-    audit "- | suite3 abort | $FGBAL_DIR/action_expert.safetensors not found"
+# The action expert is extracted here, not earlier: the extraction is memory-heavy and must not run
+# while a route, the simulator or a model server is running.
+if [ ! -f "$FGBAL_DIR/metadata.json" ]; then
+    if [ ! -f "$FGBAL_EXPORT_DIR/model.safetensors.index.json" ]; then
+        audit "- | suite3 abort | unpacked export not found at $FGBAL_EXPORT_DIR"
+        exit 1
+    fi
+    pkill -9 -f "leaderboard_evaluator.py" 2>/dev/null || true
+    pkill -9 -f "CarlaUE4" 2>/dev/null || true
+    pkill -9 -f "$SERVER_PAT" 2>/dev/null || true
+    rm -f "$SOCK_PATH"
+    sleep 15
+    audit "- | extract | server and simulator stopped; extracting action expert from $FGBAL_EXPORT_DIR"
+    mkdir -p "$FGBAL_DIR"
+    $LEAD_PYTHON /home/aimslab/flashdrive/scripts/extract_action_expert.py \
+        --checkpoint "$FGBAL_EXPORT_DIR" --output-dir "$FGBAL_DIR" > outputs/revision_suite3_extract.log 2>&1
+    audit "- | extract | exit=$?"
+    cp -n "$FGBAL_EXPORT_DIR/model.safetensors.index.json" "$FGBAL_DIR/" 2>/dev/null || true
+fi
+if [ ! -f "$FGBAL_DIR/action_expert.safetensors" ] || ! grep -q '"num_expert_tensors": 416' "$FGBAL_DIR/metadata.json" 2>/dev/null; then
+    audit "- | suite3 abort | $FGBAL_DIR: action_expert.safetensors missing or metadata does not show 416 tensors"
     exit 1
 fi
 FGBAL_SHA=$(sha_of "$FGBAL_DIR/action_expert.safetensors")

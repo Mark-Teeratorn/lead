@@ -60,10 +60,12 @@ ensure_server() {   # $1 = model dir
     pkill -9 -f "$SERVER_PAT" 2>/dev/null || true
     rm -f "$SOCK_PATH"
     sleep 5
-    HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONUNBUFFERED=1 \
-    PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True PYTORCH_ALLOC_CONF=expandable_segments:True \
     local model_arg=""
     [ "$model_dir" != "BASE" ] && model_arg="--model-path $model_dir"
+    # The environment prefix must sit directly on the server command (it was on the `local` line before 13 Nov 23:30,
+    # which left the server without these variables; fixed before this suite started any job).
+    HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONUNBUFFERED=1 \
+    PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True PYTORCH_ALLOC_CONF=expandable_segments:True \
     setsid nohup $FLASHDRIVE_PYTHON -u /home/aimslab/flashdrive/scripts/flashdrive_server.py \
         $model_arg --socket-path "$SOCK_PATH" > /tmp/flashdrive_server_revision2.log 2>&1 &
     for i in $(seq 1 900); do
