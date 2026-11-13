@@ -107,7 +107,7 @@ Comparisons: paired Golden − Flooded difference of standstill time per class (
 
 Duration and ending are proxies. The logs contain no record of whether a hazard was ahead, so this analysis cannot say that a stop was justified; it separates stops the vehicle recovers from quickly from stops it does not. Every reading is set against the test–retest spread of Section 5a.
 
-## 8. Driven standstill ("blocked" time), written 14 November 2026, 05:50 (UTC+7)
+## 8. Driven standstill ("blocked" time), written 14 November 2026, 05:25 (UTC+7)
 
 Post hoc and exploratory. No new runs; existing per-step logs only (speed, throttle and brake as finally sent to the vehicle). The confirmatory record of Section 1 is not changed.
 
