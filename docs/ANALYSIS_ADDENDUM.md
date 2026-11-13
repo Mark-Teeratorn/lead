@@ -106,3 +106,21 @@ Comparisons: paired Golden − Flooded difference of standstill time per class (
 - otherwise *mixed*.
 
 Duration and ending are proxies. The logs contain no record of whether a hazard was ahead, so this analysis cannot say that a stop was justified; it separates stops the vehicle recovers from quickly from stops it does not. Every reading is set against the test–retest spread of Section 5a.
+
+## 8. Driven standstill ("blocked" time), written 14 November 2026, 05:50 (UTC+7)
+
+Post hoc and exploratory. No new runs; existing per-step logs only (speed, throttle and brake as finally sent to the vehicle). The confirmatory record of Section 1 is not changed.
+
+**What had been seen when this was written.** The complete gate-off result for both models (analysis P, 44 routes each) and analysis T with its gate-off row. For stop episodes of 200 steps or longer in four arms (both models, default controller run 1 and gate-off), one line per episode: its length, the median throttle, the share of its steps with throttle and with brake, the median predicted extent, the most frequent rationale texts, the route's final status and its number of collision records. In that listing most long stops of Golden-6400 had throttle near the 0.6 cap on every step and no brake. Also seen earlier: the pooled command classes of analysis E (default controller, run 1, gate-inactive steps only). Not computed or viewed: any per-route value of the classes defined below, any paired statistic on them, or their totals per arm.
+
+**Definition.** Every standstill step (speed < 0.1 m/s) gets one class from the logged final command:
+- *blocked*: the step lies in a run of at least 100 consecutive standstill steps (5 s) that all have throttle ≥ 0.35 and brake = 0. The controller is asking for clear acceleration and the vehicle does not move. (0.35 is the controller's own start-assist throttle; 0.6 is its cap.)
+- *driven, transient*: throttle ≥ 0.35 and brake = 0, but not in such a run (for example pulling away from rest).
+- *not driven*: every other standstill step (brake applied, or throttle below 0.35). This holds the gate's holding brake, PID braking, and low requested acceleration.
+Per route and arm, time in each class is a percentage of the route's logged steps, so the three classes add up to the standstill fraction of Section 1. Derived endpoint: *standstill without blocked time* (standstill fraction minus the blocked class).
+
+**Comparisons.** Paired Golden − Flooded difference per class and for the derived endpoint (mean, BCa interval, Wilcoxon test as in Section 1) for the default controller (run 1; run 2 and the two-run mean when available) and the gate-off controller; gate-off minus default per model; the model × controller difference of differences. Descriptive: number of routes with any blocked time, and how many of them have at least one collision record, against the same share among routes without blocked time.
+
+**Sensitivity, fixed here.** Run length 40 and 200 steps instead of 100; throttle threshold 0.2 instead of 0.35.
+
+**Reading.** No decision rule. "Blocked" is inferred from the command log, not from a contact sensor: it says the vehicle was commanded to accelerate and did not move, which is what happens when it rests against another vehicle or an obstacle, but the logs do not record contact at each step. If the Golden − Flooded difference in standstill without blocked time has an interval that excludes 0 under both controllers while the difference in blocked time does not favour Golden, the manuscript will say that the standstill endpoint mixes two things (stops the controller commands, and time spent held in place while driving) and that the curated mix reduces the first only. Every reading is set against the test–retest spread of Section 5a.
