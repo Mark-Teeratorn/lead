@@ -1873,7 +1873,7 @@ def u_metrics(thr=U_THR, run=U_RUN):
             'standstill_without_blocked_pct': lambda rd: pct((np.asarray(rd['speed']) < SS_V) & ~blocked_masks(rd, thr, run)[0])}
 
 
-def analysis_U(arms, scen=None):
+def analysis_U(arms, scen=None, data=None):
     """ANALYSIS_ADDENDUM.md section 8. Post hoc, exploratory, existing step logs only."""
     G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
     GN, FN = 'Golden-6400 nogate', 'Flooded-6400-Matched nogate'
@@ -1954,6 +1954,23 @@ def analysis_U(arms, scen=None):
                                                  'flooded': m(fa, sel, RUN_METRICS['collision_events'])},
             'collision_events_on_other_routes': {'golden': m(ga, rest, RUN_METRICS['collision_events']),
                                                  'flooded': m(fa, rest, RUN_METRICS['collision_events'])}}
+    # section 8a: the other models, default controller, run-1 logs
+    if data is not None:
+        dv = lambda mname, fn: np.array([fn(data[mname][r]) for r in CANONICAL_44])
+        res['all_models_default_run1'] = {}
+        for mname in MODELS:
+            blk = dv(mname, M['time_blocked_pct'])
+            col = dv(mname, RUN_METRICS['collision_events']) > 0
+            res['all_models_default_run1'][mname] = {
+                'mean_standstill_pct': float(dv(mname, M['standstill_pct']).mean()),
+                **{f'mean_{c}_pct': float(dv(mname, M[f'time_{c}_pct']).mean()) for c in U_CLASSES},
+                'mean_standstill_without_blocked_pct': float(dv(mname, M['standstill_without_blocked_pct']).mean()),
+                'n_routes_with_blocked_time': int((blk > 0).sum()),
+                'blocked_routes_with_collision_event': int(((blk > 0) & col).sum()),
+                'routes': [r for r, b in zip(CANONICAL_44, blk) if b > 0]}
+        res['other_contrasts_default_run1'] = {
+            f'{a} minus {b}': {k: paired(dv(a, M[k]), dv(b, M[k])) for k in ('time_blocked_pct', 'standstill_without_blocked_pct', 'standstill_pct')}
+            for a, b in ((G16, F16), (G64, FH), (G64, G16), (FM, F16), (G16, BASE), (F16, BASE))}
     res['status_line'] = status_line(res['golden_minus_flooded'])
     return res
 
@@ -2106,6 +2123,16 @@ def render_new(man):
               for n, d in U['routes_with_blocked_time'].items() if not is_pending(d)]
     L += [table(['arm', 'routes with blocked time', 'of these with a collision event', 'other routes with a collision event',
                 'blocked runs', 'mean blocked %', 'mean standstill %'], rows_u), '']
+    if 'all_models_default_run1' in U:
+        L += ['**All six models, default controller, run 1** (addendum section 8a, descriptive)', '',
+              table(['model', 'standstill %', 'blocked %', 'driven transient %', 'not driven %', 'standstill w/o blocked %',
+                     'routes with blocked time', 'of these with a collision event'],
+                    [[mn, f(x['mean_standstill_pct'], 2), f(x['mean_blocked_pct'], 2), f(x['mean_driven_transient_pct'], 2),
+                      f(x['mean_not_driven_pct'], 2), f(x['mean_standstill_without_blocked_pct'], 2),
+                      x['n_routes_with_blocked_time'], x['blocked_routes_with_collision_event']]
+                     for mn, x in U['all_models_default_run1'].items()]), '']
+        for lab, o in U['other_contrasts_default_run1'].items():
+            L += paired_block(lab + ' (default controller, run 1)', o, 2)
     for lab, d in U.get('same_route_detail', {}).items():
         L += [f'**Routes where Golden-6400 has blocked time, {lab}** (descriptive)', '',
               table(['route', 'scenario', 'G blocked %', 'G not driven %', 'G RC', 'G coll', 'G status',
@@ -2186,7 +2213,7 @@ def main():
     man['R'] = analysis_R(arms, ov)
     man['S'] = analysis_S(arms)
     man['T'] = analysis_T(arms)
-    man['U'] = analysis_U(arms, scen)
+    man['U'] = analysis_U(arms, scen, data)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man))

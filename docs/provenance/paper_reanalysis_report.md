@@ -1245,6 +1245,65 @@ driven: speed < 0.1 m/s, throttle >= 0.35, brake == 0 (logged final command); bl
 | Golden-6400 nogate | 12 | 12 | 17 of 32 | 25 | 14.05 | 27.42 |
 | Flooded-6400-Matched nogate | 2 | 2 | 23 of 42 | 6 | 2.89 | 24.57 |
 
+**All six models, default controller, run 1** (addendum section 8a, descriptive)
+
+| model | standstill % | blocked % | driven transient % | not driven % | standstill w/o blocked % | routes with blocked time | of these with a collision event |
+|---|---|---|---|---|---|---|---|
+| Base | 40.45 | 0.00 | 10.05 | 30.40 | 40.45 | 0 | 0 |
+| Flooded-1600 | 33.69 | 0.69 | 10.71 | 22.29 | 33.00 | 1 | 1 |
+| Golden-1600 | 32.37 | 0.83 | 11.44 | 20.10 | 31.54 | 3 | 3 |
+| Flooded-6400-Hist | 33.91 | 2.11 | 11.86 | 19.93 | 31.80 | 4 | 4 |
+| Flooded-6400-Matched | 33.78 | 0.18 | 8.97 | 24.62 | 33.59 | 1 | 1 |
+| Golden-6400 | 25.71 | 7.75 | 8.47 | 9.49 | 17.97 | 6 | 6 |
+
+**Golden-1600 minus Flooded-1600 (default controller, run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 0.83 | 0.69 | 0.14 | [-2.42, 1.33] | 4.0 | 40 | 0.7150 | n/a | 0.7150 | 3/1/40 | 0.200 |
+| standstill_without_blocked_pct | 31.54 | 33.00 | -1.46 | [-8.57, 6.23] | 349.0 | 0 | 0.0896 | 0.0896 | 0.0884 | 15/29/0 | -0.295 |
+| standstill_pct | 32.37 | 33.69 | -1.33 | [-8.26, 6.29] | 359.0 | 0 | 0.1144 | 0.1144 | 0.1125 | 16/28/0 | -0.275 |
+
+**Golden-6400 minus Flooded-6400-Hist (default controller, run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 7.75 | 2.11 | 5.64 | [0.68, 13.62] | 7.0 | 36 | 0.1235 | n/a | 0.1235 | 6/2/36 | 0.611 |
+| standstill_without_blocked_pct | 17.97 | 31.80 | -13.83 | [-22.04, -6.88] | 154.0 | 0 | 2.76e-05 | 2.76e-05 | 6.91e-05 | 7/37/0 | -0.689 |
+| standstill_pct | 25.71 | 33.91 | -8.19 | [-15.84, -0.74] | 231.0 | 0 | 0.0016 | 0.0016 | 0.0021 | 9/35/0 | -0.533 |
+
+**Golden-6400 minus Golden-1600 (default controller, run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 7.75 | 0.83 | 6.92 | [2.45, 14.58] | 1.0 | 37 | 0.0280 | n/a | 0.0280 | 6/1/37 | 0.929 |
+| standstill_without_blocked_pct | 17.97 | 31.54 | -13.57 | [-21.74, -7.79] | 130.0 | 0 | 5.53e-06 | 5.53e-06 | 2.05e-05 | 9/35/0 | -0.737 |
+| standstill_pct | 25.71 | 32.37 | -6.65 | [-12.90, -1.74] | 209.0 | 0 | 5.85e-04 | 5.85e-04 | 8.45e-04 | 11/33/0 | -0.578 |
+
+**Flooded-6400-Matched minus Flooded-1600 (default controller, run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 0.18 | 0.69 | -0.51 | [-3.95, 0.18] | 1.0 | 42 | 0.6547 | n/a | 0.6547 | 1/1/42 | -0.333 |
+| standstill_without_blocked_pct | 33.59 | 33.00 | 0.59 | [-5.99, 7.38] | 479.0 | 0 | 0.8579 | 0.8579 | 0.8519 | 20/24/0 | -0.032 |
+| standstill_pct | 33.78 | 33.69 | 0.08 | [-6.26, 6.75] | 476.0 | 0 | 0.8308 | 0.8308 | 0.8245 | 20/24/0 | -0.038 |
+
+**Golden-1600 minus Base (default controller, run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 0.83 | 0.00 | 0.83 | [0.24, 2.14] | 0.0 | 41 | 0.1088 | n/a | 0.1088 | 3/0/41 | 1.000 |
+| standstill_without_blocked_pct | 31.54 | 40.45 | -8.91 | [-17.53, -0.42] | 277.0 | 0 | 0.0102 | 0.0102 | 0.0110 | 13/31/0 | -0.440 |
+| standstill_pct | 32.37 | 40.45 | -8.09 | [-16.71, 0.44] | 302.0 | 0 | 0.0236 | 0.0236 | 0.0243 | 14/30/0 | -0.390 |
+
+**Flooded-1600 minus Base (default controller, run 1)**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| time_blocked_pct | 0.69 | 0.00 | 0.69 | [0.00, 2.07] | 0.0 | 43 | 0.3173 | n/a | 0.3173 | 1/0/43 | 1.000 |
+| standstill_without_blocked_pct | 33.00 | 40.45 | -7.45 | [-17.16, 0.50] | 443.0 | 0 | 0.5514 | 0.5514 | 0.5440 | 20/24/0 | -0.105 |
+| standstill_pct | 33.69 | 40.45 | -6.76 | [-16.30, 0.89] | 446.0 | 0 | 0.5749 | 0.5749 | 0.5674 | 20/24/0 | -0.099 |
+
 **Routes where Golden-6400 has blocked time, default controller, run1** (descriptive)
 
 | route | scenario | G blocked % | G not driven % | G RC | G coll | G status | F blocked % | F not driven % | F RC | F coll | F status |
