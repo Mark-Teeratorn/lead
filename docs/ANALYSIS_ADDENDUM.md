@@ -81,3 +81,28 @@ Written before the training run started. Optional: it is reported only if traini
 - Anything else, including a value between the two with both intervals containing 0: inconclusive, and reported as such.
 
 One training seed and one evaluation pass; every reading is set against the test–retest spread of Section 5a. No confirmatory claim is made from this arm.
+
+## 7. Plan-level and stop-episode analyses, written 13 November 2026, 22:30 (UTC+7)
+
+Post hoc and exploratory. No new runs; existing per-step logs only (`predicted_trajectories.jsonl`: speed and predicted waypoints per logged step). The confirmatory record of Section 1 is not changed.
+
+**What had been seen when this was written.** Everything in the committed manifest up to commit `49d1788a`, and, on the 18–19 gate-off routes of Golden-6400 finished by 13 November 20:50: the mean standstill fraction of both models under both controllers, and the share of steps with predicted extent L below 0.64, 1.5 and 2.0 m (Section 7a was therefore looked at before it was written down, on a partial route set). Not computed or viewed for any model: the number, duration or ending of stop episodes (Section 7b).
+
+**7a. Near-stationary plan rate.** Per route and model: share of logged steps with L < 1.5 m (primary), and with L < 0.64 m and L < 2.0 m. Paired Golden − Flooded difference over the 44 routes with the Wilcoxon test and BCa interval of Section 1, for the default controller (run 1; run 2 and the two-run mean when available) and for the gate-off controller. Stated limitation: the two models visit different states in closed loop, so this is not a same-input comparison.
+
+**7b. Stop episodes.** A stop episode is a maximal run of consecutive logged steps with speed < 0.1 m/s lasting at least 20 steps (1 s at 20 Hz). Each episode gets one class:
+- *start*: begins at the first logged step of the route;
+- *resumed, short*: ends before the route's last logged step, shorter than 200 steps (10 s);
+- *resumed, long*: ends before the last logged step, 200 steps or longer;
+- *terminal, 60 s*: runs to the last logged step and is at least 1,190 steps long (the route was ended by the 60 s rule);
+- *terminal, other*: runs to the last logged step, shorter than 1,190 steps.
+Standstill steps outside any episode (runs under 1 s) are reported as *brief*. Per route and model, standstill time in each class is expressed as a percentage of the route's logged steps, so the classes add up to the standstill fraction of Section 1. Also reported: episodes per route, median episode duration, and within each class the share of steps with L < 0.64 m (the plan itself is to stay), 0.64 ≤ L < 2.0 m, and L ≥ 2.0 m (the plan is to move while the vehicle does not).
+
+Comparisons: paired Golden − Flooded difference of standstill time per class (mean, BCa interval), for the default controller (run 1; run 2 and the two-run mean when available) and for the gate-off controller.
+
+**Reading fixed in advance.** With Δ the default-controller Golden − Flooded standstill difference (run 1):
+- *freeze-type*: the classes *resumed, long* and *terminal, 60 s* together account for at least two thirds of Δ, and the interval of their summed difference excludes 0;
+- *wait-type*: the classes *start*, *resumed, short* and *brief* together account for at least two thirds of Δ, and the interval of their summed difference excludes 0;
+- otherwise *mixed*.
+
+Duration and ending are proxies. The logs contain no record of whether a hazard was ahead, so this analysis cannot say that a stop was justified; it separates stops the vehicle recovers from quickly from stops it does not. Every reading is set against the test–retest spread of Section 5a.
