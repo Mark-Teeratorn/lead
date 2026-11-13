@@ -1873,7 +1873,7 @@ def u_metrics(thr=U_THR, run=U_RUN):
             'standstill_without_blocked_pct': lambda rd: pct((np.asarray(rd['speed']) < SS_V) & ~blocked_masks(rd, thr, run)[0])}
 
 
-def analysis_U(arms):
+def analysis_U(arms, scen=None):
     """ANALYSIS_ADDENDUM.md section 8. Post hoc, exploratory, existing step logs only."""
     G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
     GN, FN = 'Golden-6400 nogate', 'Flooded-6400-Matched nogate'
@@ -1923,9 +1923,39 @@ def analysis_U(arms):
             'routes': [r for r, b in zip(CANONICAL_44, blk) if b], 'n_blocked_runs': int(sum(runs)),
             'mean_blocked_pct': float(np.mean(vec(arms, name, M['time_blocked_pct'], CANONICAL_44))),
             'mean_standstill_pct': float(np.mean(vec(arms, name, M['standstill_pct'], CANONICAL_44)))}
+    # descriptive: on the routes where Golden has blocked time, what the other model's standstill consists of
+    res['same_route_detail'] = {}
+    for lab, (ga, fa) in {'default controller, run1': (G1, F1), 'gate-off controller': (GN, FN)}.items():
+        if pending(arms, [(ga, CANONICAL_44), (fa, CANONICAL_44)]):
+            continue
+        rows_d = {}
+        for r in CANONICAL_44:
+            g, fl = arms[ga][r], arms[fa][r]
+            gb = pct(blocked_masks(g)[0])
+            if gb <= 0:
+                continue
+            rows_d[r] = {'scenario': scen[r] if scen else None,
+                         'golden': {'blocked_pct': gb, 'not_driven_pct': pct(blocked_masks(g)[2]), 'status': g['status'],
+                                    'route_completion': g['rc'], 'collision_events': RUN_METRICS['collision_events'](g)},
+                         'flooded': {'blocked_pct': pct(blocked_masks(fl)[0]), 'not_driven_pct': pct(blocked_masks(fl)[2]),
+                                     'status': fl['status'], 'route_completion': fl['rc'],
+                                     'collision_events': RUN_METRICS['collision_events'](fl)}}
+        sel = list(rows_d)
+        rest = [r for r in CANONICAL_44 if r not in rows_d]
+        m = lambda arm, rs, fn: float(np.mean([fn(arms[arm][r]) for r in rs])) if rs else None
+        nd = lambda rd: pct(blocked_masks(rd)[2])
+        res['same_route_detail'][lab] = {
+            'routes_where_golden_has_blocked_time': rows_d,
+            'flooded_not_driven_pct_on_these_routes': m(fa, sel, nd), 'flooded_not_driven_pct_on_other_routes': m(fa, rest, nd),
+            'golden_not_driven_pct_on_these_routes': m(ga, sel, nd), 'golden_not_driven_pct_on_other_routes': m(ga, rest, nd),
+            'route_completion_on_these_routes': {'golden': m(ga, sel, lambda rd: rd['rc']), 'flooded': m(fa, sel, lambda rd: rd['rc'])},
+            'route_completion_on_other_routes': {'golden': m(ga, rest, lambda rd: rd['rc']), 'flooded': m(fa, rest, lambda rd: rd['rc'])},
+            'collision_events_on_these_routes': {'golden': m(ga, sel, RUN_METRICS['collision_events']),
+                                                 'flooded': m(fa, sel, RUN_METRICS['collision_events'])},
+            'collision_events_on_other_routes': {'golden': m(ga, rest, RUN_METRICS['collision_events']),
+                                                 'flooded': m(fa, rest, RUN_METRICS['collision_events'])}}
     res['status_line'] = status_line(res['golden_minus_flooded'])
     return res
-
 
 
 # --------------------------------------------------------------------------- report N-S
@@ -2076,6 +2106,19 @@ def render_new(man):
               for n, d in U['routes_with_blocked_time'].items() if not is_pending(d)]
     L += [table(['arm', 'routes with blocked time', 'of these with a collision event', 'other routes with a collision event',
                 'blocked runs', 'mean blocked %', 'mean standstill %'], rows_u), '']
+    for lab, d in U.get('same_route_detail', {}).items():
+        L += [f'**Routes where Golden-6400 has blocked time, {lab}** (descriptive)', '',
+              table(['route', 'scenario', 'G blocked %', 'G not driven %', 'G RC', 'G coll', 'G status',
+                     'F blocked %', 'F not driven %', 'F RC', 'F coll', 'F status'],
+                    [[r, x['scenario'], f(x['golden']['blocked_pct'], 1), f(x['golden']['not_driven_pct'], 1), f(x['golden']['route_completion'], 1),
+                      int(x['golden']['collision_events']), x['golden']['status'],
+                      f(x['flooded']['blocked_pct'], 1), f(x['flooded']['not_driven_pct'], 1), f(x['flooded']['route_completion'], 1),
+                      int(x['flooded']['collision_events']), x['flooded']['status']]
+                     for r, x in d['routes_where_golden_has_blocked_time'].items()]), '',
+              f"Flooded not-driven standstill: {f(d['flooded_not_driven_pct_on_these_routes'], 2)} % on these routes, "
+              f"{f(d['flooded_not_driven_pct_on_other_routes'], 2)} % on the others. Route completion on these routes: Golden "
+              f"{f(d['route_completion_on_these_routes']['golden'], 1)}, Flooded {f(d['route_completion_on_these_routes']['flooded'], 1)}; "
+              f"on the others: Golden {f(d['route_completion_on_other_routes']['golden'], 1)}, Flooded {f(d['route_completion_on_other_routes']['flooded'], 1)}.", '']
     return '\n'.join(L) + '\n'
 
 
@@ -2143,7 +2186,7 @@ def main():
     man['R'] = analysis_R(arms, ov)
     man['S'] = analysis_S(arms)
     man['T'] = analysis_T(arms)
-    man['U'] = analysis_U(arms)
+    man['U'] = analysis_U(arms, scen)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man))

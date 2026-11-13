@@ -16155,6 +16155,362 @@
     "mean_standstill_pct": 24.565898853301395
    }
   },
+  "same_route_detail": {
+   "default controller, run1": {
+    "routes_where_golden_has_blocked_time": {
+     "1852": {
+      "scenario": "AccidentTwoWays",
+      "golden": {
+       "blocked_pct": 49.36254980079681,
+       "not_driven_pct": 3.4661354581673307,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 61.15384615384616,
+       "status": "Failed - TickRuntime",
+       "route_completion": 39.15,
+       "collision_events": 1.0
+      }
+     },
+     "1825": {
+      "scenario": "ConstructionObstacleTwoWays",
+      "golden": {
+       "blocked_pct": 66.1878453038674,
+       "not_driven_pct": 3.314917127071823,
+       "status": "Failed - TickRuntime",
+       "route_completion": 37.91,
+       "collision_events": 2.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 80.71748878923766,
+       "status": "Failed - TickRuntime",
+       "route_completion": 28.82,
+       "collision_events": 1.0
+      }
+     },
+     "3561": {
+      "scenario": "ControlLoss",
+      "golden": {
+       "blocked_pct": 39.842089280291525,
+       "not_driven_pct": 6.255693896143335,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 18.12191103789127,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 0.0
+      }
+     },
+     "3436": {
+      "scenario": "HazardAtSideLaneTwoWays",
+      "golden": {
+       "blocked_pct": 67.10837671557029,
+       "not_driven_pct": 2.9815428300993845,
+       "status": "Failed - TickRuntime",
+       "route_completion": 43.97,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 43.689320388349515,
+       "status": "Failed - TickRuntime",
+       "route_completion": 13.68,
+       "collision_events": 1.0
+      }
+     },
+     "1956": {
+      "scenario": "ParkingExit",
+      "golden": {
+       "blocked_pct": 92.26006191950464,
+       "not_driven_pct": 1.3157894736842104,
+       "status": "Failed - TickRuntime",
+       "route_completion": 3.09,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 29.574309185959674,
+       "status": "Failed - TickRuntime",
+       "route_completion": 3.09,
+       "collision_events": 1.0
+      }
+     },
+     "14194": {
+      "scenario": "PedestrianCrossing",
+      "golden": {
+       "blocked_pct": 26.158748551564308,
+       "not_driven_pct": 17.294322132097335,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 2.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 21.800433839479393,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 1.0
+      }
+     }
+    },
+    "flooded_not_driven_pct_on_these_routes": 42.50955156579394,
+    "flooded_not_driven_pct_on_other_routes": 21.795964861307098,
+    "golden_not_driven_pct_on_these_routes": 5.771400152877237,
+    "golden_not_driven_pct_on_other_routes": 10.082605256765786,
+    "route_completion_on_these_routes": {
+     "golden": 64.16166666666666,
+     "flooded": 47.45666666666667
+    },
+    "route_completion_on_other_routes": {
+     "golden": 85.25315789473684,
+     "flooded": 78.94000000000001
+    },
+    "collision_events_on_these_routes": {
+     "golden": 1.3333333333333333,
+     "flooded": 0.8333333333333334
+    },
+    "collision_events_on_other_routes": {
+     "golden": 0.9473684210526315,
+     "flooded": 0.8157894736842105
+    }
+   },
+   "gate-off controller": {
+    "routes_where_golden_has_blocked_time": {
+     "1852": {
+      "scenario": "AccidentTwoWays",
+      "golden": {
+       "blocked_pct": 62.43583761082594,
+       "not_driven_pct": 7.746150256649556,
+       "status": "Failed - TickRuntime",
+       "route_completion": 51.17,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 38.82959146117041,
+       "not_driven_pct": 6.1464850938535145,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 3.0
+      }
+     },
+     "2204": {
+      "scenario": "BlockedIntersection",
+      "golden": {
+       "blocked_pct": 51.571594877764845,
+       "not_driven_pct": 4.346138921226232,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 3.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 8.280701754385964,
+       "status": "Failed - Agent deviated from the route",
+       "route_completion": 48.08,
+       "collision_events": 1.0
+      }
+     },
+     "1825": {
+      "scenario": "ConstructionObstacleTwoWays",
+      "golden": {
+       "blocked_pct": 67.42700729927007,
+       "not_driven_pct": 4.881386861313869,
+       "status": "Failed - TickRuntime",
+       "route_completion": 33.37,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 74.58025520483545,
+       "status": "Failed - TickRuntime",
+       "route_completion": 30.34,
+       "collision_events": 2.0
+      }
+     },
+     "17752": {
+      "scenario": "DynamicObjectCrossing",
+      "golden": {
+       "blocked_pct": 22.3753280839895,
+       "not_driven_pct": 7.283464566929133,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 2.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 14.709762532981529,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 2.0
+      }
+     },
+     "3540": {
+      "scenario": "HardBreakRoute",
+      "golden": {
+       "blocked_pct": 7.775255391600454,
+       "not_driven_pct": 9.250851305334846,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 4.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 58.02603036876356,
+       "status": "Failed - Agent got blocked",
+       "route_completion": 19.62,
+       "collision_events": 1.0
+      }
+     },
+     "3436": {
+      "scenario": "HazardAtSideLaneTwoWays",
+      "golden": {
+       "blocked_pct": 57.47460087082729,
+       "not_driven_pct": 3.991291727140784,
+       "status": "Failed - Agent got blocked",
+       "route_completion": 7.62,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 26.476683937823836,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 2.0
+      }
+     },
+     "2127": {
+      "scenario": "OppositeVehicleTakingPriority",
+      "golden": {
+       "blocked_pct": 59.376546264225624,
+       "not_driven_pct": 9.74764967837704,
+       "status": "Failed - Agent got blocked",
+       "route_completion": 51.7,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 9.074410163339383,
+       "status": "Failed - Agent deviated from the route",
+       "route_completion": 54.63,
+       "collision_events": 0.0
+      }
+     },
+     "2664": {
+      "scenario": "ParkedObstacleTwoWays",
+      "golden": {
+       "blocked_pct": 14.654517843583903,
+       "not_driven_pct": 4.859529233105543,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 9.38722294654498,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 1.0
+      }
+     },
+     "1956": {
+      "scenario": "ParkingExit",
+      "golden": {
+       "blocked_pct": 92.95120061967467,
+       "not_driven_pct": 0.69713400464756,
+       "status": "Failed - TickRuntime",
+       "route_completion": 3.09,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 88.25301204819277,
+       "not_driven_pct": 3.2379518072289155,
+       "status": "Failed - TickRuntime",
+       "route_completion": 3.09,
+       "collision_events": 1.0
+      }
+     },
+     "2050": {
+      "scenario": "SignalizedJunctionRightTurn",
+      "golden": {
+       "blocked_pct": 65.70021881838073,
+       "not_driven_pct": 2.352297592997812,
+       "status": "Failed - TickRuntime",
+       "route_completion": 58.92,
+       "collision_events": 2.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 10.184287099903006,
+       "status": "Failed - Agent deviated from the route",
+       "route_completion": 55.67,
+       "collision_events": 1.0
+      }
+     },
+     "2390": {
+      "scenario": "VanillaNonSignalizedTurn",
+      "golden": {
+       "blocked_pct": 51.08499095840868,
+       "not_driven_pct": 4.159132007233273,
+       "status": "Failed - Agent deviated from the route",
+       "route_completion": 43.96,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 12.423873325213155,
+       "status": "Completed",
+       "route_completion": 100.0,
+       "collision_events": 0.0
+      }
+     },
+     "14842": {
+      "scenario": "VanillaSignalizedTurnEncounterGreenLight",
+      "golden": {
+       "blocked_pct": 65.46636659164791,
+       "not_driven_pct": 2.800700175043761,
+       "status": "Failed - TickRuntime",
+       "route_completion": 34.43,
+       "collision_events": 1.0
+      },
+      "flooded": {
+       "blocked_pct": 0.0,
+       "not_driven_pct": 11.374407582938389,
+       "status": "Failed - Agent deviated from the route",
+       "route_completion": 20.2,
+       "collision_events": 0.0
+      }
+     }
+    },
+    "flooded_not_driven_pct_on_these_routes": 20.325172651484305,
+    "flooded_not_driven_pct_on_other_routes": 11.060816791597873,
+    "golden_not_driven_pct_on_these_routes": 5.176310527499951,
+    "golden_not_driven_pct_on_other_routes": 6.974898410087443,
+    "route_completion_on_these_routes": {
+     "golden": 57.02166666666667,
+     "flooded": 60.969166666666666
+    },
+    "route_completion_on_other_routes": {
+     "golden": 83.715,
+     "flooded": 88.7275
+    },
+    "collision_events_on_these_routes": {
+     "golden": 1.5833333333333333,
+     "flooded": 1.1666666666666667
+    },
+    "collision_events_on_other_routes": {
+     "golden": 1.0,
+     "flooded": 1.15625
+    }
+   }
+  },
   "status_line": "pending: 2 of 4 parts (default controller, run2, default controller, mean of run1 and run2)"
  }
 }

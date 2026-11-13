@@ -1245,3 +1245,35 @@ driven: speed < 0.1 m/s, throttle >= 0.35, brake == 0 (logged final command); bl
 | Golden-6400 nogate | 12 | 12 | 17 of 32 | 25 | 14.05 | 27.42 |
 | Flooded-6400-Matched nogate | 2 | 2 | 23 of 42 | 6 | 2.89 | 24.57 |
 
+**Routes where Golden-6400 has blocked time, default controller, run1** (descriptive)
+
+| route | scenario | G blocked % | G not driven % | G RC | G coll | G status | F blocked % | F not driven % | F RC | F coll | F status |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1852 | AccidentTwoWays | 49.4 | 3.5 | 100.0 | 1 | Completed | 0.0 | 61.2 | 39.1 | 1 | Failed - TickRuntime |
+| 1825 | ConstructionObstacleTwoWays | 66.2 | 3.3 | 37.9 | 2 | Failed - TickRuntime | 0.0 | 80.7 | 28.8 | 1 | Failed - TickRuntime |
+| 3561 | ControlLoss | 39.8 | 6.3 | 100.0 | 1 | Completed | 0.0 | 18.1 | 100.0 | 0 | Completed |
+| 3436 | HazardAtSideLaneTwoWays | 67.1 | 3.0 | 44.0 | 1 | Failed - TickRuntime | 0.0 | 43.7 | 13.7 | 1 | Failed - TickRuntime |
+| 1956 | ParkingExit | 92.3 | 1.3 | 3.1 | 1 | Failed - TickRuntime | 0.0 | 29.6 | 3.1 | 1 | Failed - TickRuntime |
+| 14194 | PedestrianCrossing | 26.2 | 17.3 | 100.0 | 2 | Completed | 0.0 | 21.8 | 100.0 | 1 | Completed |
+
+Flooded not-driven standstill: 42.51 % on these routes, 21.80 % on the others. Route completion on these routes: Golden 64.2, Flooded 47.5; on the others: Golden 85.3, Flooded 78.9.
+
+**Routes where Golden-6400 has blocked time, gate-off controller** (descriptive)
+
+| route | scenario | G blocked % | G not driven % | G RC | G coll | G status | F blocked % | F not driven % | F RC | F coll | F status |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1852 | AccidentTwoWays | 62.4 | 7.7 | 51.2 | 1 | Failed - TickRuntime | 38.8 | 6.1 | 100.0 | 3 | Completed |
+| 2204 | BlockedIntersection | 51.6 | 4.3 | 100.0 | 3 | Completed | 0.0 | 8.3 | 48.1 | 1 | Failed - Agent deviated from the route |
+| 1825 | ConstructionObstacleTwoWays | 67.4 | 4.9 | 33.4 | 1 | Failed - TickRuntime | 0.0 | 74.6 | 30.3 | 2 | Failed - TickRuntime |
+| 17752 | DynamicObjectCrossing | 22.4 | 7.3 | 100.0 | 2 | Completed | 0.0 | 14.7 | 100.0 | 2 | Completed |
+| 3540 | HardBreakRoute | 7.8 | 9.3 | 100.0 | 4 | Completed | 0.0 | 58.0 | 19.6 | 1 | Failed - Agent got blocked |
+| 3436 | HazardAtSideLaneTwoWays | 57.5 | 4.0 | 7.6 | 1 | Failed - Agent got blocked | 0.0 | 26.5 | 100.0 | 2 | Completed |
+| 2127 | OppositeVehicleTakingPriority | 59.4 | 9.7 | 51.7 | 1 | Failed - Agent got blocked | 0.0 | 9.1 | 54.6 | 0 | Failed - Agent deviated from the route |
+| 2664 | ParkedObstacleTwoWays | 14.7 | 4.9 | 100.0 | 1 | Completed | 0.0 | 9.4 | 100.0 | 1 | Completed |
+| 1956 | ParkingExit | 93.0 | 0.7 | 3.1 | 1 | Failed - TickRuntime | 88.3 | 3.2 | 3.1 | 1 | Failed - TickRuntime |
+| 2050 | SignalizedJunctionRightTurn | 65.7 | 2.4 | 58.9 | 2 | Failed - TickRuntime | 0.0 | 10.2 | 55.7 | 1 | Failed - Agent deviated from the route |
+| 2390 | VanillaNonSignalizedTurn | 51.1 | 4.2 | 44.0 | 1 | Failed - Agent deviated from the route | 0.0 | 12.4 | 100.0 | 0 | Completed |
+| 14842 | VanillaSignalizedTurnEncounterGreenLight | 65.5 | 2.8 | 34.4 | 1 | Failed - TickRuntime | 0.0 | 11.4 | 20.2 | 0 | Failed - Agent deviated from the route |
+
+Flooded not-driven standstill: 20.33 % on these routes, 11.06 % on the others. Route completion on these routes: Golden 57.0, Flooded 61.0; on the others: Golden 83.7, Flooded 88.7.
+
