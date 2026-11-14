@@ -2267,62 +2267,91 @@ def w_load(tag, route):
     if any(r.get('controller_variant') != 'histswap' or r.get('hist_kind') not in ('true', 'moving', 'stationary')
            for r in rows):
         raise RuntimeError(f'{d.name}: step log is not from the history-swap agent')
-    _, cum = chord_profile(np.asarray([r['pred_waypoints'] for r in rows], dtype=np.float64))
-    return {'speed': np.asarray([float(r['speed']) for r in rows]), 'L': cum[:, -1].copy(),
-            'v_end': cum[:, -1] - cum[:, -11], 'kind': np.asarray([r['hist_kind'] for r in rows])}
+    wp = np.asarray([r['pred_waypoints'] for r in rows], dtype=np.float64)
+    _, cum = chord_profile(wp)
+    kind = np.asarray([r['hist_kind'] for r in rows])
+    v_end = cum[:, -1] - cum[:, -11]                       # m/s over the last 1.0 s of the plan
+    v_start = np.hypot(wp[:, 0, 0], wp[:, 0, 1]) / 0.1     # m/s over the first 0.1 s
+    after_swap = np.concatenate([[False], kind[:-1] != 'true'])   # the previous logged step was a swap step
+    return {'speed': np.asarray([float(r['speed']) for r in rows]), 'L': cum[:, -1].copy(), 'v_end': v_end,
+            'dv': v_end - v_start, 'wp1': v_start * 0.1, 'kind': kind, 'after_swap': after_swap}
 
 
-def w_reading(p, sign):
-    if 'bca95' not in p or p['bca95'] is None:
+def w_reading(p, rule):
+    ci = p.get('bca95')
+    if not (isinstance(ci, (list, tuple)) and len(ci) == 2 and all(isinstance(x, (int, float)) and x == x for x in ci)):
         return 'no reading'
-    lo, hi = p['bca95']
-    if sign < 0:
-        return 'history-dependent' if p['mean_diff'] < 0 and hi < 0 else 'no detectable dependence on the ego history'
-    return 'induces stop plans' if p['mean_diff'] > 0 and lo > 0 else 'no detectable effect'
+    lo, hi = ci
+    if rule == 'two-sided':
+        return 'the learned controls depend on the ego history' if (lo > 0 or hi < 0) else 'no detectable dependence of the controls on the ego history'
+    return 'stay-put plans are not matched by braking plans' if (p['mean_diff'] < 0 and hi < 0) else 'no detectable difference'
+
+
+# addendum 11-B: outcome -> (plan test, low-speed stratum?, swapped kind, reading rule or None)
+W_OUTCOMES = {
+    'W-a low speed, plan holds speed (|dv| < 0.5 m/s): moving history minus true history': (lambda v: np.abs(v['dv']) < 0.5, True, 'moving', 'two-sided'),
+    'W-b low speed, plan ends at rest (v_end < 0.5 m/s): moving history minus true history': (lambda v: v['v_end'] < 0.5, True, 'moving', 'negative'),
+    'description: low speed, plan accelerates (dv >= 0.5 m/s)': (lambda v: v['dv'] >= 0.5, True, 'moving', None),
+    'description: low speed, plan decelerates (dv <= -0.5 m/s)': (lambda v: v['dv'] <= -0.5, True, 'moving', None),
+    'description: low speed, stays put (L < 0.64 m)': (lambda v: v['L'] < 0.64, True, 'moving', None),
+    'description: moving, plan holds speed (|dv| < 0.5 m/s): stationary history minus true history': (lambda v: np.abs(v['dv']) < 0.5, False, 'stationary', None),
+    'description: moving, plan ends at rest (v_end < 0.5 m/s): stationary history minus true history': (lambda v: v['v_end'] < 0.5, False, 'stationary', None),
+}
+
+
+def w_outcomes(runs, drop_after_swap):
+    out = {}
+    for name, (plan, low, kind, rule) in W_OUTCOMES.items():
+        cnt = {}
+        for r, v in runs.items():
+            cond = (v['speed'] <= 0.5) if low else (v['speed'] > 0.5)
+            hit = plan(v)
+            sw, tr = cond & (v['kind'] == kind), cond & (v['kind'] == 'true')
+            if drop_after_swap:
+                tr = tr & ~v['after_swap']
+            cnt[r] = (int(np.sum(hit & sw)), int(np.sum(sw)), int(np.sum(hit & tr)), int(np.sum(tr)))
+        use = [r for r in runs if cnt[r][1] >= W_MIN and cnt[r][3] >= W_MIN]
+        o = {'pooled_swapped_pct': 100.0 * sum(c[0] for c in cnt.values()) / max(1, sum(c[1] for c in cnt.values())),
+             'pooled_true_pct': 100.0 * sum(c[2] for c in cnt.values()) / max(1, sum(c[3] for c in cnt.values())),
+             'steps_swapped': sum(c[1] for c in cnt.values()), 'steps_true': sum(c[3] for c in cnt.values()),
+             'routes_used': use}
+        if len(use) >= 5:
+            o['paired'] = paired([100.0 * cnt[r][0] / cnt[r][1] for r in use], [100.0 * cnt[r][2] / cnt[r][3] for r in use])
+            if rule:
+                o['reading'] = w_reading(o['paired'], rule)
+        else:
+            o['paired'] = {'n': len(use), 'note': f'fewer than 5 routes with {W_MIN} steps in both conditions'}
+            if rule:
+                o['reading'] = 'no reading'
+        out[name] = o
+    return out
 
 
 def analysis_W():
-    res = {'label': 'new runs, exploratory; reading rule fixed in addendum section 11 before the agent was run',
+    """ANALYSIS_ADDENDUM.md sections 11 and 11-B (11-B replaces the outcomes and reading rule of 11 and 11-A)."""
+    res = {'label': 'new runs, exploratory; outcomes and reading rule fixed in addendum section 11-B before any swap run existed',
            'definitions': {'swap steps': 'about one step in five from step 60; plan logged, not acted on',
-                           'low speed': 'speed <= 0.5 m/s, swap = moving history (4.0 m/s straight)', 'v_end': 'path length between waypoints 54 and 64 / 1.0 s (addendum 11-A)',
+                           'low speed': 'speed <= 0.5 m/s, swap = moving history (4.0 m/s straight)',
                            'moving': 'speed > 0.5 m/s, swap = stationary history',
+                           'v_start': '|first waypoint| / 0.1 s', 'v_end': 'path length between waypoints 54 and 64 / 1.0 s',
+                           'dv': 'v_end - v_start (planned speed change; set by the learned controls, not by the initial speed)',
                            'per_route_rule': f'a route is used only if it has at least {W_MIN} steps in both conditions'},
            'models': {}}
-    # outcome -> (plan test, speed test, swapped kind, sign of the reading or 0)
-    # outcome -> (plan test on the logged plan, speed test, swapped kind, sign of the reading or 0); addendum 11-A
-    ends_at_rest = lambda v, L: v < 0.5
-    outcomes = {"W1' low speed, plan ends at rest (v_end < 0.5 m/s): moving history minus true history": (ends_at_rest, True, 'moving', -1),
-                "W2' moving, plan ends at rest (v_end < 0.5 m/s): stationary history minus true history": (ends_at_rest, False, 'stationary', +1),
-                'description only: low speed, stays put (L < 0.64 m): moving history minus true history': (lambda v, L: L < 0.64, True, 'moving', 0),
-                'description only: low speed, starts moving (L >= 2.0 m): moving history minus true history': (lambda v, L: L >= 2.0, True, 'moving', 0)}
+    audit = ROOT / 'outputs/revision_suite4_audit.log'
+    queue_ended = audit.exists() and 'suite4 end' in audit.read_text()
     for model, tag in W_TAGS.items():
         runs = {r: w_load(tag, r) for r in REPLICATE_ROUTES}
         runs = {r: v for r, v in runs.items() if v is not None}
-        if len(runs) < len(REPLICATE_ROUTES):
+        if len(runs) < len(REPLICATE_ROUTES) and not (queue_ended and len(runs) >= 1):
             res['models'][model] = {'status': 'pending', 'have': {tag: len(runs)}, 'need': {tag: len(REPLICATE_ROUTES)}}
             continue
-        out = {'n_routes': len(runs), 'steps': {k: int(sum(np.sum(v['kind'] == k) for v in runs.values()))
-                                               for k in ('true', 'moving', 'stationary')}}
-        for name, (plan, low, kind, sign) in outcomes.items():
-            cnt = {}
-            for r, v in runs.items():
-                cond = (v['speed'] <= 0.5) if low else (v['speed'] > 0.5)
-                sw, tr = cond & (v['kind'] == kind), cond & (v['kind'] == 'true')
-                cnt[r] = (int(np.sum(plan(v['v_end'][sw], v['L'][sw]))), int(np.sum(sw)), int(np.sum(plan(v['v_end'][tr], v['L'][tr]))), int(np.sum(tr)))
-            use = [r for r in runs if cnt[r][1] >= W_MIN and cnt[r][3] >= W_MIN]
-            o = {'pooled_swapped_pct': 100.0 * sum(c[0] for c in cnt.values()) / max(1, sum(c[1] for c in cnt.values())),
-                 'pooled_true_pct': 100.0 * sum(c[2] for c in cnt.values()) / max(1, sum(c[3] for c in cnt.values())),
-                 'steps_swapped': sum(c[1] for c in cnt.values()), 'steps_true': sum(c[3] for c in cnt.values()),
-                 'routes_used': use}
-            if len(use) >= 5:
-                o['paired'] = paired([100.0 * cnt[r][0] / cnt[r][1] for r in use], [100.0 * cnt[r][2] / cnt[r][3] for r in use])
-                if sign:
-                    o['reading'] = w_reading(o['paired'], sign)
-            else:
-                o['paired'] = {'n': len(use), 'note': f'fewer than 5 routes with {W_MIN} steps in both conditions'}
-                if sign:
-                    o['reading'] = 'no reading'
-            out[name] = o
+        chk = {k: float(np.median(np.concatenate([v['wp1'][v['kind'] == k] for v in runs.values()]))) if any(np.any(v['kind'] == k) for v in runs.values()) else None
+               for k in ('moving', 'stationary')}
+        out = {'n_routes': len(runs), 'routes': sorted(runs),
+               'steps': {k: int(sum(np.sum(v['kind'] == k) for v in runs.values())) for k in ('true', 'moving', 'stationary')},
+               'median_first_waypoint_distance_m': chk}
+        out.update(w_outcomes(runs, False))
+        out['sensitivity: true-history steps directly after a swap step left out'] = w_outcomes(runs, True)
         res['models'][model] = out
     res['status_line'] = status_line(res['models'])
     return res
@@ -2330,22 +2359,30 @@ def analysis_W():
 
 def render_W(man):
     W = man['W']
-    L = ['## W. Motion-history swap test (addendum section 11)', '', f"Status: {W['status_line']}", '', W['label'], '',
+    L = ['## W. Motion-history swap test (addendum sections 11 and 11-B)', '', f"Status: {W['status_line']}", '', W['label'], '',
          '; '.join(f'{k}: {v}' for k, v in W['definitions'].items()), '']
+
+    def block(o):
+        out = []
+        for name, v in o.items():
+            if not isinstance(v, dict) or 'pooled_true_pct' not in v:
+                continue
+            out += [f"- {name}: pooled {f(v['pooled_swapped_pct'], 2)} % ({v['steps_swapped']} steps) against "
+                    f"{f(v['pooled_true_pct'], 2)} % ({v['steps_true']} steps); routes used {len(v['routes_used'])}"
+                    + (f"; reading: {v['reading']}" if 'reading' in v else '')]
+            if 'mean_diff' in v['paired']:
+                out += ['', table(PAIR_HDR, [pair_row('swapped minus true', v['paired'], 2)]), '']
+        return out
     for model, o in W['models'].items():
         if is_pending(o):
             L += [f'**{model}**: {pending_str(o)}', '']
             continue
-        L += [f"**{model}** ({o['n_routes']} routes; steps by history: {o['steps']})", '']
-        for name, v in o.items():
-            if not isinstance(v, dict) or 'pooled_true_pct' not in v:
-                continue
-            L += [f"- {name}: pooled {f(v['pooled_swapped_pct'], 2)} % ({v['steps_swapped']} steps) against "
-                  f"{f(v['pooled_true_pct'], 2)} % ({v['steps_true']} steps); routes used {len(v['routes_used'])}"
-                  + (f"; reading: {v['reading']}" if 'reading' in v else '')]
-            if 'mean_diff' in v['paired']:
-                L += ['', table(PAIR_HDR, [pair_row('swapped minus true', v['paired'], 2)]), '']
-        L += ['']
+        L += [f"**{model}** ({o['n_routes']} routes; steps by history: {o['steps']}; "
+              f"median first-waypoint distance by history (m): {o['median_first_waypoint_distance_m']})", '']
+        L += block(o) + ['']
+        sens = [k for k in o if k.startswith('sensitivity')]
+        for k in sens:
+            L += [f'*{model}, {k}*', ''] + block(o[k]) + ['']
     return '\n'.join(L) + '\n'
 
 

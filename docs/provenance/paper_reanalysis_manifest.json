@@ -11540,7 +11540,7 @@
   "usable_routes": {
    "model_matrix_golden_6400_rep1": 8,
    "model_matrix_flooded_6400_rep1": 8,
-   "model_matrix_golden_6400_run2": 28,
+   "model_matrix_golden_6400_run2": 32,
    "model_matrix_flooded_6400_run2": 0,
    "model_matrix_golden_6400_nogate": 44,
    "model_matrix_flooded_6400_nogate": 44,
@@ -11569,12 +11569,15 @@
     "3561"
    ],
    "model_matrix_golden_6400_run2": [
+    "14194",
     "1711",
+    "17563",
     "1773",
     "17752",
     "1790",
     "1825",
     "1852",
+    "1956",
     "2082",
     "2084",
     "2115",
@@ -11596,7 +11599,8 @@
     "3248",
     "3436",
     "3540",
-    "3561"
+    "3561",
+    "3936"
    ],
    "model_matrix_flooded_6400_run2": [],
    "model_matrix_golden_6400_nogate": [
@@ -11713,7 +11717,7 @@
     "replicate_routes_done": {
      "run1": "8/8",
      "rep1": "8/8",
-     "run2": "6/8"
+     "run2": "7/8"
     },
     "per_route_table_replicate_routes": {
      "2534": {
@@ -11908,6 +11912,15 @@
        "collision_events": 2.0,
        "n_steps": 827.0,
        "status": "Completed"
+      },
+      "run2": {
+       "standstill_pct": 12.445887445887447,
+       "driving_score": 12.96,
+       "route_completion": 100.0,
+       "mean_speed_mps": 2.4474770733240936,
+       "collision_events": 4.0,
+       "n_steps": 924.0,
+       "status": "Completed"
       }
      },
      "26458": {
@@ -12045,7 +12058,7 @@
       }
      },
      "run2 - run1": {
-      "n_routes": 28,
+      "n_routes": 32,
       "routes": [
        "2534",
        "1852",
@@ -12074,15 +12087,19 @@
        "1773",
        "2664",
        "3248",
-       "1711"
+       "1711",
+       "1956",
+       "14194",
+       "17563",
+       "3936"
       ],
-      "same_status": 20,
+      "same_status": 23,
       "metrics": {
        "standstill_pct": {
-        "n": 28,
-        "mean": 4.677107191998993,
-        "sd": 19.998894584008127,
-        "mean_abs": 11.385594163367463,
+        "n": 32,
+        "mean": 2.4146905544294333,
+        "sd": 21.431764692481494,
+        "mean_abs": 11.89844489735924,
         "per_route": {
          "2534": -1.742585917039003,
          "1852": 13.791544904573115,
@@ -12111,14 +12128,18 @@
          "1773": -0.18871415356151644,
          "2664": 35.15947493775323,
          "3248": 3.626373626373626,
-         "1711": 1.346092604452096
+         "1711": 1.346092604452096,
+         "1956": -0.2902029212447843,
+         "14194": -54.67047825349831,
+         "17563": 4.132348253488397,
+         "3936": -2.860570712975248
         }
        },
        "driving_score": {
-        "n": 28,
-        "mean": -9.537346642857143,
-        "sd": 27.08213868796067,
-        "mean_abs": 20.705745642857142,
+        "n": 32,
+        "mean": -7.91636846875,
+        "sd": 26.77668904361705,
+        "mean_abs": 19.986337281249998,
         "per_route": {
          "2534": -24.0,
          "1852": -36.510000000000005,
@@ -12147,14 +12168,18 @@
          "1773": -8.64,
          "2664": 1.0904159999999976,
          "3248": -44.54116,
-         "1711": 0.0
+         "1711": 0.0,
+         "1956": 0.0,
+         "14194": 36.761915,
+         "17563": -23.04,
+         "3936": 0.0
         }
        },
        "route_completion": {
-        "n": 28,
-        "mean": -1.511071428571429,
-        "sd": 21.836990251725815,
-        "mean_abs": 10.786071428571429,
+        "n": 32,
+        "mean": -2.9246875000000006,
+        "sd": 22.21225482510325,
+        "mean_abs": 11.040312499999999,
         "per_route": {
          "2534": 0.0,
          "1852": -60.85,
@@ -12183,14 +12208,18 @@
          "1773": 0.0,
          "2664": 0.0,
          "3248": 0.0,
-         "1711": 0.0
+         "1711": 0.0,
+         "1956": 0.0,
+         "14194": -51.28,
+         "17563": 0.0,
+         "3936": 0.0
         }
        },
        "mean_speed_mps": {
-        "n": 28,
-        "mean": -0.19578537420571368,
-        "sd": 0.5287671442391138,
-        "mean_abs": 0.36216906160456414,
+        "n": 32,
+        "mean": -0.14199777998603288,
+        "sd": 0.5460405450806065,
+        "mean_abs": 0.3611840879036555,
         "per_route": {
          "2534": -0.08362202219982517,
          "1852": -0.41633722650642446,
@@ -12219,14 +12248,18 @@
          "1773": -0.04044233805600106,
          "2664": -1.0483165117802882,
          "3248": -0.12444144446139793,
-         "1711": -0.05012475609601719
+         "1711": -0.05012475609601719,
+         "1956": -0.00023324503675020702,
+         "14194": 1.0963442093848212,
+         "17563": -0.23931453985437567,
+         "3936": 0.0812650937132362
         }
        },
        "collision_events": {
-        "n": 28,
-        "mean": 0.14285714285714285,
-        "sd": 1.0788981249502494,
-        "mean_abs": 0.7142857142857143,
+        "n": 32,
+        "mean": 0.125,
+        "sd": 1.128801819801464,
+        "mean_abs": 0.75,
         "per_route": {
          "2534": 1.0,
          "1852": 0.0,
@@ -12255,14 +12288,18 @@
          "1773": 0.0,
          "2664": 0.0,
          "3248": 1.0,
-         "1711": 0.0
+         "1711": 0.0,
+         "1956": 0.0,
+         "14194": -2.0,
+         "17563": 2.0,
+         "3936": 0.0
         }
        },
        "n_steps": {
-        "n": 28,
-        "mean": 184.17857142857142,
-        "sd": 676.4415089860802,
-        "mean_abs": 350.32142857142856,
+        "n": 32,
+        "mean": 80.53125,
+        "sd": 803.1368334135124,
+        "mean_abs": 392.59375,
         "per_route": {
          "2534": 25.0,
          "1852": -859.0,
@@ -12291,105 +12328,116 @@
          "1773": 19.0,
          "2664": 889.0,
          "3248": 63.0,
-         "1711": 33.0
+         "1711": 33.0,
+         "1956": 5.0,
+         "14194": -2625.0,
+         "17563": 82.0,
+         "3936": -42.0
         }
        }
       }
      },
      "run2 - rep1": {
-      "n_routes": 6,
+      "n_routes": 7,
       "routes": [
        "2534",
        "3561",
        "1790",
        "23695",
        "28087",
-       "2664"
+       "2664",
+       "17563"
       ],
-      "same_status": 4,
+      "same_status": 5,
       "metrics": {
        "standstill_pct": {
-        "n": 6,
-        "mean": -7.53645625897926,
-        "sd": 12.261897824967843,
-        "mean_abs": 9.599804089398768,
+        "n": 7,
+        "mean": -5.942847994352421,
+        "sd": 11.961280296547189,
+        "mean_abs": 8.745375161400174,
         "per_route": {
          "2534": -2.56245889899055,
          "3561": -14.336902601914758,
          "1790": -28.5193788192862,
          "23695": 0.640140704851663,
          "28087": -5.990040724942581,
-         "2664": 5.549902786406868
+         "2664": 5.549902786406868,
+         "17563": 3.618801593408609
         }
        },
        "driving_score": {
-        "n": 6,
-        "mean": -13.929458333333335,
-        "sd": 25.204544350099294,
-        "mean_abs": 23.337458333333334,
+        "n": 7,
+        "mean": -15.230964285714284,
+        "sd": 23.264743800910782,
+        "mean_abs": 23.294964285714286,
         "per_route": {
          "2534": 28.224,
          "3561": -44.31636,
          "1790": -10.16064,
          "23695": -29.805608,
          "28087": -3.5181420000000045,
-         "2664": -24.0
+         "2664": -24.0,
+         "17563": -23.04
         }
        },
        "route_completion": {
-        "n": 6,
-        "mean": -9.953333333333333,
-        "sd": 18.302580874474142,
-        "mean_abs": 9.953333333333333,
+        "n": 7,
+        "mean": -8.531428571428572,
+        "sd": 17.126190886642433,
+        "mean_abs": 8.531428571428572,
         "per_route": {
          "2534": 0.0,
          "3561": -14.269999999999996,
          "1790": 0.0,
          "23695": 0.0,
          "28087": -45.45,
-         "2664": 0.0
+         "2664": 0.0,
+         "17563": 0.0
         }
        },
        "mean_speed_mps": {
-        "n": 6,
-        "mean": 0.23051844461336457,
-        "sd": 0.5066318512949424,
-        "mean_abs": 0.4227111563748276,
+        "n": 7,
+        "mean": 0.15818245742309087,
+        "sd": 0.5005237183074585,
+        "mean_abs": 0.40172862913821666,
         "per_route": {
          "2534": 0.750128070621424,
          "3561": -0.28318625515930373,
          "1790": 0.9024396705932831,
          "23695": -0.08519389604539152,
          "28087": 0.30712106174986964,
-         "2664": -0.20819798407969392
+         "2664": -0.20819798407969392,
+         "17563": -0.2758334657185513
         }
        },
        "collision_events": {
-        "n": 6,
-        "mean": 0.0,
-        "sd": 1.7888543819998317,
-        "mean_abs": 1.3333333333333333,
+        "n": 7,
+        "mean": 0.2857142857142857,
+        "sd": 1.7994708216848745,
+        "mean_abs": 1.4285714285714286,
         "per_route": {
          "2534": -3.0,
          "3561": 0.0,
          "1790": 2.0,
          "23695": 1.0,
          "28087": -1.0,
-         "2664": 1.0
+         "2664": 1.0,
+         "17563": 2.0
         }
        },
        "n_steps": {
-        "n": 6,
-        "mean": -33.5,
-        "sd": 462.5938823633534,
-        "mean_abs": 357.5,
+        "n": 7,
+        "mean": -14.857142857142858,
+        "sd": 425.1593538786089,
+        "mean_abs": 320.2857142857143,
         "per_route": {
          "2534": -287.0,
          "3561": 678.0,
          "1790": -622.0,
          "23695": 15.0,
          "28087": -264.0,
-         "2664": 279.0
+         "2664": 279.0,
+         "17563": 97.0
         }
        }
       }
@@ -12401,7 +12449,8 @@
      "1790",
      "23695",
      "28087",
-     "2664"
+     "2664",
+     "17563"
     ],
     "three_run_sd": {
      "standstill_pct": {
@@ -12411,9 +12460,10 @@
        "1790": 17.61746320354191,
        "23695": 2.0214853040112843,
        "28087": 8.310046324225848,
-       "2664": 18.90201427459893
+       "2664": 18.90201427459893,
+       "17563": 2.2522491437318237
       },
-      "mean_sd": 10.063926429736812
+      "mean_sd": 8.9479725317361
      },
      "driving_score": {
       "per_route_sd": {
@@ -12422,9 +12472,10 @@
        "1790": 5.408612396095694,
        "23695": 22.737169021996216,
        "28087": 13.201100095776916,
-       "2664": 14.181666463584312
+       "2664": 14.181666463584312,
+       "17563": 13.302150202128978
       },
-      "mean_sd": 18.01279655531338
+      "mean_sd": 17.339847076287036
      },
      "route_completion": {
       "per_route_sd": {
@@ -12433,9 +12484,10 @@
        "1790": 0.0,
        "23695": 0.0,
        "28087": 25.810236341420822,
-       "2664": 0.0
+       "2664": 0.0,
+       "17563": 0.0
       },
-      "mean_sd": 5.67483744712613
+      "mean_sd": 4.864146383250969
      },
      "mean_speed_mps": {
       "per_route_sd": {
@@ -12444,9 +12496,10 @@
        "1790": 0.5903159888564662,
        "23695": 0.35842827135054844,
        "28087": 0.2673531643051965,
-       "2664": 0.5549944519290041
+       "2664": 0.5549944519290041,
+       "17563": 0.14982722368464502
       },
-      "mean_sd": 0.3969266052154747
+      "mean_sd": 0.3616266935682133
      },
      "collision_events": {
       "per_route_sd": {
@@ -12455,9 +12508,10 @@
        "1790": 1.1547005383792517,
        "23695": 0.5773502691896258,
        "28087": 0.5773502691896258,
-       "2664": 0.5773502691896257
+       "2664": 0.5773502691896257,
+       "17563": 1.1547005383792515
       },
-      "mean_sd": 0.8280695575690435
+      "mean_sd": 0.8747311262562161
      },
      "n_steps": {
       "per_route_sd": {
@@ -12466,16 +12520,17 @@
        "1790": 384.29329077324957,
        "23695": 153.46986674914396,
        "28087": 186.0116483807757,
-       "2664": 454.65408095972623
+       "2664": 454.65408095972623,
+       "17563": 52.214301999867175
       },
-      "mean_sd": 293.34073231522615
+      "mean_sd": 258.894099413032
      }
     },
     "test_retest_44": {
      "status": "pending",
      "have": {
       "model_matrix_golden_6400": 44,
-      "model_matrix_golden_6400_run2": 28
+      "model_matrix_golden_6400_run2": 32
      },
      "need": {
       "model_matrix_golden_6400": 44,
@@ -12914,7 +12969,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 28,
+      "model_matrix_golden_6400_run2": 32,
       "model_matrix_flooded_6400_run2": 0
      },
      "need": {
@@ -12925,7 +12980,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 23,
+      "model_matrix_golden_6400_run2": 27,
       "model_matrix_flooded_6400_run2": 0
      },
      "need": {
@@ -12936,7 +12991,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 19,
+      "model_matrix_golden_6400_run2": 23,
       "model_matrix_flooded_6400_run2": 0
      },
      "need": {
@@ -12950,7 +13005,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_6400": 44,
-      "model_matrix_golden_6400_run2": 28,
+      "model_matrix_golden_6400_run2": 32,
       "model_matrix_flooded_6400": 44,
       "model_matrix_flooded_6400_run2": 0
      },
@@ -12965,7 +13020,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_6400": 37,
-      "model_matrix_golden_6400_run2": 23,
+      "model_matrix_golden_6400_run2": 27,
       "model_matrix_flooded_6400": 37,
       "model_matrix_flooded_6400_run2": 0
      },
@@ -12980,7 +13035,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_6400": 33,
-      "model_matrix_golden_6400_run2": 19,
+      "model_matrix_golden_6400_run2": 23,
       "model_matrix_flooded_6400": 33,
       "model_matrix_flooded_6400_run2": 0
      },
@@ -13031,7 +13086,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 28,
+      "model_matrix_golden_6400_run2": 32,
       "model_matrix_flooded_6400": 44
      },
      "need": {
@@ -13042,7 +13097,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 23,
+      "model_matrix_golden_6400_run2": 27,
       "model_matrix_flooded_6400": 37
      },
      "need": {
@@ -13053,7 +13108,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 19,
+      "model_matrix_golden_6400_run2": 23,
       "model_matrix_flooded_6400": 33
      },
      "need": {
@@ -14035,7 +14090,7 @@
    "have": {
     "model_matrix_golden_6400_nogate": 44,
     "model_matrix_flooded_6400_nogate": 44,
-    "model_matrix_golden_6400_run2": 28,
+    "model_matrix_golden_6400_run2": 32,
     "model_matrix_flooded_6400_run2": 0
    },
    "need": {
@@ -14048,7 +14103,7 @@
   "(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)": {
    "status": "pending",
    "have": {
-    "model_matrix_golden_6400_run2": 28,
+    "model_matrix_golden_6400_run2": 32,
     "model_matrix_flooded_6400_run2": 0
    },
    "need": {
@@ -14646,7 +14701,7 @@
      "have": {
       "model_matrix_fgbalanced_6400": 0,
       "model_matrix_golden_6400": 44,
-      "model_matrix_golden_6400_run2": 28
+      "model_matrix_golden_6400_run2": 32
      },
      "need": {
       "model_matrix_fgbalanced_6400": 44,
@@ -14659,7 +14714,7 @@
      "have": {
       "model_matrix_fgbalanced_6400": 0,
       "model_matrix_golden_6400": 37,
-      "model_matrix_golden_6400_run2": 23
+      "model_matrix_golden_6400_run2": 27
      },
      "need": {
       "model_matrix_fgbalanced_6400": 37,
@@ -14672,7 +14727,7 @@
      "have": {
       "model_matrix_fgbalanced_6400": 0,
       "model_matrix_golden_6400": 33,
-      "model_matrix_golden_6400_run2": 19
+      "model_matrix_golden_6400_run2": 23
      },
      "need": {
       "model_matrix_fgbalanced_6400": 33,
@@ -14721,7 +14776,7 @@
      "status": "pending",
      "have": {
       "model_matrix_fgbalanced_6400": 0,
-      "model_matrix_golden_6400_run2": 28
+      "model_matrix_golden_6400_run2": 32
      },
      "need": {
       "model_matrix_fgbalanced_6400": 44,
@@ -14732,7 +14787,7 @@
      "status": "pending",
      "have": {
       "model_matrix_fgbalanced_6400": 0,
-      "model_matrix_golden_6400_run2": 23
+      "model_matrix_golden_6400_run2": 27
      },
      "need": {
       "model_matrix_fgbalanced_6400": 37,
@@ -14743,7 +14798,7 @@
      "status": "pending",
      "have": {
       "model_matrix_fgbalanced_6400": 0,
-      "model_matrix_golden_6400_run2": 19
+      "model_matrix_golden_6400_run2": 23
      },
      "need": {
       "model_matrix_fgbalanced_6400": 33,
@@ -14759,7 +14814,7 @@
     "model_matrix_flooded_6400": 44,
     "model_matrix_flooded_6400_run2": 0,
     "model_matrix_golden_6400": 44,
-    "model_matrix_golden_6400_run2": 28
+    "model_matrix_golden_6400_run2": 32
    },
    "need": {
     "model_matrix_fgbalanced_6400": 44,
@@ -15070,7 +15125,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -15082,7 +15137,7 @@
     "status": "pending",
     "have": {
      "model_matrix_golden_6400": 44,
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400": 44,
      "model_matrix_flooded_6400_run2": 0
     },
@@ -15473,7 +15528,7 @@
    "Golden-6400 run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28
+     "model_matrix_golden_6400_run2": 32
     },
     "need": {
      "model_matrix_golden_6400_run2": 44
@@ -15730,7 +15785,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -15742,7 +15797,7 @@
     "status": "pending",
     "have": {
      "model_matrix_golden_6400": 44,
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400": 44,
      "model_matrix_flooded_6400_run2": 0
     },
@@ -16487,7 +16542,7 @@
    "Golden-6400 run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28
+     "model_matrix_golden_6400_run2": 32
     },
     "need": {
      "model_matrix_golden_6400_run2": 44
@@ -17651,7 +17706,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -18172,7 +18227,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -19169,12 +19224,14 @@
   "status_line": "pending: 1 of 3 parts (default controller, run2)"
  },
  "W": {
-  "label": "new runs, exploratory; reading rule fixed in addendum section 11 before the agent was run",
+  "label": "new runs, exploratory; outcomes and reading rule fixed in addendum section 11-B before any swap run existed",
   "definitions": {
    "swap steps": "about one step in five from step 60; plan logged, not acted on",
    "low speed": "speed <= 0.5 m/s, swap = moving history (4.0 m/s straight)",
-   "v_end": "path length between waypoints 54 and 64 / 1.0 s (addendum 11-A)",
    "moving": "speed > 0.5 m/s, swap = stationary history",
+   "v_start": "|first waypoint| / 0.1 s",
+   "v_end": "path length between waypoints 54 and 64 / 1.0 s",
+   "dv": "v_end - v_start (planned speed change; set by the learned controls, not by the initial speed)",
    "per_route_rule": "a route is used only if it has at least 20 steps in both conditions"
   },
   "models": {
@@ -19250,7 +19307,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -19430,7 +19487,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 28,
+     "model_matrix_golden_6400_run2": 32,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {

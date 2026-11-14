@@ -16,6 +16,7 @@ AUDIT_LOG="outputs/revision_suite4_audit.log"
 SOCK_PATH="/tmp/alpamayo_flashdrive.sock"
 # Anchored so that only the real server process matches, never a shell whose command line mentions it.
 SERVER_PAT="^/home/aimslab/flashdrive/.venv/bin/python -u /home/aimslab/flashdrive/scripts/flashdrive_server.py"
+PART2_PID="${PART2_PID:-1806241}"
 PART3_PID="${PART3_PID:-1824157}"
 FLASHDRIVE_PYTHON="/home/aimslab/flashdrive/.venv/bin/python"
 ROUTE_TIMEOUT_S=9000        # 2.5 h hard limit per route (a 4,000-tick route takes about 65 min)
@@ -160,8 +161,10 @@ PY
     audit "- | job end | tag=$tag"
 }
 
-# wait for part 3
-while kill -0 "$PART3_PID" 2>/dev/null; do sleep 60; done
+# wait for parts 2 and 3 (part 3 alone is not enough: if it ended early, part 2 could still be running a route)
+while kill -0 "$PART2_PID" 2>/dev/null || kill -0 "$PART3_PID" 2>/dev/null; do sleep 60; done
+# and for any evaluation that is still running for another reason
+while pgrep -f "leaderboard_evaluator.py" > /dev/null; do sleep 60; done
 
 audit "- | suite4 start | git_head=$(git rev-parse HEAD) pid=$$"
 FLOODED_SHA=$(sha_of "$FLOODED_DIR/action_expert.safetensors")
@@ -171,14 +174,24 @@ GOLDEN_SHA=$(sha_of "$GOLDEN_DIR/action_expert.safetensors")
 run_job model_matrix_flooded_6400_histswap "$FLOODED_DIR" "$AGENT_HISTSWAP" "2534" "$FLOODED_SHA"
 if [ -z "$SUITE_ONLY" ] && [ -z "$ROUTES_OVERRIDE" ]; then
     check=$(python3 - <<'PY'
-import json
+import json, math, statistics
 p = 'outputs/local_evaluation/model_matrix_flooded_6400_histswap_2534/predicted_trajectories.jsonl'
 try:
     rows = [json.loads(l) for l in open(p) if l.strip()]
     kinds = [r.get('hist_kind') for r in rows]
     ok = len(rows) > 100 and all(k in ('true', 'moving', 'stationary') for k in kinds) \
         and all(r.get('controller_variant') == 'histswap' for r in rows) and sum(k != 'true' for k in kinds) >= 10
-    print('ok' if ok else 'bad', len(rows), {k: kinds.count(k) for k in set(kinds)})
+    # The plan is integrated from the speed the model reads from the history it was given, so the distance to the
+    # first waypoint shows whether the server used the replaced history: about 0.40 m for 4.0 m/s, about 0 at rest.
+    med, checked = {}, 0
+    for kind, lo, hi in (('moving', 0.30, 0.50), ('stationary', 0.0, 0.05)):
+        d = [math.hypot(r['pred_waypoints'][0][0], r['pred_waypoints'][0][1]) for r in rows if r.get('hist_kind') == kind]
+        if len(d) >= 10:
+            med[kind] = round(statistics.median(d), 3)
+            checked += 1
+            ok = ok and lo <= med[kind] <= hi
+    ok = ok and checked >= 1
+    print('ok' if ok else 'bad', len(rows), {k: kinds.count(k) for k in set(kinds)}, 'median first-waypoint distance (m):', med)
 except Exception as e:
     print('bad', repr(e))
 PY
