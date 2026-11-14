@@ -6,6 +6,8 @@ figure_2.png  fig_paired_standstill: per-route standstill dumbbell (Golden-6400 
 figure_3.png  fig_extent_cdf: empirical CDFs of predicted trajectory extent L
 figure_4.png  fig_model_by_controller: model x controller standstill, split into blocked time and the rest
               (only if the gate-off runs are complete; needs analysis U in the manifest)
+figure_5.png  fig_low_speed_plans: plans at 0.5 m/s or less (analysis V of the manifest): plan mix of the
+              matched pair under both controllers, and stay-put share of all six models against their training sets
 """
 import json
 import sys
@@ -128,6 +130,63 @@ def fig_model_by_controller():
     save(fig, "figure_4.png")
 
 
+def fig_low_speed_plans():
+    """Plans at low speed, from analysis V of the manifest (no step logs are read here)."""
+    V = json.loads(MANIFEST.read_text())["V"]
+    rows = V["golden_minus_flooded"]
+    parts = [("low_speed_stays_put", "stays put (L < 0.64 m)", 1.0),
+             ("low_speed_in_between", "in between", 0.5),
+             ("low_speed_starts_moving", "starts moving (L \u2265 2 m)", 0.2)]
+    fig, (a, b) = plt.subplots(1, 2, figsize=(10.5, 4.3), gridspec_kw={"width_ratios": [1, 1.25], "wspace": 0.3})
+    x, w = np.arange(2), 0.36
+    for j, key in enumerate(("default controller, run1", "gate-off controller")):
+        for i, side in enumerate(("mean_first", "mean_second")):  # first = Golden, second = Flooded
+            c, xpos, bottom = (C_GOLD, C_FLOOD)[i], x[j] + (i - 0.5) * w, 0.0
+            vals = [rows[key][k][side] for k, _, _ in parts]
+            assert abs(sum(vals) - 100) < 1e-6, "the three plan classes must add to 100 %"
+            for v, (_, _, alpha) in zip(vals, parts):
+                a.bar(xpos, v, w, bottom=bottom, color=c, alpha=alpha, edgecolor="white")
+                bottom += v
+            a.text(xpos, vals[0] + 2.5, f"{vals[0]:.0f} %", ha="center", va="bottom", fontsize=10)
+            print(f"fig_low_speed_plans: {key}, {('Golden', 'Flooded')[i]}: "
+                  + ", ".join(f"{lab} {v:.2f} %" for v, (_, lab, _) in zip(vals, parts)))
+    for i, name in enumerate((NAME_G, NAME_F)):
+        a.bar(0, 0, 0, color=(C_GOLD, C_FLOOD)[i], label=LABEL[name])
+    a.bar(0, 0, 0, color="none", label=" ")  # filler so that the second legend column holds the three plan classes
+    for _, lab, alpha in parts:
+        a.bar(0, 0, 0, color="0.25", alpha=alpha, label=lab)
+    a.set_xticks(x)
+    a.set_xticklabels(["Default controller", "Gate-off controller"])
+    a.set_ylim(0, 100)
+    a.set_ylabel("Plans at \u2264 0.5 m/s (% of steps, route mean)")
+    a.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.3), ncol=2, fontsize=9, columnspacing=1.0)
+    a.set_title("(a)", loc="left", fontsize=11, y=1.3)
+
+    pooled = V["pooled_all_models_default_run1"]
+    train = V["training_set_reference"]["low_speed_stays_put_pct"]
+    models = [("Base", "Base", "0.55", None), ("Flooded-1600", "Flooded-\n1600", C_FLOOD, "flooded_1600"),
+              ("Golden-1600", "Golden-\n1600", C_GOLD, "golden_1600"),
+              ("Flooded-6400-Hist", "Flooded-\n6400-Hist", C_FLOOD, None),
+              ("Flooded-6400-Matched", "Flooded-\n6400", C_FLOOD, "flooded_6400"),
+              ("Golden-6400", "Golden-\n6400", C_GOLD, "golden_6400")]
+    for k, (name, lab, c, tkey) in enumerate(models):
+        v = pooled[name]["low_speed_stays_put"]["pct"]
+        b.bar(k, v, 0.62, color=c, edgecolor="white", alpha=0.6 if name == "Flooded-6400-Hist" else 1.0)
+        b.text(k, v + 0.8, f"{v:.1f}", ha="center", va="bottom", fontsize=9.5)
+        if tkey:
+            b.plot([k - 0.36, k + 0.36], [train[tkey]] * 2, color="k", lw=2,
+                   label="share in its training set" if tkey == "flooded_1600" else None)
+        print(f"fig_low_speed_plans: pooled stay-put share {name}: {v:.2f} %"
+              + (f" (training set {train[tkey]} %)" if tkey else ""))
+    b.set_xticks(range(len(models)))
+    b.set_xticklabels([m[1] for m in models], fontsize=9)
+    b.set_ylim(0, 40)
+    b.set_ylabel("Plan stays put at \u2264 0.5 m/s (% of steps, pooled)")
+    b.legend(frameon=False, loc="upper right", fontsize=9.5)
+    b.set_title("(b)", loc="left", fontsize=11, y=1.3)
+    save(fig, "figure_5.png")
+
+
 def fig_pipeline():
     steps = [
         "Cameras, ego history,\nnavigation command",
@@ -170,6 +229,7 @@ def main():
     fig_paired_standstill(g, f)
     fig_extent_cdf(g, f)
     fig_model_by_controller()
+    fig_low_speed_plans()
     fig_pipeline()
 
 
