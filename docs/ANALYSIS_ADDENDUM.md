@@ -161,3 +161,32 @@ Post hoc and exploratory. No new runs. Written before any value below was comput
 
 **Reading.** No decision rule. The two models visit different states in closed loop, so conditioning on speed or on rationale class narrows the comparison but does not make it a same-input comparison. The rationale classes are a keyword heuristic. A lateral offset of the plan is not a completed manoeuvre.
 
+## 11. Motion-history swap test, written 14 November 2026, 16:13 (UTC+7), before the modified agent was run on any route
+
+New runs, exploratory, with a reading rule fixed here. The confirmatory record of Section 1 is not changed, and these runs enter no other analysis.
+
+**Question.** At low speed the flooded model plans to stay put more often than the curated one (Section 10a). The inertia account [Codevilla et al., 2019] says that such plans follow the model's own recent motion, not the scene. The only non-visual motion input of the model is the ego history (16 poses over the last 1.5 s). This test replaces that input on a fixed subset of steps and reads the plan.
+
+**What had been seen when this was written.** Everything in the manifest at commit `236aa3d3` (first passes, gate-off runs, 14 of 44 routes of the Golden second pass as in run note 6). No model has been queried with a replaced history.
+
+**Agent.** `alpamayo_bridge_agent_histswap.py` is a copy of the default agent (gate active) with three changes and no others. (i) On a *swap step* the two history arrays sent to the model are replaced as described below; camera frames (four per camera) and the navigation command are sent unchanged. (ii) The plan returned on a swap step is logged but not acted on: the vehicle receives the command of the previous step, and the controller's state is not updated. (iii) Each log line carries `hist_kind` (`true`, `moving` or `stationary`) and `controller_variant = histswap`.
+
+**Swap steps.** Step index ≥ 60, and the SHA-256 digest of the decimal step index, read as an integer, is divisible by 5 (about one step in five). The schedule is the same for every route and model.
+
+**Replacement.** If the measured speed is ≤ 0.5 m/s: *moving history*, 16 positions on a straight line behind the vehicle at a constant 4.0 m/s (x = 4.0 m/s × offset for offsets −1.5 s to 0 s, y = z = 0), identity rotations. If the speed is > 0.5 m/s: *stationary history*, all positions zero, identity rotations.
+
+**Runs.** `Golden-6400` and `Flooded-6400-Matched`, one pass each on the eight replicate routes of Section 4b (2534, 3561, 1790, 23695, 28087, 2664, 17563, 26458), tags `model_matrix_golden_6400_histswap` and `model_matrix_flooded_6400_histswap`. They start after the decoupling arm of Section 6 has finished. The first route (2534, flooded model) serves as the check that the agent runs; it is that route's run and is not repeated. No route is relaunched once it has a score.
+
+**Outcomes, per model.** Thresholds as in Section 10a.
+- **W1 (primary).** Among steps at ≤ 0.5 m/s: share of plans with L < 0.64 m (*stays put*) on swap steps (moving history) minus the same share on the other steps (true history).
+- **W2.** Among steps at > 0.5 m/s: share of plans with L < 1.5 m on swap steps (stationary history) minus the same share on the other steps.
+- Also reported: the share with L ≥ 2.0 m at low speed under both histories, and pooled shares with step counts.
+
+Per route, a share is a percentage of the steps of that condition; a route is used only if it has at least 20 steps in both conditions. Paired over routes, BCa interval and Wilcoxon test as in Section 1. With eight routes the smallest two-sided Wilcoxon p-value is 0.0078.
+
+**Reading rule.** For one model, stay-put plans are called *history-dependent* if the W1 difference is negative and its interval lies entirely below 0. Otherwise the result is *no detectable dependence on the ego history*. For W2, a stationary history is said to *induce stop plans* if the difference is positive and its interval lies entirely above 0. Fewer than five usable routes for a model: no reading, the pooled shares are reported only.
+
+**What the paper may say.** If W1 is history-dependent for `Flooded-6400-Matched`, the paper may state that this model's stay-put plans depend on the ego-history input, which is the mechanism described as the inertia problem. If not, the paper states that the test did not show this, and keeps or removes "consistent with". The result is reported whatever it is. The comparison between the two models under a moving history is descriptive.
+
+**Limits.** A moving history together with camera frames that show no motion is an input the model was not trained on, and so is the reverse. A single replaced step measures the immediate plan, not how long a stop lasts. Holding the previous command on one step in five alters the closed loop, so scores and standstill time of these runs are not comparable with any other run and are not analysed. Eight routes, one pass, unseeded sampling.
+
