@@ -729,7 +729,7 @@ run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 
 
 ### Golden-6400
 
-Replicate routes done: {'run1': '8/8', 'rep1': '8/8', 'run2': '3/8'}
+Replicate routes done: {'run1': '8/8', 'rep1': '8/8', 'run2': '5/8'}
 
 | route | run | standstill % | DS | RC % | mean speed | coll. events | steps | status |
 |---|---|---|---|---|---|---|---|---|
@@ -744,8 +744,10 @@ Replicate routes done: {'run1': '8/8', 'rep1': '8/8', 'run2': '3/8'}
 | 1790 | run2 | 17.73 | 2.80 | 100.0 | 2.358 | 6 | 1004 | Completed |
 | 23695 | run1 | 4.16 | 100.00 | 100.0 | 3.211 | 0 | 962 | Completed |
 | 23695 | rep1 | 7.30 | 85.16 | 100.0 | 2.637 | 0 | 1220 | Completed |
+| 23695 | run2 | 7.94 | 55.35 | 100.0 | 2.552 | 1 | 1235 | Completed |
 | 28087 | run1 | 40.28 | 33.65 | 56.1 | 1.228 | 1 | 1147 | Failed - Agent deviated from the route |
 | 28087 | rep1 | 29.85 | 58.07 | 100.0 | 1.453 | 1 | 1052 | Completed |
+| 28087 | run2 | 23.86 | 54.55 | 54.5 | 1.760 | 0 | 788 | Failed - Agent deviated from the route |
 | 2664 | run1 | 14.62 | 34.91 | 100.0 | 2.366 | 2 | 1122 | Completed |
 | 2664 | rep1 | 44.23 | 60.00 | 100.0 | 1.526 | 1 | 1732 | Completed |
 | 17563 | run1 | 8.31 | 36.00 | 100.0 | 2.687 | 2 | 842 | Completed |
@@ -763,22 +765,22 @@ Run-to-run differences (all routes with both runs):
 | rep1 - run1 | 8 | 6/8 | mean_speed_mps | -0.365 | 0.535 | 0.489 |
 | rep1 - run1 | 8 | 6/8 | collision_events | 0.125 | 1.727 | 0.875 |
 | rep1 - run1 | 8 | 6/8 | n_steps | 120.125 | 457.633 | 350.375 |
-| run2 - run1 | 14 | 8/14 | standstill_pct | 8.874 | 25.620 | 16.439 |
-| run2 - run1 | 14 | 8/14 | driving_score | -10.551 | 31.366 | 24.032 |
-| run2 - run1 | 14 | 8/14 | route_completion | -2.129 | 25.778 | 14.618 |
-| run2 - run1 | 14 | 8/14 | mean_speed_mps | -0.309 | 0.610 | 0.440 |
-| run2 - run1 | 14 | 8/14 | collision_events | 0.286 | 1.383 | 1.000 |
-| run2 - run1 | 14 | 8/14 | n_steps | 304.000 | 906.638 | 511.857 |
-| run2 - rep1 | 3 | 2/3 | standstill_pct | -15.140 | 12.997 | 15.140 |
-| run2 - rep1 | 3 | 2/3 | driving_score | -8.751 | 36.291 | 27.567 |
-| run2 - rep1 | 3 | 2/3 | route_completion | -4.757 | 8.239 | 4.757 |
-| run2 - rep1 | 3 | 2/3 | mean_speed_mps | 0.456 | 0.645 | 0.645 |
-| run2 - rep1 | 3 | 2/3 | collision_events | -0.333 | 2.517 | 1.667 |
-| run2 - rep1 | 3 | 2/3 | n_steps | -77.000 | 674.963 | 529.000 |
+| run2 - run1 | 25 | 17/25 | standstill_pct | 3.633 | 20.238 | 11.147 |
+| run2 - run1 | 25 | 17/25 | driving_score | -8.944 | 27.662 | 21.365 |
+| run2 - run1 | 25 | 17/25 | route_completion | -1.692 | 23.155 | 12.080 |
+| run2 - run1 | 25 | 17/25 | mean_speed_mps | -0.170 | 0.531 | 0.357 |
+| run2 - run1 | 25 | 17/25 | collision_events | 0.120 | 1.130 | 0.760 |
+| run2 - run1 | 25 | 17/25 | n_steps | 166.880 | 701.566 | 352.960 |
+| run2 - rep1 | 5 | 3/5 | standstill_pct | -10.154 | 11.686 | 10.410 |
+| run2 - rep1 | 5 | 3/5 | driving_score | -11.915 | 27.634 | 23.205 |
+| run2 - rep1 | 5 | 3/5 | route_completion | -11.944 | 19.723 | 11.944 |
+| run2 - rep1 | 5 | 3/5 | mean_speed_mps | 0.318 | 0.513 | 0.466 |
+| run2 - rep1 | 5 | 3/5 | collision_events | -0.200 | 1.924 | 1.400 |
+| run2 - rep1 | 5 | 3/5 | n_steps | -96.000 | 488.052 | 373.200 |
 
-Three-run per-route SD (routes ['2534', '3561', '1790']): standstill_pct: 10.383; driving_score: 19.319; route_completion: 2.746; mean_speed_mps: 0.400; collision_events: 1.079; n_steps: 321.970
+Three-run per-route SD (routes ['2534', '3561', '1790', '23695', '28087']): standstill_pct: 8.296; driving_score: 18.779; route_completion: 6.810; mean_speed_mps: 0.365; collision_events: 0.878; n_steps: 261.078
 
-44-route test–retest: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 14}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
+44-route test–retest: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 25}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
 
 ### Flooded-6400-Matched
 
@@ -827,17 +829,17 @@ Status: pending: 12 of 12 parts ((i) run2 Golden vs run2 Flooded | 44 routes, (i
 
 standstill_pct (primary); driving_score, route_completion, collision_events secondary
 
-**(i) run2 Golden vs run2 Flooded, 44 routes**: pending: have {'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**(i) run2 Golden vs run2 Flooded, 44 routes**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**(i) run2 Golden vs run2 Flooded, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_6400_run2': 11, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 37, 'model_matrix_flooded_6400_run2': 37}
+**(i) run2 Golden vs run2 Flooded, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_6400_run2': 20, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 37, 'model_matrix_flooded_6400_run2': 37}
 
-**(i) run2 Golden vs run2 Flooded, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_6400_run2': 10, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 33, 'model_matrix_flooded_6400_run2': 33}
+**(i) run2 Golden vs run2 Flooded, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_6400_run2': 16, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 33, 'model_matrix_flooded_6400_run2': 33}
 
-**(ii) mean of run1 and run2, Golden vs Flooded, 44 routes**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
+**(ii) mean of run1 and run2, Golden vs Flooded, 44 routes**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**(ii) mean of run1 and run2, Golden vs Flooded, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 11, 'model_matrix_flooded_6400': 37, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 37, 'model_matrix_flooded_6400': 37, 'model_matrix_flooded_6400_run2': 37}
+**(ii) mean of run1 and run2, Golden vs Flooded, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 20, 'model_matrix_flooded_6400': 37, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 37, 'model_matrix_flooded_6400': 37, 'model_matrix_flooded_6400_run2': 37}
 
-**(ii) mean of run1 and run2, Golden vs Flooded, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 10, 'model_matrix_flooded_6400': 33, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 33, 'model_matrix_flooded_6400': 33, 'model_matrix_flooded_6400_run2': 33}
+**(ii) mean of run1 and run2, Golden vs Flooded, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 16, 'model_matrix_flooded_6400': 33, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 33, 'model_matrix_flooded_6400': 33, 'model_matrix_flooded_6400_run2': 33}
 
 **(iii-a) run1 Golden vs run2 Flooded, 44 routes**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_flooded_6400_run2': 44}
 
@@ -845,11 +847,11 @@ standstill_pct (primary); driving_score, route_completion, collision_events seco
 
 **(iii-a) run1 Golden vs run2 Flooded, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_6400': 33, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 33, 'model_matrix_flooded_6400_run2': 33}
 
-**(iii-b) run2 Golden vs run1 Flooded, 44 routes**: pending: have {'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400': 44}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44}
+**(iii-b) run2 Golden vs run1 Flooded, 44 routes**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400': 44}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44}
 
-**(iii-b) run2 Golden vs run1 Flooded, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_6400_run2': 11, 'model_matrix_flooded_6400': 37}, need {'model_matrix_golden_6400_run2': 37, 'model_matrix_flooded_6400': 37}
+**(iii-b) run2 Golden vs run1 Flooded, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_6400_run2': 20, 'model_matrix_flooded_6400': 37}, need {'model_matrix_golden_6400_run2': 37, 'model_matrix_flooded_6400': 37}
 
-**(iii-b) run2 Golden vs run1 Flooded, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_6400_run2': 10, 'model_matrix_flooded_6400': 33}, need {'model_matrix_golden_6400_run2': 33, 'model_matrix_flooded_6400': 33}
+**(iii-b) run2 Golden vs run1 Flooded, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_6400_run2': 16, 'model_matrix_flooded_6400': 33}, need {'model_matrix_golden_6400_run2': 33, 'model_matrix_flooded_6400': 33}
 
 ## P. Gate-off controller
 
@@ -919,9 +921,9 @@ Routes ended by the 60 s rule: {'gate_off': 2, 'default': 7}
 | standstill_pct_v<1.0 | -1.330 | -8.710 | 7.380 | [-0.063, 14.827] | 306.0 | 0 | 0.0268 | 0.0268 | 0.0274 | 29/15/0 | 0.382 |
 | mean_speed_mps | 0.084 | 0.313 | -0.229 | [-0.458, 0.009] | 321.0 | 0 | 0.0421 | 0.0421 | 0.0423 | 15/29/0 | -0.352 |
 
-**(3) interaction, default = mean of run1 and run2**: pending: have {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**(3) interaction, default = mean of run1 and run2**: pending: have {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_nogate': 44, 'model_matrix_flooded_6400_nogate': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)**: pending: have {'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
 **(5) common-window distance (m)**
 
@@ -1033,11 +1035,11 @@ exploratory; one training seed, one evaluation pass of the Balanced model
 
 **Balanced minus Flooded-6400-Matched run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_flooded_6400_run2': 33}
 
-**Balanced minus Golden-6400 (mean of run1 and run2), 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 14}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
+**Balanced minus Golden-6400 (mean of run1 and run2), 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 25}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
 
-**Balanced minus Golden-6400 (mean of run1 and run2), 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 11}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 37}
+**Balanced minus Golden-6400 (mean of run1 and run2), 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 20}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_golden_6400': 37, 'model_matrix_golden_6400_run2': 37}
 
-**Balanced minus Golden-6400 (mean of run1 and run2), 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 10}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 33}
+**Balanced minus Golden-6400 (mean of run1 and run2), 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 16}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400': 33, 'model_matrix_golden_6400_run2': 33}
 
 **Balanced minus Golden-6400 run1, 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 44}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400': 44}
 
@@ -1045,13 +1047,13 @@ exploratory; one training seed, one evaluation pass of the Balanced model
 
 **Balanced minus Golden-6400 run1, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400': 33}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400': 33}
 
-**Balanced minus Golden-6400 run2, 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 14}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400_run2': 44}
+**Balanced minus Golden-6400 run2, 44 routes**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 25}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_golden_6400_run2': 44}
 
-**Balanced minus Golden-6400 run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 11}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_golden_6400_run2': 37}
+**Balanced minus Golden-6400 run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 20}, need {'model_matrix_fgbalanced_6400': 37, 'model_matrix_golden_6400_run2': 37}
 
-**Balanced minus Golden-6400 run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 10}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400_run2': 33}
+**Balanced minus Golden-6400 run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_golden_6400_run2': 16}, need {'model_matrix_fgbalanced_6400': 33, 'model_matrix_golden_6400_run2': 33}
 
-Pre-specified reading (44 routes): pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 14}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
+Pre-specified reading (44 routes): pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 25}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
 
 ## T. Near-stationary plans and stop episodes (Golden minus Flooded)
 
@@ -1077,9 +1079,9 @@ post hoc, exploratory; section 7a was first looked at on a partial route set bef
 | time_wait_sum_pct | 15.18 | 19.63 | -4.45 | [-6.89, -1.80] | 206.0 | 0 | 5.04e-04 | 5.04e-04 | 7.44e-04 | 10/34/0 | -0.584 |
 | episodes_per_route | 2.27 | 5.23 | -2.95 | [-4.25, -1.59] | 80.5 | 9 | 1.20e-04 | n/a | 1.20e-04 | 5/30/9 | -0.744 |
 
-**default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**default controller, mean of run1 and run2**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
+**default controller, mean of run1 and run2**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
 
 **gate-off controller**
 
@@ -1121,7 +1123,7 @@ post hoc, exploratory; section 7a was first looked at on a partial route set bef
 | terminal_other | 0 | n/a | 0 | n/a | n/a | n/a |
 | brief | 359 | 0.5 | 3288 | 5.4 | 13.8 | 80.8 |
 
-**Golden-6400 run2**: pending: have {'model_matrix_golden_6400_run2': 14}, need {'model_matrix_golden_6400_run2': 44}
+**Golden-6400 run2**: pending: have {'model_matrix_golden_6400_run2': 25}, need {'model_matrix_golden_6400_run2': 44}
 
 **Flooded-6400-Matched run2**: pending: have {'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_flooded_6400_run2': 44}
 
@@ -1167,9 +1169,9 @@ driven: speed < 0.1 m/s, throttle >= 0.35, brake == 0 (logged final command); bl
 | time_not_driven_pct | 9.49 | 24.62 | -15.13 | [-22.37, -10.04] | 40.0 | 0 | 9.89e-10 | 9.89e-10 | 1.10e-07 | 5/39/0 | -0.919 |
 | standstill_without_blocked_pct | 17.97 | 33.59 | -15.63 | [-24.95, -7.98] | 170.0 | 0 | 7.28e-05 | 7.28e-05 | 1.49e-04 | 8/36/0 | -0.657 |
 
-**Golden minus Flooded, default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**Golden minus Flooded, default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
-**Golden minus Flooded, default controller, mean of run1 and run2**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
+**Golden minus Flooded, default controller, mean of run1 and run2**: pending: have {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44}
 
 **Golden minus Flooded, gate-off controller**
 
@@ -1376,7 +1378,7 @@ conditioning: low speed: speed <= 0.5 m/s; moving: speed > 0.5 m/s; text classes
 | left_plan_2.0m | 16.89 | 12.22 | 4.67 | [2.08, 8.33] | 255.0 | 0 | 0.0044 | 0.0044 | 0.0051 | 31/13/0 | 0.485 |
 | right_plan_2.0m | 22.22 | 22.38 | -0.16 | [-3.11, 2.66] | 469.0 | 0 | 0.7683 | 0.7683 | 0.7616 | 25/19/0 | 0.053 |
 
-**Golden minus Flooded, per-route shares (%), default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**Golden minus Flooded, per-route shares (%), default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
 **Golden minus Flooded, per-route shares (%), gate-off controller**
 
@@ -1412,7 +1414,7 @@ conditioning: low speed: speed <= 0.5 m/s; moving: speed > 0.5 m/s; text classes
 | left_plan_2.0m | 12.78 | 9.42 | 3.35 | [0.81, 7.47] | 8.0 | 0 | 0.0977 | 0.0977 | 0.0858 | 7/2/0 | 0.644 |
 | right_plan_2.0m | 21.26 | 18.41 | 2.85 | [-2.38, 6.58] | 13.0 | 0 | 0.3008 | 0.3008 | 0.2604 | 6/3/0 | 0.422 |
 
-**Golden minus Flooded, nine bypass routes, default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 14, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+**Golden minus Flooded, nine bypass routes, default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
 
 **Golden minus Flooded, nine bypass routes, gate-off controller**
 
@@ -1461,4 +1463,17 @@ conditioning: low speed: speed <= 0.5 m/s; moving: speed > 0.5 m/s; text classes
 | Flooded-6400-Matched nogate | 18.83 | 62.20 | 18.97 | 0.22 | 6.17 | 15.43 | 20.86 | 26.35 | 25.82 | 31.74 | 15.22 | 19.92 |
 
 Training-set reference: {"low_speed_stays_put_pct": {"golden_1600": 11.4, "flooded_1600": 30.6, "golden_6400": 10.9, "flooded_6400": 31.0}, "manoeuvre_targets_pct": {"golden": {"straight": 50, "swerve_left": 13, "swerve_right": 13, "turn_left": 12, "turn_right": 12}, "flooded": {"straight": 22, "swerve_left": 37, "swerve_right": 12, "turn_left": 14.5, "turn_right": 14.5}}, "source": "docs/provenance/A100_TRAINING_PROVENANCE.md (copied, not recomputed here)"}
+
+
+## W. Motion-history swap test (addendum section 11)
+
+Status: pending: 2 of 2 parts (Golden-6400, Flooded-6400-Matched)
+
+new runs, exploratory; reading rule fixed in addendum section 11 before the agent was run
+
+swap steps: about one step in five from step 60; plan logged, not acted on; low speed: speed <= 0.5 m/s, swap = moving history (4.0 m/s straight); moving: speed > 0.5 m/s, swap = stationary history; per_route_rule: a route is used only if it has at least 20 steps in both conditions
+
+**Golden-6400**: pending: have {'model_matrix_golden_6400_histswap': 0}, need {'model_matrix_golden_6400_histswap': 8}
+
+**Flooded-6400-Matched**: pending: have {'model_matrix_flooded_6400_histswap': 0}, need {'model_matrix_flooded_6400_histswap': 8}
 

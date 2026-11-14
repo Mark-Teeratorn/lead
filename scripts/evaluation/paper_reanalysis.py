@@ -2250,6 +2250,101 @@ def render_new(man):
     return '\n'.join(L) + '\n'
 
 
+# --------------------------------------------------------------------------- W. motion-history swap
+
+# ANALYSIS_ADDENDUM.md section 11. These runs use alpamayo_bridge_agent_histswap.py and enter no other analysis.
+W_TAGS = {G64: 'model_matrix_golden_6400_histswap', FM: 'model_matrix_flooded_6400_histswap'}
+W_MIN = 20
+
+
+def w_load(tag, route):
+    d = ROOT / f'outputs/local_evaluation/{tag}_{route}'
+    ep, lg = d / 'checkpoint_endpoint.json', d / 'predicted_trajectories.jsonl'
+    if not ep.exists() or not lg.exists() or not json.load(open(ep)).get('_checkpoint', {}).get('records'):
+        return None
+    rows = [json.loads(ln) for ln in open(lg) if ln.strip()]
+    if any(r.get('controller_variant') != 'histswap' or r.get('hist_kind') not in ('true', 'moving', 'stationary')
+           for r in rows):
+        raise RuntimeError(f'{d.name}: step log is not from the history-swap agent')
+    _, cum = chord_profile(np.asarray([r['pred_waypoints'] for r in rows], dtype=np.float64))
+    return {'speed': np.asarray([float(r['speed']) for r in rows]), 'L': cum[:, -1].copy(),
+            'kind': np.asarray([r['hist_kind'] for r in rows])}
+
+
+def w_reading(p, sign):
+    if 'bca95' not in p or p['bca95'] is None:
+        return 'no reading'
+    lo, hi = p['bca95']
+    if sign < 0:
+        return 'history-dependent' if p['mean_diff'] < 0 and hi < 0 else 'no detectable dependence on the ego history'
+    return 'induces stop plans' if p['mean_diff'] > 0 and lo > 0 else 'no detectable effect'
+
+
+def analysis_W():
+    res = {'label': 'new runs, exploratory; reading rule fixed in addendum section 11 before the agent was run',
+           'definitions': {'swap steps': 'about one step in five from step 60; plan logged, not acted on',
+                           'low speed': 'speed <= 0.5 m/s, swap = moving history (4.0 m/s straight)',
+                           'moving': 'speed > 0.5 m/s, swap = stationary history',
+                           'per_route_rule': f'a route is used only if it has at least {W_MIN} steps in both conditions'},
+           'models': {}}
+    # outcome -> (plan test, speed test, swapped kind, sign of the reading or 0)
+    outcomes = {'W1 low speed, stays put (L < 0.64 m): moving history minus true history': (lambda L: L < 0.64, True, 'moving', -1),
+                'low speed, starts moving (L >= 2.0 m): moving history minus true history': (lambda L: L >= 2.0, True, 'moving', 0),
+                'W2 moving, plans a stop (L < 1.5 m): stationary history minus true history': (lambda L: L < 1.5, False, 'stationary', +1)}
+    for model, tag in W_TAGS.items():
+        runs = {r: w_load(tag, r) for r in REPLICATE_ROUTES}
+        runs = {r: v for r, v in runs.items() if v is not None}
+        if len(runs) < len(REPLICATE_ROUTES):
+            res['models'][model] = {'status': 'pending', 'have': {tag: len(runs)}, 'need': {tag: len(REPLICATE_ROUTES)}}
+            continue
+        out = {'n_routes': len(runs), 'steps': {k: int(sum(np.sum(v['kind'] == k) for v in runs.values()))
+                                               for k in ('true', 'moving', 'stationary')}}
+        for name, (plan, low, kind, sign) in outcomes.items():
+            cnt = {}
+            for r, v in runs.items():
+                cond = (v['speed'] <= 0.5) if low else (v['speed'] > 0.5)
+                sw, tr = cond & (v['kind'] == kind), cond & (v['kind'] == 'true')
+                cnt[r] = (int(np.sum(plan(v['L'][sw]))), int(np.sum(sw)), int(np.sum(plan(v['L'][tr]))), int(np.sum(tr)))
+            use = [r for r in runs if cnt[r][1] >= W_MIN and cnt[r][3] >= W_MIN]
+            o = {'pooled_swapped_pct': 100.0 * sum(c[0] for c in cnt.values()) / max(1, sum(c[1] for c in cnt.values())),
+                 'pooled_true_pct': 100.0 * sum(c[2] for c in cnt.values()) / max(1, sum(c[3] for c in cnt.values())),
+                 'steps_swapped': sum(c[1] for c in cnt.values()), 'steps_true': sum(c[3] for c in cnt.values()),
+                 'routes_used': use}
+            if len(use) >= 5:
+                o['paired'] = paired([100.0 * cnt[r][0] / cnt[r][1] for r in use], [100.0 * cnt[r][2] / cnt[r][3] for r in use])
+                if sign:
+                    o['reading'] = w_reading(o['paired'], sign)
+            else:
+                o['paired'] = {'n': len(use), 'note': f'fewer than 5 routes with {W_MIN} steps in both conditions'}
+                if sign:
+                    o['reading'] = 'no reading'
+            out[name] = o
+        res['models'][model] = out
+    res['status_line'] = status_line(res['models'])
+    return res
+
+
+def render_W(man):
+    W = man['W']
+    L = ['## W. Motion-history swap test (addendum section 11)', '', f"Status: {W['status_line']}", '', W['label'], '',
+         '; '.join(f'{k}: {v}' for k, v in W['definitions'].items()), '']
+    for model, o in W['models'].items():
+        if is_pending(o):
+            L += [f'**{model}**: {pending_str(o)}', '']
+            continue
+        L += [f"**{model}** ({o['n_routes']} routes; steps by history: {o['steps']})", '']
+        for name, v in o.items():
+            if not isinstance(v, dict) or 'pooled_true_pct' not in v:
+                continue
+            L += [f"- {name}: pooled {f(v['pooled_swapped_pct'], 2)} % ({v['steps_swapped']} steps) against "
+                  f"{f(v['pooled_true_pct'], 2)} % ({v['steps_true']} steps); routes used {len(v['routes_used'])}"
+                  + (f"; reading: {v['reading']}" if 'reading' in v else '')]
+            if 'mean_diff' in v['paired']:
+                L += ['', table(PAIR_HDR, [pair_row('swapped minus true', v['paired'], 2)]), '']
+        L += ['']
+    return '\n'.join(L) + '\n'
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2316,9 +2411,10 @@ def main():
     man['T'] = analysis_T(arms)
     man['U'] = analysis_U(arms, scen, data)
     man['V'] = analysis_V(arms, data)
+    man['W'] = analysis_W()
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man) + '\n' + render_new(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')
