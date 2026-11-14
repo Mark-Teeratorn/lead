@@ -2475,6 +2475,35 @@ def render_Y(man):
     return '\n'.join(L) + '\n'
 
 
+# --------------------------------------------------------------------------- Z. H1 without the controller-tuning routes
+
+def analysis_Z(arms, data, tuning_union):
+    """ANALYSIS_ADDENDUM.md section 14. Post hoc sensitivity, existing results only."""
+    tuned = {str(r) for r in tuning_union}
+    routes = [r for r in CANONICAL_44 if r not in tuned]
+    res = {'label': 'post hoc sensitivity; defined in addendum section 14 before computing',
+           'routes_not_used_for_controller_tuning': routes, 'n_routes': len(routes), 'comparisons': {}}
+    for treat in (G16, F16):
+        for base_name, base in (('Base (original run)', data[BASE]), ('Base run2', arms.get('Base run2', {}))):
+            key = f'{treat} minus {base_name}'
+            if any(r not in base for r in routes):
+                res['comparisons'][key] = {'status': 'pending', 'have': {'base_run2': sum(r in base for r in routes)}, 'need': {'base_run2': len(routes)}}
+                continue
+            res['comparisons'][key] = {met: paired([fn(data[treat][r]) for r in routes], [fn(base[r]) for r in routes])
+                                       for met, fn in (('driving_score', lambda rd: rd['ds']), ('route_completion', lambda rd: rd['rc']))}
+    res['status_line'] = status_line(res['comparisons'])
+    return res
+
+
+def render_Z(man):
+    Z = man['Z']
+    L = ['## Z. H1 on the routes not used to tune the controller (addendum section 14)', '', f"Status: {Z['status_line']}", '', Z['label'], '',
+         f"{Z['n_routes']} routes: {', '.join(Z['routes_not_used_for_controller_tuning'])}", '']
+    for k, o in Z['comparisons'].items():
+        L += paired_block(k, o, 2)
+    return '\n'.join(L) + '\n'
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2544,9 +2573,10 @@ def main():
     man['W'] = analysis_W()
     man['X'] = analysis_X(arms, data)
     man['Y'] = analysis_Y(arms, data)
+    man['Z'] = analysis_Z(arms, data, man['H']['tuning_routes_union'])
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')
