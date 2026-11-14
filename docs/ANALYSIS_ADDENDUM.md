@@ -202,3 +202,30 @@ Exploratory. No new runs. The confirmatory record of Section 1 is not changed.
 
 **12b. Time at crawling speed.** Share of logged route steps with speed ≥ 0.1 m/s and < 1.0 m/s (*crawl*); sensitivity: ≥ 0.1 and < 0.5 m/s. Paired `Golden-6400` − `Flooded-6400-Matched` difference per route, BCa interval and Wilcoxon test of Section 1, for the default controller (run 1), the gate-off controller, and the second pass when complete; the per-model means for all six models of the main table are reported as description. This is a re-expression of values that analysis P already holds (shares of steps below 0.1, 0.5 and 1.0 m/s): from the gate-off means seen when this was written, crawl is 12.75 % for the curated model and 16.93 % for the flooded one. No paired test of this quantity had been run. No decision rule; second-pass wording as in Section 10.
 
+## 11-A. Correction to the outcomes of Section 11, written 14 November 2026, 17:19 (UTC+7), before any history-swap run existed
+
+No history-swap run has started (queue part 4 waits for part 3). Nothing from any swap run has been seen. Section 11 is left as committed; this section replaces its outcomes W1 and W2 and nothing else.
+
+**What was found.** Checking the equations of Section 3.1 against the model's code (`unicycle_accel_curvature.py`, `action_to_traj`) showed that the predicted waypoints are integrated from an initial speed v_0 that the model estimates from the same ego history that the test replaces (`estimate_t0_states`). A replaced history therefore changes L mechanically, whatever the learned controls say. Numerical check (run once, CPU, the model's own action space, controls fixed at the training means): from a moving history of 4.0 m/s the estimated v_0 is 3.9998 m/s and L = 25.79 m; from a stationary history v_0 = 0 and L = 0.59 m; from v_0 = 0.4 m/s L = 3.11 m. W1 as written (share of plans with L < 0.64 m under a moving history) could hardly be met under a 4.0 m/s history for a mechanical reason, and would then read as history dependence of the model whatever the model does.
+
+**Replacement outcomes.** Plan end speed: v_end = (path length between waypoint 54 and waypoint 64) / 1.0 s, in m/s, from the logged waypoints. A plan *ends at rest* if v_end < 0.5 m/s. This does not depend on v_0 except through the controls that reach rest.
+- **W1' (primary).** Among steps at ≤ 0.5 m/s: share of plans that end at rest on swap steps (moving history) minus the same share on the other steps (true history).
+- **W2'.** Among steps at > 0.5 m/s: share of plans that end at rest on swap steps (stationary history) minus the same share on the other steps.
+Per-route rule, pairing, intervals, reading rule, limits and what the paper may say are as in Section 11, with *ends at rest* in place of *stays put* and *stop plans*. The shares with L < 0.64 m and L ≥ 2.0 m of Section 11 are reported as description only and carry no reading.
+
+**Agent and queue.** Unchanged: the agent logs the full waypoint array, from which v_end follows.
+
+## 13. Plans at rest and at slow speed (sensitivity of Section 10a to the initial speed), written 14 November 2026, 17:19 (UTC+7), before computing
+
+Post hoc, exploratory, existing step logs only. The confirmatory record of Section 1 is not changed.
+
+**Why.** The extent L is integrated from the vehicle's current speed v_0 (Section 11-A). Among steps at ≤ 0.5 m/s, a plan that keeps v_0 = 0.4 m/s has L ≈ 3 m, whereas a plan from rest with the mean training controls has L ≈ 0.6 m. The stay-put share of Section 10a can therefore differ between two models partly because they spend different shares of their low-speed steps near zero speed. This section removes that possibility by conditioning on speed more tightly.
+
+**What had been seen when this was written.** The results of Sections 10a and 10b for both controllers; no value of the quantities below for any model.
+
+**Strata and outcomes.** Strata: *at rest* (speed < 0.1 m/s) and *slow* (0.1 ≤ speed ≤ 0.5 m/s). Outcomes in each stratum: share of plans with L < 0.64 m (*stays put*) and share of plans that end at rest (v_end < 0.5 m/s, Section 11-A).
+
+**Comparison.** As Section 10: per route a percentage of that stratum's steps, a route used only if both arms have at least 20 steps in the stratum, paired `Golden-6400` − `Flooded-6400-Matched`, BCa interval and Wilcoxon test of Section 1; default controller (run 1), gate-off controller, and run 2 when complete. Pooled shares for all six models are reported as description.
+
+**Reading.** No decision rule. If, among steps at rest, the stay-put share is lower for the curated model with an interval below 0 under both controllers, the paper says the difference in Section 10a is not an artefact of the speed distribution inside the 0.5 m/s band. If it is not, the paper says so and weakens the statement of Section 10a to match.
+
