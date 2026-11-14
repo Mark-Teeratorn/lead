@@ -190,3 +190,15 @@ Per route, a share is a percentage of the steps of that condition; a route is us
 
 **Limits.** A moving history together with camera frames that show no motion is an input the model was not trained on, and so is the reverse. A single replaced step measures the immediate plan, not how long a stop lasts. Holding the previous command on one step in five alters the closed loop, so scores and standstill time of these runs are not comparable with any other run and are not analysed. Eight routes, one pass, unseeded sampling.
 
+## 12. Wording rule for contact claims, and time at crawling speed, written 14 November 2026, 16:23 (UTC+7)
+
+Exploratory. No new runs. The confirmatory record of Section 1 is not changed.
+
+**12a. What the paper may say about collisions after the second pass.** Section 5 already lists collision events (merged by actor id, as in analysis F) as a secondary outcome of the second pass, on run 2 alone and on the per-route mean of runs 1 and 2 (analysis O). This section adds only a wording rule, fixed before any collision count of a second pass was computed or viewed. Known when written: first pass 44 events (`Golden-6400`) against 36 (`Flooded-6400-Matched`), rate ratio 1.12 with interval 0.80 to 1.68; gate-off runs 51 against 51.
+- The paper may state that one model had *more collisions* than the other only if, on the per-route mean of the two passes (44 routes), the paired difference has a BCa interval that excludes 0.
+- Otherwise it states that collision counts did not differ detectably, and gives both counts.
+- In neither case does the paper state that one model is *safer*. Collisions in these runs are simulator contact events of any severity, the routes are 44 short scenarios, and no hazard exposure is measured.
+- Blocked time (Section 8) is reported as time spent commanded to accelerate without moving, on routes with a collision event. It is not reported as a collision count.
+
+**12b. Time at crawling speed.** Share of logged route steps with speed ≥ 0.1 m/s and < 1.0 m/s (*crawl*); sensitivity: ≥ 0.1 and < 0.5 m/s. Paired `Golden-6400` − `Flooded-6400-Matched` difference per route, BCa interval and Wilcoxon test of Section 1, for the default controller (run 1), the gate-off controller, and the second pass when complete; the per-model means for all six models of the main table are reported as description. This is a re-expression of values that analysis P already holds (shares of steps below 0.1, 0.5 and 1.0 m/s): from the gate-off means seen when this was written, crawl is 12.75 % for the curated model and 16.93 % for the flooded one. No paired test of this quantity had been run. No decision rule; second-pass wording as in Section 10.
+
