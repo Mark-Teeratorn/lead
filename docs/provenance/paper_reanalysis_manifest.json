@@ -11253,6 +11253,42 @@
    }
   },
   "additional_models": {
+   "Golden-6400 run2": {
+    "mean_ds": 42.454910659090906,
+    "mean_rc": 75.02659090909091,
+    "mean_penalty": 0.6025560227272728,
+    "progress_km": 3.6990926159999993,
+    "odometer_km": 4.125381444542379,
+    "collisions_raw": 55,
+    "collisions_events": 47,
+    "collisions_raw_by_class": {
+     "vehicle": 54,
+     "pedestrian": 0,
+     "layout": 1
+    },
+    "collisions_events_by_class": {
+     "vehicle": 46,
+     "pedestrian": 0,
+     "layout": 1
+    },
+    "events_per_progress_km": 12.705818663935828,
+    "events_per_odometer_km": 11.392885877784236,
+    "non_timeout_infractions": 91,
+    "non_timeout_per_progress_km": 24.600627625918307,
+    "non_timeout_per_odometer_km": 22.058566274007777,
+    "standstill_pct": 28.013224879801665,
+    "standstill_pct_as_compute_paper_tables": 28.013224879801665,
+    "routes_with_steplog_from_fallback_prefix": [],
+    "mean_speed_route_mean": 1.8334796187654971,
+    "mean_speed_pooled": 1.5640960150679146,
+    "moving_steer_jerk": 0.0474966240278727,
+    "hard_brake_pct": 4.36385605120836,
+    "red_light": 2,
+    "stop_infraction": 0,
+    "outside_route_lanes": 14,
+    "vehicle_blocked": 3,
+    "min_speed_infractions": 615
+   },
    "Golden-6400 nogate": {
     "mean_ds": 45.693138318181816,
     "mean_rc": 76.435,
@@ -11540,7 +11576,7 @@
   "usable_routes": {
    "model_matrix_golden_6400_rep1": 8,
    "model_matrix_flooded_6400_rep1": 8,
-   "model_matrix_golden_6400_run2": 32,
+   "model_matrix_golden_6400_run2": 44,
    "model_matrix_flooded_6400_run2": 0,
    "model_matrix_golden_6400_nogate": 44,
    "model_matrix_flooded_6400_nogate": 44,
@@ -11570,6 +11606,7 @@
    ],
    "model_matrix_golden_6400_run2": [
     "14194",
+    "14842",
     "1711",
     "17563",
     "1773",
@@ -11578,10 +11615,13 @@
     "1825",
     "1852",
     "1956",
+    "2050",
     "2082",
     "2084",
     "2115",
     "2127",
+    "2144",
+    "2164",
     "2201",
     "2204",
     "2283",
@@ -11589,15 +11629,23 @@
     "23687",
     "23695",
     "23771",
+    "2390",
     "23901",
+    "2416",
     "2513",
     "2534",
+    "26458",
     "2664",
+    "2709",
     "2790",
     "28087",
+    "28099",
     "3086",
+    "3144",
     "3248",
+    "3364",
     "3436",
+    "3464",
     "3540",
     "3561",
     "3936"
@@ -11717,7 +11765,7 @@
     "replicate_routes_done": {
      "run1": "8/8",
      "rep1": "8/8",
-     "run2": "7/8"
+     "run2": "8/8"
     },
     "per_route_table_replicate_routes": {
      "2534": {
@@ -11941,6 +11989,15 @@
        "collision_events": 0.0,
        "n_steps": 807.0,
        "status": "Failed - Agent deviated from the route"
+      },
+      "run2": {
+       "standstill_pct": 48.64864864864865,
+       "driving_score": 60.0,
+       "route_completion": 100.0,
+       "mean_speed_mps": 1.1386401176711958,
+       "collision_events": 1.0,
+       "n_steps": 1295.0,
+       "status": "Completed"
       }
      }
     },
@@ -12058,7 +12115,7 @@
       }
      },
      "run2 - run1": {
-      "n_routes": 32,
+      "n_routes": 44,
       "routes": [
        "2534",
        "1852",
@@ -12091,15 +12148,27 @@
        "1956",
        "14194",
        "17563",
-       "3936"
+       "3936",
+       "28099",
+       "2050",
+       "2709",
+       "26458",
+       "2390",
+       "2416",
+       "14842",
+       "3144",
+       "3464",
+       "2144",
+       "2164",
+       "3364"
       ],
-      "same_status": 23,
+      "same_status": 30,
       "metrics": {
        "standstill_pct": {
-        "n": 32,
-        "mean": 2.4146905544294333,
-        "sd": 21.431764692481494,
-        "mean_abs": 11.89844489735924,
+        "n": 44,
+        "mean": 2.298642741742519,
+        "sd": 22.531996601870105,
+        "mean_abs": 12.702353045334196,
         "per_route": {
          "2534": -1.742585917039003,
          "1852": 13.791544904573115,
@@ -12132,14 +12201,26 @@
          "1956": -0.2902029212447843,
          "14194": -54.67047825349831,
          "17563": 4.132348253488397,
-         "3936": -2.860570712975248
+         "3936": -2.860570712975248,
+         "28099": 5.715172187230035,
+         "2050": -1.8069033537234152,
+         "2709": 0.6971781617607391,
+         "26458": 20.400061078027182,
+         "2390": 1.436089554901434,
+         "2416": -0.6514553790382784,
+         "14842": -13.845580533397786,
+         "3144": 65.3641964815814,
+         "3464": 4.702334120115395,
+         "2144": -50.89365986981695,
+         "2164": -9.943958056163542,
+         "3364": 2.696708503452796
         }
        },
        "driving_score": {
-        "n": 32,
-        "mean": -7.91636846875,
-        "sd": 26.77668904361705,
-        "mean_abs": 19.986337281249998,
+        "n": 44,
+        "mean": -7.397008954545455,
+        "sd": 27.608420486749687,
+        "mean_abs": 21.57235704545454,
         "per_route": {
          "2534": -24.0,
          "1852": -36.510000000000005,
@@ -12172,14 +12253,26 @@
          "1956": 0.0,
          "14194": 36.761915,
          "17563": -23.04,
-         "3936": 0.0
+         "3936": 0.0,
+         "28099": 0.0,
+         "2050": -26.598,
+         "2709": 40.0,
+         "26458": -40.0,
+         "2390": 12.52,
+         "2416": 0.0,
+         "14842": -33.66,
+         "3144": -50.62476,
+         "3464": -40.0,
+         "2144": 12.918156999999997,
+         "2164": 25.299999999999997,
+         "3364": 28.0
         }
        },
        "route_completion": {
-        "n": 32,
-        "mean": -2.9246875000000006,
-        "sd": 22.21225482510325,
-        "mean_abs": 11.040312499999999,
+        "n": 44,
+        "mean": -7.350454545454546,
+        "sd": 25.620710913156962,
+        "mean_abs": 13.82181818181818,
         "per_route": {
          "2534": 0.0,
          "1852": -60.85,
@@ -12212,14 +12305,26 @@
          "1956": 0.0,
          "14194": -51.28,
          "17563": 0.0,
-         "3936": 0.0
+         "3936": 0.0,
+         "28099": 0.0,
+         "2050": -44.33,
+         "2709": 0.0,
+         "26458": 0.0,
+         "2390": 12.52,
+         "2416": 0.0,
+         "14842": -63.66,
+         "3144": -79.78999999999999,
+         "3464": 0.0,
+         "2144": -4.869999999999997,
+         "2164": -49.7,
+         "3364": 0.0
         }
        },
        "mean_speed_mps": {
-        "n": 32,
-        "mean": -0.14199777998603288,
-        "sd": 0.5460405450806065,
-        "mean_abs": 0.3611840879036555,
+        "n": 44,
+        "mean": -0.12248191748477494,
+        "sd": 0.5920823205141962,
+        "mean_abs": 0.3949010272455846,
         "per_route": {
          "2534": -0.08362202219982517,
          "1852": -0.41633722650642446,
@@ -12252,14 +12357,26 @@
          "1956": -0.00023324503675020702,
          "14194": 1.0963442093848212,
          "17563": -0.23931453985437567,
-         "3936": 0.0812650937132362
+         "3936": 0.0812650937132362,
+         "28099": -0.09158396500416699,
+         "2050": -0.2017708075434732,
+         "2709": -0.302647133238529,
+         "26458": -0.6220074124097164,
+         "2390": 0.018311987703230503,
+         "2416": 0.23273144690534808,
+         "14842": 0.45198005081343573,
+         "3144": -1.6546557211659143,
+         "3464": -0.21734335523959825,
+         "2144": 1.4511951359205284,
+         "2164": 0.33202086671330866,
+         "3364": -0.24150650323149936
         }
        },
        "collision_events": {
-        "n": 32,
-        "mean": 0.125,
-        "sd": 1.128801819801464,
-        "mean_abs": 0.75,
+        "n": 44,
+        "mean": 0.06818181818181818,
+        "sd": 1.0432000693912997,
+        "mean_abs": 0.7045454545454546,
         "per_route": {
          "2534": 1.0,
          "1852": 0.0,
@@ -12292,14 +12409,26 @@
          "1956": 0.0,
          "14194": -2.0,
          "17563": 2.0,
-         "3936": 0.0
+         "3936": 0.0,
+         "28099": 0.0,
+         "2050": 0.0,
+         "2709": -1.0,
+         "26458": 1.0,
+         "2390": 0.0,
+         "2416": 0.0,
+         "14842": 0.0,
+         "3144": 1.0,
+         "3464": 1.0,
+         "2144": -1.0,
+         "2164": -1.0,
+         "3364": -1.0
         }
        },
        "n_steps": {
-        "n": 32,
-        "mean": 80.53125,
-        "sd": 803.1368334135124,
-        "mean_abs": 392.59375,
+        "n": 44,
+        "mean": 61.29545454545455,
+        "sd": 723.1394275012015,
+        "mean_abs": 363.4318181818182,
         "per_route": {
          "2534": 25.0,
          "1852": -859.0,
@@ -12332,13 +12461,25 @@
          "1956": 5.0,
          "14194": -2625.0,
          "17563": 82.0,
-         "3936": -42.0
+         "3936": -42.0,
+         "28099": 39.0,
+         "2050": -7.0,
+         "2709": 126.0,
+         "26458": 410.0,
+         "2390": 50.0,
+         "2416": -67.0,
+         "14842": -284.0,
+         "3144": 971.0,
+         "3464": 114.0,
+         "2144": -1081.0,
+         "2164": -215.0,
+         "3364": 64.0
         }
        }
       }
      },
      "run2 - rep1": {
-      "n_routes": 7,
+      "n_routes": 8,
       "routes": [
        "2534",
        "3561",
@@ -12346,15 +12487,16 @@
        "23695",
        "28087",
        "2664",
-       "17563"
+       "17563",
+       "26458"
       ],
       "same_status": 5,
       "metrics": {
        "standstill_pct": {
-        "n": 7,
-        "mean": -5.942847994352421,
-        "sd": 11.961280296547189,
-        "mean_abs": 8.745375161400174,
+        "n": 8,
+        "mean": -2.8983409015857133,
+        "sd": 14.028026388617226,
+        "mean_abs": 9.953854359697807,
         "per_route": {
          "2534": -2.56245889899055,
          "3561": -14.336902601914758,
@@ -12362,14 +12504,15 @@
          "23695": 0.640140704851663,
          "28087": -5.990040724942581,
          "2664": 5.549902786406868,
-         "17563": 3.618801593408609
+         "17563": 3.618801593408609,
+         "26458": 18.41320874778124
         }
        },
        "driving_score": {
-        "n": 7,
-        "mean": -15.230964285714284,
-        "sd": 23.264743800910782,
-        "mean_abs": 23.294964285714286,
+        "n": 8,
+        "mean": -12.142494375000002,
+        "sd": 23.24298364956555,
+        "mean_abs": 21.567693125,
         "per_route": {
          "2534": 28.224,
          "3561": -44.31636,
@@ -12377,14 +12520,15 @@
          "23695": -29.805608,
          "28087": -3.5181420000000045,
          "2664": -24.0,
-         "17563": -23.04
+         "17563": -23.04,
+         "26458": 9.476795000000003
         }
        },
        "route_completion": {
-        "n": 7,
-        "mean": -8.531428571428572,
-        "sd": 17.126190886642433,
-        "mean_abs": 8.531428571428572,
+        "n": 8,
+        "mean": -1.4900000000000002,
+        "sd": 25.457007455147366,
+        "mean_abs": 13.44,
         "per_route": {
          "2534": 0.0,
          "3561": -14.269999999999996,
@@ -12392,14 +12536,15 @@
          "23695": 0.0,
          "28087": -45.45,
          "2664": 0.0,
-         "17563": 0.0
+         "17563": 0.0,
+         "26458": 47.8
         }
        },
        "mean_speed_mps": {
-        "n": 7,
-        "mean": 0.15818245742309087,
-        "sd": 0.5005237183074585,
-        "mean_abs": 0.40172862913821666,
+        "n": 8,
+        "mean": 0.06820799857107279,
+        "sd": 0.5286757765925161,
+        "mean_abs": 0.42171420217007133,
         "per_route": {
          "2534": 0.750128070621424,
          "3561": -0.28318625515930373,
@@ -12407,14 +12552,15 @@
          "23695": -0.08519389604539152,
          "28087": 0.30712106174986964,
          "2664": -0.20819798407969392,
-         "17563": -0.2758334657185513
+         "17563": -0.2758334657185513,
+         "26458": -0.5616132133930538
         }
        },
        "collision_events": {
-        "n": 7,
-        "mean": 0.2857142857142857,
-        "sd": 1.7994708216848745,
-        "mean_abs": 1.4285714285714286,
+        "n": 8,
+        "mean": 0.375,
+        "sd": 1.685018016012207,
+        "mean_abs": 1.375,
         "per_route": {
          "2534": -3.0,
          "3561": 0.0,
@@ -12422,14 +12568,15 @@
          "23695": 1.0,
          "28087": -1.0,
          "2664": 1.0,
-         "17563": 2.0
+         "17563": 2.0,
+         "26458": 1.0
         }
        },
        "n_steps": {
-        "n": 7,
-        "mean": -14.857142857142858,
-        "sd": 425.1593538786089,
-        "mean_abs": 320.2857142857143,
+        "n": 8,
+        "mean": 48.0,
+        "sd": 431.90938203020585,
+        "mean_abs": 341.25,
         "per_route": {
          "2534": -287.0,
          "3561": 678.0,
@@ -12437,7 +12584,8 @@
          "23695": 15.0,
          "28087": -264.0,
          "2664": 279.0,
-         "17563": 97.0
+         "17563": 97.0,
+         "26458": 488.0
         }
        }
       }
@@ -12450,7 +12598,8 @@
      "23695",
      "28087",
      "2664",
-     "17563"
+     "17563",
+     "26458"
     ],
     "three_run_sd": {
      "standstill_pct": {
@@ -12461,9 +12610,10 @@
        "23695": 2.0214853040112843,
        "28087": 8.310046324225848,
        "2664": 18.90201427459893,
-       "17563": 2.2522491437318237
+       "17563": 2.2522491437318237,
+       "26458": 11.248380109737363
       },
-      "mean_sd": 8.9479725317361
+      "mean_sd": 9.23552347898626
      },
      "driving_score": {
       "per_route_sd": {
@@ -12473,9 +12623,10 @@
        "23695": 22.737169021996216,
        "28087": 13.201100095776916,
        "2664": 14.181666463584312,
-       "17563": 13.302150202128978
+       "17563": 13.302150202128978,
+       "26458": 26.260752994230923
       },
-      "mean_sd": 17.339847076287036
+      "mean_sd": 18.45496031603002
      },
      "route_completion": {
       "per_route_sd": {
@@ -12485,9 +12636,10 @@
        "23695": 0.0,
        "28087": 25.810236341420822,
        "2664": 0.0,
-       "17563": 0.0
+       "17563": 0.0,
+       "26458": 27.59734286726411
       },
-      "mean_sd": 4.864146383250969
+      "mean_sd": 7.705795943752611
      },
      "mean_speed_mps": {
       "per_route_sd": {
@@ -12497,9 +12649,10 @@
        "23695": 0.35842827135054844,
        "28087": 0.2673531643051965,
        "2664": 0.5549944519290041,
-       "17563": 0.14982722368464502
+       "17563": 0.14982722368464502,
+       "26458": 0.34301362505133987
       },
-      "mean_sd": 0.3616266935682133
+      "mean_sd": 0.3593000600036041
      },
      "collision_events": {
       "per_route_sd": {
@@ -12509,9 +12662,10 @@
        "23695": 0.5773502691896258,
        "28087": 0.5773502691896258,
        "2664": 0.5773502691896257,
-       "17563": 1.1547005383792515
+       "17563": 1.1547005383792515,
+       "26458": 0.5773502691896258
       },
-      "mean_sd": 0.8747311262562161
+      "mean_sd": 0.8375585191228925
      },
      "n_steps": {
       "per_route_sd": {
@@ -12521,20 +12675,87 @@
        "23695": 153.46986674914396,
        "28087": 186.0116483807757,
        "2664": 454.65408095972623,
-       "17563": 52.214301999867175
+       "17563": 52.214301999867175,
+       "26458": 262.14754115446766
       },
-      "mean_sd": 258.894099413032
+      "mean_sd": 259.3007796307114
      }
     },
     "test_retest_44": {
-     "status": "pending",
-     "have": {
-      "model_matrix_golden_6400": 44,
-      "model_matrix_golden_6400_run2": 32
+     "standstill_pct": {
+      "run2_minus_run1": {
+       "n": 44,
+       "mean_first": 28.013224879801665,
+       "mean_second": 25.714582138059143,
+       "mean_diff": 2.298642741742519,
+       "n_first_greater": 22,
+       "n_first_less": 22,
+       "n_tie": 0,
+       "bca95": [
+        -3.726074314651831,
+        9.557771938550532
+       ],
+       "wilcoxon": {
+        "n_zero_differences": 0,
+        "statistic": 455.0,
+        "p": 0.6479516952579161,
+        "p_approx": 0.6406374643417463,
+        "p_exact": 0.6479516952579161,
+        "rank_biserial": 0.08080808080808081
+       }
+      },
+      "sd_of_per_route_difference": 22.531996601870105,
+      "icc_1_1": 0.565654152334204
      },
-     "need": {
-      "model_matrix_golden_6400": 44,
-      "model_matrix_golden_6400_run2": 44
+     "driving_score": {
+      "run2_minus_run1": {
+       "n": 44,
+       "mean_first": 42.454910659090906,
+       "mean_second": 49.851919613636376,
+       "mean_diff": -7.397008954545455,
+       "n_first_greater": 14,
+       "n_first_less": 24,
+       "n_tie": 6,
+       "bca95": [
+        -15.033662924567546,
+        0.9030999292204791
+       ],
+       "wilcoxon": {
+        "n_zero_differences": 6,
+        "statistic": 247.0,
+        "p": 0.07325053620133018,
+        "p_approx": 0.07325053620133018,
+        "p_exact": "not available (zero differences or tied |differences|)",
+        "rank_biserial": -0.3333333333333333
+       }
+      },
+      "sd_of_per_route_difference": 27.608420486749687,
+      "icc_1_1": 0.5068455739727794
+     },
+     "route_completion": {
+      "run2_minus_run1": {
+       "n": 44,
+       "mean_first": 75.02659090909091,
+       "mean_second": 82.37704545454547,
+       "mean_diff": -7.350454545454546,
+       "n_first_greater": 7,
+       "n_first_less": 14,
+       "n_tie": 23,
+       "bca95": [
+        -15.61458644220411,
+        -0.46411658241191256
+       ],
+       "wilcoxon": {
+        "n_zero_differences": 23,
+        "statistic": 68.0,
+        "p": 0.0987409489608765,
+        "p_approx": 0.0987409489608765,
+        "p_exact": "not available (zero differences or tied |differences|)",
+        "rank_biserial": -0.41125541125541126
+       }
+      },
+      "sd_of_per_route_difference": 25.620710913156962,
+      "icc_1_1": 0.5772068579238755
      }
     }
    },
@@ -12960,7 +13181,7 @@
   },
   "icc_formula": "One-way random-effects, single-measure ICC(1,1) (Shrout & Fleiss 1979):\n(MSB - MSW) / (MSB + (k - 1) MSW), k = 2 runs, rows = routes.",
   "note": "run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 44-route pass.",
-  "status_line": "partial: rep1 routes usable 16/16; 44-route test-retest pending for ['Golden-6400', 'Flooded-6400-Matched']"
+  "status_line": "partial: rep1 routes usable 16/16; 44-route test-retest pending for ['Flooded-6400-Matched']"
  },
  "O": {
   "endpoint": "standstill_pct (primary); driving_score, route_completion, collision_events secondary",
@@ -12969,7 +13190,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 32,
+      "model_matrix_golden_6400_run2": 44,
       "model_matrix_flooded_6400_run2": 0
      },
      "need": {
@@ -12980,7 +13201,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 27,
+      "model_matrix_golden_6400_run2": 37,
       "model_matrix_flooded_6400_run2": 0
      },
      "need": {
@@ -12991,7 +13212,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_golden_6400_run2": 23,
+      "model_matrix_golden_6400_run2": 33,
       "model_matrix_flooded_6400_run2": 0
      },
      "need": {
@@ -13005,7 +13226,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_6400": 44,
-      "model_matrix_golden_6400_run2": 32,
+      "model_matrix_golden_6400_run2": 44,
       "model_matrix_flooded_6400": 44,
       "model_matrix_flooded_6400_run2": 0
      },
@@ -13020,7 +13241,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_6400": 37,
-      "model_matrix_golden_6400_run2": 27,
+      "model_matrix_golden_6400_run2": 37,
       "model_matrix_flooded_6400": 37,
       "model_matrix_flooded_6400_run2": 0
      },
@@ -13035,7 +13256,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_6400": 33,
-      "model_matrix_golden_6400_run2": 23,
+      "model_matrix_golden_6400_run2": 33,
       "model_matrix_flooded_6400": 33,
       "model_matrix_flooded_6400_run2": 0
      },
@@ -13084,41 +13305,266 @@
    },
    "(iii-b) run2 Golden vs run1 Flooded": {
     "44 routes": {
-     "status": "pending",
-     "have": {
-      "model_matrix_golden_6400_run2": 32,
-      "model_matrix_flooded_6400": 44
+     "standstill_pct": {
+      "n": 44,
+      "mean_first": 28.013224879801665,
+      "mean_second": 33.776134975367206,
+      "mean_diff": -5.762910095565534,
+      "n_first_greater": 9,
+      "n_first_less": 35,
+      "n_tie": 0,
+      "bca95": [
+       -10.941383208212162,
+       0.5089867351072435
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 197.0,
+       "p": 0.0003202683641347903,
+       "p_approx": 0.0005057028047359698,
+       "p_exact": 0.0003202683641347903,
+       "rank_biserial": -0.602020202020202
+      }
      },
-     "need": {
-      "model_matrix_golden_6400_run2": 44,
-      "model_matrix_flooded_6400": 44
+     "driving_score": {
+      "n": 44,
+      "mean_first": 42.454910659090906,
+      "mean_second": 53.088480272727274,
+      "mean_diff": -10.633569613636364,
+      "n_first_greater": 17,
+      "n_first_less": 21,
+      "n_tie": 6,
+      "bca95": [
+       -20.4929358058629,
+       -3.0713805109690306
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 6,
+       "statistic": 258.0,
+       "p": 0.10277907055529034,
+       "p_approx": 0.10277907055529034,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": -0.30364372469635625
+      }
+     },
+     "route_completion": {
+      "n": 44,
+      "mean_first": 75.02659090909091,
+      "mean_second": 74.64681818181819,
+      "mean_diff": 0.37977272727272776,
+      "n_first_greater": 11,
+      "n_first_less": 10,
+      "n_tie": 23,
+      "bca95": [
+       -8.552770268939272,
+       8.659606503116494
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 23,
+       "statistic": 111.0,
+       "p": 0.8757103086427647,
+       "p_approx": 0.8757103086427647,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.03896103896103896
+      }
+     },
+     "collision_events": {
+      "n": 44,
+      "mean_first": 1.0681818181818181,
+      "mean_second": 0.8181818181818182,
+      "mean_diff": 0.25,
+      "n_first_greater": 15,
+      "n_first_less": 7,
+      "n_tie": 22,
+      "bca95": [
+       -0.022727272727272728,
+       0.5454545454545454
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 22,
+       "statistic": 80.5,
+       "p": 0.10519892809273736,
+       "p_approx": 0.10519892809273736,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.36363636363636365
+      }
      }
     },
     "37 routes (excl. 7 training-overlap routes)": {
-     "status": "pending",
-     "have": {
-      "model_matrix_golden_6400_run2": 27,
-      "model_matrix_flooded_6400": 37
+     "standstill_pct": {
+      "n": 37,
+      "mean_first": 27.544907932979722,
+      "mean_second": 32.55978547277973,
+      "mean_diff": -5.014877539800005,
+      "n_first_greater": 7,
+      "n_first_less": 30,
+      "n_tie": 0,
+      "bca95": [
+       -10.827423660858546,
+       2.245946278447019
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 160.0,
+       "p": 0.003158962179441005,
+       "p_approx": 0.0038643992651245618,
+       "p_exact": 0.003158962179441005,
+       "rank_biserial": -0.5448079658605974
+      }
      },
-     "need": {
-      "model_matrix_golden_6400_run2": 37,
-      "model_matrix_flooded_6400": 37
+     "driving_score": {
+      "n": 37,
+      "mean_first": 43.23734224324323,
+      "mean_second": 54.50501543243243,
+      "mean_diff": -11.267673189189189,
+      "n_first_greater": 15,
+      "n_first_less": 19,
+      "n_tie": 3,
+      "bca95": [
+       -22.406234833410213,
+       -2.5345103603335937
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 3,
+       "statistic": 215.0,
+       "p": 0.15840316249155506,
+       "p_approx": 0.15840316249155506,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": -0.2773109243697479
+      }
+     },
+     "route_completion": {
+      "n": 37,
+      "mean_first": 75.13162162162163,
+      "mean_second": 74.76189189189189,
+      "mean_diff": 0.36972972972973067,
+      "n_first_greater": 10,
+      "n_first_less": 10,
+      "n_tie": 17,
+      "bca95": [
+       -9.917605975107884,
+       10.126753031426546
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 17,
+       "statistic": 102.0,
+       "p": 0.910824985273362,
+       "p_approx": 0.910824985273362,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.02857142857142857
+      }
+     },
+     "collision_events": {
+      "n": 37,
+      "mean_first": 1.054054054054054,
+      "mean_second": 0.7837837837837838,
+      "mean_diff": 0.2702702702702703,
+      "n_first_greater": 13,
+      "n_first_less": 6,
+      "n_tie": 18,
+      "bca95": [
+       -0.05405405405405406,
+       0.5945945945945946
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 18,
+       "statistic": 60.0,
+       "p": 0.12928993464364205,
+       "p_approx": 0.12928993464364205,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.3684210526315789
+      }
      }
     },
     "33 routes (excl. 11 gate-flagged routes)": {
-     "status": "pending",
-     "have": {
-      "model_matrix_golden_6400_run2": 23,
-      "model_matrix_flooded_6400": 33
+     "standstill_pct": {
+      "n": 33,
+      "mean_first": 29.58231693534735,
+      "mean_second": 34.63792857920127,
+      "mean_diff": -5.05561164385393,
+      "n_first_greater": 7,
+      "n_first_less": 26,
+      "n_tie": 0,
+      "bca95": [
+       -11.47475835167802,
+       3.218427061203822
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 141.0,
+       "p": 0.011631014058366418,
+       "p_approx": 0.01268251271857492,
+       "p_exact": 0.011631014058366418,
+       "rank_biserial": -0.49732620320855614
+      }
      },
-     "need": {
-      "model_matrix_golden_6400_run2": 33,
-      "model_matrix_flooded_6400": 33
+     "driving_score": {
+      "n": 33,
+      "mean_first": 40.57022236363637,
+      "mean_second": 50.39713851515152,
+      "mean_diff": -9.826916151515151,
+      "n_first_greater": 15,
+      "n_first_less": 16,
+      "n_tie": 2,
+      "bca95": [
+       -22.551434621718176,
+       -0.6208317424177645
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 2,
+       "statistic": 205.0,
+       "p": 0.3994234147547876,
+       "p_approx": 0.3994234147547876,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": -0.17338709677419356
+      }
+     },
+     "route_completion": {
+      "n": 33,
+      "mean_first": 72.37666666666668,
+      "mean_second": 71.89727272727272,
+      "mean_diff": 0.47939393939394026,
+      "n_first_greater": 10,
+      "n_first_less": 9,
+      "n_tie": 14,
+      "bca95": [
+       -11.465814438119402,
+       11.416435819608195
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 14,
+       "statistic": 92.0,
+       "p": 0.9039076325167246,
+       "p_approx": 0.9039076325167246,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.031578947368421054
+      }
+     },
+     "collision_events": {
+      "n": 33,
+      "mean_first": 1.0606060606060606,
+      "mean_second": 0.8484848484848485,
+      "mean_diff": 0.21212121212121213,
+      "n_first_greater": 11,
+      "n_first_less": 6,
+      "n_tie": 16,
+      "bca95": [
+       -0.12121212121212122,
+       0.5757575757575758
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 16,
+       "statistic": 56.0,
+       "p": 0.29057754595444907,
+       "p_approx": 0.29057754595444907,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.2679738562091503
+      }
      }
     }
    }
   },
-  "status_line": "pending: 12 of 12 parts ((i) run2 Golden vs run2 Flooded | 44 routes, (i) run2 Golden vs run2 Flooded | 37 routes (excl. 7 training-overlap routes), (i) run2 Golden vs run2 Flooded | 33 routes (excl. 11 gate-flagged routes), (ii) mean of run1 and run2, Golden vs Flooded | 44 routes, (ii) mean of run1 and run2, Golden vs Flooded | 37 routes (excl. 7 training-overlap routes), (ii) mean of run1 and run2, Golden vs Flooded | 33 routes (excl. 11 gate-flagged routes), (iii-a) run1 Golden vs run2 Flooded | 44 routes, (iii-a) run1 Golden vs run2 Flooded | 37 routes (excl. 7 training-overlap routes), (iii-a) run1 Golden vs run2 Flooded | 33 routes (excl. 11 gate-flagged routes), (iii-b) run2 Golden vs run1 Flooded | 44 routes, (iii-b) run2 Golden vs run1 Flooded | 37 routes (excl. 7 training-overlap routes), (iii-b) run2 Golden vs run1 Flooded | 33 routes (excl. 11 gate-flagged routes))"
+  "status_line": "pending: 9 of 12 parts ((i) run2 Golden vs run2 Flooded | 44 routes, (i) run2 Golden vs run2 Flooded | 37 routes (excl. 7 training-overlap routes), (i) run2 Golden vs run2 Flooded | 33 routes (excl. 11 gate-flagged routes), (ii) mean of run1 and run2, Golden vs Flooded | 44 routes, (ii) mean of run1 and run2, Golden vs Flooded | 37 routes (excl. 7 training-overlap routes), (ii) mean of run1 and run2, Golden vs Flooded | 33 routes (excl. 11 gate-flagged routes), (iii-a) run1 Golden vs run2 Flooded | 44 routes, (iii-a) run1 Golden vs run2 Flooded | 37 routes (excl. 7 training-overlap routes), (iii-a) run1 Golden vs run2 Flooded | 33 routes (excl. 11 gate-flagged routes))"
  },
  "P": {
   "metric_definitions": {
@@ -14090,7 +14536,7 @@
    "have": {
     "model_matrix_golden_6400_nogate": 44,
     "model_matrix_flooded_6400_nogate": 44,
-    "model_matrix_golden_6400_run2": 32,
+    "model_matrix_golden_6400_run2": 44,
     "model_matrix_flooded_6400_run2": 0
    },
    "need": {
@@ -14103,7 +14549,7 @@
   "(4) noise reference (G_run2 - F_run2) - (G_run1 - F_run1)": {
    "status": "pending",
    "have": {
-    "model_matrix_golden_6400_run2": 32,
+    "model_matrix_golden_6400_run2": 44,
     "model_matrix_flooded_6400_run2": 0
    },
    "need": {
@@ -14701,7 +15147,7 @@
      "have": {
       "model_matrix_fgbalanced_6400": 0,
       "model_matrix_golden_6400": 44,
-      "model_matrix_golden_6400_run2": 32
+      "model_matrix_golden_6400_run2": 44
      },
      "need": {
       "model_matrix_fgbalanced_6400": 44,
@@ -14714,7 +15160,7 @@
      "have": {
       "model_matrix_fgbalanced_6400": 0,
       "model_matrix_golden_6400": 37,
-      "model_matrix_golden_6400_run2": 27
+      "model_matrix_golden_6400_run2": 37
      },
      "need": {
       "model_matrix_fgbalanced_6400": 37,
@@ -14727,7 +15173,7 @@
      "have": {
       "model_matrix_fgbalanced_6400": 0,
       "model_matrix_golden_6400": 33,
-      "model_matrix_golden_6400_run2": 23
+      "model_matrix_golden_6400_run2": 33
      },
      "need": {
       "model_matrix_fgbalanced_6400": 33,
@@ -14776,7 +15222,7 @@
      "status": "pending",
      "have": {
       "model_matrix_fgbalanced_6400": 0,
-      "model_matrix_golden_6400_run2": 32
+      "model_matrix_golden_6400_run2": 44
      },
      "need": {
       "model_matrix_fgbalanced_6400": 44,
@@ -14787,7 +15233,7 @@
      "status": "pending",
      "have": {
       "model_matrix_fgbalanced_6400": 0,
-      "model_matrix_golden_6400_run2": 27
+      "model_matrix_golden_6400_run2": 37
      },
      "need": {
       "model_matrix_fgbalanced_6400": 37,
@@ -14798,7 +15244,7 @@
      "status": "pending",
      "have": {
       "model_matrix_fgbalanced_6400": 0,
-      "model_matrix_golden_6400_run2": 23
+      "model_matrix_golden_6400_run2": 33
      },
      "need": {
       "model_matrix_fgbalanced_6400": 33,
@@ -14814,7 +15260,7 @@
     "model_matrix_flooded_6400": 44,
     "model_matrix_flooded_6400_run2": 0,
     "model_matrix_golden_6400": 44,
-    "model_matrix_golden_6400_run2": 32
+    "model_matrix_golden_6400_run2": 44
    },
    "need": {
     "model_matrix_fgbalanced_6400": 44,
@@ -15125,7 +15571,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -15137,7 +15583,7 @@
     "status": "pending",
     "have": {
      "model_matrix_golden_6400": 44,
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400": 44,
      "model_matrix_flooded_6400_run2": 0
     },
@@ -15526,12 +15972,53 @@
     }
    },
    "Golden-6400 run2": {
-    "status": "pending",
-    "have": {
-     "model_matrix_golden_6400_run2": 32
+    "start": {
+     "n_runs": 6,
+     "median_duration_s": 1.0,
+     "steps": 129,
+     "plan_L<0.64_pct": 5.426356589147287,
+     "plan_0.64<=L<2.0_pct": 20.930232558139537,
+     "plan_L>=2.0_pct": 73.64341085271317
     },
-    "need": {
-     "model_matrix_golden_6400_run2": 44
+    "resumed_short": {
+     "n_runs": 61,
+     "median_duration_s": 1.25,
+     "steps": 2239,
+     "plan_L<0.64_pct": 4.376953997320232,
+     "plan_0.64<=L<2.0_pct": 16.6592228673515,
+     "plan_L>=2.0_pct": 78.96382313532827
+    },
+    "resumed_long": {
+     "n_runs": 8,
+     "median_duration_s": 18.025,
+     "steps": 3127,
+     "plan_L<0.64_pct": 1.0553245922609529,
+     "plan_0.64<=L<2.0_pct": 13.367444835305403,
+     "plan_L>=2.0_pct": 85.57723057243363
+    },
+    "terminal_60s": {
+     "n_runs": 7,
+     "median_duration_s": 60.0,
+     "steps": 8403,
+     "plan_L<0.64_pct": 2.296798762346781,
+     "plan_0.64<=L<2.0_pct": 14.792336070451029,
+     "plan_L>=2.0_pct": 82.91086516720219
+    },
+    "terminal_other": {
+     "n_runs": 1,
+     "median_duration_s": 21.65,
+     "steps": 433,
+     "plan_L<0.64_pct": 0.0,
+     "plan_0.64<=L<2.0_pct": 3.695150115473441,
+     "plan_L>=2.0_pct": 96.30484988452656
+    },
+    "brief": {
+     "n_runs": 548,
+     "median_duration_s": 0.5,
+     "steps": 5080,
+     "plan_L<0.64_pct": 1.5354330708661417,
+     "plan_0.64<=L<2.0_pct": 9.271653543307085,
+     "plan_L>=2.0_pct": 89.19291338582677
     }
    },
    "Flooded-6400-Matched run2": {
@@ -15785,7 +16272,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -15797,7 +16284,7 @@
     "status": "pending",
     "have": {
      "model_matrix_golden_6400": 44,
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400": 44,
      "model_matrix_flooded_6400_run2": 0
     },
@@ -16540,13 +17027,23 @@
     "mean_standstill_pct": 33.776134975367206
    },
    "Golden-6400 run2": {
-    "status": "pending",
-    "have": {
-     "model_matrix_golden_6400_run2": 32
-    },
-    "need": {
-     "model_matrix_golden_6400_run2": 44
-    }
+    "n_routes_with_blocked_time": 8,
+    "blocked_routes_with_collision_event": 8,
+    "n_routes_without_blocked_time": 36,
+    "other_routes_with_collision_event": 19,
+    "routes": [
+     "1852",
+     "2204",
+     "3561",
+     "3540",
+     "3436",
+     "2664",
+     "1956",
+     "3144"
+    ],
+    "n_blocked_runs": 25,
+    "mean_blocked_pct": 8.514039808001748,
+    "mean_standstill_pct": 28.013224879801665
    },
    "Flooded-6400-Matched run2": {
     "status": "pending",
@@ -17706,7 +18203,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -18227,7 +18724,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -19307,7 +19804,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
@@ -19487,7 +19984,7 @@
    "default controller, run2": {
     "status": "pending",
     "have": {
-     "model_matrix_golden_6400_run2": 32,
+     "model_matrix_golden_6400_run2": 44,
      "model_matrix_flooded_6400_run2": 0
     },
     "need": {
