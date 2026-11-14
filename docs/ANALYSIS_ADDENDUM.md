@@ -229,3 +229,33 @@ Post hoc, exploratory, existing step logs only. The confirmatory record of Secti
 
 **Reading.** No decision rule. If, among steps at rest, the stay-put share is lower for the curated model with an interval below 0 under both controllers, the paper says the difference in Section 10a is not an artefact of the speed distribution inside the 0.5 m/s band. If it is not, the paper says so and weakens the statement of Section 10a to match.
 
+## 11-B. Second correction to the outcomes of Section 11, written 14 November 2026, 18:25 (UTC+7), before any history-swap run existed
+
+No history-swap run has started and no swap log exists. Sections 11 and 11-A are left as committed. This section replaces the outcomes and the reading rule of Section 11-A.
+
+**What was wrong in 11-A.** An independent review of the code pointed out that the plan end speed also depends on the initial speed: the integration is v_k = v_0 + Σ a_j Δt with no clamp, so for identical controls v_end shifts with v_0. Section 11-A said otherwise. The reviewer applied v_0 = 4.0 m/s to the plans already logged in the first pass on the eight replicate routes: the share of plans that end at rest becomes 0.0 % for both models on every route, against 7–61 % (flooded) and 1.5–29 % (curated) under the true history. W1' as written would therefore be met by a network that ignores the ego history completely, and would be read as dependence on it.
+
+**What the action space implies.** The expert outputs accelerations and curvatures. A plan that stays put at rest is a plan without acceleration from v_0 = 0. The same controls from v_0 = 4.0 m/s keep the vehicle moving. Stopping from motion needs a braking plan. The two questions are therefore separate, and each gets its own outcome.
+
+**Outcomes, per model, among steps at ≤ 0.5 m/s.** From the logged waypoints: v_start = |first waypoint| / 0.1 s; v_end as in 11-A; planned speed change Δv = v_end − v_start. A plan *holds speed* if |Δv| < 0.5 m/s, *accelerates* if Δv ≥ 0.5 m/s, *decelerates* if Δv ≤ −0.5 m/s. Δv depends on the learned controls and not on v_0, except where a braking plan passes through zero speed.
+- **W-a (primary; do the learned controls depend on the ego history?).** Share of plans that hold speed, on swap steps (moving history) minus on the other steps (true history).
+- **W-b (are stay-put plans matched by braking plans?).** Share of plans that end at rest (v_end < 0.5 m/s), on swap steps minus on the other steps. Under the true history this is the stay-put share; under the moving history it is the share of plans that brake to rest.
+- Reported as description: the three-way split (holds, accelerates, decelerates) under both histories; the same quantities for steps at > 0.5 m/s with the stationary history; the L-based shares of Section 11.
+
+Per-route rule, pairing, intervals and limits as in Section 11.
+
+**Reading rule.**
+- W-a: if the interval excludes 0, *the learned controls depend on the ego history*; the sign and the three-way split say how. Otherwise *no detectable dependence of the controls on the ego history*.
+- W-b: if the difference is negative with the interval below 0, *stay-put plans are not matched by braking plans*: in the situations where the model stays put when at rest, it does not plan to brake to rest when told it is moving. This is expected from the action space if the controls do not change, and it is not by itself evidence that the model uses the history.
+
+**What the paper may say.**
+- If W-a shows dependence for `Flooded-6400-Matched` and the hold-speed share is lower under the moving history: the model's no-acceleration plans at rest are tied to an ego history that says it is at rest, which is the dependence the inertia account describes.
+- If W-a shows no dependence and W-b is negative: the stay-put plans are plans without acceleration that the model issues whatever the history says; the paper states that the test did not show a dependence on the ego history, and does not attribute the stops to the inertia mechanism.
+- Any other outcome is reported as found, without the word inertia.
+
+**Sensitivity, fixed now.** The same review found, by reading the streaming server's code, that the key-value cache may let one step's reasoning and action tokens be visible to the next step's trajectory-start token. This was not measured. Every outcome above is therefore also computed with the true-history steps that directly follow a swap step left out. If the two versions differ in reading, both are reported and no reading is given.
+
+**Agent, routes, schedule.** Unchanged. The queue's log check is strengthened (first-waypoint distance about 0.4 m on moving-history steps and below 0.05 m on stationary-history steps, which shows that the server used the replaced history), and the queue now waits for parts 2 and 3. If a route never scores, the analysis uses the routes that exist once the queue has ended.
+
+**A rule that was applied but not written down.** In analyses V, X and Y a paired comparison is computed only if at least five routes meet the 20-step rule. Sections 10 and 13 do not state this. It has not been triggered (40 to 44 routes in every comparison so far).
+
