@@ -259,3 +259,13 @@ Per-route rule, pairing, intervals and limits as in Section 11.
 
 **A rule that was applied but not written down.** In analyses V, X and Y a paired comparison is computed only if at least five routes meet the 20-step rule. Sections 10 and 13 do not state this. It has not been triggered (40 to 44 routes in every comparison so far).
 
+## 14. H1 on the routes not used to tune the controller, written 15 November 2026, 02:41 (UTC+7), before computing
+
+Post hoc sensitivity analysis, existing results only. The confirmatory record of Section 1 is not changed.
+
+**Why.** The PID gains and the lookahead were tuned on 20 of the 44 evaluation routes with a fine-tuned checkpoint (`model_v4`), not with the pretrained model. The controller may therefore suit the plans of fine-tuned models better than those of `Base`, which would favour H1. Section 3 fixed this sensitivity analysis for H2 only.
+
+**What had been seen when this was written.** H1 on 44 routes and on the 37 routes without training overlap, against the original `Base` run. No H1 value restricted to the non-tuning routes.
+
+**Analysis.** `Golden-1600` − `Base` and, for comparison, `Flooded-1600` − `Base`, on Driving Score and route completion, restricted to the 24 canonical routes outside the tuning list of analysis H; paired, BCa interval and Wilcoxon test of Section 1. Against the original `Base` run now, and against `base_run2` when it is complete. No decision rule: if the point estimate keeps its sign and the interval excludes 0, the paper says H1 does not depend on the tuning routes; otherwise it reports the 24-route result next to the 44-route one and says the two differ.
+
