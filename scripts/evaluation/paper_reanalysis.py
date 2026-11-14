@@ -219,6 +219,7 @@ def parse_route_dirs(ep_dir, log_dir, label, tolerate_partial_last_line=False):
         'duration_game': float(rec['meta']['duration_game']),
         'infractions': rec['infractions'],
         'speed': speed, 'L': cum[:, -1].copy(), 'y_end': wp[:, -1, 1].copy(),
+        'v_end': cum[:, -1] - cum[:, -11],   # m/s: path between waypoints 54 and 64 over 1.0 s (addendum 11-A)
         'steer': np.asarray(steer), 'throttle': np.asarray(thr), 'brake': np.asarray(brk),
         'target': target, 'coc': coc,
         'n_steps': len(speed), 'step_gaps': int(np.sum(np.diff(steps) != 1)),
@@ -2268,7 +2269,7 @@ def w_load(tag, route):
         raise RuntimeError(f'{d.name}: step log is not from the history-swap agent')
     _, cum = chord_profile(np.asarray([r['pred_waypoints'] for r in rows], dtype=np.float64))
     return {'speed': np.asarray([float(r['speed']) for r in rows]), 'L': cum[:, -1].copy(),
-            'kind': np.asarray([r['hist_kind'] for r in rows])}
+            'v_end': cum[:, -1] - cum[:, -11], 'kind': np.asarray([r['hist_kind'] for r in rows])}
 
 
 def w_reading(p, sign):
@@ -2283,14 +2284,17 @@ def w_reading(p, sign):
 def analysis_W():
     res = {'label': 'new runs, exploratory; reading rule fixed in addendum section 11 before the agent was run',
            'definitions': {'swap steps': 'about one step in five from step 60; plan logged, not acted on',
-                           'low speed': 'speed <= 0.5 m/s, swap = moving history (4.0 m/s straight)',
+                           'low speed': 'speed <= 0.5 m/s, swap = moving history (4.0 m/s straight)', 'v_end': 'path length between waypoints 54 and 64 / 1.0 s (addendum 11-A)',
                            'moving': 'speed > 0.5 m/s, swap = stationary history',
                            'per_route_rule': f'a route is used only if it has at least {W_MIN} steps in both conditions'},
            'models': {}}
     # outcome -> (plan test, speed test, swapped kind, sign of the reading or 0)
-    outcomes = {'W1 low speed, stays put (L < 0.64 m): moving history minus true history': (lambda L: L < 0.64, True, 'moving', -1),
-                'low speed, starts moving (L >= 2.0 m): moving history minus true history': (lambda L: L >= 2.0, True, 'moving', 0),
-                'W2 moving, plans a stop (L < 1.5 m): stationary history minus true history': (lambda L: L < 1.5, False, 'stationary', +1)}
+    # outcome -> (plan test on the logged plan, speed test, swapped kind, sign of the reading or 0); addendum 11-A
+    ends_at_rest = lambda v, L: v < 0.5
+    outcomes = {"W1' low speed, plan ends at rest (v_end < 0.5 m/s): moving history minus true history": (ends_at_rest, True, 'moving', -1),
+                "W2' moving, plan ends at rest (v_end < 0.5 m/s): stationary history minus true history": (ends_at_rest, False, 'stationary', +1),
+                'description only: low speed, stays put (L < 0.64 m): moving history minus true history': (lambda v, L: L < 0.64, True, 'moving', 0),
+                'description only: low speed, starts moving (L >= 2.0 m): moving history minus true history': (lambda v, L: L >= 2.0, True, 'moving', 0)}
     for model, tag in W_TAGS.items():
         runs = {r: w_load(tag, r) for r in REPLICATE_ROUTES}
         runs = {r: v for r, v in runs.items() if v is not None}
@@ -2304,7 +2308,7 @@ def analysis_W():
             for r, v in runs.items():
                 cond = (v['speed'] <= 0.5) if low else (v['speed'] > 0.5)
                 sw, tr = cond & (v['kind'] == kind), cond & (v['kind'] == 'true')
-                cnt[r] = (int(np.sum(plan(v['L'][sw]))), int(np.sum(sw)), int(np.sum(plan(v['L'][tr]))), int(np.sum(tr)))
+                cnt[r] = (int(np.sum(plan(v['v_end'][sw], v['L'][sw]))), int(np.sum(sw)), int(np.sum(plan(v['v_end'][tr], v['L'][tr]))), int(np.sum(tr)))
             use = [r for r in runs if cnt[r][1] >= W_MIN and cnt[r][3] >= W_MIN]
             o = {'pooled_swapped_pct': 100.0 * sum(c[0] for c in cnt.values()) / max(1, sum(c[1] for c in cnt.values())),
                  'pooled_true_pct': 100.0 * sum(c[2] for c in cnt.values()) / max(1, sum(c[3] for c in cnt.values())),
@@ -2380,6 +2384,60 @@ def render_X(man):
     return '\n'.join(L) + '\n'
 
 
+# --------------------------------------------------------------------------- Y. plans at rest and at slow speed
+
+def y_masks(rd):
+    v, L, ve = np.asarray(rd['speed']), np.asarray(rd['L']), np.asarray(rd['v_end'])
+    out = {}
+    for sname, cond in (('at_rest', v < 0.1), ('slow_0.1_to_0.5', (v >= 0.1) & (v <= 0.5))):
+        out[f'{sname}: stays_put (L<0.64)'] = (L < 0.64, cond)
+        out[f'{sname}: ends_at_rest (v_end<0.5)'] = (ve < 0.5, cond)
+    return out
+
+
+def y_route_table(arm, routes):
+    tab = {}
+    for r in routes:
+        for k, (num, cond) in y_masks(arm[r]).items():
+            tab.setdefault(k, {})[r] = (int(np.sum(num & cond)), int(np.sum(cond)))
+    return tab
+
+
+def analysis_Y(arms, data):
+    """ANALYSIS_ADDENDUM.md section 13. Post hoc, exploratory, existing step logs only."""
+    G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
+    GN, FN = 'Golden-6400 nogate', 'Flooded-6400-Matched nogate'
+    rows = {'default controller, run1': (G1, F1), 'default controller, run2': (G2, F2), 'gate-off controller': (GN, FN)}
+    res = {'label': 'post hoc, exploratory; defined in addendum section 13 before computing',
+           'definitions': {'at rest': 'speed < 0.1 m/s', 'slow': '0.1 <= speed <= 0.5 m/s', 'stays put': 'L < 0.64 m',
+                           'ends at rest': 'v_end < 0.5 m/s, v_end = path length between waypoints 54 and 64 / 1.0 s',
+                           'per_route_rule': f'a route is used only if both arms have at least {V_MIN} steps in the stratum'},
+           'golden_minus_flooded': {}, 'pooled_all_models_default_run1': {}}
+    for row, (ga, fa) in rows.items():
+        p = pending(arms, [(ga, CANONICAL_44), (fa, CANONICAL_44)])
+        if p:
+            res['golden_minus_flooded'][row] = p
+            continue
+        res['golden_minus_flooded'][row] = v_paired(y_route_table(arms[ga], CANONICAL_44), y_route_table(arms[fa], CANONICAL_44), CANONICAL_44)
+    for m in MODELS:
+        res['pooled_all_models_default_run1'][m] = v_pooled(y_route_table(data[m], CANONICAL_44), CANONICAL_44)
+    res['status_line'] = status_line(res['golden_minus_flooded'])
+    return res
+
+
+def render_Y(man):
+    Y = man['Y']
+    L = ['## Y. Plans at rest and at slow speed (addendum section 13)', '', f"Status: {Y['status_line']}", '', Y['label'], '',
+         '; '.join(f'{k}: {v}' for k, v in Y['definitions'].items()), '']
+    for row, o in Y['golden_minus_flooded'].items():
+        L += paired_block('Golden minus Flooded, per-route shares (%), ' + row, o, 2)
+    d = Y['pooled_all_models_default_run1']
+    ks = list(next(iter(d.values())).keys())
+    L += ['**Pooled shares (%), all 44 routes, default controller, run 1** (steps in the stratum in brackets, first model)', '',
+          table(['arm'] + ks, [[mn] + [f(x[k]['pct'], 2) for k in ks] for mn, x in d.items()]), '']
+    return '\n'.join(L) + '\n'
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2448,9 +2506,10 @@ def main():
     man['V'] = analysis_V(arms, data)
     man['W'] = analysis_W()
     man['X'] = analysis_X(arms, data)
+    man['Y'] = analysis_Y(arms, data)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')
