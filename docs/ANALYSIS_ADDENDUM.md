@@ -141,3 +141,23 @@ Sections 7 and 8 were defined after their data had been seen, so their run-1 and
 
 **Reporting.** Each of R1–R3 is reported as replicated or not replicated, whatever the outcome, in the same paragraph as the run-1 result. The same three contrasts on the 37 routes without training overlap (Section 5c) and with the sensitivity settings of Section 8 are reported as sensitivity rows without a decision. Two-run means are reported as in Sections 7a and 8 and carry no decision, because they contain run 1. If a route of either run has no score after the rerun rule, the tests use the routes scored in both.
 
+## 10. Three further analyses of the existing step logs, written 14 November 2026, 12:45 (UTC+7)
+
+Post hoc and exploratory. No new runs. Written before any value below was computed for any model or run. The confirmatory record of Section 1 is not changed.
+
+**Why these three.** Each follows from a property of the training sets recorded in `docs/provenance/A100_TRAINING_PROVENANCE.md`: among low-speed training frames 31 % stay put in the Flooded sets against 11 % in the Golden sets (10a); the manoeuvre targets differ, with 37 % leftward swerves and 22 % straight driving in Flooded against 13 % and 50 % in Golden (10c). 10b uses the rationale text, which comes from the frozen backbone and is therefore produced by the same weights in every model.
+
+**What had been seen when this was written.** Everything in the manifest at commit `9a8f27ee`, including: standstill time by rationale class (analysis J), standstill time by extent band (analysis D), and inside stop episodes the share of steps per extent band (analysis T, descriptives). Not computed or viewed for any model or run: the lateral coordinate of any predicted waypoint; plan extent conditioned on speed over all steps; plan extent conditioned on rationale class. Of the second pass, nothing beyond what Section 9 lists.
+
+**10a. Plans at low speed and while moving.** Definitions copied from the training-set table. Among logged steps with speed ≤ 0.5 m/s: share with L < 0.64 m (*stays put*), with L ≥ 2.0 m (*starts moving*), and in between. Among logged steps with speed > 0.5 m/s: share with L < 1.5 m (*plans a stop while moving*).
+
+**10b. Plan given the stated reason.** Rationale classes exactly as in analysis J (keyword heuristic, patterns unchanged). Among steps of class *proceed*, and separately among steps of class *caution*: share with L < 1.5 m.
+
+**10c. Lateral plans.** y_end is the lateral coordinate of the last (64th) predicted waypoint as logged, in the model's frame, positive to the left (the controller negates it for CARLA). Among logged steps with L ≥ 2.0 m: share with y_end ≥ 1.0 m (*left*), share with y_end ≤ −1.0 m (*right*). Sensitivity: 0.5 m and 2.0 m. Reported on all 44 routes and on the nine obstacle-bypass routes already listed in the script (`BYPASS_SINGLE` and `BYPASS_TWOWAY`: 2534, 2513, 1790, 1773, 1852, 1825, 3436, 2664, 3464).
+
+**Comparisons, the same for all three.** Per route, each share is a percentage of the conditioning steps of that route; a route enters a paired comparison only if both arms have at least 20 conditioning steps on it, and the number of routes used is reported. Paired Golden-6400 − Flooded-6400-Matched difference with the BCa interval and Wilcoxon test of Section 1, for the default controller (run 1) and the gate-off controller. Pooled shares over all steps of the 44 routes are reported for all six models of the main table (default controller, run 1) next to the training-set values, as description only.
+
+**Second pass.** The same paired comparisons on run 2 alone are reported when both second passes are complete. A run-1 difference whose interval excludes 0 is called *replicated* if the run-2 difference has the same sign and its interval excludes 0. No adjustment for multiplicity; these stay exploratory, below R1–R3 of Section 9.
+
+**Reading.** No decision rule. The two models visit different states in closed loop, so conditioning on speed or on rationale class narrows the comparison but does not make it a same-input comparison. The rationale classes are a keyword heuristic. A lateral offset of the plan is not a completed manoeuvre.
+
