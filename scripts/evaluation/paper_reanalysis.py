@@ -218,7 +218,7 @@ def parse_route_dirs(ep_dir, log_dir, label, tolerate_partial_last_line=False):
         'route_length': float(rec['meta']['route_length']),
         'duration_game': float(rec['meta']['duration_game']),
         'infractions': rec['infractions'],
-        'speed': speed, 'L': cum[:, -1].copy(),
+        'speed': speed, 'L': cum[:, -1].copy(), 'y_end': wp[:, -1, 1].copy(),
         'steer': np.asarray(steer), 'throttle': np.asarray(thr), 'brake': np.asarray(brk),
         'target': target, 'coc': coc,
         'n_steps': len(speed), 'step_gaps': int(np.sum(np.diff(steps) != 1)),
@@ -1975,6 +1975,92 @@ def analysis_U(arms, scen=None, data=None):
     return res
 
 
+# section 10 of ANALYSIS_ADDENDUM.md: plans by speed, by stated reason, and lateral plans
+V_MIN, V_LAT, V_LAT_SENS = 20, 1.0, [0.5, 2.0]
+BYPASS_9 = BYPASS_SINGLE + BYPASS_TWOWAY
+
+
+def v_masks(rd, cache):
+    """name -> (numerator mask, conditioning mask), per logged step."""
+    v, L, y = np.asarray(rd['speed']), np.asarray(rd['L']), np.asarray(rd['y_end'])
+    cls = np.array([coc_class(t, cache) for t in rd['coc']])
+    low, mov, far = v <= 0.5, v > 0.5, L >= 2.0
+    out = {'low_speed_stays_put': (L < 0.64, low), 'low_speed_starts_moving': (L >= 2.0, low),
+           'low_speed_in_between': ((L >= 0.64) & (L < 2.0), low),
+           'moving_plans_stop': (L < 1.5, mov),
+           'proceed_text_plan_below_1.5m': (L < 1.5, cls == 0), 'caution_text_plan_below_1.5m': (L < 1.5, cls == 1),
+           'left_plan': (y >= V_LAT, far), 'right_plan': (y <= -V_LAT, far)}
+    for t in V_LAT_SENS:
+        out[f'left_plan_{t}m'] = (y >= t, far)
+        out[f'right_plan_{t}m'] = (y <= -t, far)
+    return out
+
+
+def v_route_table(arm, routes, cache):
+    """metric -> route -> (numerator steps, conditioning steps)."""
+    tab = {}
+    for r in routes:
+        for k, (num, cond) in v_masks(arm[r], cache).items():
+            tab.setdefault(k, {})[r] = (int(np.sum(num & cond)), int(np.sum(cond)))
+    return tab
+
+
+def v_paired(tg, tf, routes):
+    out = {}
+    for k in tg:
+        use = [r for r in routes if tg[k][r][1] >= V_MIN and tf[k][r][1] >= V_MIN]
+        if len(use) < 5:
+            out[k] = {'n': len(use), 'note': 'fewer than 5 routes with 20 conditioning steps in both arms'}
+            continue
+        x = [100.0 * tg[k][r][0] / tg[k][r][1] for r in use]
+        y = [100.0 * tf[k][r][0] / tf[k][r][1] for r in use]
+        out[k] = paired(x, y)
+    return out
+
+
+def v_pooled(tab, routes):
+    return {k: {'pct': 100.0 * sum(v[r][0] for r in routes) / max(1, sum(v[r][1] for r in routes)),
+                'conditioning_steps': int(sum(v[r][1] for r in routes))} for k, v in tab.items()}
+
+
+def analysis_V(arms, data):
+    """ANALYSIS_ADDENDUM.md section 10. Post hoc, exploratory, existing step logs only."""
+    cache = {}
+    G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
+    GN, FN = 'Golden-6400 nogate', 'Flooded-6400-Matched nogate'
+    rows = {'default controller, run1': (G1, F1), 'default controller, run2': (G2, F2), 'gate-off controller': (GN, FN)}
+    res = {'label': 'post hoc, exploratory; defined in addendum section 10 before computing',
+           'definitions': {'conditioning': 'low speed: speed <= 0.5 m/s; moving: speed > 0.5 m/s; text classes as in analysis J; '
+                                           'lateral: steps with L >= 2.0 m, y_end = lateral coordinate of the last waypoint, positive left',
+                           'per_route_rule': f'a route is used only if both arms have at least {V_MIN} conditioning steps',
+                           'lateral_threshold_m': V_LAT, 'lateral_sensitivity_m': V_LAT_SENS, 'bypass_routes': BYPASS_9},
+           'golden_minus_flooded': {}, 'golden_minus_flooded_bypass_routes': {}, 'pooled_all_models_default_run1': {},
+           'pooled_bypass_routes_default_run1': {}, 'pooled_new_arms': {}}
+    for row, (ga, fa) in rows.items():
+        p = pending(arms, [(ga, CANONICAL_44), (fa, CANONICAL_44)])
+        if p:
+            res['golden_minus_flooded'][row] = p
+            res['golden_minus_flooded_bypass_routes'][row] = p
+            continue
+        tg, tf = v_route_table(arms[ga], CANONICAL_44, cache), v_route_table(arms[fa], CANONICAL_44, cache)
+        res['golden_minus_flooded'][row] = v_paired(tg, tf, CANONICAL_44)
+        res['golden_minus_flooded_bypass_routes'][row] = v_paired(tg, tf, BYPASS_9)
+        if row != 'default controller, run1':
+            res['pooled_new_arms'][ga] = v_pooled(tg, CANONICAL_44)
+            res['pooled_new_arms'][fa] = v_pooled(tf, CANONICAL_44)
+    for m in MODELS:
+        tab = v_route_table(data[m], CANONICAL_44, cache)
+        res['pooled_all_models_default_run1'][m] = v_pooled(tab, CANONICAL_44)
+        res['pooled_bypass_routes_default_run1'][m] = v_pooled(tab, BYPASS_9)
+    res['training_set_reference'] = {
+        'low_speed_stays_put_pct': {'golden_1600': 11.4, 'flooded_1600': 30.6, 'golden_6400': 10.9, 'flooded_6400': 31.0},
+        'manoeuvre_targets_pct': {'golden': {'straight': 50, 'swerve_left': 13, 'swerve_right': 13, 'turn_left': 12, 'turn_right': 12},
+                                  'flooded': {'straight': 22, 'swerve_left': 37, 'swerve_right': 12, 'turn_left': 14.5, 'turn_right': 14.5}},
+        'source': 'docs/provenance/A100_TRAINING_PROVENANCE.md (copied, not recomputed here)'}
+    res['status_line'] = status_line(res['golden_minus_flooded'])
+    return res
+
+
 # --------------------------------------------------------------------------- report N-S
 
 def is_pending(v):
@@ -2146,6 +2232,21 @@ def render_new(man):
               f"{f(d['flooded_not_driven_pct_on_other_routes'], 2)} % on the others. Route completion on these routes: Golden "
               f"{f(d['route_completion_on_these_routes']['golden'], 1)}, Flooded {f(d['route_completion_on_these_routes']['flooded'], 1)}; "
               f"on the others: Golden {f(d['route_completion_on_other_routes']['golden'], 1)}, Flooded {f(d['route_completion_on_other_routes']['flooded'], 1)}.", '']
+    V = man['V']
+    L += ['## V. Plans by speed, by stated reason, and lateral plans (addendum section 10)', '', f"Status: {V['status_line']}", '',
+          V['label'], '', '; '.join(f'{k}: {v}' for k, v in V['definitions'].items()), '']
+    for row, o in V['golden_minus_flooded'].items():
+        L += paired_block('Golden minus Flooded, per-route shares (%), ' + row, o, 2)
+    for row, o in V['golden_minus_flooded_bypass_routes'].items():
+        L += paired_block('Golden minus Flooded, nine bypass routes, ' + row, o, 2)
+    for title, key in (('Pooled shares (%), all 44 routes, default controller, run 1', 'pooled_all_models_default_run1'),
+                       ('Pooled shares (%), nine bypass routes, default controller, run 1', 'pooled_bypass_routes_default_run1'),
+                       ('Pooled shares (%), all 44 routes, other arms', 'pooled_new_arms')):
+        d = V[key]
+        if d:
+            ks = list(next(iter(d.values())).keys())
+            L += [f'**{title}**', '', table(['arm'] + ks, [[mn] + [f(x[k]['pct'], 2) for k in ks] for mn, x in d.items()]), '']
+    L += [f"Training-set reference: {json.dumps(V['training_set_reference'])}", '']
     return '\n'.join(L) + '\n'
 
 
@@ -2214,6 +2315,7 @@ def main():
     man['S'] = analysis_S(arms)
     man['T'] = analysis_T(arms)
     man['U'] = analysis_U(arms, scen, data)
+    man['V'] = analysis_V(arms, data)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man))
