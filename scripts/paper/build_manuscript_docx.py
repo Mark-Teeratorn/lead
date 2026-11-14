@@ -258,7 +258,7 @@ def main(txt_path=TXT_PATH, docx_path=DOCX_PATH):
             continue
 
         # Major section heading (Heading 1)
-        if line in major_headings:
+        if line in major_headings or re.match(r"^\d+\. [A-Z][^.]{2,90}$", line) and len(line.split()) <= 8 and not line.endswith(":") and "**" not in line:
             p = doc.add_paragraph(style="Heading 1")
             format_paragraph_spacing(p, space_before=14, space_after=6, line_spacing=1.15)
             add_formatted_text_and_math(p, line, size_pt=14, default_bold=True)
