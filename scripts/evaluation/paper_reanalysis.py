@@ -2345,6 +2345,41 @@ def render_W(man):
     return '\n'.join(L) + '\n'
 
 
+# --------------------------------------------------------------------------- X. crawling speed
+
+X_METRICS = {'crawl_pct_0.1_to_1.0': lambda rd: pct((rd['speed'] >= 0.1) & (rd['speed'] < 1.0)),
+             'crawl_pct_0.1_to_0.5 (sensitivity)': lambda rd: pct((rd['speed'] >= 0.1) & (rd['speed'] < 0.5))}
+
+
+def analysis_X(arms, data):
+    """ANALYSIS_ADDENDUM.md section 12b. Post hoc, exploratory, existing step logs only."""
+    rows = {'default controller, run1': ('Golden-6400 run1', 'Flooded-6400-Matched run1'),
+            'default controller, run2': ('Golden-6400 run2', 'Flooded-6400-Matched run2'),
+            'gate-off controller': ('Golden-6400 nogate', 'Flooded-6400-Matched nogate')}
+    res = {'label': 'post hoc, exploratory; defined in addendum section 12b',
+           'definition': 'share of logged route steps with 0.1 <= speed < 1.0 m/s (sensitivity: < 0.5 m/s)',
+           'golden_minus_flooded': {}, 'all_models_default_run1': {}}
+    for row, (ga, fa) in rows.items():
+        p = pending(arms, [(ga, CANONICAL_44), (fa, CANONICAL_44)])
+        res['golden_minus_flooded'][row] = p or {k: paired(vec(arms, ga, fn, CANONICAL_44), vec(arms, fa, fn, CANONICAL_44))
+                                                 for k, fn in X_METRICS.items()}
+    for m in MODELS:
+        res['all_models_default_run1'][m] = {k: float(np.mean([fn(data[m][r]) for r in CANONICAL_44])) for k, fn in X_METRICS.items()}
+    res['status_line'] = status_line(res['golden_minus_flooded'])
+    return res
+
+
+def render_X(man):
+    X = man['X']
+    L = ['## X. Time at crawling speed (addendum section 12b)', '', f"Status: {X['status_line']}", '', X['label'], '', X['definition'], '']
+    for row, o in X['golden_minus_flooded'].items():
+        L += paired_block('Golden minus Flooded, per-route share (%), ' + row, o, 2)
+    ks = list(X_METRICS)
+    L += ['**Mean of per-route shares (%), default controller, run 1**', '',
+          table(['model'] + ks, [[m] + [f(v[k], 2) for k in ks] for m, v in X['all_models_default_run1'].items()]), '']
+    return '\n'.join(L) + '\n'
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2412,9 +2447,10 @@ def main():
     man['U'] = analysis_U(arms, scen, data)
     man['V'] = analysis_V(arms, data)
     man['W'] = analysis_W()
+    man['X'] = analysis_X(arms, data)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')

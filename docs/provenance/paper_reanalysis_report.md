@@ -1477,3 +1477,39 @@ swap steps: about one step in five from step 60; plan logged, not acted on; low 
 
 **Flooded-6400-Matched**: pending: have {'model_matrix_flooded_6400_histswap': 0}, need {'model_matrix_flooded_6400_histswap': 8}
 
+
+## X. Time at crawling speed (addendum section 12b)
+
+Status: pending: 1 of 3 parts (default controller, run2)
+
+post hoc, exploratory; defined in addendum section 12b
+
+share of logged route steps with 0.1 <= speed < 1.0 m/s (sensitivity: < 0.5 m/s)
+
+**Golden minus Flooded, per-route share (%), default controller, run1**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| crawl_pct_0.1_to_1.0 | 11.74 | 12.39 | -0.65 | [-1.86, 0.73] | 343.0 | 0 | 0.0769 | 0.0769 | 0.0761 | 17/27/0 | -0.307 |
+| crawl_pct_0.1_to_0.5 (sensitivity) | 5.07 | 5.55 | -0.49 | [-1.09, 0.21] | 310.0 | 0 | 0.0303 | 0.0303 | 0.0309 | 14/30/0 | -0.374 |
+
+**Golden minus Flooded, per-route share (%), default controller, run2**: pending: have {'model_matrix_golden_6400_run2': 25, 'model_matrix_flooded_6400_run2': 0}, need {'model_matrix_golden_6400_run2': 44, 'model_matrix_flooded_6400_run2': 44}
+
+**Golden minus Flooded, per-route share (%), gate-off controller**
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| crawl_pct_0.1_to_1.0 | 12.75 | 16.93 | -4.18 | [-6.48, -2.72] | 112.0 | 0 | 1.44e-06 | 1.44e-06 | 7.83e-06 | 7/37/0 | -0.774 |
+| crawl_pct_0.1_to_0.5 (sensitivity) | 5.67 | 8.00 | -2.33 | [-3.41, -1.58] | 87.0 | 0 | 1.74e-07 | 1.74e-07 | 1.92e-06 | 6/38/0 | -0.824 |
+
+**Mean of per-route shares (%), default controller, run 1**
+
+| model | crawl_pct_0.1_to_1.0 | crawl_pct_0.1_to_0.5 (sensitivity) |
+|---|---|---|
+| Base | 11.80 | 5.41 |
+| Flooded-1600 | 12.59 | 5.70 |
+| Golden-1600 | 12.31 | 5.38 |
+| Flooded-6400-Hist | 13.31 | 6.31 |
+| Flooded-6400-Matched | 12.39 | 5.55 |
+| Golden-6400 | 11.74 | 5.07 |
+
