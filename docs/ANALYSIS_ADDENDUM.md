@@ -269,3 +269,27 @@ Post hoc sensitivity analysis, existing results only. The confirmatory record of
 
 **Analysis.** `Golden-1600` − `Base` and, for comparison, `Flooded-1600` − `Base`, on Driving Score and route completion, restricted to the 24 canonical routes outside the tuning list of analysis H; paired, BCa interval and Wilcoxon test of Section 1. Against the original `Base` run now, and against `base_run2` when it is complete. No decision rule: if the point estimate keeps its sign and the interval excludes 0, the paper says H1 does not depend on the tuning routes; otherwise it reports the 24-route result next to the 44-route one and says the two differ.
 
+## 15. Plan-level reading of the decoupling arm, and when it counts as a remedy, written 15 November 2026, 11:40 (UTC+7), before the model had run any route
+
+Extends Section 6, which fixed a reading for standstill time only. The model `Matrix-FloodedGroups-Balanced-6400` is trained; none of its 44 evaluation routes has been run. The confirmatory record of Section 1 is not changed.
+
+**What had been seen when this was written.** Everything in the manifest at commit `86dc79c6`, and the partial look at both second passes recorded as run note 8. Nothing from the decoupling model.
+
+**Comparators.** As in Section 6: for `Flooded-6400-Matched` and `Golden-6400`, the per-route mean of the two default-controller passes. The decoupling model has one pass.
+
+**Outcomes** (definitions of Sections 7a, 8, 10a and 13, unchanged):
+- **D1 (primary).** Share of steps with a plan shorter than 1.5 m: Balanced − Flooded.
+- **D2.** The same share: Balanced − Golden.
+- Supporting: stay-put share at ≤ 0.5 m/s and among steps at rest; blocked time; standstill outside blocked time; Driving Score; route completion; collision events. Each as Balanced − Flooded and Balanced − Golden.
+Paired over the 44 routes, BCa interval and Wilcoxon test of Section 1.
+
+**Reading, which ingredient.**
+- D1 negative with its interval below 0, and D2 with an interval that includes 0: near-stationary planning follows the manoeuvre mix and the stationary share, not the scenario-group mix.
+- D2 positive with its interval above 0, and D1 with an interval that includes 0: it follows the scenario-group mix.
+- Both intervals exclude 0 with the Balanced value in between: both contribute. Anything else: inconclusive.
+The fraction of the Flooded − Golden gap that the Balanced model closes is reported as description.
+
+**Reading, remedy.** The mix is called a *candidate remedy for hesitation* only if all three hold against `Flooded-6400-Matched`: D1 is negative with its interval below 0; the blocked-time difference has an interval that includes 0 or lies below it; and the Driving Score difference has an interval that includes 0 or lies above it. If D1 holds and either of the other two fails, the paper says that the mix reduces hesitation at a cost, and names the cost. The word remedy is not used in any other case.
+
+**Limits.** One training seed and one evaluation pass for this model, against two-pass means for the comparators, so its values carry more run-to-run noise. The Balanced mix differs from the Flooded mix in two factors at once (manoeuvre mix and stationary share), which this arm cannot separate. A candidate remedy on 44 routes with one controller is not a demonstrated one.
+
