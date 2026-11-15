@@ -23524,5 +23524,56 @@
    }
   },
   "status_line": "pending: 2 of 4 parts (Golden-1600 minus Base run2, Flooded-1600 minus Base run2)"
+ },
+ "second_pass_decisions": {
+  "label": "decisions by rules committed before the second-pass values existed (addendum sections 1, 5a, 9)",
+  "R1 near-stationary plan rate (L < 1.5 m)": {
+   "mean_diff": -7.11343384614309,
+   "bca95": [
+    -10.821621999064654,
+    -4.683353400666815
+   ],
+   "p": 1.91630533663556e-09,
+   "decision": "replicated"
+  },
+  "R2 standstill without blocked time": {
+   "mean_diff": -12.913209896047839,
+   "bca95": [
+    -20.992253282861196,
+    -7.011059971576452
+   ],
+   "p": 6.836333227511204e-06,
+   "p_holm": 1.3672666455022409e-05,
+   "decision": "replicated"
+  },
+  "R3 blocked time": {
+   "mean_diff": 7.82595303909394,
+   "bca95": [
+    2.6942844527333856,
+    16.138601283757513
+   ],
+   "p": 0.028401837044201694,
+   "p_holm": 0.028401837044201694,
+   "decision": "replicated"
+  },
+  "H2 on run 2 alone": {
+   "mean_diff": -5.087256856953898,
+   "bca95": [
+    -11.785516479036648,
+    0.9785483720119768
+   ],
+   "p": 0.0021087605026650635,
+   "case_by_rule_of_section_1": "B"
+  },
+  "H2 on the mean of run 1 and run 2 (no decision attached)": {
+   "mean_diff": -6.5744048471309755,
+   "bca95": [
+    -11.182309837892268,
+    -1.7331343369128989
+   ],
+   "p": 0.0010821552800734935,
+   "case_by_rule_of_section_1": "A1"
+  },
+  "status_line": "complete"
  }
 }

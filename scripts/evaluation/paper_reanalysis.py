@@ -2504,6 +2504,48 @@ def render_Z(man):
     return '\n'.join(L) + '\n'
 
 
+# --------------------------------------------------------------------------- decisions fixed in the addendum
+
+def h2_case(p):
+    """Decision rule of ANALYSIS_ADDENDUM.md section 1."""
+    d, hi = p['mean_diff'], p['bca95'][1]
+    if d >= 0:
+        return 'C'
+    if hi < 0:
+        return 'A1' if d <= -4.0 else 'A2'
+    return 'B'
+
+
+def second_pass_decisions(man):
+    """R1-R3 of addendum section 9 (run 2 only) and the H2 case on run 2; Holm over R2 and R3."""
+    out = {'label': 'decisions by rules committed before the second-pass values existed (addendum sections 1, 5a, 9)'}
+    t = man['T']['golden_minus_flooded'].get('default controller, run2', {})
+    u = man['U']['golden_minus_flooded'].get('default controller, run2', {})
+    o = man['O']['comparisons']
+    if 'plan_rate_L<1.5_pct' not in t or 'time_blocked_pct' not in u:
+        out['status'] = 'pending'
+        out['status_line'] = 'pending: second passes incomplete'
+        return out
+    r1, r2, r3 = t['plan_rate_L<1.5_pct'], u['standstill_without_blocked_pct'], u['time_blocked_pct']
+    p2, p3 = r2['wilcoxon']['p'], r3['wilcoxon']['p']
+    lo, hi = sorted([p2, p3])
+    adj = {lo: min(1.0, 2 * lo), hi: min(1.0, max(2 * lo, hi))}
+    out['R1 near-stationary plan rate (L < 1.5 m)'] = {
+        'mean_diff': r1['mean_diff'], 'bca95': r1['bca95'], 'p': r1['wilcoxon']['p'],
+        'decision': 'replicated' if r1['mean_diff'] < 0 and r1['bca95'][1] < 0 and r1['wilcoxon']['p'] < 0.05 else 'not replicated'}
+    out['R2 standstill without blocked time'] = {
+        'mean_diff': r2['mean_diff'], 'bca95': r2['bca95'], 'p': p2, 'p_holm': adj[p2],
+        'decision': 'replicated' if r2['mean_diff'] < 0 and r2['bca95'][1] < 0 and adj[p2] < 0.05 else 'not replicated'}
+    out['R3 blocked time'] = {
+        'mean_diff': r3['mean_diff'], 'bca95': r3['bca95'], 'p': p3, 'p_holm': adj[p3],
+        'decision': 'replicated' if r3['mean_diff'] > 0 and r3['bca95'][0] > 0 and adj[p3] < 0.05 else 'not replicated'}
+    for label, key in (('H2 on run 2 alone', '(i) run2 Golden vs run2 Flooded'), ('H2 on the mean of run 1 and run 2 (no decision attached)', '(ii) mean of run1 and run2, Golden vs Flooded')):
+        v = o[key]['44 routes']['standstill_pct']
+        out[label] = {'mean_diff': v['mean_diff'], 'bca95': v['bca95'], 'p': v['wilcoxon']['p'], 'case_by_rule_of_section_1': h2_case(v)}
+    out['status_line'] = 'complete'
+    return out
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2574,6 +2616,7 @@ def main():
     man['X'] = analysis_X(arms, data)
     man['Y'] = analysis_Y(arms, data)
     man['Z'] = analysis_Z(arms, data, man['H']['tuning_routes_union'])
+    man['second_pass_decisions'] = second_pass_decisions(man)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man))
