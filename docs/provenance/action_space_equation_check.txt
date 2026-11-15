@@ -1,0 +1,6 @@
+max |code - paper equations| over 5 random control sets (m): 5.600953699058664e-06
+history moving 4.0 m/s -> estimated v0 = 3.9997634887695312
+history stationary -> estimated v0 = 0.0
+mean-control plan from v0=0.0: L (63 segments) = 0.59 m, first segment = 0.000 m
+mean-control plan from v0=0.4: L (63 segments) = 3.11 m, first segment = 0.040 m
+mean-control plan from v0=4.0: L (63 segments) = 25.79 m, first segment = 0.400 m

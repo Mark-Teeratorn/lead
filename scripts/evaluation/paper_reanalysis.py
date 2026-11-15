@@ -2518,7 +2518,7 @@ def h2_case(p):
 
 def second_pass_decisions(man):
     """R1-R3 of addendum section 9 (run 2 only) and the H2 case on run 2; Holm over R2 and R3."""
-    out = {'label': 'decisions by rules committed before the second-pass values existed (addendum sections 1, 5a, 9)'}
+    out = {'label': 'decisions by rules of addendum sections 1, 5a and 9; section 9 was committed on 14 Nov 2026 at 12:35, before the Flooded second pass started and before any plan-level second-pass value was computed (14 of 44 Golden second-pass routes existed and their standstill had been looked at)'}
     t = man['T']['golden_minus_flooded'].get('default controller, run2', {})
     u = man['U']['golden_minus_flooded'].get('default controller, run2', {})
     o = man['O']['comparisons']
@@ -2652,6 +2652,49 @@ def analysis_pass_agreement(arms):
     return res
 
 
+# --------------------------------------------------------------------------- braking plans while moving (addendum 17)
+
+def brake_route_table(arm, routes):
+    tab = {}
+    for r in routes:
+        v, ve = np.asarray(arm[r]['speed']), np.asarray(arm[r]['v_end'])
+        for name, cond in (('moving_0.5_to_2: plan ends at rest', (v > 0.5) & (v <= 2.0)), ('moving_above_2: plan ends at rest', v > 2.0)):
+            tab.setdefault(name, {})[r] = (int(np.sum((ve < 0.5) & cond)), int(np.sum(cond)))
+    return tab
+
+
+def analysis_braking(arms, data):
+    """ANALYSIS_ADDENDUM.md section 17. Post hoc; replaces the 'moving_plans_stop' measure of analysis V."""
+    rows = {'default controller, run1': ('Golden-6400 run1', 'Flooded-6400-Matched run1'),
+            'default controller, run2': ('Golden-6400 run2', 'Flooded-6400-Matched run2'),
+            'gate-off controller': ('Golden-6400 nogate', 'Flooded-6400-Matched nogate')}
+    res = {'label': 'post hoc; defined in addendum section 17 before computing',
+           'definition': 'share of steps in the speed stratum whose plan ends at rest (v_end < 0.5 m/s)',
+           'golden_minus_flooded': {}, 'pooled_all_models_default_run1': {}}
+    for row, (ga, fa) in rows.items():
+        p = pending(arms, [(ga, CANONICAL_44), (fa, CANONICAL_44)])
+        res['golden_minus_flooded'][row] = p or v_paired(brake_route_table(arms[ga], CANONICAL_44), brake_route_table(arms[fa], CANONICAL_44), CANONICAL_44)
+    for m in MODELS:
+        res['pooled_all_models_default_run1'][m] = v_pooled(brake_route_table(data[m], CANONICAL_44), CANONICAL_44)
+    res['status_line'] = status_line(res['golden_minus_flooded'])
+    return res
+
+
+def second_pass_sensitivity(arms, man):
+    """Sensitivity rows promised in addendum section 9 (no decision attached): R1-R3 on the 37 routes without
+    training overlap, and R2/R3 with the settings of section 8, all on run 2 alone."""
+    G2, F2 = 'Golden-6400 run2', 'Flooded-6400-Matched run2'
+    if pending(arms, [(G2, CANONICAL_44), (F2, CANONICAL_44)]):
+        return {'status': 'pending'}
+    r37 = ROUTE_SUBSETS['37 routes (excl. 7 training-overlap routes)']
+    um = u_metrics()
+    M = {'R1 near-stationary plan rate (L < 1.5 m)': lambda rd: pct(np.asarray(rd['L']) < 1.5),
+         'R2 standstill without blocked time': um['standstill_without_blocked_pct'], 'R3 blocked time': um['time_blocked_pct']}
+    out = {'37 routes (excl. 7 training-overlap routes)': {k: paired(vec(arms, G2, fn, r37), vec(arms, F2, fn, r37)) for k, fn in M.items()}}
+    out['section 8 settings, 44 routes'] = man['U']['sensitivity_golden_minus_flooded'].get('default controller, run2', {})
+    return out
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2723,8 +2766,10 @@ def main():
     man['Y'] = analysis_Y(arms, data)
     man['Z'] = analysis_Z(arms, data, man['H']['tuning_routes_union'])
     man['second_pass_decisions'] = second_pass_decisions(man)
+    man['second_pass_decisions']['sensitivity_no_decision'] = second_pass_sensitivity(arms, man)
     man['S15'] = analysis_S15(arms)
     man['pass_agreement'] = analysis_pass_agreement(arms)
+    man['braking'] = analysis_braking(arms, data)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man))
