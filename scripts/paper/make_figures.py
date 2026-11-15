@@ -137,9 +137,12 @@ def fig_low_speed_plans():
     parts = [("low_speed_stays_put", "stays put (L < 0.64 m)", 1.0),
              ("low_speed_in_between", "in between", 0.5),
              ("low_speed_starts_moving", "starts moving (L \u2265 2 m)", 0.2)]
-    fig, (a, b) = plt.subplots(1, 2, figsize=(10.5, 4.3), gridspec_kw={"width_ratios": [1, 1.25], "wspace": 0.3})
-    x, w = np.arange(2), 0.36
-    for j, key in enumerate(("default controller, run1", "gate-off controller")):
+    fig, (a, b) = plt.subplots(1, 2, figsize=(11.5, 4.3), gridspec_kw={"width_ratios": [1.25, 1.25], "wspace": 0.3})
+    groups = [("default controller, run1", "Default,\npass 1"), ("default controller, run2", "Default,\npass 2"),
+              ("gate-off controller", "Gate-off")]
+    groups = [(k, lab) for k, lab in groups if "low_speed_stays_put" in rows.get(k, {})]   # a pass still pending is left out
+    x, w = np.arange(len(groups)), 0.36
+    for j, (key, _) in enumerate(groups):
         for i, side in enumerate(("mean_first", "mean_second")):  # first = Golden, second = Flooded
             c, xpos, bottom = (C_GOLD, C_FLOOD)[i], x[j] + (i - 0.5) * w, 0.0
             vals = [rows[key][k][side] for k, _, _ in parts]
@@ -156,7 +159,7 @@ def fig_low_speed_plans():
     for _, lab, alpha in parts:
         a.bar(0, 0, 0, color="0.25", alpha=alpha, label=lab)
     a.set_xticks(x)
-    a.set_xticklabels(["Default controller", "Gate-off controller"])
+    a.set_xticklabels([lab for _, lab in groups])
     a.set_ylim(0, 100)
     a.set_ylabel("Plans at \u2264 0.5 m/s (% of steps, route mean)")
     a.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.3), ncol=2, fontsize=9, columnspacing=1.0)
