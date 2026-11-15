@@ -23575,5 +23575,76 @@
    "case_by_rule_of_section_1": "A1"
   },
   "status_line": "complete"
+ },
+ "S15": {
+  "label": "reading fixed in addendum section 15 before the decoupling model had run any route",
+  "per_route_rule": "conditional shares need at least 20 conditioning steps in every pass used",
+  "comparisons": {
+   "Balanced minus Flooded-6400-Matched": {
+    "status": "pending",
+    "have": {
+     "model_matrix_fgbalanced_6400": 0,
+     "model_matrix_flooded_6400": 44,
+     "model_matrix_flooded_6400_run2": 44,
+     "model_matrix_golden_6400": 44,
+     "model_matrix_golden_6400_run2": 44
+    },
+    "need": {
+     "model_matrix_fgbalanced_6400": 44,
+     "model_matrix_flooded_6400": 44,
+     "model_matrix_flooded_6400_run2": 44,
+     "model_matrix_golden_6400": 44,
+     "model_matrix_golden_6400_run2": 44
+    }
+   },
+   "Balanced minus Golden-6400": {
+    "status": "pending",
+    "have": {
+     "model_matrix_fgbalanced_6400": 0,
+     "model_matrix_flooded_6400": 44,
+     "model_matrix_flooded_6400_run2": 44,
+     "model_matrix_golden_6400": 44,
+     "model_matrix_golden_6400_run2": 44
+    },
+    "need": {
+     "model_matrix_fgbalanced_6400": 44,
+     "model_matrix_flooded_6400": 44,
+     "model_matrix_flooded_6400_run2": 44,
+     "model_matrix_golden_6400": 44,
+     "model_matrix_golden_6400_run2": 44
+    }
+   }
+  },
+  "status_line": "pending: 2 of 2 parts (Balanced minus Flooded-6400-Matched, Balanced minus Golden-6400)"
+ },
+ "pass_agreement": {
+  "label": "descriptive, post hoc; addendum section 16",
+  "metrics": {
+   "standstill_pct": {
+    "routes_negative_in_both_passes": 28,
+    "routes_positive_in_both_passes": 1,
+    "routes_with_sign_change": 15,
+    "spearman_r_of_route_differences": 0.005496828752642706,
+    "sd_of_route_differences_pass1": 23.6552047773225,
+    "sd_of_route_differences_pass2": 21.972158448767274,
+    "largest_route_change_golden": 65.3641964815814,
+    "largest_route_change_flooded": 62.89603983859807,
+    "spearman_r_same_model_golden": 0.6877620780195725,
+    "spearman_r_same_model_flooded": 0.7358703312191684
+   },
+   "plan_rate_L<1.5_pct": {
+    "routes_negative_in_both_passes": 39,
+    "routes_positive_in_both_passes": 0,
+    "routes_with_sign_change": 5,
+    "spearman_r_of_route_differences": 0.3946441155743481,
+    "sd_of_route_differences_pass1": 15.57711965139304,
+    "sd_of_route_differences_pass2": 10.155359716782657,
+    "largest_route_change_golden": 26.381629767431914,
+    "largest_route_change_flooded": 49.09258594472803,
+    "spearman_r_same_model_golden": 0.7447318345196983,
+    "spearman_r_same_model_flooded": 0.7809725158562367
+   }
+  },
+  "status_line": "complete"
  }
 }

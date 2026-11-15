@@ -2546,6 +2546,112 @@ def second_pass_decisions(man):
     return out
 
 
+# --------------------------------------------------------------------------- S15. decoupling arm, plan level and remedy reading
+
+def s15_metrics():
+    um = u_metrics()
+
+    def share(test, cond):
+        def fn(rd):
+            v, L = np.asarray(rd['speed']), np.asarray(rd['L'])
+            m = cond(v)
+            return pct(test(L[m])) if int(m.sum()) >= V_MIN else float('nan')
+        return fn
+    return {'plan_rate_L<1.5_pct': lambda rd: pct(np.asarray(rd['L']) < 1.5),
+            'low_speed_stays_put_pct': share(lambda L: L < 0.64, lambda v: v <= 0.5),
+            'at_rest_stays_put_pct': share(lambda L: L < 0.64, lambda v: v < 0.1),
+            'time_blocked_pct': um['time_blocked_pct'], 'standstill_without_blocked_pct': um['standstill_without_blocked_pct'],
+            'standstill_pct': RUN_METRICS['standstill_pct'], 'driving_score': RUN_METRICS['driving_score'],
+            'route_completion': RUN_METRICS['route_completion'], 'collision_events': RUN_METRICS['collision_events']}
+
+
+def analysis_S15(arms, B='Balanced-6400 run1'):
+    """ANALYSIS_ADDENDUM.md section 15: plan-level reading of the decoupling arm and the remedy criterion.
+    Comparators are per-route means of their two default-controller passes; the decoupling model has one pass."""
+    comps = {'Flooded-6400-Matched': ('Flooded-6400-Matched run1', 'Flooded-6400-Matched run2'),
+             'Golden-6400': ('Golden-6400 run1', 'Golden-6400 run2')}
+    res = {'label': 'reading fixed in addendum section 15 before the decoupling model had run any route',
+           'per_route_rule': f'conditional shares need at least {V_MIN} conditioning steps in every pass used', 'comparisons': {}}
+    p = pending(arms, [(n, CANONICAL_44) for n in (B,) + comps['Flooded-6400-Matched'] + comps['Golden-6400']])
+    if p:
+        res['comparisons'] = {f'Balanced minus {c}': p for c in comps}
+        res['status_line'] = status_line(res['comparisons'])
+        return res
+    M = s15_metrics()
+    for cname, names in comps.items():
+        out = {}
+        for k, fn in M.items():
+            b = vec(arms, B, fn, CANONICAL_44)
+            c = np.mean([vec(arms, n, fn, CANONICAL_44) for n in names], axis=0)
+            ok = ~np.isnan(b) & ~np.isnan(c)
+            out[k] = paired(b[ok], c[ok]) if int(ok.sum()) >= 5 else {'n': int(ok.sum()), 'note': 'fewer than 5 usable routes'}
+        res['comparisons'][f'Balanced minus {cname}'] = out
+    d1 = res['comparisons']['Balanced minus Flooded-6400-Matched']
+    d2 = res['comparisons']['Balanced minus Golden-6400']
+    c1, c2 = d1['plan_rate_L<1.5_pct']['bca95'], d2['plan_rate_L<1.5_pct']['bca95']
+    inc = lambda c: c[0] <= 0 <= c[1]
+    if c1[1] < 0 and inc(c2):
+        ingredient = 'near-stationary planning follows the manoeuvre mix and the stationary share, not the scenario-group mix'
+    elif c2[0] > 0 and inc(c1):
+        ingredient = 'near-stationary planning follows the scenario-group mix'
+    elif c1[1] < 0 and c2[0] > 0:
+        ingredient = 'both contribute (the Balanced value lies between the two, both intervals exclude 0)'
+    else:
+        ingredient = 'inconclusive'
+    f_mean, g_mean, b_mean = d1['plan_rate_L<1.5_pct']['mean_second'], d2['plan_rate_L<1.5_pct']['mean_second'], d1['plan_rate_L<1.5_pct']['mean_first']
+    cb, cd = d1['time_blocked_pct']['bca95'], d1['driving_score']['bca95']
+    less_hesitation, blocked_ok, score_ok = c1[1] < 0, not cb[0] > 0, not cd[1] < 0
+    if less_hesitation and blocked_ok and score_ok:
+        remedy = 'candidate remedy for hesitation'
+    elif less_hesitation:
+        remedy = 'reduces hesitation at a cost: ' + ', '.join(x for x, bad in (('more blocked time', not blocked_ok), ('lower Driving Score', not score_ok)) if bad)
+    else:
+        remedy = 'not a remedy: near-stationary plans are not clearly less frequent than for the obstacle-heavy model'
+    res['reading'] = {'D1 Balanced minus Flooded, plan rate': d1['plan_rate_L<1.5_pct']['mean_diff'], 'D1_bca95': c1,
+                      'D2 Balanced minus Golden, plan rate': d2['plan_rate_L<1.5_pct']['mean_diff'], 'D2_bca95': c2,
+                      'ingredient': ingredient,
+                      'fraction_of_flooded_minus_golden_gap_closed': (f_mean - b_mean) / (f_mean - g_mean) if f_mean != g_mean else None,
+                      'remedy': remedy}
+    res['status_line'] = 'complete'
+    return res
+
+
+def render_S15(man):
+    S = man['S15']
+    L = ['## S15. Decoupling arm: plan-level reading and remedy criterion (addendum section 15)', '', f"Status: {S['status_line']}", '', S['label'], '']
+    for k, o in S['comparisons'].items():
+        L += paired_block(k, o, 2)
+    if 'reading' in S:
+        L += [f"Reading: {json.dumps(S['reading'])}", '']
+    return '\n'.join(L) + '\n'
+
+
+# --------------------------------------------------------------------------- pass agreement (addendum section 16)
+
+def analysis_pass_agreement(arms):
+    """ANALYSIS_ADDENDUM.md section 16. Descriptive, post hoc (written down after the values had been computed)."""
+    from scipy.stats import spearmanr
+    G1, F1, G2, F2 = 'Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2'
+    res = {'label': 'descriptive, post hoc; addendum section 16', 'metrics': {}}
+    p = pending(arms, [(n, CANONICAL_44) for n in (G1, F1, G2, F2)])
+    if p:
+        res['metrics'] = p
+        res['status_line'] = 'pending'
+        return res
+    for name, fn in (('standstill_pct', RUN_METRICS['standstill_pct']), ('plan_rate_L<1.5_pct', lambda rd: pct(np.asarray(rd['L']) < 1.5))):
+        v = {a: vec(arms, a, fn, CANONICAL_44) for a in (G1, F1, G2, F2)}
+        d1, d2 = v[G1] - v[F1], v[G2] - v[F2]
+        res['metrics'][name] = {
+            'routes_negative_in_both_passes': int(np.sum((d1 < 0) & (d2 < 0))), 'routes_positive_in_both_passes': int(np.sum((d1 > 0) & (d2 > 0))),
+            'routes_with_sign_change': int(np.sum(np.sign(d1) != np.sign(d2))),
+            'spearman_r_of_route_differences': float(spearmanr(d1, d2)[0]),
+            'sd_of_route_differences_pass1': float(np.std(d1, ddof=1)), 'sd_of_route_differences_pass2': float(np.std(d2, ddof=1)),
+            'largest_route_change_golden': float(np.max(np.abs(v[G2] - v[G1]))), 'largest_route_change_flooded': float(np.max(np.abs(v[F2] - v[F1]))),
+            'spearman_r_same_model_golden': float(spearmanr(v[G1], v[G2])[0]), 'spearman_r_same_model_flooded': float(spearmanr(v[F1], v[F2])[0])}
+    res['status_line'] = 'complete'
+    return res
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2617,9 +2723,11 @@ def main():
     man['Y'] = analysis_Y(arms, data)
     man['Z'] = analysis_Z(arms, data, man['H']['tuning_routes_union'])
     man['second_pass_decisions'] = second_pass_decisions(man)
+    man['S15'] = analysis_S15(arms)
+    man['pass_agreement'] = analysis_pass_agreement(arms)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')

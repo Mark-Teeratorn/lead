@@ -1,6 +1,6 @@
 # Reframe draft: title, abstract and introduction in two versions
 
-Written 14 Nov 2026, before the second pass was complete. Nothing here is in the manuscript yet.
+Written 14 Nov 2026, before the second pass was complete. On 15 Nov rule R1 was met and Version A was applied to the manuscript (commit 7a419370), with the second-pass values filled in; this file is kept as the record of what was drafted in advance.
 Which version is used is decided by the rules already committed in `ANALYSIS_ADDENDUM.md` (§9 R1–R3, §10, §12a), not by preference.
 
 - **Version A** is used if the plan-level findings replicate on the second pass (R1 met; low-speed stay-put difference has the same sign and an interval that excludes 0).

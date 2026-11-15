@@ -1867,3 +1867,14 @@ post hoc sensitivity; defined in addendum section 14 before computing
 
 **Flooded-1600 minus Base run2**: pending: have {'base_run2': 0}, need {'base_run2': 24}
 
+
+## S15. Decoupling arm: plan-level reading and remedy criterion (addendum section 15)
+
+Status: pending: 2 of 2 parts (Balanced minus Flooded-6400-Matched, Balanced minus Golden-6400)
+
+reading fixed in addendum section 15 before the decoupling model had run any route
+
+**Balanced minus Flooded-6400-Matched**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
+
+**Balanced minus Golden-6400**: pending: have {'model_matrix_fgbalanced_6400': 0, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}, need {'model_matrix_fgbalanced_6400': 44, 'model_matrix_flooded_6400': 44, 'model_matrix_flooded_6400_run2': 44, 'model_matrix_golden_6400': 44, 'model_matrix_golden_6400_run2': 44}
+

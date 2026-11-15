@@ -293,3 +293,9 @@ The fraction of the Flooded − Golden gap that the Balanced model closes is rep
 
 **Limits.** One training seed and one evaluation pass for this model, against two-pass means for the comparators, so its values carry more run-to-run noise. The Balanced mix differs from the Flooded mix in two factors at once (manoeuvre mix and stationary share), which this arm cannot separate. A candidate remedy on 44 routes with one controller is not a demonstrated one.
 
+## 16. Route-level agreement between the two passes, written 15 November 2026, 15:32 (UTC+7), after the values had been computed
+
+Descriptive only, no test and no decision. These quantities were first computed in an exploratory session on 15 November, after both second passes were complete, and are written down here afterwards; they are labelled post hoc wherever they are reported.
+
+For standstill time and for the share of steps with a plan shorter than 1.5 m: the per-route `Golden-6400` − `Flooded-6400-Matched` difference in pass 1 and in pass 2; the number of routes on which it is negative in both passes, positive in both, or of different sign; the Spearman rank correlation between the two sets of per-route differences; and, per model, the largest absolute change of a route's value between the passes.
+
