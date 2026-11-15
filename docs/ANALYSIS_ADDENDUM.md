@@ -299,3 +299,15 @@ Descriptive only, no test and no decision. These quantities were first computed 
 
 For standstill time and for the share of steps with a plan shorter than 1.5 m: the per-route `Golden-6400` − `Flooded-6400-Matched` difference in pass 1 and in pass 2; the number of routes on which it is negative in both passes, positive in both, or of different sign; the Spearman rank correlation between the two sets of per-route differences; and, per model, the largest absolute change of a route's value between the passes.
 
+## 17. Braking plans while moving (correction of the "plans a stop while moving" measure of Section 10a), written 15 November 2026, 15:49 (UTC+7), before computing
+
+Post hoc, existing step logs only. The confirmatory record of Section 1 is not changed.
+
+**What was wrong.** Section 10a measured "plans a stop while moving" as the share of steps at more than 0.5 m/s whose plan is shorter than 1.5 m, and the manuscript concluded that neither model plans a stop from motion in more than 0.3 % of steps. An independent consistency read pointed out that the plan is integrated from the current speed (Section 11-A): a plan that brakes to rest from ordinary driving speed covers more than 1.5 m, so the measure is close to zero by construction at all but the lowest speeds. The conclusion drawn from it is withdrawn.
+
+**What had been seen when this was written.** The values of Section 10a and of Section 13 (plans that end at rest, for steps at or below 0.5 m/s only). No value of the quantity below for steps above 0.5 m/s.
+
+**Replacement.** Among logged steps in a speed stratum, the share of plans that end at rest (v_end < 0.5 m/s, v_end as in Section 11-A). Strata: 0.5 < speed ≤ 2 m/s, and speed > 2 m/s. Comparison as in Section 10: per route a percentage of the stratum's steps, routes with at least 20 steps in the stratum in both arms, paired `Golden-6400` − `Flooded-6400-Matched`, BCa interval and Wilcoxon test of Section 1; default controller in pass 1 and in pass 2, and the gate-off controller. Pooled shares for all six models (default controller, pass 1) as description.
+
+**Reading.** No decision rule. The manuscript's statement about stopping from motion is rewritten to say what these values show, whichever way they come out, and the sentence that the difference between the models "is one of restarting, not of stopping" is kept only if the braking-plan shares of the two models do not differ in either stratum (intervals including 0 in both passes).
+
