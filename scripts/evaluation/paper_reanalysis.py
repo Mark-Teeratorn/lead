@@ -2695,6 +2695,125 @@ def second_pass_sensitivity(arms, man):
     return out
 
 
+# --------------------------------------------------------------------------- review items R11, R13 (addendum 18)
+
+def route_polyline(route):
+    rt = ET.parse(ROUTE_XML_DIR / f'{route}.xml').getroot().find('route')
+    pts = np.array([[float(p.get('x')), float(p.get('y'))] for p in rt.find('waypoints').findall('position')])
+    seg = np.hypot(*np.diff(pts, axis=0).T)
+    return pts, seg, np.concatenate([[0.0], np.cumsum(seg)])
+
+
+def arc_length_of(q, pts, seg, cum):
+    best = None
+    for i in range(len(pts) - 1):
+        a, ab = pts[i], pts[i + 1] - pts[i]
+        t = 0.0 if seg[i] == 0 else float(np.clip(np.dot(q - a, ab) / (seg[i] ** 2), 0.0, 1.0))
+        dist = float(np.hypot(*(a + t * ab - q)))
+        if best is None or dist < best[0]:
+            best = (dist, cum[i] + t * seg[i])
+    return best[1]
+
+
+def blocked_runs(rd):
+    blk = blocked_masks(rd)[0]
+    runs, i, n = [], 0, len(blk)
+    while i < n:
+        if blk[i]:
+            j = i
+            while j < n and blk[j]:
+                j += 1
+            runs.append((i, j))
+            i = j
+        else:
+            i += 1
+    return runs
+
+
+CONTACT_TOL, CONTACT_SENS = 10.0, [5.0, 20.0]
+
+
+def analysis_contact(arms):
+    """ANALYSIS_ADDENDUM.md section 18a: blocked runs relative to recorded collision positions."""
+    names = {'default controller, run1': ('Golden-6400 run1', 'Flooded-6400-Matched run1'),
+             'default controller, run2': ('Golden-6400 run2', 'Flooded-6400-Matched run2'),
+             'gate-off controller': ('Golden-6400 nogate', 'Flooded-6400-Matched nogate')}
+    res = {'label': 'post hoc; requested by the review panel (R11); defined in addendum section 18a before computing',
+           'definition': f'gap = min |distance travelled at run onset - arc length of a collision position on the route polyline|; at a recorded collision position if gap <= {CONTACT_TOL} m',
+           'limits': 'collision records have no time; distance travelled approximates route position; steps before the first logged plan are missing',
+           'rows': {}}
+    for row, pair in names.items():
+        p = pending(arms, [(n, CANONICAL_44) for n in pair])
+        if p:
+            res['rows'][row] = p
+            continue
+        out, without = {}, {}
+        for name in pair:
+            listing, n_runs, steps_all, steps_at = [], 0, 0, {t: 0 for t in [CONTACT_TOL] + CONTACT_SENS}
+            pct_without = []
+            for r in CANONICAL_44:
+                rd = arms[name][r]
+                runs = blocked_runs(rd)
+                keep = np.zeros(len(rd['speed']), bool)
+                if runs:
+                    pts, seg, cum = route_polyline(r)
+                    scale = rd['route_length'] / cum[-1]
+                    cols = parse_collisions(rd)
+                    sc = [arc_length_of(np.array([x['x'], x['y']]), pts, seg, cum) * scale for x in cols]
+                    odo = np.concatenate([[0.0], np.cumsum(np.asarray(rd['speed']) * DT)])
+                    for (i, j) in runs:
+                        gap = min(abs(odo[i] - s) for s in sc) if sc else None
+                        n_runs += 1
+                        steps_all += j - i
+                        for t in steps_at:
+                            if gap is not None and gap <= t:
+                                steps_at[t] += j - i
+                        if gap is None or gap > CONTACT_TOL:
+                            keep[i:j] = True
+                        listing.append({'route': r, 'onset_step': int(i), 'steps': int(j - i), 'distance_travelled_m': float(odo[i]),
+                                        'collision_arc_lengths_m': [float(s) for s in sc], 'gap_m': None if gap is None else float(gap),
+                                        'collision_actors': sorted({x['actor_type'] for x in cols})})
+                pct_without.append(pct(keep))
+            out[name] = {'n_blocked_runs': n_runs, 'blocked_steps': steps_all,
+                         'share_of_blocked_steps_at_collision_position_pct': {f'{t:g} m': (100.0 * v / steps_all if steps_all else None) for t, v in steps_at.items()},
+                         'n_runs_at_collision_position_10m': sum(1 for x in listing if x['gap_m'] is not None and x['gap_m'] <= CONTACT_TOL),
+                         'mean_blocked_pct_without_runs_at_collision_position': float(np.mean(pct_without)), 'runs': listing}
+            without[name] = np.array(pct_without)
+        out['paired blocked time without runs at a collision position (Golden minus Flooded)'] = paired(without[pair[0]], without[pair[1]])
+        res['rows'][row] = out
+    res['status_line'] = status_line(res['rows'])
+    return res
+
+
+def r13_table(arm, routes):
+    tab = {}
+    for r in routes:
+        rd = arm[r]
+        v, L = np.asarray(rd['speed']), np.asarray(rd['L'])
+        blk = blocked_masks(rd)[0]
+        rest, low = v < 0.1, v <= 0.5
+        gate = (L < 1.5) | ((v < 0.5) & (L < 2.0))
+        for name, num, cond in (('at rest: in a blocked run', blk, rest), ('at rest: gate condition holds, not blocked', gate & ~blk, rest),
+                                ('at rest: neither', ~gate & ~blk, rest),
+                                ('at rest, not blocked: stays put (L<0.64)', L < 0.64, rest & ~blk),
+                                ('low speed (<=0.5), not blocked: stays put (L<0.64)', L < 0.64, low & ~blk)):
+            tab.setdefault(name, {})[r] = (int(np.sum(num & cond)), int(np.sum(cond)))
+    return tab
+
+
+def analysis_R13(arms):
+    """ANALYSIS_ADDENDUM.md section 18b: stay-put shares without blocked steps."""
+    rows = {'default controller, run1': ('Golden-6400 run1', 'Flooded-6400-Matched run1'),
+            'default controller, run2': ('Golden-6400 run2', 'Flooded-6400-Matched run2'),
+            'gate-off controller': ('Golden-6400 nogate', 'Flooded-6400-Matched nogate')}
+    res = {'label': 'post hoc; requested by the review panel (R13); defined in addendum section 18b before computing', 'golden_minus_flooded': {}}
+    for row, (ga, fa) in rows.items():
+        p = pending(arms, [(ga, CANONICAL_44), (fa, CANONICAL_44)])
+        res['golden_minus_flooded'][row] = p or v_paired(r13_table(arms[ga], CANONICAL_44), r13_table(arms[fa], CANONICAL_44), CANONICAL_44)
+    res['status_line'] = status_line(res['golden_minus_flooded'])
+    return res
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2770,6 +2889,8 @@ def main():
     man['S15'] = analysis_S15(arms)
     man['pass_agreement'] = analysis_pass_agreement(arms)
     man['braking'] = analysis_braking(arms, data)
+    man['contact'] = analysis_contact(arms)
+    man['R13'] = analysis_R13(arms)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man))

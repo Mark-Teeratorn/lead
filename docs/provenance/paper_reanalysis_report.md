@@ -1090,23 +1090,23 @@ Routes ended by the 60 s rule: {'gate_off': 2, 'default': 7}
 
 Status: pending: 6 of 6 parts (Golden-1600 vs Base run2 | 44 routes, Golden-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Golden-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes), Flooded-1600 vs Base run2 | 44 routes, Flooded-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Flooded-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes))
 
-base_run2 status (PARTIAL: 1/44 routes): {'Failed - TickRuntime': 1}; TickRuntime by 60 s rule ['2534'], by 4000 cap []
+base_run2 status (PARTIAL: 10/44 routes): {'Completed': 4, 'Failed - Agent deviated from the route': 2, 'Failed - TickRuntime': 4}; TickRuntime by 60 s rule ['2534', '2204'], by 4000 cap ['1825', '3540']
 
-**Golden-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 1}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
+**Golden-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 10}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
 
-**Golden-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_1600': 37, 'base_run2': 1}, need {'model_matrix_golden_1600': 37, 'base_run2': 37}
+**Golden-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_1600': 37, 'base_run2': 8}, need {'model_matrix_golden_1600': 37, 'base_run2': 37}
 
-**Golden-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_1600': 33, 'base_run2': 1}, need {'model_matrix_golden_1600': 33, 'base_run2': 33}
+**Golden-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_1600': 33, 'base_run2': 7}, need {'model_matrix_golden_1600': 33, 'base_run2': 33}
 
-**Flooded-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_flooded_1600': 44, 'base_run2': 1}, need {'model_matrix_flooded_1600': 44, 'base_run2': 44}
+**Flooded-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_flooded_1600': 44, 'base_run2': 10}, need {'model_matrix_flooded_1600': 44, 'base_run2': 44}
 
-**Flooded-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_flooded_1600': 37, 'base_run2': 1}, need {'model_matrix_flooded_1600': 37, 'base_run2': 37}
+**Flooded-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_flooded_1600': 37, 'base_run2': 8}, need {'model_matrix_flooded_1600': 37, 'base_run2': 37}
 
-**Flooded-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_flooded_1600': 33, 'base_run2': 1}, need {'model_matrix_flooded_1600': 33, 'base_run2': 33}
+**Flooded-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_flooded_1600': 33, 'base_run2': 7}, need {'model_matrix_flooded_1600': 33, 'base_run2': 33}
 
-Holm {H1 base_run2, H2}: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 1}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
+Holm {H1 base_run2, H2}: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 10}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
 
-**base_run2 minus original Base**: pending: have {'base_run2': 1}, need {'base_run2': 44}
+**base_run2 minus original Base**: pending: have {'base_run2': 10}, need {'base_run2': 44}
 
 ## R. Overlap sensitivity (H1, H2 on 44 / 37 / 33 routes)
 
@@ -1856,7 +1856,7 @@ post hoc sensitivity; defined in addendum section 14 before computing
 | driving_score | 60.80 | 52.98 | 7.82 | [-5.41, 21.34] | 56.0 | 6 | 0.1989 | n/a | 0.1989 | 11/7/6 | 0.345 |
 | route_completion | 82.71 | 76.52 | 6.18 | [0.88, 15.97] | 12.0 | 15 | 0.2135 | n/a | 0.2135 | 6/3/15 | 0.467 |
 
-**Golden-1600 minus Base run2**: pending: have {'base_run2': 0}, need {'base_run2': 24}
+**Golden-1600 minus Base run2**: pending: have {'base_run2': 4}, need {'base_run2': 24}
 
 **Flooded-1600 minus Base (original run)**
 
@@ -1865,7 +1865,7 @@ post hoc sensitivity; defined in addendum section 14 before computing
 | driving_score | 54.60 | 52.98 | 1.62 | [-9.81, 11.97] | 105.0 | 3 | 0.7151 | n/a | 0.7151 | 12/9/3 | 0.091 |
 | route_completion | 80.80 | 76.52 | 4.28 | [-7.35, 17.20] | 28.0 | 13 | 0.6566 | n/a | 0.6566 | 5/6/13 | 0.152 |
 
-**Flooded-1600 minus Base run2**: pending: have {'base_run2': 0}, need {'base_run2': 24}
+**Flooded-1600 minus Base run2**: pending: have {'base_run2': 4}, need {'base_run2': 24}
 
 
 ## S15. Decoupling arm: plan-level reading and remedy criterion (addendum section 15)

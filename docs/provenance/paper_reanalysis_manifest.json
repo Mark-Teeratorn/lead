@@ -11616,7 +11616,7 @@
    "model_matrix_flooded_6400_run2": 44,
    "model_matrix_golden_6400_nogate": 44,
    "model_matrix_flooded_6400_nogate": 44,
-   "base_run2": 1,
+   "base_run2": 10,
    "model_matrix_fgbalanced_6400": 0
   },
   "usable_route_ids": {
@@ -11825,7 +11825,16 @@
     "3936"
    ],
    "base_run2": [
-    "2534"
+    "17752",
+    "1825",
+    "1852",
+    "2201",
+    "2204",
+    "2513",
+    "2534",
+    "3086",
+    "3540",
+    "3561"
    ],
    "model_matrix_fgbalanced_6400": []
   },
@@ -16194,15 +16203,21 @@
  },
  "Q": {
   "base_run2_status": {
-   "n_routes_usable": 1,
+   "n_routes_usable": 10,
    "status_counts": {
-    "Failed - TickRuntime": 1
+    "Completed": 4,
+    "Failed - Agent deviated from the route": 2,
+    "Failed - TickRuntime": 4
    },
    "tickruntime_60s_rule": [
-    "2534"
+    "2534",
+    "2204"
    ],
-   "tickruntime_4000_cap": [],
-   "label": "PARTIAL: 1/44 routes"
+   "tickruntime_4000_cap": [
+    "1825",
+    "3540"
+   ],
+   "label": "PARTIAL: 10/44 routes"
   },
   "comparisons": {
    "Golden-1600 vs Base run2": {
@@ -16210,7 +16225,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_1600": 44,
-      "base_run2": 1
+      "base_run2": 10
      },
      "need": {
       "model_matrix_golden_1600": 44,
@@ -16221,7 +16236,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_1600": 37,
-      "base_run2": 1
+      "base_run2": 8
      },
      "need": {
       "model_matrix_golden_1600": 37,
@@ -16232,7 +16247,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_1600": 33,
-      "base_run2": 1
+      "base_run2": 7
      },
      "need": {
       "model_matrix_golden_1600": 33,
@@ -16245,7 +16260,7 @@
      "status": "pending",
      "have": {
       "model_matrix_flooded_1600": 44,
-      "base_run2": 1
+      "base_run2": 10
      },
      "need": {
       "model_matrix_flooded_1600": 44,
@@ -16256,7 +16271,7 @@
      "status": "pending",
      "have": {
       "model_matrix_flooded_1600": 37,
-      "base_run2": 1
+      "base_run2": 8
      },
      "need": {
       "model_matrix_flooded_1600": 37,
@@ -16267,7 +16282,7 @@
      "status": "pending",
      "have": {
       "model_matrix_flooded_1600": 33,
-      "base_run2": 1
+      "base_run2": 7
      },
      "need": {
       "model_matrix_flooded_1600": 33,
@@ -16280,7 +16295,7 @@
    "status": "pending",
    "have": {
     "model_matrix_golden_1600": 44,
-    "base_run2": 1
+    "base_run2": 10
    },
    "need": {
     "model_matrix_golden_1600": 44,
@@ -16290,7 +16305,7 @@
   "base_run2_minus_base_original": {
    "status": "pending",
    "have": {
-    "base_run2": 1
+    "base_run2": 10
    },
    "need": {
     "base_run2": 44
@@ -23469,7 +23484,7 @@
    "Golden-1600 minus Base run2": {
     "status": "pending",
     "have": {
-     "base_run2": 0
+     "base_run2": 4
     },
     "need": {
      "base_run2": 24
@@ -23522,7 +23537,7 @@
    "Flooded-1600 minus Base run2": {
     "status": "pending",
     "have": {
-     "base_run2": 0
+     "base_run2": 4
     },
     "need": {
      "base_run2": 24
@@ -24050,6 +24065,1714 @@
     "moving_above_2: plan ends at rest": {
      "pct": 0.8193922840559918,
      "conditioning_steps": 20503
+    }
+   }
+  },
+  "status_line": "complete"
+ },
+ "contact": {
+  "label": "post hoc; requested by the review panel (R11); defined in addendum section 18a before computing",
+  "definition": "gap = min |distance travelled at run onset - arc length of a collision position on the route polyline|; at a recorded collision position if gap <= 10.0 m",
+  "limits": "collision records have no time; distance travelled approximates route position; steps before the first logged plan are missing",
+  "rows": {
+   "default controller, run1": {
+    "Golden-6400 run1": {
+     "n_blocked_runs": 22,
+     "blocked_steps": 7262,
+     "share_of_blocked_steps_at_collision_position_pct": {
+      "10 m": 100.0,
+      "5 m": 100.0,
+      "20 m": 100.0
+     },
+     "n_runs_at_collision_position_10m": 22,
+     "mean_blocked_pct_without_runs_at_collision_position": 0.0,
+     "runs": [
+      {
+       "route": "1852",
+       "onset_step": 456,
+       "steps": 612,
+       "distance_travelled_m": 52.66345060121927,
+       "collision_arc_lengths_m": [
+        51.92832382961406
+       ],
+       "gap_m": 0.7351267716052092,
+       "collision_actors": [
+        "vehicle.dodge.charger_police_2020"
+       ]
+      },
+      {
+       "route": "1852",
+       "onset_step": 1069,
+       "steps": 160,
+       "distance_travelled_m": 52.81777310877182,
+       "collision_arc_lengths_m": [
+        51.92832382961406
+       ],
+       "gap_m": 0.8894492791577591,
+       "collision_actors": [
+        "vehicle.dodge.charger_police_2020"
+       ]
+      },
+      {
+       "route": "1852",
+       "onset_step": 1232,
+       "steps": 284,
+       "distance_travelled_m": 52.83116101148688,
+       "collision_arc_lengths_m": [
+        51.92832382961406
+       ],
+       "gap_m": 0.9028371818728189,
+       "collision_actors": [
+        "vehicle.dodge.charger_police_2020"
+       ]
+      },
+      {
+       "route": "1852",
+       "onset_step": 1735,
+       "steps": 183,
+       "distance_travelled_m": 53.223453366464064,
+       "collision_arc_lengths_m": [
+        51.92832382961406
+       ],
+       "gap_m": 1.2951295368500055,
+       "collision_actors": [
+        "vehicle.dodge.charger_police_2020"
+       ]
+      },
+      {
+       "route": "1825",
+       "onset_step": 610,
+       "steps": 830,
+       "distance_travelled_m": 51.613605103946036,
+       "collision_arc_lengths_m": [
+        36.67220628821323,
+        50.60371298205004
+       ],
+       "gap_m": 1.0098921218959944,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1825",
+       "onset_step": 1441,
+       "steps": 123,
+       "distance_travelled_m": 51.651092681581936,
+       "collision_arc_lengths_m": [
+        36.67220628821323,
+        50.60371298205004
+       ],
+       "gap_m": 1.047379699531895,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1825",
+       "onset_step": 1565,
+       "steps": 245,
+       "distance_travelled_m": 51.65560320372401,
+       "collision_arc_lengths_m": [
+        36.67220628821323,
+        50.60371298205004
+       ],
+       "gap_m": 1.0518902216739718,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 933,
+       "steps": 363,
+       "distance_travelled_m": 82.40130214277015,
+       "collision_arc_lengths_m": [
+        82.17716696714429
+       ],
+       "gap_m": 0.22413517562586094,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 1430,
+       "steps": 115,
+       "distance_travelled_m": 82.41937641071992,
+       "collision_arc_lengths_m": [
+        82.17716696714429
+       ],
+       "gap_m": 0.24220944357563212,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 1701,
+       "steps": 102,
+       "distance_travelled_m": 82.38004234106772,
+       "collision_arc_lengths_m": [
+        82.17716696714429
+       ],
+       "gap_m": 0.20287537392343324,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 1824,
+       "steps": 119,
+       "distance_travelled_m": 82.38684728423604,
+       "collision_arc_lengths_m": [
+        82.17716696714429
+       ],
+       "gap_m": 0.2096803170917525,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 1944,
+       "steps": 129,
+       "distance_travelled_m": 82.39200883017757,
+       "collision_arc_lengths_m": [
+        82.17716696714429
+       ],
+       "gap_m": 0.21484186303328556,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 2331,
+       "steps": 147,
+       "distance_travelled_m": 82.50748592638774,
+       "collision_arc_lengths_m": [
+        82.17716696714429
+       ],
+       "gap_m": 0.33031895924345633,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 2499,
+       "steps": 337,
+       "distance_travelled_m": 82.51356833493442,
+       "collision_arc_lengths_m": [
+        82.17716696714429
+       ],
+       "gap_m": 0.3364013677901312,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 606,
+       "steps": 218,
+       "distance_travelled_m": 58.51573742500932,
+       "collision_arc_lengths_m": [
+        56.59439470895549
+       ],
+       "gap_m": 1.9213427160538288,
+       "collision_actors": [
+        "vehicle.chevrolet.impala"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 913,
+       "steps": 1200,
+       "distance_travelled_m": 58.45518509770691,
+       "collision_arc_lengths_m": [
+        56.59439470895549
+       ],
+       "gap_m": 1.8607903887514183,
+       "collision_actors": [
+        "vehicle.chevrolet.impala"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 96,
+       "steps": 154,
+       "distance_travelled_m": 4.185793368393998,
+       "collision_arc_lengths_m": [
+        4.137077864575306
+       ],
+       "gap_m": 0.04871550381869216,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 254,
+       "steps": 1038,
+       "distance_travelled_m": 4.184310999551177,
+       "collision_arc_lengths_m": [
+        4.137077864575306
+       ],
+       "gap_m": 0.04723313497587078,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "14194",
+       "onset_step": 1623,
+       "steps": 297,
+       "distance_travelled_m": 66.08424294046884,
+       "collision_arc_lengths_m": [
+        54.458438849246924,
+        49.661030421697,
+        63.44671460751635
+       ],
+       "gap_m": 2.637528332952492,
+       "collision_actors": [
+        "vehicle.lincoln.mkz_2020",
+        "vehicle.nissan.patrol_2021"
+       ]
+      },
+      {
+       "route": "14194",
+       "onset_step": 2504,
+       "steps": 146,
+       "distance_travelled_m": 66.28652426356825,
+       "collision_arc_lengths_m": [
+        54.458438849246924,
+        49.661030421697,
+        63.44671460751635
+       ],
+       "gap_m": 2.839809656051905,
+       "collision_actors": [
+        "vehicle.lincoln.mkz_2020",
+        "vehicle.nissan.patrol_2021"
+       ]
+      },
+      {
+       "route": "14194",
+       "onset_step": 2651,
+       "steps": 115,
+       "distance_travelled_m": 66.2959074835157,
+       "collision_arc_lengths_m": [
+        54.458438849246924,
+        49.661030421697,
+        63.44671460751635
+       ],
+       "gap_m": 2.849192875999357,
+       "collision_actors": [
+        "vehicle.lincoln.mkz_2020",
+        "vehicle.nissan.patrol_2021"
+       ]
+      },
+      {
+       "route": "14194",
+       "onset_step": 2827,
+       "steps": 345,
+       "distance_travelled_m": 66.3281663917807,
+       "collision_arc_lengths_m": [
+        54.458438849246924,
+        49.661030421697,
+        63.44671460751635
+       ],
+       "gap_m": 2.8814517842643497,
+       "collision_actors": [
+        "vehicle.lincoln.mkz_2020",
+        "vehicle.nissan.patrol_2021"
+       ]
+      }
+     ]
+    },
+    "Flooded-6400-Matched run1": {
+     "n_blocked_runs": 2,
+     "blocked_steps": 255,
+     "share_of_blocked_steps_at_collision_position_pct": {
+      "10 m": 0.0,
+      "5 m": 0.0,
+      "20 m": 0.0
+     },
+     "n_runs_at_collision_position_10m": 0,
+     "mean_blocked_pct_without_runs_at_collision_position": 0.1816756910800798,
+     "runs": [
+      {
+       "route": "23901",
+       "onset_step": 2534,
+       "steps": 107,
+       "distance_travelled_m": 192.28358568359337,
+       "collision_arc_lengths_m": [
+        12.571698314347822,
+        19.10526122143744,
+        127.84125248170226,
+        159.379
+       ],
+       "gap_m": 32.90458568359338,
+       "collision_actors": [
+        "static.pole",
+        "static.terrain",
+        "vehicle.audi.tt",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      },
+      {
+       "route": "23901",
+       "onset_step": 2775,
+       "steps": 148,
+       "distance_travelled_m": 192.28619559038052,
+       "collision_arc_lengths_m": [
+        12.571698314347822,
+        19.10526122143744,
+        127.84125248170226,
+        159.379
+       ],
+       "gap_m": 32.907195590380525,
+       "collision_actors": [
+        "static.pole",
+        "static.terrain",
+        "vehicle.audi.tt",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      }
+     ]
+    },
+    "paired blocked time without runs at a collision position (Golden minus Flooded)": {
+     "n": 44,
+     "mean_first": 0.0,
+     "mean_second": 0.1816756910800798,
+     "mean_diff": -0.1816756910800798,
+     "n_first_greater": 0,
+     "n_first_less": 1,
+     "n_tie": 43,
+     "bca95": [
+      -1.2717298375605586,
+      0.0
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 43,
+      "statistic": 0.0,
+      "p": 0.31731050786291415,
+      "p_approx": 0.31731050786291415,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "default controller, run2": {
+    "Golden-6400 run2": {
+     "n_blocked_runs": 25,
+     "blocked_steps": 7262,
+     "share_of_blocked_steps_at_collision_position_pct": {
+      "10 m": 87.33131368768935,
+      "5 m": 81.71302671440374,
+      "20 m": 100.0
+     },
+     "n_runs_at_collision_position_10m": 22,
+     "mean_blocked_pct_without_runs_at_collision_position": 1.3856256400988012,
+     "runs": [
+      {
+       "route": "1852",
+       "onset_step": 451,
+       "steps": 1200,
+       "distance_travelled_m": 52.61593475964275,
+       "collision_arc_lengths_m": [
+        51.87666917456953
+       ],
+       "gap_m": 0.7392655850732197,
+       "collision_actors": [
+        "vehicle.dodge.charger_police_2020"
+       ]
+      },
+      {
+       "route": "2204",
+       "onset_step": 1039,
+       "steps": 132,
+       "distance_travelled_m": 46.142510168156704,
+       "collision_arc_lengths_m": [
+        42.72008738519599
+       ],
+       "gap_m": 3.422422782960716,
+       "collision_actors": [
+        "vehicle.lincoln.mkz_2020"
+       ]
+      },
+      {
+       "route": "2204",
+       "onset_step": 1174,
+       "steps": 124,
+       "distance_travelled_m": 46.17213964352021,
+       "collision_arc_lengths_m": [
+        42.72008738519599
+       ],
+       "gap_m": 3.4520522583242226,
+       "collision_actors": [
+        "vehicle.lincoln.mkz_2020"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 2075,
+       "steps": 263,
+       "distance_travelled_m": 122.26383743981738,
+       "collision_arc_lengths_m": [
+        103.42882693550443,
+        107.91545994652917,
+        111.74009596357496,
+        112.7562001312376
+       ],
+       "gap_m": 9.507637308579774,
+       "collision_actors": [
+        "vehicle.chevrolet.impala"
+       ]
+      },
+      {
+       "route": "3561",
+       "onset_step": 2347,
+       "steps": 145,
+       "distance_travelled_m": 122.31620315632495,
+       "collision_arc_lengths_m": [
+        103.42882693550443,
+        107.91545994652917,
+        111.74009596357496,
+        112.7562001312376
+       ],
+       "gap_m": 9.56000302508734,
+       "collision_actors": [
+        "vehicle.chevrolet.impala"
+       ]
+      },
+      {
+       "route": "3540",
+       "onset_step": 432,
+       "steps": 191,
+       "distance_travelled_m": 47.59019221284781,
+       "collision_arc_lengths_m": [
+        47.61539067423449,
+        52.85800458352261,
+        57.97042048174494
+       ],
+       "gap_m": 0.025198461386679583,
+       "collision_actors": [
+        "vehicle.chevrolet.impala",
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3540",
+       "onset_step": 624,
+       "steps": 154,
+       "distance_travelled_m": 47.586616282290905,
+       "collision_arc_lengths_m": [
+        47.61539067423449,
+        52.85800458352261,
+        57.97042048174494
+       ],
+       "gap_m": 0.028774391943585442,
+       "collision_actors": [
+        "vehicle.chevrolet.impala",
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3540",
+       "onset_step": 2619,
+       "steps": 851,
+       "distance_travelled_m": 60.488551081980816,
+       "collision_arc_lengths_m": [
+        47.61539067423449,
+        52.85800458352261,
+        57.97042048174494
+       ],
+       "gap_m": 2.518130600235878,
+       "collision_actors": [
+        "vehicle.chevrolet.impala",
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3540",
+       "onset_step": 3566,
+       "steps": 169,
+       "distance_travelled_m": 60.62895602482651,
+       "collision_arc_lengths_m": [
+        47.61539067423449,
+        52.85800458352261,
+        57.97042048174494
+       ],
+       "gap_m": 2.6585355430815696,
+       "collision_actors": [
+        "vehicle.chevrolet.impala",
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3540",
+       "onset_step": 3736,
+       "steps": 263,
+       "distance_travelled_m": 60.65617706831785,
+       "collision_arc_lengths_m": [
+        47.61539067423449,
+        52.85800458352261,
+        57.97042048174494
+       ],
+       "gap_m": 2.6857565865729143,
+       "collision_actors": [
+        "vehicle.chevrolet.impala",
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 770,
+       "steps": 134,
+       "distance_travelled_m": 74.60576968701281,
+       "collision_arc_lengths_m": [
+        73.0963704776117
+       ],
+       "gap_m": 1.50939920940111,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 905,
+       "steps": 128,
+       "distance_travelled_m": 74.61065366498406,
+       "collision_arc_lengths_m": [
+        73.0963704776117
+       ],
+       "gap_m": 1.5142831873723566,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 1034,
+       "steps": 108,
+       "distance_travelled_m": 74.60759450760493,
+       "collision_arc_lengths_m": [
+        73.0963704776117
+       ],
+       "gap_m": 1.5112240299932296,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 1235,
+       "steps": 531,
+       "distance_travelled_m": 74.62480840947734,
+       "collision_arc_lengths_m": [
+        73.0963704776117
+       ],
+       "gap_m": 1.5284379318656391,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 1767,
+       "steps": 181,
+       "distance_travelled_m": 74.64673834081101,
+       "collision_arc_lengths_m": [
+        73.0963704776117
+       ],
+       "gap_m": 1.5503678631993125,
+       "collision_actors": [
+        "vehicle.ford.mustang"
+       ]
+      },
+      {
+       "route": "2664",
+       "onset_step": 448,
+       "steps": 212,
+       "distance_travelled_m": 50.73269902599995,
+       "collision_arc_lengths_m": [
+        50.29686138974378,
+        66.95935427441522
+       ],
+       "gap_m": 0.4358376362561671,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020",
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "2664",
+       "onset_step": 664,
+       "steps": 232,
+       "distance_travelled_m": 51.02849412333625,
+       "collision_arc_lengths_m": [
+        50.29686138974378,
+        66.95935427441522
+       ],
+       "gap_m": 0.7316327335924697,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020",
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "2664",
+       "onset_step": 1260,
+       "steps": 127,
+       "distance_travelled_m": 67.65583012895961,
+       "collision_arc_lengths_m": [
+        50.29686138974378,
+        66.95935427441522
+       ],
+       "gap_m": 0.6964758545443885,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020",
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 97,
+       "steps": 259,
+       "distance_travelled_m": 4.199223778163619,
+       "collision_arc_lengths_m": [
+        4.116218648451213
+       ],
+       "gap_m": 0.08300512971240614,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 357,
+       "steps": 531,
+       "distance_travelled_m": 4.196903465072249,
+       "collision_arc_lengths_m": [
+        4.116218648451213
+       ],
+       "gap_m": 0.08068481662103633,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 889,
+       "steps": 100,
+       "distance_travelled_m": 4.213126155554657,
+       "collision_arc_lengths_m": [
+        4.116218648451213
+       ],
+       "gap_m": 0.09690750710344442,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 990,
+       "steps": 307,
+       "distance_travelled_m": 4.224617332640918,
+       "collision_arc_lengths_m": [
+        4.116218648451213
+       ],
+       "gap_m": 0.10839868418970511,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "3144",
+       "onset_step": 311,
+       "steps": 253,
+       "distance_travelled_m": 23.71819284911311,
+       "collision_arc_lengths_m": [
+        4.247191764282533
+       ],
+       "gap_m": 19.471001084830576,
+       "collision_actors": [
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "3144",
+       "onset_step": 801,
+       "steps": 117,
+       "distance_travelled_m": 23.7140743996455,
+       "collision_arc_lengths_m": [
+        4.247191764282533
+       ],
+       "gap_m": 19.466882635362968,
+       "collision_actors": [
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "3144",
+       "onset_step": 959,
+       "steps": 550,
+       "distance_travelled_m": 23.72185395604813,
+       "collision_arc_lengths_m": [
+        4.247191764282533
+       ],
+       "gap_m": 19.474662191765596,
+       "collision_actors": [
+        "vehicle.mercedes.coupe_2020"
+       ]
+      }
+     ]
+    },
+    "Flooded-6400-Matched run2": {
+     "n_blocked_runs": 6,
+     "blocked_steps": 944,
+     "share_of_blocked_steps_at_collision_position_pct": {
+      "10 m": 30.93220338983051,
+      "5 m": 30.93220338983051,
+      "20 m": 100.0
+     },
+     "n_runs_at_collision_position_10m": 2,
+     "mean_blocked_pct_without_runs_at_collision_position": 0.47524637005073184,
+     "runs": [
+      {
+       "route": "2390",
+       "onset_step": 393,
+       "steps": 173,
+       "distance_travelled_m": 30.498291205623914,
+       "collision_arc_lengths_m": [
+        21.398603160450076,
+        26.325104612091568
+       ],
+       "gap_m": 4.173186593532346,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      },
+      {
+       "route": "2390",
+       "onset_step": 652,
+       "steps": 119,
+       "distance_travelled_m": 30.734332373612606,
+       "collision_arc_lengths_m": [
+        21.398603160450076,
+        26.325104612091568
+       ],
+       "gap_m": 4.409227761521038,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      },
+      {
+       "route": "2390",
+       "onset_step": 1973,
+       "steps": 249,
+       "distance_travelled_m": 36.599824097909554,
+       "collision_arc_lengths_m": [
+        21.398603160450076,
+        26.325104612091568
+       ],
+       "gap_m": 10.274719485817986,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      },
+      {
+       "route": "2390",
+       "onset_step": 2332,
+       "steps": 103,
+       "distance_travelled_m": 36.678640311924745,
+       "collision_arc_lengths_m": [
+        21.398603160450076,
+        26.325104612091568
+       ],
+       "gap_m": 10.353535699833177,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      },
+      {
+       "route": "2390",
+       "onset_step": 2741,
+       "steps": 106,
+       "distance_travelled_m": 36.71613968982278,
+       "collision_arc_lengths_m": [
+        21.398603160450076,
+        26.325104612091568
+       ],
+       "gap_m": 10.391035077731214,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      },
+      {
+       "route": "2390",
+       "onset_step": 2848,
+       "steps": 194,
+       "distance_travelled_m": 36.71652544590164,
+       "collision_arc_lengths_m": [
+        21.398603160450076,
+        26.325104612091568
+       ],
+       "gap_m": 10.39142083381007,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017"
+       ]
+      }
+     ]
+    },
+    "paired blocked time without runs at a collision position (Golden minus Flooded)": {
+     "n": 44,
+     "mean_first": 1.3856256400988012,
+     "mean_second": 0.47524637005073184,
+     "mean_diff": 0.9103792700480693,
+     "n_first_greater": 1,
+     "n_first_less": 1,
+     "n_tie": 42,
+     "bca95": [
+      -0.9504927401014637,
+      5.067256190344473
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 42,
+      "statistic": 1.0,
+      "p": 0.6547208460185769,
+      "p_approx": 0.6547208460185769,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.3333333333333333
+     }
+    }
+   },
+   "gate-off controller": {
+    "Golden-6400 nogate": {
+     "n_blocked_runs": 25,
+     "blocked_steps": 12392,
+     "share_of_blocked_steps_at_collision_position_pct": {
+      "10 m": 100.0,
+      "5 m": 86.2088444157521,
+      "20 m": 100.0
+     },
+     "n_runs_at_collision_position_10m": 25,
+     "mean_blocked_pct_without_runs_at_collision_position": 0.0,
+     "runs": [
+      {
+       "route": "1852",
+       "onset_step": 549,
+       "steps": 138,
+       "distance_travelled_m": 66.4974169033435,
+       "collision_arc_lengths_m": [
+        65.38088316274704
+       ],
+       "gap_m": 1.1165337405964664,
+       "collision_actors": [
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "1852",
+       "onset_step": 943,
+       "steps": 1200,
+       "distance_travelled_m": 68.7484188680217,
+       "collision_arc_lengths_m": [
+        65.38088316274704
+       ],
+       "gap_m": 3.367535705274662,
+       "collision_actors": [
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "2204",
+       "onset_step": 1067,
+       "steps": 186,
+       "distance_travelled_m": 62.1260853983834,
+       "collision_arc_lengths_m": [
+        40.8236484051248,
+        51.52423317887057,
+        61.139063196243455
+       ],
+       "gap_m": 0.9870222021399471,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017",
+        "vehicle.mini.cooper_s_2021"
+       ]
+      },
+      {
+       "route": "2204",
+       "onset_step": 1254,
+       "steps": 165,
+       "distance_travelled_m": 62.09974579880777,
+       "collision_arc_lengths_m": [
+        40.8236484051248,
+        51.52423317887057,
+        61.139063196243455
+       ],
+       "gap_m": 0.9606826025643116,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017",
+        "vehicle.mini.cooper_s_2021"
+       ]
+      },
+      {
+       "route": "2204",
+       "onset_step": 1546,
+       "steps": 978,
+       "distance_travelled_m": 64.42331196096832,
+       "collision_arc_lengths_m": [
+        40.8236484051248,
+        51.52423317887057,
+        61.139063196243455
+       ],
+       "gap_m": 3.2842487647248646,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.lincoln.mkz_2017",
+        "vehicle.mini.cooper_s_2021"
+       ]
+      },
+      {
+       "route": "1825",
+       "onset_step": 633,
+       "steps": 278,
+       "distance_travelled_m": 44.434590464028155,
+       "collision_arc_lengths_m": [
+        43.50097042811091
+       ],
+       "gap_m": 0.9336200359172437,
+       "collision_actors": [
+        "static.prop.trafficwarning"
+       ]
+      },
+      {
+       "route": "1825",
+       "onset_step": 992,
+       "steps": 1200,
+       "distance_travelled_m": 44.70399214151814,
+       "collision_arc_lengths_m": [
+        43.50097042811091
+       ],
+       "gap_m": 1.2030217134072316,
+       "collision_actors": [
+        "static.prop.trafficwarning"
+       ]
+      },
+      {
+       "route": "17752",
+       "onset_step": 1167,
+       "steps": 341,
+       "distance_travelled_m": 131.57922149416888,
+       "collision_arc_lengths_m": [
+        129.28043804070305,
+        53.57591275903715
+       ],
+       "gap_m": 2.2987834534658305,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "walker.pedestrian.0022"
+       ]
+      },
+      {
+       "route": "3540",
+       "onset_step": 1426,
+       "steps": 137,
+       "distance_travelled_m": 120.23983093951591,
+       "collision_arc_lengths_m": [
+        64.5034898449275,
+        74.75267727474777,
+        105.26295573779488,
+        120.4708357559907
+       ],
+       "gap_m": 0.23100481647479398,
+       "collision_actors": [
+        "vehicle.audi.tt",
+        "vehicle.lincoln.mkz_2017",
+        "vehicle.mercedes.coupe_2020"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 178,
+       "steps": 237,
+       "distance_travelled_m": 11.141291124046552,
+       "collision_arc_lengths_m": [
+        9.949677201492788
+       ],
+       "gap_m": 1.1916139225537634,
+       "collision_actors": [
+        "static.fence"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 416,
+       "steps": 220,
+       "distance_travelled_m": 11.150044802535392,
+       "collision_arc_lengths_m": [
+        9.949677201492788
+       ],
+       "gap_m": 1.200367601042604,
+       "collision_actors": [
+        "static.fence"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 661,
+       "steps": 202,
+       "distance_travelled_m": 11.165056041482098,
+       "collision_arc_lengths_m": [
+        9.949677201492788
+       ],
+       "gap_m": 1.2153788399893095,
+       "collision_actors": [
+        "static.fence"
+       ]
+      },
+      {
+       "route": "3436",
+       "onset_step": 920,
+       "steps": 133,
+       "distance_travelled_m": 11.176367651028388,
+       "collision_arc_lengths_m": [
+        9.949677201492788
+       ],
+       "gap_m": 1.2266904495355995,
+       "collision_actors": [
+        "static.fence"
+       ]
+      },
+      {
+       "route": "2127",
+       "onset_step": 821,
+       "steps": 1200,
+       "distance_travelled_m": 47.45690887029852,
+       "collision_arc_lengths_m": [
+        43.3803752188816
+       ],
+       "gap_m": 4.076533651416916,
+       "collision_actors": [
+        "vehicle.lincoln.mkz_2017"
+       ]
+      },
+      {
+       "route": "2664",
+       "onset_step": 454,
+       "steps": 193,
+       "distance_travelled_m": 51.017031322489636,
+       "collision_arc_lengths_m": [
+        50.56111900162664,
+        55.678351441034806
+       ],
+       "gap_m": 0.4559123208629927,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 91,
+       "steps": 1200,
+       "distance_travelled_m": 4.122516925437992,
+       "collision_arc_lengths_m": [
+        4.061587368126851
+       ],
+       "gap_m": 0.060929557311141025,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "2050",
+       "onset_step": 627,
+       "steps": 1201,
+       "distance_travelled_m": 51.4986891968816,
+       "collision_arc_lengths_m": [
+        37.21201533760159,
+        49.557087643089226
+       ],
+       "gap_m": 1.941601553792374,
+       "collision_actors": [
+        "vehicle.ford.mustang",
+        "vehicle.nissan.patrol_2021"
+       ]
+      },
+      {
+       "route": "2390",
+       "onset_step": 417,
+       "steps": 565,
+       "distance_travelled_m": 39.78168517696121,
+       "collision_arc_lengths_m": [
+        34.15707702708845
+       ],
+       "gap_m": 5.624608149872763,
+       "collision_actors": [
+        "static.fence"
+       ]
+      },
+      {
+       "route": "14842",
+       "onset_step": 474,
+       "steps": 1138,
+       "distance_travelled_m": 26.73145340050952,
+       "collision_arc_lengths_m": [
+        18.19391481103725,
+        22.77417002197846
+       ],
+       "gap_m": 3.9572833785310593,
+       "collision_actors": [
+        "static.prop.mesh"
+       ]
+      },
+      {
+       "route": "14842",
+       "onset_step": 1613,
+       "steps": 336,
+       "distance_travelled_m": 27.554605892527523,
+       "collision_arc_lengths_m": [
+        18.19391481103725,
+        22.77417002197846
+       ],
+       "gap_m": 4.780435870549063,
+       "collision_actors": [
+        "static.prop.mesh"
+       ]
+      },
+      {
+       "route": "14842",
+       "onset_step": 2460,
+       "steps": 124,
+       "distance_travelled_m": 30.237212058021473,
+       "collision_arc_lengths_m": [
+        18.19391481103725,
+        22.77417002197846
+       ],
+       "gap_m": 7.463042036043014,
+       "collision_actors": [
+        "static.prop.mesh"
+       ]
+      },
+      {
+       "route": "14842",
+       "onset_step": 2659,
+       "steps": 234,
+       "distance_travelled_m": 30.625293832025275,
+       "collision_arc_lengths_m": [
+        18.19391481103725,
+        22.77417002197846
+       ],
+       "gap_m": 7.851123810046815,
+       "collision_actors": [
+        "static.prop.mesh"
+       ]
+      },
+      {
+       "route": "14842",
+       "onset_step": 2894,
+       "steps": 369,
+       "distance_travelled_m": 30.786268031719096,
+       "collision_arc_lengths_m": [
+        18.19391481103725,
+        22.77417002197846
+       ],
+       "gap_m": 8.012098009740637,
+       "collision_actors": [
+        "static.prop.mesh"
+       ]
+      },
+      {
+       "route": "14842",
+       "onset_step": 3265,
+       "steps": 269,
+       "distance_travelled_m": 31.013708012317935,
+       "collision_arc_lengths_m": [
+        18.19391481103725,
+        22.77417002197846
+       ],
+       "gap_m": 8.239537990339475,
+       "collision_actors": [
+        "static.prop.mesh"
+       ]
+      },
+      {
+       "route": "14842",
+       "onset_step": 3535,
+       "steps": 148,
+       "distance_travelled_m": 31.248611784088272,
+       "collision_arc_lengths_m": [
+        18.19391481103725,
+        22.77417002197846
+       ],
+       "gap_m": 8.474441762109812,
+       "collision_actors": [
+        "static.prop.mesh"
+       ]
+      }
+     ]
+    },
+    "Flooded-6400-Matched nogate": {
+     "n_blocked_runs": 6,
+     "blocked_steps": 2227,
+     "share_of_blocked_steps_at_collision_position_pct": {
+      "10 m": 100.0,
+      "5 m": 100.0,
+      "20 m": 100.0
+     },
+     "n_runs_at_collision_position_10m": 6,
+     "mean_blocked_pct_without_runs_at_collision_position": 0.0,
+     "runs": [
+      {
+       "route": "1852",
+       "onset_step": 543,
+       "steps": 206,
+       "distance_travelled_m": 52.65414140581921,
+       "collision_arc_lengths_m": [
+        51.92733047086301,
+        64.4491126544543,
+        69.49835518499927
+       ],
+       "gap_m": 0.7268109349561982,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020",
+        "vehicle.dodge.charger_police_2020",
+        "vehicle.mini.cooper_s_2021"
+       ]
+      },
+      {
+       "route": "1852",
+       "onset_step": 756,
+       "steps": 155,
+       "distance_travelled_m": 52.69996713887084,
+       "collision_arc_lengths_m": [
+        51.92733047086301,
+        64.4491126544543,
+        69.49835518499927
+       ],
+       "gap_m": 0.7726366680078272,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020",
+        "vehicle.dodge.charger_police_2020",
+        "vehicle.mini.cooper_s_2021"
+       ]
+      },
+      {
+       "route": "1852",
+       "onset_step": 912,
+       "steps": 474,
+       "distance_travelled_m": 52.7384318613509,
+       "collision_arc_lengths_m": [
+        51.92733047086301,
+        64.4491126544543,
+        69.49835518499927
+       ],
+       "gap_m": 0.8111013904878845,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020",
+        "vehicle.dodge.charger_police_2020",
+        "vehicle.mini.cooper_s_2021"
+       ]
+      },
+      {
+       "route": "1852",
+       "onset_step": 1701,
+       "steps": 220,
+       "distance_travelled_m": 53.00655340511354,
+       "collision_arc_lengths_m": [
+        51.92733047086301,
+        64.4491126544543,
+        69.49835518499927
+       ],
+       "gap_m": 1.0792229342505308,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020",
+        "vehicle.dodge.charger_police_2020",
+        "vehicle.mini.cooper_s_2021"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 155,
+       "steps": 707,
+       "distance_travelled_m": 4.26614195001007,
+       "collision_arc_lengths_m": [
+        4.180782888834796
+       ],
+       "gap_m": 0.08535906117527414,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      },
+      {
+       "route": "1956",
+       "onset_step": 863,
+       "steps": 465,
+       "distance_travelled_m": 4.3304631336925,
+       "collision_arc_lengths_m": [
+        4.180782888834796
+       ],
+       "gap_m": 0.14968024485770393,
+       "collision_actors": [
+        "vehicle.dodge.charger_2020"
+       ]
+      }
+     ]
+    },
+    "paired blocked time without runs at a collision position (Golden minus Flooded)": {
+     "n": 44,
+     "mean_first": 0.0,
+     "mean_second": 0.0,
+     "mean_diff": 0.0,
+     "n_first_greater": 0,
+     "n_first_less": 0,
+     "n_tie": 44,
+     "bca95": {
+      "status": "not_computable",
+      "reason": "all paired differences identical"
+     },
+     "wilcoxon": {
+      "n_zero_differences": 44,
+      "status": "not_computable",
+      "reason": "all differences are zero"
+     }
+    }
+   }
+  },
+  "status_line": "complete"
+ },
+ "R13": {
+  "label": "post hoc; requested by the review panel (R13); defined in addendum section 18b before computing",
+  "golden_minus_flooded": {
+   "default controller, run1": {
+    "at rest: in a blocked run": {
+     "n": 44,
+     "mean_first": 10.23214657337419,
+     "mean_second": 0.34682552635874003,
+     "mean_diff": 9.88532104701545,
+     "n_first_greater": 6,
+     "n_first_less": 1,
+     "n_tie": 37,
+     "bca95": [
+      3.6395095464797707,
+      20.498287302271002
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 37,
+      "statistic": 1.0,
+      "p": 0.027991815485665747,
+      "p_approx": 0.027991815485665747,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.9285714285714286
+     }
+    },
+    "at rest: gate condition holds, not blocked": {
+     "n": 44,
+     "mean_first": 13.391574026634698,
+     "mean_second": 33.46074728392004,
+     "mean_diff": -20.069173257285346,
+     "n_first_greater": 0,
+     "n_first_less": 44,
+     "n_tie": 0,
+     "bca95": [
+      -25.51717298280092,
+      -16.15161812127619
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1368683772161603e-13,
+      "p_approx": 7.615942892424528e-09,
+      "p_exact": 1.1368683772161603e-13,
+      "rank_biserial": -1.0
+     }
+    },
+    "at rest: neither": {
+     "n": 44,
+     "mean_first": 76.37627939999112,
+     "mean_second": 66.19242718972122,
+     "mean_diff": 10.183852210269896,
+     "n_first_greater": 38,
+     "n_first_less": 6,
+     "n_tie": 0,
+     "bca95": [
+      2.6465558853561393,
+      16.166288425192445
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 205.0,
+      "p": 0.000480050115584163,
+      "p_approx": 0.0007134547206164106,
+      "p_exact": 0.000480050115584163,
+      "rank_biserial": 0.5858585858585859
+     }
+    },
+    "at rest, not blocked: stays put (L<0.64)": {
+     "n": 44,
+     "mean_first": 2.8101646424321696,
+     "mean_second": 16.0282871668156,
+     "mean_diff": -13.21812252438343,
+     "n_first_greater": 0,
+     "n_first_less": 43,
+     "n_tie": 1,
+     "bca95": [
+      -17.464134913961743,
+      -10.253439073424072
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 1,
+      "statistic": 0.0,
+      "p": 1.120159643476778e-08,
+      "p_approx": 1.120159643476778e-08,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -1.0
+     }
+    },
+    "low speed (<=0.5), not blocked: stays put (L<0.64)": {
+     "n": 44,
+     "mean_first": 2.238637277507733,
+     "mean_second": 14.009886351593458,
+     "mean_diff": -11.771249074085723,
+     "n_first_greater": 0,
+     "n_first_less": 43,
+     "n_tie": 1,
+     "bca95": [
+      -16.085058991270436,
+      -8.831633247167714
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 1,
+      "statistic": 0.0,
+      "p": 1.120159643476778e-08,
+      "p_approx": 1.120159643476778e-08,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "default controller, run2": {
+    "at rest: in a blocked run": {
+     "n": 44,
+     "mean_first": 11.422759068317673,
+     "mean_second": 0.7996476129163419,
+     "mean_diff": 10.62311145540133,
+     "n_first_greater": 8,
+     "n_first_less": 1,
+     "n_tie": 35,
+     "bca95": [
+      3.9490714346076996,
+      20.765943504586996
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 35,
+      "statistic": 3.0,
+      "p": 0.020879263166351643,
+      "p_approx": 0.020879263166351643,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.8666666666666667
+     }
+    },
+    "at rest: gate condition holds, not blocked": {
+     "n": 44,
+     "mean_first": 14.273121535569196,
+     "mean_second": 30.059978772903026,
+     "mean_diff": -15.786857237333829,
+     "n_first_greater": 3,
+     "n_first_less": 41,
+     "n_tie": 0,
+     "bca95": [
+      -19.577946879890266,
+      -11.924930241151
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 42.0,
+      "p": 1.2940972737851553e-09,
+      "p_approx": 1.246125922573453e-07,
+      "p_exact": 1.2940972737851553e-09,
+      "rank_biserial": -0.9151515151515152
+     }
+    },
+    "at rest: neither": {
+     "n": 44,
+     "mean_first": 74.30411939611314,
+     "mean_second": 69.14037361418065,
+     "mean_diff": 5.163745781932497,
+     "n_first_greater": 35,
+     "n_first_less": 9,
+     "n_tie": 0,
+     "bca95": [
+      -3.0127451344662233,
+      11.127674840008883
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 292.0,
+      "p": 0.017059172380072596,
+      "p_approx": 0.017833886134121717,
+      "p_exact": 0.017059172380072596,
+      "rank_biserial": 0.4101010101010101
+     }
+    },
+    "at rest, not blocked: stays put (L<0.64)": {
+     "n": 44,
+     "mean_first": 2.575952667499994,
+     "mean_second": 13.722422839098074,
+     "mean_diff": -11.14647017159808,
+     "n_first_greater": 1,
+     "n_first_less": 41,
+     "n_tie": 2,
+     "bca95": [
+      -13.955259085679824,
+      -8.88598962083771
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 2,
+      "statistic": 1.0,
+      "p": 1.7720370014560372e-08,
+      "p_approx": 1.7720370014560372e-08,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.9977851605758582
+     }
+    },
+    "low speed (<=0.5), not blocked: stays put (L<0.64)": {
+     "n": 44,
+     "mean_first": 1.992358132395298,
+     "mean_second": 11.754756537294396,
+     "mean_diff": -9.762398404899097,
+     "n_first_greater": 1,
+     "n_first_less": 42,
+     "n_tie": 1,
+     "bca95": [
+      -12.506023420609106,
+      -7.70572666935596
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 1,
+      "statistic": 2.0,
+      "p": 1.2906165535074668e-08,
+      "p_approx": 1.2906165535074668e-08,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.9957716701902748
+     }
+    }
+   },
+   "gate-off controller": {
+    "at rest: in a blocked run": {
+     "n": 44,
+     "mean_first": 20.3801867926593,
+     "mean_second": 3.6284900976616967,
+     "mean_diff": 16.7516966949976,
+     "n_first_greater": 12,
+     "n_first_less": 0,
+     "n_tie": 32,
+     "bca95": [
+      8.86910326422148,
+      27.868272838920184
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 32,
+      "statistic": 0.0,
+      "p": 0.002217721464237049,
+      "p_approx": 0.002217721464237049,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 1.0
+     }
+    },
+    "at rest: gate condition holds, not blocked": {
+     "n": 44,
+     "mean_first": 11.2361832423131,
+     "mean_second": 32.561460702331196,
+     "mean_diff": -21.325277460018103,
+     "n_first_greater": 0,
+     "n_first_less": 44,
+     "n_tie": 0,
+     "bca95": [
+      -26.780750642948654,
+      -17.58730692443257
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1368683772161603e-13,
+      "p_approx": 7.615942892424528e-09,
+      "p_exact": 1.1368683772161603e-13,
+      "rank_biserial": -1.0
+     }
+    },
+    "at rest: neither": {
+     "n": 44,
+     "mean_first": 68.38362996502761,
+     "mean_second": 63.81004920000709,
+     "mean_diff": 4.573580765020503,
+     "n_first_greater": 33,
+     "n_first_less": 11,
+     "n_tie": 0,
+     "bca95": [
+      -3.6974927599861758,
+      10.960575453161399
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 334.0,
+      "p": 0.060598257585411375,
+      "p_approx": 0.060258011774009426,
+      "p_exact": 0.060598257585411375,
+      "rank_biserial": 0.32525252525252524
+     }
+    },
+    "at rest, not blocked: stays put (L<0.64)": {
+     "n": 44,
+     "mean_first": 2.7286421952786664,
+     "mean_second": 13.636565790592577,
+     "mean_diff": -10.907923595313907,
+     "n_first_greater": 0,
+     "n_first_less": 44,
+     "n_tie": 0,
+     "bca95": [
+      -15.390091664709555,
+      -8.406867410181793
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1368683772161603e-13,
+      "p_approx": 7.615942892424528e-09,
+      "p_exact": 1.1368683772161603e-13,
+      "rank_biserial": -1.0
+     }
+    },
+    "low speed (<=0.5), not blocked: stays put (L<0.64)": {
+     "n": 44,
+     "mean_first": 2.166393888362679,
+     "mean_second": 10.724858549288394,
+     "mean_diff": -8.558464660925715,
+     "n_first_greater": 0,
+     "n_first_less": 44,
+     "n_tie": 0,
+     "bca95": [
+      -12.735506156892978,
+      -6.424912450585122
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1368683772161603e-13,
+      "p_approx": 7.615942892424528e-09,
+      "p_exact": 1.1368683772161603e-13,
+      "rank_biserial": -1.0
+     }
     }
    }
   },
