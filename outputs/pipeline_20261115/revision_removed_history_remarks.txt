@@ -1,0 +1,21 @@
+ (The previous version of this manuscript argued the opposite; that argument treated the flow as a regressor and is withdrawn.)
+
+ The "6,415 steps, 8 epochs" given for it previously are sums, not logged counters. The 20,050 steps previously given for `Golden-6400` belong to a different model (`model_v4`, 16,040 samples), which is not part of this study but was used to tune the controller (see below).
+
+ (We previously called this a hysteretic latch; that described the effect, not a stored state.)
+
+ (Earlier text stating Epic quality was wrong.)
+
+ An earlier claim that repeated evaluations were deterministic was wrong.
+
+ An earlier version of this analysis counted plans shorter than 1.5 m at more than 0.5 m/s; that count is close to zero by construction, because the plan is integrated from the current speed, and is withdrawn.
+
+ (An earlier version used a 10-route subset selected after inspection; it is withdrawn.)
+
+ Statements in the earlier version that the balanced model had a constant, reduced or lowest crash rate are withdrawn.
+
+ The script cited in the previous version (`scripts/common/evaluate_confirmatory_plan.py`) was never committed and is no longer used.
+
+The routes previously called "Open Maneuver" are the 25 Overtaking and Merging routes, renamed "Overtaking + Merging". Contrary to the earlier description, they include
+
+The earlier explanation for route 2164, that the obstacle-heavy models ended before the conflict and were therefore not exposed to it, is not supported by this check. 

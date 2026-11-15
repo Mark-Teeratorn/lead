@@ -11616,7 +11616,7 @@
    "model_matrix_flooded_6400_run2": 44,
    "model_matrix_golden_6400_nogate": 44,
    "model_matrix_flooded_6400_nogate": 44,
-   "base_run2": 10,
+   "base_run2": 11,
    "model_matrix_fgbalanced_6400": 0
   },
   "usable_route_ids": {
@@ -11826,6 +11826,7 @@
    ],
    "base_run2": [
     "17752",
+    "1790",
     "1825",
     "1852",
     "2201",
@@ -16203,21 +16204,22 @@
  },
  "Q": {
   "base_run2_status": {
-   "n_routes_usable": 10,
+   "n_routes_usable": 11,
    "status_counts": {
     "Completed": 4,
     "Failed - Agent deviated from the route": 2,
-    "Failed - TickRuntime": 4
+    "Failed - TickRuntime": 5
    },
    "tickruntime_60s_rule": [
     "2534",
-    "2204"
+    "2204",
+    "1790"
    ],
    "tickruntime_4000_cap": [
     "1825",
     "3540"
    ],
-   "label": "PARTIAL: 10/44 routes"
+   "label": "PARTIAL: 11/44 routes"
   },
   "comparisons": {
    "Golden-1600 vs Base run2": {
@@ -16225,7 +16227,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_1600": 44,
-      "base_run2": 10
+      "base_run2": 11
      },
      "need": {
       "model_matrix_golden_1600": 44,
@@ -16236,7 +16238,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_1600": 37,
-      "base_run2": 8
+      "base_run2": 9
      },
      "need": {
       "model_matrix_golden_1600": 37,
@@ -16247,7 +16249,7 @@
      "status": "pending",
      "have": {
       "model_matrix_golden_1600": 33,
-      "base_run2": 7
+      "base_run2": 8
      },
      "need": {
       "model_matrix_golden_1600": 33,
@@ -16260,7 +16262,7 @@
      "status": "pending",
      "have": {
       "model_matrix_flooded_1600": 44,
-      "base_run2": 10
+      "base_run2": 11
      },
      "need": {
       "model_matrix_flooded_1600": 44,
@@ -16271,7 +16273,7 @@
      "status": "pending",
      "have": {
       "model_matrix_flooded_1600": 37,
-      "base_run2": 8
+      "base_run2": 9
      },
      "need": {
       "model_matrix_flooded_1600": 37,
@@ -16282,7 +16284,7 @@
      "status": "pending",
      "have": {
       "model_matrix_flooded_1600": 33,
-      "base_run2": 7
+      "base_run2": 8
      },
      "need": {
       "model_matrix_flooded_1600": 33,
@@ -16295,7 +16297,7 @@
    "status": "pending",
    "have": {
     "model_matrix_golden_1600": 44,
-    "base_run2": 10
+    "base_run2": 11
    },
    "need": {
     "model_matrix_golden_1600": 44,
@@ -16305,7 +16307,7 @@
   "base_run2_minus_base_original": {
    "status": "pending",
    "have": {
-    "base_run2": 10
+    "base_run2": 11
    },
    "need": {
     "base_run2": 44
@@ -25774,6 +25776,52 @@
       "rank_biserial": -1.0
      }
     }
+   }
+  },
+  "status_line": "complete"
+ },
+ "pair1600": {
+  "label": "post hoc; suggested in review (S23); defined in addendum section 19 before computing",
+  "low_speed_stays_put": {
+   "n": 44,
+   "mean_first": 8.858604316215166,
+   "mean_second": 9.540024081992643,
+   "mean_diff": -0.681419765777476,
+   "n_first_greater": 20,
+   "n_first_less": 23,
+   "n_tie": 1,
+   "bca95": [
+    -3.908335007248176,
+    1.9715367351638666
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 1,
+    "statistic": 430.0,
+    "p": 0.603605273543774,
+    "p_approx": 0.603605273543774,
+    "p_exact": "not available (zero differences or tied |differences|)",
+    "rank_biserial": -0.09090909090909091
+   }
+  },
+  "at_rest_stays_put": {
+   "n": 44,
+   "mean_first": 9.954980225077104,
+   "mean_second": 10.723824397848908,
+   "mean_diff": -0.7688441727718035,
+   "n_first_greater": 19,
+   "n_first_less": 24,
+   "n_tie": 1,
+   "bca95": [
+    -3.954740021858543,
+    1.9169691894419987
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 1,
+    "statistic": 426.0,
+    "p": 0.5703590649174934,
+    "p_approx": 0.5703590649174934,
+    "p_exact": "not available (zero differences or tied |differences|)",
+    "rank_biserial": -0.09936575052854123
    }
   },
   "status_line": "complete"

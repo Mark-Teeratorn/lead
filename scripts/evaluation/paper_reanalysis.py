@@ -2814,6 +2814,19 @@ def analysis_R13(arms):
     return res
 
 
+# --------------------------------------------------------------------------- 1,600-sample pair (addendum 19)
+
+def analysis_pair1600(data):
+    """ANALYSIS_ADDENDUM.md section 19."""
+    tg, tf = v_route_table(data[G16], CANONICAL_44, {}), v_route_table(data[F16], CANONICAL_44, {})
+    yg, yf = y_route_table(data[G16], CANONICAL_44), y_route_table(data[F16], CANONICAL_44)
+    out = {'label': 'post hoc; suggested in review (S23); defined in addendum section 19 before computing',
+           'low_speed_stays_put': v_paired({'k': tg['low_speed_stays_put']}, {'k': tf['low_speed_stays_put']}, CANONICAL_44)['k'],
+           'at_rest_stays_put': v_paired({'k': yg['at_rest: stays_put (L<0.64)']}, {'k': yf['at_rest: stays_put (L<0.64)']}, CANONICAL_44)['k']}
+    out['status_line'] = 'complete'
+    return out
+
+
 # --------------------------------------------------------------------------- main
 
 def clean(o):
@@ -2891,6 +2904,7 @@ def main():
     man['braking'] = analysis_braking(arms, data)
     man['contact'] = analysis_contact(arms)
     man['R13'] = analysis_R13(arms)
+    man['pair1600'] = analysis_pair1600(data)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man))

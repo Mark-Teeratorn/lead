@@ -1090,23 +1090,23 @@ Routes ended by the 60 s rule: {'gate_off': 2, 'default': 7}
 
 Status: pending: 6 of 6 parts (Golden-1600 vs Base run2 | 44 routes, Golden-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Golden-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes), Flooded-1600 vs Base run2 | 44 routes, Flooded-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Flooded-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes))
 
-base_run2 status (PARTIAL: 10/44 routes): {'Completed': 4, 'Failed - Agent deviated from the route': 2, 'Failed - TickRuntime': 4}; TickRuntime by 60 s rule ['2534', '2204'], by 4000 cap ['1825', '3540']
+base_run2 status (PARTIAL: 11/44 routes): {'Completed': 4, 'Failed - Agent deviated from the route': 2, 'Failed - TickRuntime': 5}; TickRuntime by 60 s rule ['2534', '2204', '1790'], by 4000 cap ['1825', '3540']
 
-**Golden-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 10}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
+**Golden-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 11}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
 
-**Golden-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_1600': 37, 'base_run2': 8}, need {'model_matrix_golden_1600': 37, 'base_run2': 37}
+**Golden-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_golden_1600': 37, 'base_run2': 9}, need {'model_matrix_golden_1600': 37, 'base_run2': 37}
 
-**Golden-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_1600': 33, 'base_run2': 7}, need {'model_matrix_golden_1600': 33, 'base_run2': 33}
+**Golden-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_golden_1600': 33, 'base_run2': 8}, need {'model_matrix_golden_1600': 33, 'base_run2': 33}
 
-**Flooded-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_flooded_1600': 44, 'base_run2': 10}, need {'model_matrix_flooded_1600': 44, 'base_run2': 44}
+**Flooded-1600 vs Base run2, 44 routes**: pending: have {'model_matrix_flooded_1600': 44, 'base_run2': 11}, need {'model_matrix_flooded_1600': 44, 'base_run2': 44}
 
-**Flooded-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_flooded_1600': 37, 'base_run2': 8}, need {'model_matrix_flooded_1600': 37, 'base_run2': 37}
+**Flooded-1600 vs Base run2, 37 routes (excl. 7 training-overlap routes)**: pending: have {'model_matrix_flooded_1600': 37, 'base_run2': 9}, need {'model_matrix_flooded_1600': 37, 'base_run2': 37}
 
-**Flooded-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_flooded_1600': 33, 'base_run2': 7}, need {'model_matrix_flooded_1600': 33, 'base_run2': 33}
+**Flooded-1600 vs Base run2, 33 routes (excl. 11 gate-flagged routes)**: pending: have {'model_matrix_flooded_1600': 33, 'base_run2': 8}, need {'model_matrix_flooded_1600': 33, 'base_run2': 33}
 
-Holm {H1 base_run2, H2}: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 10}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
+Holm {H1 base_run2, H2}: pending: have {'model_matrix_golden_1600': 44, 'base_run2': 11}, need {'model_matrix_golden_1600': 44, 'base_run2': 44}
 
-**base_run2 minus original Base**: pending: have {'base_run2': 10}, need {'base_run2': 44}
+**base_run2 minus original Base**: pending: have {'base_run2': 11}, need {'base_run2': 44}
 
 ## R. Overlap sensitivity (H1, H2 on 44 / 37 / 33 routes)
 
