@@ -2844,6 +2844,43 @@ def clean(o):
     return o
 
 
+def analysis_tables_base_rerun(arms, scen):
+    """Table 3 and Table 4 values for the `Base-Rerun` row (base_run2), computed as for the other rows:
+    summary_row and the analysis F event-rate interval (Table 3); analysis A gate share, analysis D bands,
+    analysis C primary-ability strata and the 60 s rule / tick-cap split of analysis M (Table 4)."""
+    runs = arms.get('Base run2', {})
+    if any(r not in runs for r in CANONICAL_44):
+        return {'status': 'pending', 'have': sum(r in runs for r in CANONICAL_44), 'need': 44}
+    rds = [runs[r] for r in CANONICAL_44]
+    cnts = [route_counts(rd) for rd in rds]
+    ex = np.array([exposures(rd) for rd in rds])
+    t3 = summary_row(rds, cnts, ex)
+    e = np.array([c['events_actor_id'] for c in cnts], float)
+    idx = boot_indices(44)
+    boot = e[idx].sum(axis=1) / ex[:, 0][idx].sum(axis=1)
+    t3['events_per_progress_km_ci95'] = [float(x) for x in np.percentile(boot, [2.5, 97.5])]
+    ss = [rd['speed'] < SS_V for rd in rds]
+    groups, _ = strata_groups(scen)
+    strata_keys = ['primary:Overtaking', 'primary:Merging', 'primary:Overtaking + Merging', 'primary:Emergency_Brake',
+                   'primary:Traffic_Signs', 'primary:Give_Way', 'no_junction_control_by_scenario_type',
+                   'bypass:single_direction', 'bypass:two_way']
+    by_route = dict(zip(CANONICAL_44, rds))
+    t4 = {
+        'standstill_pct': float(np.mean([pct(m) for m in ss])),
+        'gate_pct_all_steps': float(np.mean([pct(gate_mask(rd)) for rd in rds])),
+        'gate_share_of_standstill_pct': float(np.nanmean([np.mean(gate_mask(rd)[m]) * 100.0 if m.any() else np.nan
+                                                         for rd, m in zip(rds, ss)])),
+        'mean_L_m': float(np.mean([np.mean(rd['L']) for rd in rds])),
+        'standstill_and_band_pct': dict(zip(BANDS, [float(np.mean([pct((band_index(rd) == k) & m)
+                                                                    for rd, m in zip(rds, ss)])) for k in range(4)])),
+        'strata_standstill_pct': {k: float(np.mean([pct(by_route[r]['speed'] < SS_V) for r in groups[k]]))
+                                  for k in strata_keys},
+        'ended_by_60s_rule': int(sum(ended_by_60s_rule(rd) for rd in rds)),
+        'ended_by_tick_cap': int(sum(rd['status'] == 'Failed - TickRuntime' and not ended_by_60s_rule(rd) for rd in rds)),
+    }
+    return {'status': 'complete', 'table3': t3, 'table4': t4}
+
+
 def main():
     data = load_all()
     scen = load_route_scenarios()
@@ -2905,6 +2942,7 @@ def main():
     man['contact'] = analysis_contact(arms)
     man['R13'] = analysis_R13(arms)
     man['pair1600'] = analysis_pair1600(data)
+    man['tables_base_rerun'] = analysis_tables_base_rerun(arms, scen)
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
     OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man))

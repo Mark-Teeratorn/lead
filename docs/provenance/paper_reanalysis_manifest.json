@@ -1132,7 +1132,7 @@
     "mean_diff": -0.024358795454544172,
     "bca90": [
      -7.276890227725286,
-     6.363015870077923
+     6.363015870077932
     ],
     "ci_within_margin": true,
     "p_tost_bootstrap": 0.0278
@@ -1141,7 +1141,7 @@
     "mean_diff": -3.2122018636363636,
     "bca90": [
      -11.25698666486826,
-     4.300716357806039
+     4.300716357806041
     ],
     "ci_lower_above_minus_margin": false,
     "p_noninferiority_bootstrap": 0.15865
@@ -1346,7 +1346,7 @@
     "wilcoxon": {
      "n_zero_differences": 0,
      "statistic": 270.5,
-     "p": 0.00879347863670405,
+     "p": 0.008168734191485783,
      "p_approx": 0.00879347863670405,
      "p_exact": "not available (zero differences or tied |differences|)",
      "rank_biserial": -0.4535353535353535
@@ -10517,11 +10517,11 @@
    "mean_delta_ds": -0.024358795454544172,
    "spearman_dRC_dP": {
     "rho": -0.516277388616836,
-    "p": 0.00033401193751584235
+    "p": 0.00033401193751584203
    },
    "pearson_dRC_dP": {
-    "r": -0.43361594137057374,
-    "p": 0.003277482402243133
+    "r": -0.4336159413705737,
+    "p": 0.0032774824022431506
    },
    "n_routes_dRC_pos_dDS_neg": 6,
    "n_routes_dRC_neg_dDS_pos": 4,
@@ -10754,7 +10754,7 @@
    "mean_delta_ds": -3.2365606590909084,
    "spearman_dRC_dP": {
     "rho": -0.17874204179275313,
-    "p": 0.24568838257736858
+    "p": 0.24568838257736864
    },
    "pearson_dRC_dP": {
     "r": -0.14223102704687138,
@@ -11018,7 +11018,7 @@
      "23687"
     ],
     "mean_speed_route_mean": 1.4742229347133913,
-    "mean_speed_pooled": 0.9984966344358607,
+    "mean_speed_pooled": 0.9984966344358609,
     "moving_steer_jerk": 0.05763227254997309,
     "hard_brake_pct": 4.6707238301778045,
     "red_light": 2,
@@ -11126,7 +11126,7 @@
     "standstill_pct_as_compute_paper_tables": 33.90818909466657,
     "routes_with_steplog_from_fallback_prefix": [],
     "mean_speed_route_mean": 1.6122529999567725,
-    "mean_speed_pooled": 1.38457368385256,
+    "mean_speed_pooled": 1.3845736838525597,
     "moving_steer_jerk": 0.04909811894954925,
     "hard_brake_pct": 5.200767475326608,
     "red_light": 2,
@@ -11198,7 +11198,7 @@
     "standstill_pct_as_compute_paper_tables": 25.714582138059143,
     "routes_with_steplog_from_fallback_prefix": [],
     "mean_speed_route_mean": 1.955961536250272,
-    "mean_speed_pooled": 1.7014922121431264,
+    "mean_speed_pooled": 1.7014922121431262,
     "moving_steer_jerk": 0.047134882326642376,
     "hard_brake_pct": 4.458117697341632,
     "red_light": 3,
@@ -11316,7 +11316,7 @@
     "standstill_pct_as_compute_paper_tables": 33.10048173675557,
     "routes_with_steplog_from_fallback_prefix": [],
     "mean_speed_route_mean": 1.6479642313564833,
-    "mean_speed_pooled": 1.4351479319355624,
+    "mean_speed_pooled": 1.4351479319355622,
     "moving_steer_jerk": 0.048586242722236335,
     "hard_brake_pct": 4.54993696928973,
     "red_light": 2,
@@ -11396,6 +11396,42 @@
     "outside_route_lanes": 10,
     "vehicle_blocked": 1,
     "min_speed_infractions": 678
+   },
+   "Base run2": {
+    "mean_ds": 42.59997390909091,
+    "mean_rc": 71.9259090909091,
+    "mean_penalty": 0.6065816136363638,
+    "progress_km": 3.4678021616,
+    "odometer_km": 3.8048945818989472,
+    "collisions_raw": 53,
+    "collisions_events": 49,
+    "collisions_raw_by_class": {
+     "vehicle": 48,
+     "pedestrian": 0,
+     "layout": 5
+    },
+    "collisions_events_by_class": {
+     "vehicle": 44,
+     "pedestrian": 0,
+     "layout": 5
+    },
+    "events_per_progress_km": 14.129987155147289,
+    "events_per_odometer_km": 12.87814916952182,
+    "non_timeout_infractions": 83,
+    "non_timeout_per_progress_km": 23.934468038310712,
+    "non_timeout_per_odometer_km": 21.814007776945125,
+    "standstill_pct": 36.27799930216923,
+    "standstill_pct_as_compute_paper_tables": 36.27799930216923,
+    "routes_with_steplog_from_fallback_prefix": [],
+    "mean_speed_route_mean": 1.5383244384467603,
+    "mean_speed_pooled": 1.2186191531559898,
+    "moving_steer_jerk": 0.0575463168774418,
+    "hard_brake_pct": 4.720488877312854,
+    "red_light": 2,
+    "stop_infraction": 1,
+    "outside_route_lanes": 12,
+    "vehicle_blocked": 1,
+    "min_speed_infractions": 595
    }
   }
  },
@@ -11616,8 +11652,8 @@
    "model_matrix_flooded_6400_run2": 44,
    "model_matrix_golden_6400_nogate": 44,
    "model_matrix_flooded_6400_nogate": 44,
-   "base_run2": 11,
-   "model_matrix_fgbalanced_6400": 0
+   "base_run2": 44,
+   "model_matrix_fgbalanced_6400": 33
   },
   "usable_route_ids": {
    "model_matrix_golden_6400_rep1": [
@@ -11825,22 +11861,89 @@
     "3936"
    ],
    "base_run2": [
+    "14194",
+    "14842",
+    "1711",
+    "17563",
+    "1773",
     "17752",
     "1790",
     "1825",
     "1852",
+    "1956",
+    "2050",
+    "2082",
+    "2084",
+    "2115",
+    "2127",
+    "2144",
+    "2164",
     "2201",
     "2204",
+    "2283",
+    "2286",
+    "23687",
+    "23695",
+    "23771",
+    "2390",
+    "23901",
+    "2416",
     "2513",
     "2534",
+    "26458",
+    "2664",
+    "2709",
+    "2790",
+    "28087",
+    "28099",
     "3086",
+    "3144",
+    "3248",
+    "3364",
+    "3436",
+    "3464",
     "3540",
-    "3561"
+    "3561",
+    "3936"
    ],
-   "model_matrix_fgbalanced_6400": []
+   "model_matrix_fgbalanced_6400": [
+    "14194",
+    "1711",
+    "17563",
+    "1773",
+    "17752",
+    "1790",
+    "1825",
+    "1852",
+    "1956",
+    "2082",
+    "2084",
+    "2115",
+    "2127",
+    "2201",
+    "2204",
+    "2283",
+    "2286",
+    "23687",
+    "23695",
+    "23771",
+    "23901",
+    "2513",
+    "2534",
+    "2664",
+    "2790",
+    "28087",
+    "28099",
+    "3086",
+    "3248",
+    "3436",
+    "3540",
+    "3561",
+    "3936"
+   ]
   },
   "usable_but_unparsable_treated_as_absent": {},
-  "usability_rule": "A route directory is usable only if checkpoint_endpoint.json parses, carries\n_checkpoint.global_record.scores_mean and a record, and predicted_trajectories.jsonl exists."
+  "usability_rule": "A route directory is usable only if checkpoint_endpoint.json parses, carries _checkpoint.global_record.scores_mean and a record, and predicted_trajectories.jsonl exists."
  },
  "N": {
   "replicate_routes": [
@@ -13851,7 +13954,7 @@
     }
    }
   },
-  "icc_formula": "One-way random-effects, single-measure ICC(1,1) (Shrout & Fleiss 1979):\n(MSB - MSW) / (MSB + (k - 1) MSW), k = 2 runs, rows = routes.",
+  "icc_formula": "One-way random-effects, single-measure ICC(1,1) (Shrout & Fleiss 1979): (MSB - MSW) / (MSB + (k - 1) MSW), k = 2 runs, rows = routes.",
   "note": "run1 = first pass (tag without suffix), rep1 = 8-route replicate, run2 = second 44-route pass.",
   "status_line": "complete"
  },
@@ -15760,7 +15863,7 @@
     "wilcoxon": {
      "n_zero_differences": 0,
      "statistic": 292.0,
-     "p": 0.017830969102300427,
+     "p": 0.017059172380072596,
      "p_approx": 0.017830969102300427,
      "p_exact": "not available (zero differences or tied |differences|)",
      "rank_biserial": -0.4101010101010101
@@ -16204,116 +16307,1039 @@
  },
  "Q": {
   "base_run2_status": {
-   "n_routes_usable": 11,
+   "n_routes_usable": 44,
    "status_counts": {
-    "Completed": 4,
-    "Failed - Agent deviated from the route": 2,
-    "Failed - TickRuntime": 5
+    "Completed": 23,
+    "Failed - Agent deviated from the route": 11,
+    "Failed - Agent got blocked": 1,
+    "Failed - TickRuntime": 9
    },
    "tickruntime_60s_rule": [
     "2534",
     "2204",
-    "1790"
+    "1790",
+    "3436",
+    "1956",
+    "26458",
+    "3464"
    ],
    "tickruntime_4000_cap": [
     "1825",
     "3540"
    ],
-   "label": "PARTIAL: 11/44 routes"
+   "label": "complete (44 routes)"
   },
   "comparisons": {
    "Golden-1600 vs Base run2": {
     "44 routes": {
-     "status": "pending",
-     "have": {
-      "model_matrix_golden_1600": 44,
-      "base_run2": 11
+     "driving_score": {
+      "n": 44,
+      "mean_first": 49.87627840909091,
+      "mean_second": 42.59997390909091,
+      "mean_diff": 7.276304499999998,
+      "n_first_greater": 23,
+      "n_first_less": 11,
+      "n_tie": 10,
+      "bca95": [
+       -0.39399243010567075,
+       14.602189273230259
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 10,
+       "statistic": 182.0,
+       "p": 0.04830816499395985,
+       "p_approx": 0.04830816499395985,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.38823529411764707
+      }
      },
-     "need": {
-      "model_matrix_golden_1600": 44,
-      "base_run2": 44
+     "route_completion": {
+      "n": 44,
+      "mean_first": 78.15954545454545,
+      "mean_second": 71.9259090909091,
+      "mean_diff": 6.233636363636363,
+      "n_first_greater": 17,
+      "n_first_less": 6,
+      "n_tie": 21,
+      "bca95": [
+       -2.782261429413108,
+       15.27877975876461
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 21,
+       "statistic": 83.0,
+       "p": 0.09436225831584012,
+       "p_approx": 0.09436225831584012,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.39855072463768115
+      }
+     },
+     "standstill_pct": {
+      "n": 44,
+      "mean_first": 32.36568374381989,
+      "mean_second": 36.27799930216923,
+      "mean_diff": -3.9123155583493316,
+      "n_first_greater": 24,
+      "n_first_less": 20,
+      "n_tie": 0,
+      "bca95": [
+       -12.702334942383683,
+       4.212603107061269
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 443.0,
+       "p": 0.5514293721180366,
+       "p_approx": 0.5439504535793802,
+       "p_exact": 0.5514293721180366,
+       "rank_biserial": -0.10505050505050505
+      }
      }
     },
     "37 routes (excl. 7 training-overlap routes)": {
-     "status": "pending",
-     "have": {
-      "model_matrix_golden_1600": 37,
-      "base_run2": 9
+     "driving_score": {
+      "n": 37,
+      "mean_first": 48.81040721621622,
+      "mean_second": 41.258389621621625,
+      "mean_diff": 7.552017594594594,
+      "n_first_greater": 20,
+      "n_first_less": 8,
+      "n_tie": 9,
+      "bca95": [
+       -0.800409914149341,
+       15.760863806227471
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 9,
+       "statistic": 117.0,
+       "p": 0.05018984724877887,
+       "p_approx": 0.05018984724877887,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.4236453201970443
+      }
      },
-     "need": {
-      "model_matrix_golden_1600": 37,
-      "base_run2": 37
+     "route_completion": {
+      "n": 37,
+      "mean_first": 77.59594594594594,
+      "mean_second": 70.0591891891892,
+      "mean_diff": 7.536756756756757,
+      "n_first_greater": 16,
+      "n_first_less": 4,
+      "n_tie": 17,
+      "bca95": [
+       -2.0777025292349536,
+       16.957544455317294
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 17,
+       "statistic": 53.0,
+       "p": 0.05222204238661496,
+       "p_approx": 0.05222204238661496,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.49523809523809526
+      }
+     },
+     "standstill_pct": {
+      "n": 37,
+      "mean_first": 32.35084785768343,
+      "mean_second": 35.778282363406014,
+      "mean_diff": -3.427434505722574,
+      "n_first_greater": 20,
+      "n_first_less": 17,
+      "n_tie": 0,
+      "bca95": [
+       -12.622384723314074,
+       6.13549077743884
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 319.0,
+       "p": 0.6330981708597392,
+       "p_approx": 0.6239185944721397,
+       "p_exact": 0.6330981708597392,
+       "rank_biserial": -0.09246088193456614
+      }
      }
     },
     "33 routes (excl. 11 gate-flagged routes)": {
-     "status": "pending",
-     "have": {
-      "model_matrix_golden_1600": 33,
-      "base_run2": 8
+     "driving_score": {
+      "n": 33,
+      "mean_first": 47.09378990909091,
+      "mean_second": 36.6869823030303,
+      "mean_diff": 10.406807606060605,
+      "n_first_greater": 20,
+      "n_first_less": 7,
+      "n_tie": 6,
+      "bca95": [
+       2.6723281673517225,
+       18.712822722458924
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 6,
+       "statistic": 89.0,
+       "p": 0.01628343898983998,
+       "p_approx": 0.01628343898983998,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.5291005291005291
+      }
      },
-     "need": {
-      "model_matrix_golden_1600": 33,
-      "base_run2": 33
+     "route_completion": {
+      "n": 33,
+      "mean_first": 75.05333333333334,
+      "mean_second": 66.6030303030303,
+      "mean_diff": 8.450303030303031,
+      "n_first_greater": 16,
+      "n_first_less": 4,
+      "n_tie": 13,
+      "bca95": [
+       -2.297179322426837,
+       19.126688309422818
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 13,
+       "statistic": 53.0,
+       "p": 0.05222204238661496,
+       "p_approx": 0.05222204238661496,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.49523809523809526
+      }
+     },
+     "standstill_pct": {
+      "n": 33,
+      "mean_first": 34.36758789810699,
+      "mean_second": 38.24506440942903,
+      "mean_diff": -3.8774765113220333,
+      "n_first_greater": 18,
+      "n_first_less": 15,
+      "n_tie": 0,
+      "bca95": [
+       -14.6292460775247,
+       6.662927537455124
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 250.0,
+       "p": 0.5964904481079429,
+       "p_approx": 0.5857749837558817,
+       "p_exact": 0.5964904481079429,
+       "rank_biserial": -0.10873440285204991
+      }
      }
     }
    },
    "Flooded-1600 vs Base run2": {
     "44 routes": {
-     "status": "pending",
-     "have": {
-      "model_matrix_flooded_1600": 44,
-      "base_run2": 11
+     "driving_score": {
+      "n": 44,
+      "mean_first": 45.76895247727273,
+      "mean_second": 42.59997390909091,
+      "mean_diff": 3.168978568181819,
+      "n_first_greater": 18,
+      "n_first_less": 20,
+      "n_tie": 6,
+      "bca95": [
+       -5.657490221568798,
+       12.638729678054494
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 6,
+       "statistic": 333.0,
+       "p": 0.5865449492246471,
+       "p_approx": 0.5865449492246471,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.10121457489878542
+      }
      },
-     "need": {
-      "model_matrix_flooded_1600": 44,
-      "base_run2": 44
+     "route_completion": {
+      "n": 44,
+      "mean_first": 77.44318181818181,
+      "mean_second": 71.9259090909091,
+      "mean_diff": 5.517272727272728,
+      "n_first_greater": 13,
+      "n_first_less": 9,
+      "n_tie": 22,
+      "bca95": [
+       -5.231698845556141,
+       15.958393578491963
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 22,
+       "statistic": 96.0,
+       "p": 0.32207523283525596,
+       "p_approx": 0.32207523283525596,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.24110671936758893
+      }
+     },
+     "standstill_pct": {
+      "n": 44,
+      "mean_first": 33.69124352177721,
+      "mean_second": 36.27799930216923,
+      "mean_diff": -2.5867557803920125,
+      "n_first_greater": 25,
+      "n_first_less": 19,
+      "n_tie": 0,
+      "bca95": [
+       -10.82169837477467,
+       4.415322728690068
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 475.0,
+       "p": 0.8217495229185943,
+       "p_approx": 0.8154478227740822,
+       "p_exact": 0.8217495229185943,
+       "rank_biserial": 0.04040404040404041
+      }
      }
     },
     "37 routes (excl. 7 training-overlap routes)": {
-     "status": "pending",
-     "have": {
-      "model_matrix_flooded_1600": 37,
-      "base_run2": 9
+     "driving_score": {
+      "n": 37,
+      "mean_first": 42.846631351351355,
+      "mean_second": 41.258389621621625,
+      "mean_diff": 1.58824172972973,
+      "n_first_greater": 15,
+      "n_first_less": 16,
+      "n_tie": 6,
+      "bca95": [
+       -7.262897361107052,
+       11.1903942753318
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 6,
+       "statistic": 232.0,
+       "p": 0.7538611333550084,
+       "p_approx": 0.7538611333550084,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.06451612903225806
+      }
      },
-     "need": {
-      "model_matrix_flooded_1600": 37,
-      "base_run2": 37
+     "route_completion": {
+      "n": 37,
+      "mean_first": 76.2789189189189,
+      "mean_second": 70.0591891891892,
+      "mean_diff": 6.21972972972973,
+      "n_first_greater": 12,
+      "n_first_less": 7,
+      "n_tie": 18,
+      "bca95": [
+       -5.379862459817711,
+       17.982925718583484
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 18,
+       "statistic": 70.0,
+       "p": 0.3143893322216611,
+       "p_approx": 0.3143893322216611,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.2631578947368421
+      }
+     },
+     "standstill_pct": {
+      "n": 37,
+      "mean_first": 33.42004689306825,
+      "mean_second": 35.778282363406014,
+      "mean_diff": -2.358235470337759,
+      "n_first_greater": 22,
+      "n_first_less": 15,
+      "n_tie": 0,
+      "bca95": [
+       -11.213589580863607,
+       5.962461448855197
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 343.0,
+       "p": 0.9050843829900259,
+       "p_approx": 0.8979642461764971,
+       "p_exact": 0.9050843829900259,
+       "rank_biserial": 0.02418207681365576
+      }
      }
     },
     "33 routes (excl. 11 gate-flagged routes)": {
-     "status": "pending",
-     "have": {
-      "model_matrix_flooded_1600": 33,
-      "base_run2": 8
+     "driving_score": {
+      "n": 33,
+      "mean_first": 40.69046545454545,
+      "mean_second": 36.6869823030303,
+      "mean_diff": 4.003483151515151,
+      "n_first_greater": 15,
+      "n_first_less": 13,
+      "n_tie": 5,
+      "bca95": [
+       -5.058157859904128,
+       14.082022645752678
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 5,
+       "statistic": 171.0,
+       "p": 0.46619403462565867,
+       "p_approx": 0.46619403462565867,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.15763546798029557
+      }
      },
-     "need": {
-      "model_matrix_flooded_1600": 33,
-      "base_run2": 33
+     "route_completion": {
+      "n": 33,
+      "mean_first": 73.59818181818181,
+      "mean_second": 66.6030303030303,
+      "mean_diff": 6.995151515151514,
+      "n_first_greater": 12,
+      "n_first_less": 6,
+      "n_tie": 15,
+      "bca95": [
+       -6.343564729024307,
+       20.306253587299594
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 15,
+       "statistic": 63.0,
+       "p": 0.32714387454989213,
+       "p_approx": 0.32714387454989213,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 0.2631578947368421
+      }
+     },
+     "standstill_pct": {
+      "n": 33,
+      "mean_first": 35.32274067523264,
+      "mean_second": 38.24506440942903,
+      "mean_diff": -2.9223237341963975,
+      "n_first_greater": 19,
+      "n_first_less": 14,
+      "n_tie": 0,
+      "bca95": [
+       -13.296876746239183,
+       6.061916891119588
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 274.0,
+       "p": 0.9157698068302125,
+       "p_approx": 0.907540882973728,
+       "p_exact": 0.9157698068302125,
+       "rank_biserial": -0.023172905525846704
+      }
      }
     }
    }
   },
   "holm_H1_base_run2_and_H2": {
-   "status": "pending",
-   "have": {
-    "model_matrix_golden_1600": 44,
-    "base_run2": 11
-   },
-   "need": {
-    "model_matrix_golden_1600": 44,
-    "base_run2": 44
-   }
+   "tests": [
+    "H1 Golden-1600 vs Base run2 DS (two-sided Wilcoxon)",
+    "H2 Golden-6400 vs Flooded-6400-Matched standstill (primary)"
+   ],
+   "raw_p": [
+    0.04830816499395985,
+    0.0007092337563108231
+   ],
+   "holm_p": [
+    0.04830816499395985,
+    0.0014184675126216462
+   ]
   },
   "base_run2_minus_base_original": {
-   "status": "pending",
-   "have": {
-    "base_run2": 11
+   "label": "different termination rule AND a different run: not a pure test-retest",
+   "driving_score": {
+    "n": 44,
+    "mean_first": 42.59997390909091,
+    "mean_second": 38.82122225,
+    "mean_diff": 3.778751659090909,
+    "n_first_greater": 19,
+    "n_first_less": 16,
+    "n_tie": 9,
+    "bca95": [
+     -2.427242109129869,
+     10.182746849623626
+    ],
+    "wilcoxon": {
+     "n_zero_differences": 9,
+     "statistic": 250.5,
+     "p": 0.29075242740007134,
+     "p_approx": 0.29075242740007134,
+     "p_exact": "not available (zero differences or tied |differences|)",
+     "rank_biserial": 0.20476190476190476
+    },
+    "per_route": {
+     "2534": {
+      "first": 15.0336,
+      "second": 16.9452
+     },
+     "1852": {
+      "first": 36.0,
+      "second": 23.49
+     },
+     "2204": {
+      "first": 44.5,
+      "second": 44.5
+     },
+     "2513": {
+      "first": 21.6,
+      "second": 12.96
+     },
+     "1825": {
+      "first": 14.7849,
+      "second": 8.87094
+     },
+     "3561": {
+      "first": 53.642525,
+      "second": 18.082646
+     },
+     "3086": {
+      "first": 43.74,
+      "second": 43.74
+     },
+     "17752": {
+      "first": 58.183571,
+      "second": 29.461027
+     },
+     "2201": {
+      "first": 30.338,
+      "second": 24.6414
+     },
+     "3540": {
+      "first": 3.210346,
+      "second": 4.563481
+     },
+     "1790": {
+      "first": 4.469645,
+      "second": 2.79936
+     },
+     "3436": {
+      "first": 3.936222,
+      "second": 12.96
+     },
+     "2286": {
+      "first": 21.6,
+      "second": 60.0
+     },
+     "23687": {
+      "first": 100.0,
+      "second": 54.575145
+     },
+     "23901": {
+      "first": 54.669536,
+      "second": 86.590081
+     },
+     "23695": {
+      "first": 100.0,
+      "second": 90.966357
+     },
+     "2790": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "2283": {
+      "first": 94.29,
+      "second": 94.29
+     },
+     "23771": {
+      "first": 100.0,
+      "second": 60.0
+     },
+     "2084": {
+      "first": 36.0,
+      "second": 48.0
+     },
+     "28087": {
+      "first": 41.09,
+      "second": 41.09
+     },
+     "2115": {
+      "first": 52.534297,
+      "second": 31.854
+     },
+     "2082": {
+      "first": 38.55,
+      "second": 37.233435
+     },
+     "2127": {
+      "first": 37.656948,
+      "second": 41.410165
+     },
+     "1773": {
+      "first": 21.6,
+      "second": 2.79936
+     },
+     "2664": {
+      "first": 21.6,
+      "second": 22.572
+     },
+     "3248": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "1711": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "1956": {
+      "first": 1.854,
+      "second": 1.854
+     },
+     "14194": {
+      "first": 14.828408,
+      "second": 48.72
+     },
+     "17563": {
+      "first": 12.96,
+      "second": 21.6
+     },
+     "3936": {
+      "first": 24.001945,
+      "second": 24.861352
+     },
+     "28099": {
+      "first": 40.33912,
+      "second": 58.931046
+     },
+     "2050": {
+      "first": 50.841685,
+      "second": 7.724363
+     },
+     "2709": {
+      "first": 8.1972,
+      "second": 36.0
+     },
+     "26458": {
+      "first": 53.87,
+      "second": 45.51
+     },
+     "2390": {
+      "first": 65.0,
+      "second": 15.3144
+     },
+     "2416": {
+      "first": 16.968,
+      "second": 28.28
+     },
+     "14842": {
+      "first": 20.2,
+      "second": 20.2
+     },
+     "3144": {
+      "first": 36.548204,
+      "second": 7.805077
+     },
+     "3464": {
+      "first": 20.784,
+      "second": 60.0
+     },
+     "2144": {
+      "first": 16.9767,
+      "second": 26.118
+     },
+     "2164": {
+      "first": 100.0,
+      "second": 77.860944
+     },
+     "3364": {
+      "first": 42.0,
+      "second": 12.96
+     }
+    }
    },
-   "need": {
-    "base_run2": 44
+   "route_completion": {
+    "n": 44,
+    "mean_first": 71.9259090909091,
+    "mean_second": 69.07181818181819,
+    "mean_diff": 2.85409090909091,
+    "n_first_greater": 9,
+    "n_first_less": 9,
+    "n_tie": 26,
+    "bca95": [
+     -6.407612063963528,
+     12.424266032679856
+    ],
+    "wilcoxon": {
+     "n_zero_differences": 26,
+     "statistic": 80.0,
+     "p": 0.8106969968597719,
+     "p_approx": 0.8106969968597719,
+     "p_exact": "not available (zero differences or tied |differences|)",
+     "rank_biserial": 0.06432748538011696
+    },
+    "per_route": {
+     "2534": {
+      "first": 41.76,
+      "second": 47.07
+     },
+     "1852": {
+      "first": 100.0,
+      "second": 39.15
+     },
+     "2204": {
+      "first": 44.5,
+      "second": 44.5
+     },
+     "2513": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "1825": {
+      "first": 37.91,
+      "second": 37.91
+     },
+     "3561": {
+      "first": 100.0,
+      "second": 31.64
+     },
+     "3086": {
+      "first": 43.74,
+      "second": 43.74
+     },
+     "17752": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "2201": {
+      "first": 43.34,
+      "second": 58.67
+     },
+     "3540": {
+      "first": 18.87,
+      "second": 15.87
+     },
+     "1790": {
+      "first": 95.8,
+      "second": 100.0
+     },
+     "3436": {
+      "first": 27.31,
+      "second": 100.0
+     },
+     "2286": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "23687": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "23901": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "23695": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "2790": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "2283": {
+      "first": 94.29,
+      "second": 94.29
+     },
+     "23771": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "2084": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "28087": {
+      "first": 41.09,
+      "second": 41.09
+     },
+     "2115": {
+      "first": 100.0,
+      "second": 53.09
+     },
+     "2082": {
+      "first": 38.55,
+      "second": 39.86
+     },
+     "2127": {
+      "first": 42.88,
+      "second": 53.16
+     },
+     "1773": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "2664": {
+      "first": 100.0,
+      "second": 37.62
+     },
+     "3248": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "1711": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "1956": {
+      "first": 3.09,
+      "second": 3.09
+     },
+     "14194": {
+      "first": 100.0,
+      "second": 48.72
+     },
+     "17563": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "3936": {
+      "first": 39.57,
+      "second": 39.57
+     },
+     "28099": {
+      "first": 41.68,
+      "second": 100.0
+     },
+     "2050": {
+      "first": 100.0,
+      "second": 22.99
+     },
+     "2709": {
+      "first": 22.77,
+      "second": 100.0
+     },
+     "26458": {
+      "first": 53.87,
+      "second": 45.51
+     },
+     "2390": {
+      "first": 100.0,
+      "second": 42.54
+     },
+     "2416": {
+      "first": 35.35,
+      "second": 35.35
+     },
+     "14842": {
+      "first": 20.2,
+      "second": 20.2
+     },
+     "3144": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "3464": {
+      "first": 34.64,
+      "second": 100.0
+     },
+     "2144": {
+      "first": 43.53,
+      "second": 43.53
+     },
+     "2164": {
+      "first": 100.0,
+      "second": 100.0
+     },
+     "3364": {
+      "first": 100.0,
+      "second": 100.0
+     }
+    }
+   },
+   "standstill_pct": {
+    "n": 44,
+    "mean_first": 36.27799930216923,
+    "mean_second": 40.45161031598571,
+    "mean_diff": -4.173611013816475,
+    "n_first_greater": 19,
+    "n_first_less": 25,
+    "n_tie": 0,
+    "bca95": [
+     -12.147587240839899,
+     2.9725632086856866
+    ],
+    "wilcoxon": {
+     "n_zero_differences": 0,
+     "statistic": 402.0,
+     "p": 0.28341325604878875,
+     "p_approx": 0.27777644912621136,
+     "p_exact": 0.28341325604878875,
+     "rank_biserial": -0.18787878787878787
+    },
+    "per_route": {
+     "2534": {
+      "first": 79.52325127002734,
+      "second": 88.52213053263316
+     },
+     "1852": {
+      "first": 56.42237982663515,
+      "second": 90.34758689672418
+     },
+     "2204": {
+      "first": 72.82884713052312,
+      "second": 45.07772020725388
+     },
+     "2513": {
+      "first": 16.519434628975265,
+      "second": 17.003367003367003
+     },
+     "1825": {
+      "first": 76.66916729182296,
+      "second": 87.39684921230307
+     },
+     "3561": {
+      "first": 14.730100640439158,
+      "second": 81.89143341815097
+     },
+     "3086": {
+      "first": 17.86786786786787,
+      "second": 23.16715542521994
+     },
+     "17752": {
+      "first": 17.054908485856902,
+      "second": 23.142112125162974
+     },
+     "2201": {
+      "first": 20.803443328550934,
+      "second": 48.452929558920346
+     },
+     "3540": {
+      "first": 90.39759939984997,
+      "second": 85.88039867109634
+     },
+     "1790": {
+      "first": 67.07317073170732,
+      "second": 71.18542848611526
+     },
+     "3436": {
+      "first": 85.59912055698058,
+      "second": 65.36312849162012
+     },
+     "2286": {
+      "first": 14.576962283384301,
+      "second": 8.472803347280335
+     },
+     "23687": {
+      "first": 9.332321699544764,
+      "second": 5.934242181234964
+     },
+     "23901": {
+      "first": 19.89010989010989,
+      "second": 19.35266351989211
+     },
+     "23695": {
+      "first": 8.124459809853068,
+      "second": 11.339421613394215
+     },
+     "2790": {
+      "first": 13.784461152882205,
+      "second": 12.860576923076922
+     },
+     "2283": {
+      "first": 23.778307508939214,
+      "second": 23.172323759791123
+     },
+     "23771": {
+      "first": 7.627118644067797,
+      "second": 11.06687898089172
+     },
+     "2084": {
+      "first": 69.41940137035701,
+      "second": 59.305804907241175
+     },
+     "28087": {
+      "first": 28.72628726287263,
+      "second": 24.328147100424328
+     },
+     "2115": {
+      "first": 26.615553121577218,
+      "second": 60.42502004811547
+     },
+     "2082": {
+      "first": 17.2972972972973,
+      "second": 23.17262830482115
+     },
+     "2127": {
+      "first": 32.572614107883815,
+      "second": 84.33641975308642
+     },
+     "1773": {
+      "first": 18.37606837606838,
+      "second": 19.784172661870503
+     },
+     "2664": {
+      "first": 22.83072546230441,
+      "second": 90.44761190297575
+     },
+     "3248": {
+      "first": 19.82200647249191,
+      "second": 18.91891891891892
+     },
+     "1711": {
+      "first": 28.498727735368956,
+      "second": 20.276497695852534
+     },
+     "1956": {
+      "first": 97.81333333333333,
+      "second": 98.32458114528632
+     },
+     "14194": {
+      "first": 28.377065111758988,
+      "second": 33.83458646616541
+     },
+     "17563": {
+      "first": 16.381909547738694,
+      "second": 17.404129793510325
+     },
+     "3936": {
+      "first": 13.057851239669422,
+      "second": 16.557377049180328
+     },
+     "28099": {
+      "first": 22.8486646884273,
+      "second": 22.606689734717417
+     },
+     "2050": {
+      "first": 28.933566433566433,
+      "second": 94.8987246811703
+     },
+     "2709": {
+      "first": 83.77837116154873,
+      "second": 17.938931297709924
+     },
+     "26458": {
+      "first": 81.11111111111111,
+      "second": 92.87321830457614
+     },
+     "2390": {
+      "first": 31.43418467583497,
+      "second": 13.44165435745938
+     },
+     "2416": {
+      "first": 33.76623376623377,
+      "second": 17.66169154228856
+     },
+     "14842": {
+      "first": 28.68525896414343,
+      "second": 21.513002364066196
+     },
+     "3144": {
+      "first": 21.684867394695786,
+      "second": 29.277108433734938
+     },
+     "3464": {
+      "first": 77.42998352553542,
+      "second": 22.73449920508744
+     },
+     "2144": {
+      "first": 21.79675994108984,
+      "second": 28.855721393034827
+     },
+     "2164": {
+      "first": 19.32245922208281,
+      "second": 20.75242718446602
+     },
+     "3364": {
+      "first": 13.048635824436536,
+      "second": 10.572139303482588
+     }
+    }
    }
   },
-  "status_line": "pending: 6 of 6 parts (Golden-1600 vs Base run2 | 44 routes, Golden-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Golden-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes), Flooded-1600 vs Base run2 | 44 routes, Flooded-1600 vs Base run2 | 37 routes (excl. 7 training-overlap routes), Flooded-1600 vs Base run2 | 33 routes (excl. 11 gate-flagged routes))"
+  "status_line": "complete"
  },
  "R": {
   "source_of_expected_values": "docs/provenance/train_eval_overlap_canonical44.json",
@@ -16534,7 +17560,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 33,
       "model_matrix_flooded_6400": 44,
       "model_matrix_flooded_6400_run2": 44
      },
@@ -16547,7 +17573,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 28,
       "model_matrix_flooded_6400": 37,
       "model_matrix_flooded_6400_run2": 37
      },
@@ -16560,7 +17586,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 24,
       "model_matrix_flooded_6400": 33,
       "model_matrix_flooded_6400_run2": 33
      },
@@ -16575,7 +17601,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 33,
       "model_matrix_flooded_6400": 44
      },
      "need": {
@@ -16586,7 +17612,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 28,
       "model_matrix_flooded_6400": 37
      },
      "need": {
@@ -16597,7 +17623,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 24,
       "model_matrix_flooded_6400": 33
      },
      "need": {
@@ -16610,7 +17636,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 33,
       "model_matrix_flooded_6400_run2": 44
      },
      "need": {
@@ -16621,7 +17647,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 28,
       "model_matrix_flooded_6400_run2": 37
      },
      "need": {
@@ -16632,7 +17658,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 24,
       "model_matrix_flooded_6400_run2": 33
      },
      "need": {
@@ -16645,7 +17671,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 33,
       "model_matrix_golden_6400": 44,
       "model_matrix_golden_6400_run2": 44
      },
@@ -16658,7 +17684,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 28,
       "model_matrix_golden_6400": 37,
       "model_matrix_golden_6400_run2": 37
      },
@@ -16671,7 +17697,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 24,
       "model_matrix_golden_6400": 33,
       "model_matrix_golden_6400_run2": 33
      },
@@ -16686,7 +17712,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 33,
       "model_matrix_golden_6400": 44
      },
      "need": {
@@ -16697,7 +17723,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 28,
       "model_matrix_golden_6400": 37
      },
      "need": {
@@ -16708,7 +17734,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 24,
       "model_matrix_golden_6400": 33
      },
      "need": {
@@ -16721,7 +17747,7 @@
     "44 routes": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 33,
       "model_matrix_golden_6400_run2": 44
      },
      "need": {
@@ -16732,7 +17758,7 @@
     "37 routes (excl. 7 training-overlap routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 28,
       "model_matrix_golden_6400_run2": 37
      },
      "need": {
@@ -16743,7 +17769,7 @@
     "33 routes (excl. 11 gate-flagged routes)": {
      "status": "pending",
      "have": {
-      "model_matrix_fgbalanced_6400": 0,
+      "model_matrix_fgbalanced_6400": 24,
       "model_matrix_golden_6400_run2": 33
      },
      "need": {
@@ -16756,7 +17782,7 @@
   "prespecified_reading_44": {
    "status": "pending",
    "have": {
-    "model_matrix_fgbalanced_6400": 0,
+    "model_matrix_fgbalanced_6400": 33,
     "model_matrix_flooded_6400": 44,
     "model_matrix_flooded_6400_run2": 44,
     "model_matrix_golden_6400": 44,
@@ -16775,7 +17801,7 @@
  "T": {
   "label": "post hoc, exploratory; section 7a was first looked at on a partial route set before it was written down",
   "definitions": {
-   "episode": "Maximal runs of consecutive logged steps with speed < 0.1 m/s as (first, end_exclusive, class).\nRuns under 20 steps are 'brief'. A run reaching the last step is terminal even if it begins at step 0.",
+   "episode": "Maximal runs of consecutive logged steps with speed < 0.1 m/s as (first, end_exclusive, class). Runs under 20 steps are 'brief'. A run reaching the last step is terminal even if it begins at step 0.",
    "classes": {
     "start": "begins at the first logged step",
     "resumed_short": "ends before the last step, < 200 steps",
@@ -21313,7 +22339,7 @@
      "wilcoxon": {
       "n_zero_differences": 3,
       "statistic": 2.0,
-      "p": 0.09375,
+      "p": 0.07473549830588248,
       "p_approx": 0.07473549830588248,
       "p_exact": "not available (zero differences or tied |differences|)",
       "rank_biserial": -0.8095238095238095
@@ -21334,7 +22360,7 @@
      "wilcoxon": {
       "n_zero_differences": 1,
       "statistic": 0.0,
-      "p": 0.0078125,
+      "p": 0.011718685599768628,
       "p_approx": 0.011718685599768628,
       "p_exact": "not available (zero differences or tied |differences|)",
       "rank_biserial": -1.0
@@ -21567,7 +22593,7 @@
      "wilcoxon": {
       "n_zero_differences": 4,
       "statistic": 6.0,
-      "p": 0.8125,
+      "p": 0.6858304344516057,
       "p_approx": 0.6858304344516057,
       "p_exact": "not available (zero differences or tied |differences|)",
       "rank_biserial": 0.2
@@ -21588,7 +22614,7 @@
      "wilcoxon": {
       "n_zero_differences": 2,
       "statistic": 5.0,
-      "p": 0.15625,
+      "p": 0.12819017434510785,
       "p_approx": 0.12819017434510785,
       "p_exact": "not available (zero differences or tied |differences|)",
       "rank_biserial": -0.6428571428571429
@@ -21821,7 +22847,7 @@
      "wilcoxon": {
       "n_zero_differences": 2,
       "statistic": 5.0,
-      "p": 0.15625,
+      "p": 0.12819017434510785,
       "p_approx": 0.12819017434510785,
       "p_exact": "not available (zero differences or tied |differences|)",
       "rank_biserial": -0.6428571428571429
@@ -21842,7 +22868,7 @@
      "wilcoxon": {
       "n_zero_differences": 2,
       "statistic": 6.0,
-      "p": 0.21875,
+      "p": 0.17629637444051116,
       "p_approx": 0.17629637444051116,
       "p_exact": "not available (zero differences or tied |differences|)",
       "rank_biserial": -0.5714285714285714
@@ -23289,7 +24315,7 @@
      "wilcoxon": {
       "n_zero_differences": 0,
       "statistic": 69.5,
-      "p": 1.1031336597293706e-06,
+      "p": 6.700088306388352e-08,
       "p_approx": 1.1031336597293706e-06,
       "p_exact": "not available (zero differences or tied |differences|)",
       "rank_biserial": -0.8530655391120507
@@ -23484,12 +24510,47 @@
     }
    },
    "Golden-1600 minus Base run2": {
-    "status": "pending",
-    "have": {
-     "base_run2": 4
+    "driving_score": {
+     "n": 24,
+     "mean_first": 60.803795666666666,
+     "mean_second": 55.96801791666667,
+     "mean_diff": 4.835777750000001,
+     "n_first_greater": 12,
+     "n_first_less": 6,
+     "n_tie": 6,
+     "bca95": [
+      -6.848060765686737,
+      15.768655213711739
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 6,
+      "statistic": 61.0,
+      "p": 0.28597919066405664,
+      "p_approx": 0.28597919066405664,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.28654970760233917
+     }
     },
-    "need": {
-     "base_run2": 24
+    "route_completion": {
+     "n": 24,
+     "mean_first": 82.70583333333333,
+     "mean_second": 77.20625,
+     "mean_diff": 5.499583333333333,
+     "n_first_greater": 8,
+     "n_first_less": 3,
+     "n_tie": 13,
+     "bca95": [
+      -5.59359084473577,
+      16.74291666666667
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 13,
+      "statistic": 21.0,
+      "p": 0.2860033840207056,
+      "p_approx": 0.2860033840207056,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.36363636363636365
+     }
     }
    },
    "Flooded-1600 minus Base (original run)": {
@@ -23537,16 +24598,51 @@
     }
    },
    "Flooded-1600 minus Base run2": {
-    "status": "pending",
-    "have": {
-     "base_run2": 4
+    "driving_score": {
+     "n": 24,
+     "mean_first": 54.601749125,
+     "mean_second": 55.96801791666667,
+     "mean_diff": -1.3662687916666674,
+     "n_first_greater": 9,
+     "n_first_less": 11,
+     "n_tie": 4,
+     "bca95": [
+      -13.905702979183843,
+      12.022013011783358
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 4,
+      "statistic": 98.0,
+      "p": 0.7938390455415016,
+      "p_approx": 0.7938390455415016,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.06666666666666667
+     }
     },
-    "need": {
-     "base_run2": 24
+    "route_completion": {
+     "n": 24,
+     "mean_first": 80.80208333333333,
+     "mean_second": 77.20625,
+     "mean_diff": 3.595833333333332,
+     "n_first_greater": 7,
+     "n_first_less": 6,
+     "n_tie": 11,
+     "bca95": [
+      -12.028101400140983,
+      19.629754600990328
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 11,
+      "statistic": 39.0,
+      "p": 0.6496440323317323,
+      "p_approx": 0.6496440323317323,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.14285714285714285
+     }
     }
    }
   },
-  "status_line": "pending: 2 of 4 parts (Golden-1600 minus Base run2, Flooded-1600 minus Base run2)"
+  "status_line": "complete"
  },
  "second_pass_decisions": {
   "label": "decisions by rules of addendum sections 1, 5a and 9; section 9 was committed on 14 Nov 2026 at 12:35, before the Flooded second pass started and before any plan-level second-pass value was computed (14 of 44 Golden second-pass routes existed and their standstill had been looked at)",
@@ -23807,7 +24903,7 @@
    "Balanced minus Flooded-6400-Matched": {
     "status": "pending",
     "have": {
-     "model_matrix_fgbalanced_6400": 0,
+     "model_matrix_fgbalanced_6400": 33,
      "model_matrix_flooded_6400": 44,
      "model_matrix_flooded_6400_run2": 44,
      "model_matrix_golden_6400": 44,
@@ -23824,7 +24920,7 @@
    "Balanced minus Golden-6400": {
     "status": "pending",
     "have": {
-     "model_matrix_fgbalanced_6400": 0,
+     "model_matrix_fgbalanced_6400": 33,
      "model_matrix_flooded_6400": 44,
      "model_matrix_flooded_6400_run2": 44,
      "model_matrix_golden_6400": 44,
@@ -25825,5 +26921,73 @@
    }
   },
   "status_line": "complete"
+ },
+ "tables_base_rerun": {
+  "status": "complete",
+  "table3": {
+   "mean_ds": 42.59997390909091,
+   "mean_rc": 71.9259090909091,
+   "mean_penalty": 0.6065816136363638,
+   "progress_km": 3.4678021616,
+   "odometer_km": 3.8048945818989472,
+   "collisions_raw": 53,
+   "collisions_events": 49,
+   "collisions_raw_by_class": {
+    "vehicle": 48,
+    "pedestrian": 0,
+    "layout": 5
+   },
+   "collisions_events_by_class": {
+    "vehicle": 44,
+    "pedestrian": 0,
+    "layout": 5
+   },
+   "events_per_progress_km": 14.129987155147289,
+   "events_per_odometer_km": 12.87814916952182,
+   "non_timeout_infractions": 83,
+   "non_timeout_per_progress_km": 23.934468038310712,
+   "non_timeout_per_odometer_km": 21.814007776945125,
+   "standstill_pct": 36.27799930216923,
+   "standstill_pct_as_compute_paper_tables": 36.27799930216923,
+   "routes_with_steplog_from_fallback_prefix": [],
+   "mean_speed_route_mean": 1.5383244384467603,
+   "mean_speed_pooled": 1.2186191531559898,
+   "moving_steer_jerk": 0.0575463168774418,
+   "hard_brake_pct": 4.720488877312854,
+   "red_light": 2,
+   "stop_infraction": 1,
+   "outside_route_lanes": 12,
+   "vehicle_blocked": 1,
+   "min_speed_infractions": 595,
+   "events_per_progress_km_ci95": [
+    9.752595641619871,
+    19.182045214186946
+   ]
+  },
+  "table4": {
+   "standstill_pct": 36.27799930216923,
+   "gate_pct_all_steps": 15.365264700557766,
+   "gate_share_of_standstill_pct": 29.55519039236356,
+   "mean_L_m": 24.769112421766735,
+   "standstill_and_band_pct": {
+    "L<0.64": 8.289169124501225,
+    "0.64<=L<1.5": 4.5946189537755755,
+    "1.5<=L<2.0 & v<0.5": 1.9583948374395328,
+    "gate inactive": 21.435816386452895
+   },
+   "strata_standstill_pct": {
+    "primary:Overtaking": 55.604811296672985,
+    "primary:Merging": 26.612322376866246,
+    "primary:Overtaking + Merging": 37.04961838799667,
+    "primary:Emergency_Brake": 37.206396392182626,
+    "primary:Traffic_Signs": 39.33633118240382,
+    "primary:Give_Way": 13.41654848865937,
+    "no_junction_control_by_scenario_type": 41.05693084629576,
+    "bypass:single_direction": 45.372981251694576,
+    "bypass:two_way": 63.790275332655696
+   },
+   "ended_by_60s_rule": 7,
+   "ended_by_tick_cap": 2
+  }
  }
 }
