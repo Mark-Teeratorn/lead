@@ -21,6 +21,7 @@
 (2) CLAIMS REMOVED OR CHANGED, AND WHY
 - "Across Scale" in the title; "saturating", "does not resolve", "standstill floor" — only two dataset sizes and one seed each (R3).
 - Title changed on 16 Nov 2026 (author's choice) to "Learning to Wait: …"; the former subtitle "A Matched-Pair, Single-Seed Study" was dropped from the title, and the design (matched schedule, one seed per condition) is stated in the first sentences of the abstract.
+- Word file renamed on 17 Nov 2026 (author's request) to "docs/Learning to Wait - Fine-Tuning Data Composition and the Stay-Put Plans of a Vision-Language-Action Driving Policy.docx" (a hyphen replaces the colon, which file names cannot hold).
 - H2 against the historical checkpoint as the primary result (−8.19 pp, p_Holm 0.0032) — that checkpoint has a different, two-phase schedule. Replaced by the confirmatory matched result −8.06 pp (R1).
 - "Hazard flooding = naive / uncurated oversampling of edge-case logs" — both regimes are IPF draws from one verified pool (dataset READMEs; DEVIATIONS B9).
 - Old Table 1 percentages (e.g. "22:51:27 steering", "39% braking") — rebuilt from the dataset READMEs; "50:25:25" was a misreading of 50/13/13/12/12.
