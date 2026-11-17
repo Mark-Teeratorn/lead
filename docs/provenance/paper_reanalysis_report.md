@@ -2278,3 +2278,347 @@ post hoc; addendum section 20, written after the section 15 values were seen; de
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | paired blocked time without runs at a collision position (Balanced minus Flooded-6400-Matched; comparator = mean of two passes) | 0.00 | 0.33 | -0.33 | [-1.61, -0.09] | 0.0 | 42 | 0.1797 | n/a | 0.1797 | 0/2/42 | -1.000 |
 | paired blocked time without runs at a collision position (Balanced minus Golden-6400; comparator = mean of two passes) | 0.00 | 0.69 | -0.69 | [-4.16, 0.00] | 0.0 | 43 | 0.3173 | n/a | 0.3173 | 0/1/43 | -1.000 |
+
+
+## S22. Analyses requested by the review of 17 November 2026 (addendum section 22)
+
+post hoc; addendum section 22, written before computing; no decision rule
+
+### (a) Means of per-route values
+
+| arm | plan_rate_L<1.5_pct | low_speed_stays_put_pct | at_rest_stays_put_pct | time_blocked_pct | standstill_without_blocked_pct | standstill_pct | driving_score | route_completion | collision_events | plans_ending_at_rest_above_2mps_pct | crawl_pct_0.1_to_1.0 | success |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Base run2 | 13.239 | 12.605 | 14.169 | 0.368 | 35.910 | 36.278 | 42.600 | 71.926 | 1.114 | 1.590 | 13.242 | 13.636 |
+| Base run1 | 17.635 | 16.222 | 17.535 | 0.000 | 40.452 | 40.452 | 38.821 | 69.072 | 1.136 | 1.686 | 11.803 | 6.818 |
+| Golden-6400 run1 | 2.471 | 2.082 | 2.624 | 7.748 | 17.966 | 25.715 | 49.852 | 82.377 | 1.000 | 0.993 | 11.744 | 13.636 |
+| Golden-6400 run2 | 3.018 | 1.857 | 2.381 | 8.514 | 19.499 | 28.013 | 42.455 | 75.027 | 1.068 | 0.992 | 12.790 | 6.818 |
+| Flooded-6400-Matched run1 | 13.034 | 14.001 | 16.018 | 0.182 | 33.594 | 33.776 | 53.088 | 74.647 | 0.818 | 2.169 | 12.392 | 18.182 |
+| Flooded-6400-Matched run2 | 10.132 | 11.739 | 13.704 | 0.688 | 32.412 | 33.100 | 50.566 | 76.517 | 1.045 | 2.161 | 12.628 | 15.909 |
+| Golden-6400 nogate | 2.719 | 1.784 | 2.179 | 14.052 | 13.363 | 27.415 | 45.693 | 76.435 | 1.159 | 1.018 | 12.752 | 13.636 |
+| Flooded-6400-Matched nogate | 8.938 | 10.251 | 12.953 | 2.888 | 21.678 | 24.566 | 47.953 | 81.157 | 1.159 | 2.263 | 16.931 | 13.636 |
+| Balanced-6400 run1 | 3.631 | 2.713 | 3.233 | 6.347 | 20.591 | 26.938 | 49.574 | 77.443 | 1.023 | 1.517 | 12.798 | 15.909 |
+| Golden-1600 | 9.278 | 8.859 | 9.955 | 0.828 | 31.538 | 32.366 | 49.876 | 78.160 | 0.955 | 2.319 | 12.307 | 11.364 |
+| Flooded-1600 | 10.829 | 9.540 | 10.724 | 0.689 | 33.002 | 33.691 | 45.769 | 77.443 | 1.000 | 1.994 | 12.585 | 11.364 |
+
+Base run2 minus Golden-6400 (mean of two passes)
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| plan_rate_L<1.5_pct | 13.239 | 2.745 | 10.494 | [6.414, 16.355] | 107.0 | 0 | 9.69e-07 | 9.69e-07 | 5.95e-06 | 35/9/0 | 0.784 |
+| low_speed_stays_put_pct | 12.605 | 1.970 | 10.635 | [7.108, 15.778] | 27.0 | 1 | 7.23e-08 | n/a | 7.23e-08 | 40/3/1 | 0.943 |
+| at_rest_stays_put_pct | 14.169 | 2.503 | 11.666 | [8.075, 16.830] | 9.0 | 2 | 3.15e-08 | n/a | 3.15e-08 | 40/2/2 | 0.980 |
+| time_blocked_pct | 0.368 | 8.131 | -7.763 | [-15.580, -3.502] | 2.0 | 33 | 0.0058 | n/a | 0.0058 | 1/10/33 | -0.939 |
+| standstill_without_blocked_pct | 35.910 | 18.733 | 17.177 | [10.260, 26.324] | 156.0 | 0 | 3.13e-05 | 3.13e-05 | 7.62e-05 | 35/9/0 | 0.685 |
+| standstill_pct | 36.278 | 26.864 | 9.414 | [3.127, 17.689] | 269.0 | 0 | 0.0076 | 0.0076 | 0.0084 | 32/12/0 | 0.457 |
+| driving_score | 42.600 | 46.153 | -3.553 | [-10.800, 3.247] | 358.0 | 3 | 0.3475 | n/a | 0.3475 | 19/22/3 | -0.168 |
+| route_completion | 71.926 | 78.702 | -6.776 | [-15.462, 1.005] | 127.0 | 17 | 0.1363 | n/a | 0.1363 | 11/16/17 | -0.328 |
+| collision_events | 1.114 | 1.034 | 0.080 | [-0.148, 0.318] | 234.5 | 12 | 0.5724 | n/a | 0.5724 | 16/16/12 | 0.112 |
+| plans_ending_at_rest_above_2mps_pct | 1.627 | 0.992 | 0.635 | [0.209, 1.086] | 204.0 | 3 | 0.0056 | n/a | 0.0056 | 29/11/3 | 0.502 |
+| crawl_pct_0.1_to_1.0 | 13.242 | 12.267 | 0.975 | [-0.594, 2.435] | 358.0 | 0 | 0.1117 | 0.1117 | 0.1099 | 27/17/0 | 0.277 |
+
+Base run2 minus Flooded-6400-Matched (mean of two passes)
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| plan_rate_L<1.5_pct | 13.239 | 11.583 | 1.656 | [-2.045, 6.541] | 402.0 | 0 | 0.2834 | 0.2834 | 0.2778 | 15/29/0 | -0.188 |
+| low_speed_stays_put_pct | 12.605 | 12.870 | -0.265 | [-3.643, 4.495] | 371.0 | 0 | 0.1508 | 0.1508 | 0.1479 | 14/30/0 | -0.251 |
+| at_rest_stays_put_pct | 14.169 | 14.861 | -0.692 | [-4.181, 4.073] | 368.0 | 0 | 0.1410 | 0.1410 | 0.1383 | 14/30/0 | -0.257 |
+| time_blocked_pct | 0.368 | 0.435 | -0.067 | [-1.214, 0.645] | 5.0 | 40 | 1.0000 | n/a | 1.0000 | 2/2/40 | 0.000 |
+| standstill_without_blocked_pct | 35.910 | 33.003 | 2.907 | [-2.094, 10.352] | 440.0 | 0 | 0.5284 | 0.5284 | 0.5210 | 20/24/0 | -0.111 |
+| standstill_pct | 36.278 | 33.438 | 2.840 | [-2.374, 10.710] | 437.0 | 0 | 0.5059 | 0.5059 | 0.4985 | 20/24/0 | -0.117 |
+| driving_score | 42.600 | 51.827 | -9.227 | [-15.389, -3.113] | 202.0 | 6 | 0.0145 | n/a | 0.0145 | 15/23/6 | -0.455 |
+| route_completion | 71.926 | 75.582 | -3.656 | [-11.741, 4.175] | 128.0 | 19 | 0.3533 | n/a | 0.3533 | 9/16/19 | -0.212 |
+| collision_events | 1.114 | 0.932 | 0.182 | [-0.068, 0.443] | 123.5 | 18 | 0.1804 | n/a | 0.1804 | 16/10/18 | 0.296 |
+| plans_ending_at_rest_above_2mps_pct | 1.627 | 2.165 | -0.538 | [-1.201, 0.005] | 315.0 | 2 | 0.1345 | n/a | 0.1345 | 16/25/2 | -0.268 |
+| crawl_pct_0.1_to_1.0 | 13.242 | 12.510 | 0.732 | [-0.694, 2.105] | 400.0 | 0 | 0.2731 | 0.2731 | 0.2676 | 25/19/0 | 0.192 |
+
+Base run2 minus Balanced-6400 (one pass)
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| plan_rate_L<1.5_pct | 13.239 | 3.631 | 9.608 | [5.173, 15.794] | 105.0 | 0 | 8.24e-07 | 8.24e-07 | 5.33e-06 | 38/6/0 | 0.788 |
+| low_speed_stays_put_pct | 12.605 | 2.713 | 9.892 | [6.251, 15.175] | 70.0 | 1 | 1.14e-06 | n/a | 1.14e-06 | 37/6/1 | 0.852 |
+| at_rest_stays_put_pct | 14.169 | 3.233 | 10.935 | [7.192, 16.162] | 53.0 | 2 | 6.27e-07 | n/a | 6.27e-07 | 38/4/2 | 0.883 |
+| time_blocked_pct | 0.368 | 6.347 | -5.979 | [-13.515, -2.186] | 0.0 | 37 | 0.0180 | n/a | 0.0180 | 0/7/37 | -1.000 |
+| standstill_without_blocked_pct | 35.910 | 20.591 | 15.319 | [7.827, 24.548] | 177.0 | 0 | 1.09e-04 | 1.09e-04 | 2.06e-04 | 34/10/0 | 0.642 |
+| standstill_pct | 36.278 | 26.938 | 9.340 | [2.487, 17.914] | 245.0 | 0 | 0.0030 | 0.0030 | 0.0035 | 33/11/0 | 0.505 |
+| driving_score | 42.600 | 49.574 | -6.974 | [-12.952, -0.817] | 163.0 | 10 | 0.0215 | n/a | 0.0215 | 11/23/10 | -0.452 |
+| route_completion | 71.926 | 77.443 | -5.517 | [-14.728, 2.678] | 59.0 | 25 | 0.1474 | n/a | 0.1474 | 7/12/25 | -0.379 |
+| collision_events | 1.114 | 1.023 | 0.091 | [-0.227, 0.341] | 85.5 | 24 | 0.4430 | n/a | 0.4430 | 12/8/24 | 0.186 |
+| plans_ending_at_rest_above_2mps_pct | 1.627 | 1.517 | 0.110 | [-0.407, 0.546] | 345.0 | 3 | 0.3823 | n/a | 0.3823 | 25/15/3 | 0.159 |
+| crawl_pct_0.1_to_1.0 | 13.242 | 12.798 | 0.443 | [-1.316, 2.027] | 418.0 | 0 | 0.3756 | 0.3756 | 0.3689 | 25/19/0 | 0.156 |
+
+Base run2 minus Golden-1600 (one pass)
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| plan_rate_L<1.5_pct | 13.239 | 9.278 | 3.961 | [-1.233, 9.955] | 414.0 | 0 | 0.3510 | 0.3510 | 0.3445 | 25/19/0 | 0.164 |
+| low_speed_stays_put_pct | 12.605 | 8.859 | 3.746 | [-0.696, 9.120] | 383.0 | 1 | 0.2771 | n/a | 0.2771 | 26/17/1 | 0.190 |
+| at_rest_stays_put_pct | 14.169 | 9.955 | 4.214 | [-0.264, 9.665] | 360.0 | 1 | 0.1724 | n/a | 0.1724 | 27/16/1 | 0.239 |
+| time_blocked_pct | 0.368 | 0.828 | -0.460 | [-1.799, 0.437] | 3.0 | 39 | 0.2249 | n/a | 0.2249 | 2/3/39 | -0.600 |
+| standstill_without_blocked_pct | 35.910 | 31.538 | 4.372 | [-3.871, 13.061] | 427.0 | 0 | 0.4346 | 0.4346 | 0.4274 | 20/24/0 | 0.137 |
+| standstill_pct | 36.278 | 32.366 | 3.912 | [-4.213, 12.702] | 443.0 | 0 | 0.5514 | 0.5514 | 0.5440 | 20/24/0 | 0.105 |
+| driving_score | 42.600 | 49.876 | -7.276 | [-14.602, 0.394] | 182.0 | 10 | 0.0483 | n/a | 0.0483 | 11/23/10 | -0.388 |
+| route_completion | 71.926 | 78.160 | -6.234 | [-15.279, 2.782] | 83.0 | 21 | 0.0944 | n/a | 0.0944 | 6/17/21 | -0.399 |
+| collision_events | 1.114 | 0.955 | 0.159 | [-0.182, 0.523] | 114.0 | 21 | 0.4525 | n/a | 0.4525 | 13/10/21 | 0.174 |
+| plans_ending_at_rest_above_2mps_pct | 1.627 | 2.319 | -0.692 | [-1.199, -0.178] | 246.0 | 2 | 0.0168 | n/a | 0.0168 | 13/28/2 | -0.429 |
+| crawl_pct_0.1_to_1.0 | 13.242 | 12.307 | 0.935 | [-0.825, 2.687] | 422.0 | 0 | 0.4012 | 0.4012 | 0.3943 | 26/18/0 | 0.147 |
+
+Base run2 minus Flooded-1600 (one pass)
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| plan_rate_L<1.5_pct | 13.239 | 10.829 | 2.410 | [-2.630, 7.866] | 465.0 | 0 | 0.7332 | 0.7332 | 0.7263 | 20/24/0 | 0.061 |
+| low_speed_stays_put_pct | 12.605 | 9.540 | 3.065 | [-0.785, 7.988] | 397.0 | 0 | 0.2580 | 0.2580 | 0.2528 | 26/18/0 | 0.198 |
+| at_rest_stays_put_pct | 14.169 | 10.724 | 3.445 | [-0.502, 8.364] | 380.0 | 0 | 0.1833 | 0.1833 | 0.1796 | 26/18/0 | 0.232 |
+| time_blocked_pct | 0.368 | 0.689 | -0.321 | [-2.730, 0.225] | 1.0 | 42 | 0.6547 | n/a | 0.6547 | 1/1/42 | -0.333 |
+| standstill_without_blocked_pct | 35.910 | 33.002 | 2.908 | [-4.063, 10.825] | 484.0 | 0 | 0.9035 | 0.9035 | 0.8979 | 20/24/0 | 0.022 |
+| standstill_pct | 36.278 | 33.691 | 2.587 | [-4.415, 10.822] | 475.0 | 0 | 0.8217 | 0.8217 | 0.8154 | 19/25/0 | -0.040 |
+| driving_score | 42.600 | 45.769 | -3.169 | [-12.639, 5.657] | 333.0 | 6 | 0.5865 | n/a | 0.5865 | 20/18/6 | -0.101 |
+| route_completion | 71.926 | 77.443 | -5.517 | [-15.958, 5.232] | 96.0 | 22 | 0.3221 | n/a | 0.3221 | 9/13/22 | -0.241 |
+| collision_events | 1.114 | 1.000 | 0.114 | [-0.250, 0.455] | 132.5 | 20 | 0.6012 | n/a | 0.6012 | 13/11/20 | 0.117 |
+| plans_ending_at_rest_above_2mps_pct | 1.627 | 1.994 | -0.367 | [-0.925, 0.124] | 311.0 | 3 | 0.1833 | n/a | 0.1833 | 16/24/3 | -0.241 |
+| crawl_pct_0.1_to_1.0 | 13.242 | 12.585 | 0.656 | [-0.909, 2.346] | 411.0 | 0 | 0.3332 | 0.3332 | 0.3269 | 27/17/0 | 0.170 |
+
+### (c) Blocked-time tests
+
+| contrast | mean diff | non-zero pairs | positive | negative | permutation p | Wilcoxon p | method |
+|---|---|---|---|---|---|---|---|
+| Golden-6400 minus Flooded-6400-Matched, default controller, run1 | 7.566 | 7 | 6 | 1 | 0.0312 | 0.0280 | exact, all 128 sign assignments over the non-zero pairs |
+| Golden-6400 minus Flooded-6400-Matched, default controller, run2 | 7.826 | 9 | 8 | 1 | 0.0234 | 0.0284 | exact, all 512 sign assignments over the non-zero pairs |
+| Golden-6400 minus Flooded-6400-Matched, gate-off controller | 11.164 | 12 | 12 | 0 | 4.88e-04 | 0.0022 | exact, all 4096 sign assignments over the non-zero pairs |
+| Golden-6400 minus Flooded-6400-Matched, mean of two passes | 7.696 | 12 | 10 | 2 | 0.0054 | 0.0096 | exact, all 4096 sign assignments over the non-zero pairs |
+| Balanced-6400 minus Flooded-6400-Matched (mean of two passes) | 5.912 | 9 | 7 | 2 | 0.0508 | 0.0663 | exact, all 512 sign assignments over the non-zero pairs |
+| Balanced-6400 minus Golden-6400 (mean of two passes) | -1.784 | 13 | 3 | 10 | 0.4949 | 0.1330 | exact, all 8192 sign assignments over the non-zero pairs |
+| Golden-6400 run1 minus Golden-1600 | 6.920 | 7 | 6 | 1 | 0.0312 | 0.0280 | exact, all 128 sign assignments over the non-zero pairs |
+
+### (d) Position match
+
+```
+{
+ "Golden-6400 run1": {
+  "long_standstill_runs_not_blocked": 8,
+  "of_these_on_a_route_with_a_collision": 8,
+  "of_these_at_collision_position_10m": 8,
+  "match_rate_pct": 100.0,
+  "match_rate_on_routes_with_a_collision_pct": 100.0,
+  "n_blocked_runs": 22,
+  "placement_rate_pct_mean_over_blocked_runs": 33.13359970217501
+ },
+ "Golden-6400 run2": {
+  "long_standstill_runs_not_blocked": 9,
+  "of_these_on_a_route_with_a_collision": 9,
+  "of_these_at_collision_position_10m": 8,
+  "match_rate_pct": 88.88888888888889,
+  "match_rate_on_routes_with_a_collision_pct": 88.88888888888889,
+  "n_blocked_runs": 25,
+  "placement_rate_pct_mean_over_blocked_runs": 42.274143833470056
+ },
+ "Golden-6400 nogate": {
+  "long_standstill_runs_not_blocked": 3,
+  "of_these_on_a_route_with_a_collision": 3,
+  "of_these_at_collision_position_10m": 3,
+  "match_rate_pct": 100.0,
+  "match_rate_on_routes_with_a_collision_pct": 100.0,
+  "n_blocked_runs": 25,
+  "placement_rate_pct_mean_over_blocked_runs": 59.45037690807962
+ },
+ "Flooded-6400-Matched run1": {
+  "long_standstill_runs_not_blocked": 16,
+  "of_these_on_a_route_with_a_collision": 13,
+  "of_these_at_collision_position_10m": 12,
+  "match_rate_pct": 75.0,
+  "match_rate_on_routes_with_a_collision_pct": 92.3076923076923,
+  "n_blocked_runs": 2,
+  "placement_rate_pct_mean_over_blocked_runs": 34.60076775832062
+ },
+ "Flooded-6400-Matched run2": {
+  "long_standstill_runs_not_blocked": 12,
+  "of_these_on_a_route_with_a_collision": 12,
+  "of_these_at_collision_position_10m": 12,
+  "match_rate_pct": 100.0,
+  "match_rate_on_routes_with_a_collision_pct": 100.0,
+  "n_blocked_runs": 6,
+  "placement_rate_pct_mean_over_blocked_runs": 67.87178116927505
+ },
+ "Flooded-6400-Matched nogate": {
+  "long_standstill_runs_not_blocked": 14,
+  "of_these_on_a_route_with_a_collision": 14,
+  "of_these_at_collision_position_10m": 12,
+  "match_rate_pct": 85.71428571428571,
+  "match_rate_on_routes_with_a_collision_pct": 85.71428571428571,
+  "n_blocked_runs": 6,
+  "placement_rate_pct_mean_over_blocked_runs": 52.29888728439063
+ },
+ "Balanced-6400 run1": {
+  "long_standstill_runs_not_blocked": 9,
+  "of_these_on_a_route_with_a_collision": 9,
+  "of_these_at_collision_position_10m": 9,
+  "match_rate_pct": 100.0,
+  "match_rate_on_routes_with_a_collision_pct": 100.0,
+  "n_blocked_runs": 24,
+  "placement_rate_pct_mean_over_blocked_runs": 43.95023589949325
+ }
+}
+{
+ "long_runs": 71,
+ "at_collision_position": 64,
+ "on_route_with_collision": 68,
+ "match_rate_pct": 90.14084507042253,
+ "match_rate_on_routes_with_a_collision_pct": 94.11764705882354
+}
+```
+
+### (e) Collision events on routes with blocked time
+
+```
+{
+ "default controller, run1": {
+  "n_routes_with_blocked_time_for_either_model": 7,
+  "routes": [
+   "1852",
+   "1825",
+   "3561",
+   "3436",
+   "23901",
+   "1956",
+   "14194"
+  ],
+  "events_golden_on_these_routes": 9.0,
+  "events_flooded_on_these_routes": 8.0,
+  "events_golden_on_other_routes": 35.0,
+  "events_flooded_on_other_routes": 28.0
+ },
+ "default controller, run2": {
+  "n_routes_with_blocked_time_for_either_model": 9,
+  "routes": [
+   "1852",
+   "2204",
+   "3561",
+   "3540",
+   "3436",
+   "2664",
+   "1956",
+   "2390",
+   "3144"
+  ],
+  "events_golden_on_these_routes": 10.0,
+  "events_flooded_on_these_routes": 8.0,
+  "events_golden_on_other_routes": 37.0,
+  "events_flooded_on_other_routes": 38.0
+ },
+ "gate-off controller": {
+  "n_routes_with_blocked_time_for_either_model": 12,
+  "routes": [
+   "1852",
+   "2204",
+   "1825",
+   "17752",
+   "3540",
+   "3436",
+   "2127",
+   "2664",
+   "1956",
+   "2050",
+   "2390",
+   "14842"
+  ],
+  "events_golden_on_these_routes": 19.0,
+  "events_flooded_on_these_routes": 14.0,
+  "events_golden_on_other_routes": 32.0,
+  "events_flooded_on_other_routes": 37.0
+ },
+ "Balanced-6400, routes on which it has blocked time": {
+  "n_routes": 7,
+  "routes": [
+   "2534",
+   "1852",
+   "17752",
+   "3436",
+   "1956",
+   "14194",
+   "2416"
+  ],
+  "events_balanced": 13.0,
+  "events_flooded_mean_of_two_passes": 6.5,
+  "events_golden_mean_of_two_passes": 6.5
+ }
+}
+```
+
+### (f) Plans per stop episode
+
+default controller, run1
+
+```
+{
+ "n_routes_with_at_least_3_episodes_for_both": 12,
+ "episodes_total": {
+  "golden": 100,
+  "flooded": 230
+ },
+ "episodes_beginning_with_a_stay_put_plan_pooled_pct": {
+  "golden": 4.0,
+  "flooded": 8.26086956521739
+ },
+ "episodes_censored_pooled_pct": {
+  "golden": 0.0,
+  "flooded": 0.0
+ }
+}
+```
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| begin_stay_put_pct, golden minus flooded | 6.250 | 9.200 | -2.950 | [-8.968, 3.380] | 11.5 | 4 | 0.3621 | n/a | 0.3621 | 3/5/4 | -0.361 |
+| begin_start_plan_pct, golden minus flooded | 70.433 | 71.845 | -1.413 | [-14.248, 9.022] | 26.0 | 2 | 0.8784 | n/a | 0.8784 | 6/4/2 | -0.055 |
+| median_delay_s, golden minus flooded | 0.015 | 0.006 | 0.008 | [0.000, 0.017] | 0.0 | 10 | 0.1573 | n/a | 0.1573 | 2/0/10 | 1.000 |
+
+default controller, run2
+
+```
+{
+ "n_routes_with_at_least_3_episodes_for_both": 11,
+ "episodes_total": {
+  "golden": 83,
+  "flooded": 236
+ },
+ "episodes_beginning_with_a_stay_put_plan_pooled_pct": {
+  "golden": 1.2048192771084338,
+  "flooded": 8.05084745762712
+ },
+ "episodes_censored_pooled_pct": {
+  "golden": 0.0,
+  "flooded": 0.0
+ }
+}
+```
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| begin_stay_put_pct, golden minus flooded | 0.000 | 9.697 | -9.697 | [-16.818, -3.788] | 0.0 | 6 | 0.0412 | n/a | 0.0412 | 0/5/6 | -1.000 |
+| begin_start_plan_pct, golden minus flooded | 76.263 | 67.753 | 8.510 | [-14.596, 28.283] | 20.0 | 1 | 0.4434 | n/a | 0.4434 | 6/4/1 | 0.273 |
+| median_delay_s, golden minus flooded | 0.009 | 0.018 | -0.009 | [-0.030, 0.005] | 7.5 | 4 | 0.2596 | n/a | 0.2596 | 3/4/4 | -0.464 |
+
+gate-off controller
+
+```
+{
+ "n_routes_with_at_least_3_episodes_for_both": 3,
+ "episodes_total": {
+  "golden": 54,
+  "flooded": 123
+ },
+ "episodes_beginning_with_a_stay_put_plan_pooled_pct": {
+  "golden": 3.7037037037037037,
+  "flooded": 8.130081300813009
+ },
+ "episodes_censored_pooled_pct": {
+  "golden": 0.0,
+  "flooded": 0.0
+ }
+}
+```
+
+| comparison | mean 1st | mean 2nd | diff | BCa 95% | W | zeros | p | p exact | p approx | 1st>/</= | r_rb |
+|---|---|---|---|---|---|---|---|---|---|---|---|

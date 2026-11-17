@@ -165,26 +165,31 @@ def fig_low_speed_plans():
     a.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.3), ncol=2, fontsize=9, columnspacing=1.0)
     a.set_title("(a)", loc="left", fontsize=11, y=1.3)
 
-    pooled = V["pooled_all_models_default_run1"]
-    train = V["training_set_reference"]["low_speed_stays_put_pct"]
-    models = [("Base", "Base", "0.55", None), ("Flooded-1600", "Flooded-\n1600", C_FLOOD, "flooded_1600"),
+    # Panel (b): means of per-route shares (addendum 22a), with the re-evaluated unadapted policy and the decoupling checkpoint.
+    man = json.loads(MANIFEST.read_text())
+    means = man["review17"]["a_base_reference"]["means_of_per_route_values"]
+    train = dict(V["training_set_reference"]["low_speed_stays_put_pct"])
+    dec = json.loads((ROOT / "docs/provenance/decoupling_dataset_composition.json").read_text())
+    train["floodedgroups_balanced_6400"] = round(dec["sets"]["floodedgroups_balanced_6400"]["low_speed_stays_put_pct"], 1)
+    models = [("Base run2", "Base-\nRerun", "0.55", None), ("Flooded-1600", "Flooded-\n1600", C_FLOOD, "flooded_1600"),
               ("Golden-1600", "Golden-\n1600", C_GOLD, "golden_1600"),
               ("Flooded-6400-Hist", "Flooded-\n6400-Hist", C_FLOOD, None),
-              ("Flooded-6400-Matched", "Flooded-\n6400", C_FLOOD, "flooded_6400"),
-              ("Golden-6400", "Golden-\n6400", C_GOLD, "golden_6400")]
+              ("Flooded-6400-Matched run1", "Flooded-\n6400", C_FLOOD, "flooded_6400"),
+              ("Golden-6400 run1", "Golden-\n6400", C_GOLD, "golden_6400"),
+              ("Balanced-6400 run1", "Decoupling-\n6400", "0.3", "floodedgroups_balanced_6400")]
     for k, (name, lab, c, tkey) in enumerate(models):
-        v = pooled[name]["low_speed_stays_put"]["pct"]
+        v = means[name]["low_speed_stays_put_pct"]
         b.bar(k, v, 0.62, color=c, edgecolor="white", alpha=0.6 if name == "Flooded-6400-Hist" else 1.0)
         b.text(k, v + 0.8, f"{v:.1f}", ha="center", va="bottom", fontsize=9.5)
         if tkey:
             b.plot([k - 0.36, k + 0.36], [train[tkey]] * 2, color="k", lw=2,
                    label="share in its training set" if tkey == "flooded_1600" else None)
-        print(f"fig_low_speed_plans: pooled stay-put share {name}: {v:.2f} %"
+        print(f"fig_low_speed_plans: per-route mean stay-put share {name}: {v:.2f} %"
               + (f" (training set {train[tkey]} %)" if tkey else ""))
     b.set_xticks(range(len(models)))
-    b.set_xticklabels([m[1] for m in models], fontsize=9)
+    b.set_xticklabels([m[1] for m in models], fontsize=8.5)
     b.set_ylim(0, 40)
-    b.set_ylabel("Plan stays put at \u2264 0.5 m/s (% of steps, pooled)")
+    b.set_ylabel("Plan stays put at \u2264 0.5 m/s (% of steps, route mean)")
     b.legend(frameon=False, loc="upper right", fontsize=9.5)
     b.set_title("(b)", loc="left", fontsize=11, y=1.3)
     save(fig, "figure_5.png")

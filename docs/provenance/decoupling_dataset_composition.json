@@ -1,0 +1,96 @@
+{
+ "source": "annotations_train.json of the three published 6,400-sample datasets (Hugging Face), fetched 17 Nov 2026",
+ "definitions": "low speed: speed_mps <= 0.5; stays put: future_path_m < 0.64; starts: future_path_m >= 2.0; sample identity: (clip_id, t0_relative)",
+ "sets": {
+  "golden_6400": {
+   "n": 6400,
+   "n_unique_samples": 6400,
+   "stationary_n": 128,
+   "stationary_pct": 2.0,
+   "brake_pct": 35.359375,
+   "hazard_pct": 23.796875,
+   "manoeuvre_pct": {
+    "STRAIGHT": 50.0,
+    "SWERVE_LEFT": 13.0,
+    "SWERVE_RIGHT": 13.0,
+    "TURN_LEFT": 12.0,
+    "TURN_RIGHT": 12.0
+   },
+   "low_speed_n": 1570,
+   "low_speed_stays_put_n": 171,
+   "low_speed_starts_n": 1251,
+   "low_speed_between_n": 148,
+   "low_speed_stays_put_pct": 10.89171974522293,
+   "n_clips": 1417,
+   "n_lead_logs": 527
+  },
+  "flooded_6400": {
+   "n": 6400,
+   "n_unique_samples": 6400,
+   "stationary_n": 640,
+   "stationary_pct": 10.0,
+   "brake_pct": 41.328125,
+   "hazard_pct": 30.8125,
+   "manoeuvre_pct": {
+    "STRAIGHT": 22.0,
+    "SWERVE_LEFT": 37.0,
+    "SWERVE_RIGHT": 12.0,
+    "TURN_LEFT": 14.5,
+    "TURN_RIGHT": 14.5
+   },
+   "low_speed_n": 2143,
+   "low_speed_stays_put_n": 663,
+   "low_speed_starts_n": 1343,
+   "low_speed_between_n": 137,
+   "low_speed_stays_put_pct": 30.937937470835276,
+   "n_clips": 1400,
+   "n_lead_logs": 524
+  },
+  "floodedgroups_balanced_6400": {
+   "n": 6400,
+   "n_unique_samples": 6400,
+   "stationary_n": 128,
+   "stationary_pct": 2.0,
+   "brake_pct": 35.078125,
+   "hazard_pct": 24.171875,
+   "manoeuvre_pct": {
+    "STRAIGHT": 50.0,
+    "SWERVE_LEFT": 13.0,
+    "SWERVE_RIGHT": 13.0,
+    "TURN_LEFT": 12.0,
+    "TURN_RIGHT": 12.0
+   },
+   "low_speed_n": 1507,
+   "low_speed_stays_put_n": 167,
+   "low_speed_starts_n": 1210,
+   "low_speed_between_n": 130,
+   "low_speed_stays_put_pct": 11.081619110816192,
+   "n_clips": 1414,
+   "n_lead_logs": 527
+  }
+ },
+ "overlap": {
+  "golden_6400 and flooded_6400": {
+   "shared_samples": 4284,
+   "share_of_each_pct": 66.9375
+  },
+  "golden_6400 and floodedgroups_balanced_6400": {
+   "shared_samples": 5523,
+   "share_of_each_pct": 86.296875
+  },
+  "flooded_6400 and floodedgroups_balanced_6400": {
+   "shared_samples": 4112,
+   "share_of_each_pct": 64.25
+  },
+  "all three": {
+   "shared_samples": 3942
+  },
+  "floodedgroups_balanced_6400 in neither other set": {
+   "samples": 707
+  },
+  "floodedgroups_balanced_6400 samples not in golden_6400": {
+   "samples": 877
+  }
+ },
+ "note": "Samples on the seven canonical evaluation routes touched by training were not computed for the decoupling set: the route mapping of train_eval_overlap_canonical44.json cannot be rebuilt from the annotation file. The dataset card gives 83 samples (1.3 %) on its own 44-route list, which is a different subset file."
+}

@@ -2867,6 +2867,244 @@ def analysis_pair1600(data):
 
 # --------------------------------------------------------------------------- main
 
+# --------------------------------------------------------------------------- review of 17 Nov 2026 (addendum 22)
+
+def perm_signflip(d, n_random=100000, seed=SEED):
+    """Two-sided sign-flip permutation test of the mean paired difference (addendum 22c)."""
+    d = np.asarray(d, float)
+    nz = d[d != 0]
+    n = len(nz)
+    if n == 0:
+        return {'n_nonzero_pairs': 0, 'status': 'not_computable'}
+    obs = abs(float(nz.sum()))
+    if n <= 20:
+        signs = ((np.arange(2 ** n)[:, None] >> np.arange(n)) & 1) * 2 - 1
+        p = float(np.mean(np.abs(signs @ nz) >= obs - 1e-9))
+        method = f'exact, all {2 ** n} sign assignments over the non-zero pairs'
+    else:
+        rng = np.random.default_rng(seed)
+        signs = rng.integers(0, 2, size=(n_random, n)) * 2 - 1
+        p = float((np.sum(np.abs(signs @ nz) >= obs - 1e-9) + 1) / (n_random + 1))
+        method = f'{n_random} random sign assignments, seed {seed}'
+    return {'n_nonzero_pairs': int(n), 'n_positive': int(np.sum(nz > 0)), 'n_negative': int(np.sum(nz < 0)),
+            'p_two_sided': p, 'method': method}
+
+
+def r17_metrics():
+    M = dict(s15_metrics())
+
+    def ends_at_rest(rd):
+        v, ve = np.asarray(rd['speed']), np.asarray(rd['v_end'])
+        m = v > 2.0
+        return pct(ve[m] < 0.5) if int(m.sum()) >= V_MIN else float('nan')
+    M['plans_ending_at_rest_above_2mps_pct'] = ends_at_rest
+    M['crawl_pct_0.1_to_1.0'] = lambda rd: pct((np.asarray(rd['speed']) >= 0.1) & (np.asarray(rd['speed']) < 1.0))
+    # Bench2Drive tools/merge_route_json.py: route completed and no infraction other than min_speed_infractions
+    M['success'] = lambda rd: 100.0 * float(rd['status'] in ('Completed', 'Perfect') and sum(len(v) for k, v in rd['infractions'].items() if k != 'min_speed_infractions') == 0)
+    return M
+
+
+def long_runs_not_blocked(rd, run=U_RUN):
+    """Runs of at least `run` consecutive standstill steps that contain no blocked step."""
+    ss = np.asarray(rd['speed']) < SS_V
+    blk = blocked_masks(rd)[0]
+    out, i, n = [], 0, len(ss)
+    while i < n:
+        if not ss[i]:
+            i += 1
+            continue
+        j = i
+        while j < n and ss[j]:
+            j += 1
+        if j - i >= run and not blk[i:j].any():
+            out.append((i, j))
+        i = j
+    return out
+
+
+def position_match(arm):
+    """Addendum 22d: match rate at 10 m of long standstill runs that are not blocked, and the placement rate of blocked runs."""
+    n_long, n_long_at, placement, n_long_routes_with_collision = 0, 0, [], 0
+    for r in CANONICAL_44:
+        rd = arm[r]
+        blk, lng = blocked_runs(rd), long_runs_not_blocked(rd)
+        if not blk and not lng:
+            continue
+        pts, seg, cum = route_polyline(r)
+        scale = rd['route_length'] / cum[-1]
+        sc = [arc_length_of(np.array([x['x'], x['y']]), pts, seg, cum) * scale for x in parse_collisions(rd)]
+        odo = np.concatenate([[0.0], np.cumsum(np.asarray(rd['speed']) * DT)])
+        for (i, j) in lng:
+            n_long += 1
+            n_long_routes_with_collision += bool(sc)
+            if sc and min(abs(odo[i] - s) for s in sc) <= CONTACT_TOL:
+                n_long_at += 1
+        if blk:
+            D = float(odo[-1])
+            iv = sorted((max(0.0, s - CONTACT_TOL), min(D, s + CONTACT_TOL)) for s in sc)
+            cov, end = 0.0, -1.0
+            for a, b in iv:
+                if b <= a:
+                    continue
+                a = max(a, end)
+                if b > a:
+                    cov += b - a
+                    end = b
+            placement += [cov / D if D > 0 else float('nan')] * len(blk)
+    return {'long_standstill_runs_not_blocked': n_long, 'of_these_on_a_route_with_a_collision': int(n_long_routes_with_collision),
+            'of_these_at_collision_position_10m': n_long_at,
+            'match_rate_pct': 100.0 * n_long_at / n_long if n_long else None,
+            'match_rate_on_routes_with_a_collision_pct': 100.0 * n_long_at / n_long_routes_with_collision if n_long_routes_with_collision else None,
+            'n_blocked_runs': len(placement),
+            'placement_rate_pct_mean_over_blocked_runs': 100.0 * float(np.mean(placement)) if placement else None}
+
+
+def episode_plan_table(arm, routes):
+    """Addendum 22f: per route, stop episodes (>= 20 steps), share that begin with a stay-put plan, median delay to the first plan of 2 m or more."""
+    tab = {}
+    for r in routes:
+        rd = arm[r]
+        L = np.asarray(rd['L'])
+        eps = [(i, j) for i, j, c in stop_episodes(rd) if c != 'brief']
+        first, start2, delay, cens = [], [], [], []
+        for i, j in eps:
+            first.append(bool(L[i] < 0.64))
+            start2.append(bool(L[i] >= 2.0))
+            k = np.nonzero(L[i:j] >= 2.0)[0]
+            delay.append((int(k[0]) if len(k) else j - i) * DT)
+            cens.append(not len(k))
+        tab[r] = {'n': len(eps), 'begin_stay_put_pct': 100.0 * float(np.mean(first)) if eps else float('nan'),
+                  'begin_start_plan_pct': 100.0 * float(np.mean(start2)) if eps else float('nan'),
+                  'median_delay_s': float(np.median(delay)) if eps else float('nan'),
+                  'n_censored': int(np.sum(cens)), 'n_begin_stay_put': int(np.sum(first))}
+    return tab
+
+
+def analysis_review17(arms):
+    """ANALYSIS_ADDENDUM.md section 22: analyses requested by the review of 17 Nov 2026. Post hoc, no decision rule."""
+    G1, F1, G2, F2, GN, FN = ('Golden-6400 run1', 'Flooded-6400-Matched run1', 'Golden-6400 run2', 'Flooded-6400-Matched run2',
+                              'Golden-6400 nogate', 'Flooded-6400-Matched nogate')
+    BASE2, BAL = 'Base run2', 'Balanced-6400 run1'
+    need = [(n, CANONICAL_44) for n in (G1, F1, G2, F2, GN, FN, BASE2, BAL, 'Golden-1600', 'Flooded-1600')]
+    res = {'label': 'post hoc; addendum section 22, written before computing; no decision rule'}
+    p = pending(arms, need)
+    if p:
+        res['status'] = p
+        res['status_line'] = 'pending'
+        return res
+    M = r17_metrics()
+
+    def v(name, fn):
+        return vec(arms, name, fn, CANONICAL_44)
+
+    def pair_nan(a, b):
+        ok = ~np.isnan(a) & ~np.isnan(b)
+        return paired(a[ok], b[ok]) if int(ok.sum()) >= 5 else {'n': int(ok.sum()), 'note': 'fewer than 5 usable routes'}
+
+    # (a) reference values for the unadapted policy
+    comps = {'Golden-6400 (mean of two passes)': (G1, G2), 'Flooded-6400-Matched (mean of two passes)': (F1, F2),
+             'Balanced-6400 (one pass)': (BAL,), 'Golden-1600 (one pass)': ('Golden-1600',), 'Flooded-1600 (one pass)': ('Flooded-1600',)}
+    a = {'means_of_per_route_values': {}, 'base_rerun_minus': {}}
+    for arm_name in (BASE2, 'Base run1', G1, G2, F1, F2, GN, FN, BAL, 'Golden-1600', 'Flooded-1600') + (('Flooded-6400-Hist',) if 'Flooded-6400-Hist' in arms else ()):
+        a['means_of_per_route_values'][arm_name] = {k: float(np.nanmean(v(arm_name, fn))) for k, fn in M.items()}
+    for cname, names in comps.items():
+        a['base_rerun_minus'][cname] = {k: pair_nan(v(BASE2, fn), np.mean([v(n, fn) for n in names], axis=0)) for k, fn in M.items() if k != 'success'}
+    res['a_base_reference'] = a
+
+    # (c) blocked-time tests
+    bt = M['time_blocked_pct']
+    contrasts = {'Golden-6400 minus Flooded-6400-Matched, default controller, run1': (v(G1, bt), v(F1, bt)),
+                 'Golden-6400 minus Flooded-6400-Matched, default controller, run2': (v(G2, bt), v(F2, bt)),
+                 'Golden-6400 minus Flooded-6400-Matched, gate-off controller': (v(GN, bt), v(FN, bt)),
+                 'Golden-6400 minus Flooded-6400-Matched, mean of two passes': ((v(G1, bt) + v(G2, bt)) / 2, (v(F1, bt) + v(F2, bt)) / 2),
+                 'Balanced-6400 minus Flooded-6400-Matched (mean of two passes)': (v(BAL, bt), (v(F1, bt) + v(F2, bt)) / 2),
+                 'Balanced-6400 minus Golden-6400 (mean of two passes)': (v(BAL, bt), (v(G1, bt) + v(G2, bt)) / 2),
+                 'Golden-6400 run1 minus Golden-1600': (v(G1, bt), v('Golden-1600', bt))}
+    res['c_blocked_time_tests'] = {}
+    for k, (x, y) in contrasts.items():
+        d = x - y
+        res['c_blocked_time_tests'][k] = dict(perm_signflip(d), mean_diff=float(np.mean(d)),
+                                              n_routes_first_nonzero=int(np.sum(x > 0)), n_routes_second_nonzero=int(np.sum(y > 0)),
+                                              wilcoxon_p=wilcoxon_full(x, y).get('p'))
+
+    # (d) chance rate of the position match
+    res['d_position_match'] = {n: position_match(arms[n]) for n in (G1, G2, GN, F1, F2, FN, BAL)}
+    pooled = {'long_runs': sum(x['long_standstill_runs_not_blocked'] for x in res['d_position_match'].values()),
+              'at_collision_position': sum(x['of_these_at_collision_position_10m'] for x in res['d_position_match'].values()),
+              'on_route_with_collision': sum(x['of_these_on_a_route_with_a_collision'] for x in res['d_position_match'].values())}
+    pooled['match_rate_pct'] = 100.0 * pooled['at_collision_position'] / pooled['long_runs'] if pooled['long_runs'] else None
+    pooled['match_rate_on_routes_with_a_collision_pct'] = 100.0 * pooled['at_collision_position'] / pooled['on_route_with_collision'] if pooled['on_route_with_collision'] else None
+    res['d_position_match_pooled_over_the_seven_runs'] = pooled
+
+    # (e) collision events on the routes with blocked time
+    ce = RUN_METRICS['collision_events']
+    res['e_collision_events_on_blocked_routes'] = {}
+    for label, (ga, fa) in {'default controller, run1': (G1, F1), 'default controller, run2': (G2, F2), 'gate-off controller': (GN, FN)}.items():
+        sel = np.array([bool(blocked_runs(arms[ga][r])) or bool(blocked_runs(arms[fa][r])) for r in CANONICAL_44])
+        g, fl = v(ga, ce), v(fa, ce)
+        res['e_collision_events_on_blocked_routes'][label] = {
+            'n_routes_with_blocked_time_for_either_model': int(sel.sum()), 'routes': [r for r, s in zip(CANONICAL_44, sel) if s],
+            'events_golden_on_these_routes': float(g[sel].sum()), 'events_flooded_on_these_routes': float(fl[sel].sum()),
+            'events_golden_on_other_routes': float(g[~sel].sum()), 'events_flooded_on_other_routes': float(fl[~sel].sum())}
+    selb = np.array([bool(blocked_runs(arms[BAL][r])) for r in CANONICAL_44])
+    res['e_collision_events_on_blocked_routes']['Balanced-6400, routes on which it has blocked time'] = {
+        'n_routes': int(selb.sum()), 'routes': [r for r, s in zip(CANONICAL_44, selb) if s],
+        'events_balanced': float(v(BAL, ce)[selb].sum()),
+        'events_flooded_mean_of_two_passes': float(((v(F1, ce) + v(F2, ce)) / 2)[selb].sum()),
+        'events_golden_mean_of_two_passes': float(((v(G1, ce) + v(G2, ce)) / 2)[selb].sum())}
+
+    # (f) plans per stop episode
+    res['f_stop_episode_plans'] = {}
+    for label, (ga, fa) in {'default controller, run1': (G1, F1), 'default controller, run2': (G2, F2), 'gate-off controller': (GN, FN)}.items():
+        tg, tf = episode_plan_table(arms[ga], CANONICAL_44), episode_plan_table(arms[fa], CANONICAL_44)
+        rt = [r for r in CANONICAL_44 if tg[r]['n'] >= 3 and tf[r]['n'] >= 3]
+        out = {'n_routes_with_at_least_3_episodes_for_both': len(rt),
+               'episodes_total': {'golden': int(sum(tg[r]['n'] for r in CANONICAL_44)), 'flooded': int(sum(tf[r]['n'] for r in CANONICAL_44))},
+               'episodes_beginning_with_a_stay_put_plan_pooled_pct': {
+                   'golden': 100.0 * sum(tg[r]['n_begin_stay_put'] for r in CANONICAL_44) / max(1, sum(tg[r]['n'] for r in CANONICAL_44)),
+                   'flooded': 100.0 * sum(tf[r]['n_begin_stay_put'] for r in CANONICAL_44) / max(1, sum(tf[r]['n'] for r in CANONICAL_44))},
+               'episodes_censored_pooled_pct': {
+                   'golden': 100.0 * sum(tg[r]['n_censored'] for r in CANONICAL_44) / max(1, sum(tg[r]['n'] for r in CANONICAL_44)),
+                   'flooded': 100.0 * sum(tf[r]['n_censored'] for r in CANONICAL_44) / max(1, sum(tf[r]['n'] for r in CANONICAL_44))}}
+        if len(rt) >= 5:
+            for key in ('begin_stay_put_pct', 'begin_start_plan_pct', 'median_delay_s'):
+                out[f'{key}, golden minus flooded'] = paired([tg[r][key] for r in rt], [tf[r][key] for r in rt])
+        res['f_stop_episode_plans'][label] = out
+    # composition of the H3 statistic: of the steps with a plan shorter than 1.5 m, the share at standstill (pooled over the 44 routes)
+    res['h3_statistic_composition'] = {}
+    for n in (G1, F1, G2, F2, GN, FN):
+        L = np.concatenate([np.asarray(arms[n][r]['L']) for r in CANONICAL_44])
+        sp = np.concatenate([np.asarray(arms[n][r]['speed']) for r in CANONICAL_44])
+        m = L < 1.5
+        res['h3_statistic_composition'][n] = {'steps_with_plan_below_1.5m': int(m.sum()),
+                                              'of_these_at_standstill_pct': 100.0 * float(np.mean(sp[m] < SS_V)),
+                                              'of_these_at_0.5mps_or_less_pct': 100.0 * float(np.mean(sp[m] <= 0.5))}
+    res['status_line'] = 'complete'
+    return res
+
+
+def render_review17(man):
+    R = man['review17']
+    out = ['', '## S22. Analyses requested by the review of 17 November 2026 (addendum section 22)', '', R['label'], '']
+    if R.get('status_line') != 'complete':
+        return '\n'.join(out + ['pending'])
+    a = R['a_base_reference']
+    keys = list(a['means_of_per_route_values']['Base run2'])
+    out += ['### (a) Means of per-route values', '', table(['arm'] + keys, [[n] + [f(x[k]) for k in keys] for n, x in a['means_of_per_route_values'].items()]), '']
+    for c, d in a['base_rerun_minus'].items():
+        out += [f'Base run2 minus {c}', '', table(PAIR_HDR, [pair_row(k, x) for k, x in d.items() if 'mean_diff' in x]), '']
+    out += ['### (c) Blocked-time tests', '', table(['contrast', 'mean diff', 'non-zero pairs', 'positive', 'negative', 'permutation p', 'Wilcoxon p', 'method'],
+            [[k, f(x['mean_diff']), x['n_nonzero_pairs'], x.get('n_positive'), x.get('n_negative'), fp(x.get('p_two_sided')), fp(x.get('wilcoxon_p')), x.get('method', '')]
+             for k, x in R['c_blocked_time_tests'].items()]), '']
+    out += ['### (d) Position match', '', '```', json.dumps(R['d_position_match'], indent=1), json.dumps(R['d_position_match_pooled_over_the_seven_runs'], indent=1), '```', '']
+    out += ['### (e) Collision events on routes with blocked time', '', '```', json.dumps(R['e_collision_events_on_blocked_routes'], indent=1), '```', '']
+    out += ['### (f) Plans per stop episode', '']
+    for label, d in R['f_stop_episode_plans'].items():
+        out += [label, '', '```', json.dumps({k: x for k, x in d.items() if not isinstance(x, dict) or 'wilcoxon' not in x}, indent=1), '```', '',
+                table(PAIR_HDR, [pair_row(k, x) for k, x in d.items() if isinstance(x, dict) and 'wilcoxon' in x]), '']
+    return '\n'.join(out)
+
+
 def clean(o):
     if isinstance(o, dict):
         return {str(k): clean(v) for k, v in o.items()}
@@ -2984,9 +3222,18 @@ def main():
     man['tables_base_rerun'] = analysis_tables_base_rerun(arms, scen)
     # same row computation for the decoupling model (Tables 3 and 4), descriptive
     man['tables_balanced'] = analysis_tables_base_rerun(arms, scen, arm='Balanced-6400 run1')
+    man['review17'] = analysis_review17(dict(arms, **{'Flooded-6400-Hist': data[FH]}))
+    # four-test family of the first re-analysis with the designated H1 comparator (Base run2); raw p of the two margin tests as in A
+    try:
+        f4 = man['A']['holm_4_test_families']['family_with_Flooded-6400-Matched']
+        raw4 = [man['Q']['holm_H1_base_run2_and_H2']['raw_p'][0]] + list(f4['raw_p'][1:])
+        man['review17']['holm_4_test_family_with_base_run2'] = {'tests': ['H1 Golden-1600 vs Base run2 DS (two-sided Wilcoxon)'] + list(f4['tests'][1:]),
+                                                               'raw_p': raw4, 'holm_p': [float(x) for x in holm_adjust(raw4)]}
+    except Exception as e:  # keep the run usable if a key is missing
+        man['review17']['holm_4_test_family_with_base_run2'] = {'status': f'not computed: {type(e).__name__}: {e}'}
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man) + '\n' + render_contact_balanced(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man) + '\n' + render_contact_balanced(man) + '\n' + render_review17(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')
