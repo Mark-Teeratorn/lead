@@ -341,7 +341,7 @@ Post hoc, existing step logs and result records only. The confirmatory record of
 
 **Reading.** No decision rule, and the Section 15 reading stands as computed. If most of the decoupling model's blocked steps lie at a recorded collision position, the paper describes its blocked time as it does for the balanced model: time commanded to accelerate at the site of a recorded collision, not an independent cost. Otherwise it reports the split as found. The limits of Section 18a apply.
 
-## 21. Same-input comparison of the action experts (offline replay), written 17 November 2026, 15:25 (UTC+7), before any inference of this analysis was run
+## 21. Same-input comparison of the action experts (offline replay), written 17 November 2026, 15:13 (UTC+7), before any inference of this analysis was run
 
 Requested by the review of 17 November 2026 (required item R4, route (a)) and, in an earlier form, by the review of 15 November (item R10). New inference on existing checkpoints; no simulator, no training. The confirmatory record of Section 1 and all earlier readings are not changed.
 
@@ -369,7 +369,7 @@ In every case the size of the same-input difference is printed next to the close
 
 **Limits known in advance.** The states are those a privileged expert driver reached, so states after a collision and other states that only the learned policies reach are absent. Each state is one prefill and one streaming step, not a long stream. The validation split was not drawn to the target mix of either training regime, and it holds few demonstrated stay-put futures (15 of 384).
 
-## 22. Analyses requested by the review of 17 November 2026, written 17 November 2026, 15:25 (UTC+7), before computing
+## 22. Analyses requested by the review of 17 November 2026, written 17 November 2026, 15:13 (UTC+7), before computing
 
 Post hoc; existing logs, result records and dataset annotation files only. No decision rule is attached to any of them, and no earlier decision is changed.
 
