@@ -388,3 +388,7 @@ Post hoc; existing logs, result records and dataset annotation files only. No de
 **(f) Plans per stop episode (item R4, supplementary to Section 21).** A stop episode is a run of at least 20 consecutive steps below 0.1 m/s (Section 7b). For each episode: whether the plan at its first step is a stay-put plan (L < 0.64 m), and the number of steps from the start of the episode to the first plan with L of 2 m or more (censored at the end of the episode). Per route: the share of episodes that begin with a stay-put plan and the median delay. Paired over the routes with at least three episodes for both models, `Golden-6400` against `Flooded-6400-Matched`, in each pass and without the gate. This counts each stop once, whatever its length.
 
 **(g) Success rate (suggested item S20).** The share of routes completed in full without an infraction, per checkpoint and pass, as description.
+
+## Correction note on heading times, written 17 November 2026, 18:15 (UTC+7)
+
+Two section headings give a time that is later than the commit that first contained the section. The commit times are the record: Section 6 is headed 23:40 on 12 November 2026 and was committed at 23:32:16 (`c56dbdee`); Section 7 is headed 22:30 on 13 November 2026 and was committed at 21:19:48 (`845e061d`). The headings were written as estimates before the commit was made. Neither difference changes the order of a rule and the data it refers to. The headings are left as they were, so that earlier citations of them remain valid.

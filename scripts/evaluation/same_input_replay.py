@@ -3,13 +3,15 @@
 
 Replays the low-speed samples of the shared validation split through the engine of the
 deployed FlashDrive model server, with one action expert patched in, and stores K sampled
-plans per state. The quantized backbone is loaded once; the unadapted expert runs first, then each fine-tuned
-expert is patched in with the same call the model server uses. At the end the first patched expert
-is patched in again and a few states are repeated, to check that swapping experts in one process
-gives the same output. Run with the FlashDrive virtual environment:
+plans per state. One process per expert: the engine of the model server loads the quantized backbone and patches
+the expert before any inference, exactly as in deployment. (Patching a second expert into a model
+that has already run does not work: FlashDrive fuses the expert's attention projections at first
+use, and a later load_state_dict leaves the fused weights unchanged.) At the end the first states
+are repeated with the same seeds, to check that the per-state stream reset reproduces the output
+of a fresh process. Run with the FlashDrive virtual environment:
 
   /home/aimslab/flashdrive/.venv/bin/python scripts/evaluation/same_input_replay.py \
-      --out-dir outputs/same_input --experts Golden-6400=<dir> Flooded-6400-Matched=<dir> ...
+      --out-dir outputs/same_input --name Golden-6400 --model-path <checkpoint dir | BASE>
 """
 import argparse
 import json
@@ -44,15 +46,15 @@ def extent(xyz: np.ndarray):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--experts", nargs="+", required=True, help="name=checkpoint_dir, in the order to run (after Base)")
+    ap.add_argument("--name", required=True)
+    ap.add_argument("--model-path", required=True, help="checkpoint directory, or BASE for the unadapted model")
     ap.add_argument("--ds", default="/mnt/disk2/r4_sameinput/ds")
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--k", type=int, default=16)
     ap.add_argument("--max-speed", type=float, default=0.5)
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--seed-base", type=int, default=1000)
-    ap.add_argument("--skip-base", action="store_true")
-    ap.add_argument("--n-swap-check", type=int, default=5)
+    ap.add_argument("--n-reset-check", type=int, default=3)
     a = ap.parse_args()
 
     ds = Path(a.ds)
@@ -61,8 +63,7 @@ def main():
     states = select_states(ds, a.max_speed)
     if a.limit:
         states = states[:a.limit]
-    experts = [tuple(e.split("=", 1)) for e in a.experts]
-    print(f"{len(states)} states; experts: Base, " + ", ".join(n for n, _ in experts), flush=True)
+    print(f"{len(states)} states; expert {a.name} from {a.model_path}", flush=True)
 
     import contextlib
     import gc
@@ -71,7 +72,6 @@ def main():
     import physical_ai_av
     import flashdrive_server as fs
     from alpamayo1_5.load_physical_aiavdataset import load_physical_aiavdataset
-    from safetensors.torch import load_file
 
     class LocalAVDI(physical_ai_av.PhysicalAIAVDatasetInterface):
         """The dataset interface reading a local copy of the published dataset, without any Hub request."""
@@ -90,7 +90,8 @@ def main():
 
     avdi = LocalAVDI(ds)
     t_load = time.time()
-    engine = fs.FlashDriveEngine(model_path="z-lab/Alpamayo-1.5-10B", num_samples=a.k)
+    model_path = "z-lab/Alpamayo-1.5-10B" if a.model_path == "BASE" else a.model_path
+    engine = fs.FlashDriveEngine(model_path=model_path, num_samples=a.k)
     fs.logger.setLevel("WARNING")
     print(f"backbone loaded in {time.time() - t_load:.0f} s", flush=True)
     holder = {}
@@ -103,19 +104,6 @@ def main():
         return res
 
     engine.rollout = rollout
-
-    def patch(ckpt_dir):
-        """Same call as FlashDriveEngine (Option C): load the cached expert file and patch it into the model."""
-        f = Path(ckpt_dir) / "action_expert.safetensors"
-        w = load_file(str(f), device="cpu")
-        n = len(w)
-        missing, unexpected = engine.model.load_state_dict(w, strict=False)
-        del w
-        gc.collect()
-        torch.cuda.empty_cache()
-        # The model server only warns about these (action-space constants stored in the expert file); do the same.
-        print(f"patch {f.parent.name}: {len(missing)} missing, {len(unexpected)} unexpected keys {list(unexpected)[:3]}", flush=True)
-        return n
 
     def request(clip, t0, nav):
         d = load_physical_aiavdataset(clip, t0_us=int(t0), num_frames=4, avdi=avdi, maybe_stream=False)
@@ -138,6 +126,7 @@ def main():
             m = engine.model
             m._past_key_values = None
             m._cached_streaming_attention_mask = None  # sized by the prefill length of the stream it was built for
+            m.setup_torch_compile(m._torch_compile)     # drops the input buffers pinned to the first stream's shapes
             m.vlm.model.visual.reset_shape_caches()
             m.vlm.model.language_model.reset_shape_caches()
             torch.cuda.empty_cache()
@@ -185,20 +174,13 @@ def main():
                           f"mem {torch.cuda.max_memory_allocated() / 2**30:.1f} GB {rec.get('error', '')}", flush=True)
         print(f"finished {name}{suffix} at {time.strftime('%H:%M:%S')}", flush=True)
 
-    if not a.skip_base:
-        run_expert("Base")
-    for name, ckpt in experts:
-        n = patch(ckpt)
-        print(f"patched {n} tensors of {name} from {ckpt}", flush=True)
-        run_expert(name)
-    # swap check: patch the first expert in again and repeat a few states with the same seeds
-    if experts and a.n_swap_check:
-        name, ckpt = experts[0]
-        patch(ckpt)
-        chk = out_dir / f"{name}.swapcheck.jsonl"
+    run_expert(a.name)
+    # reset check: repeat the first states with the same seeds; state 0 was the first state of this fresh process
+    if a.n_reset_check:
+        chk = out_dir / f"{a.name}.resetcheck.jsonl"
         if chk.exists():
             chk.unlink()
-        run_expert(name, idx=list(range(min(a.n_swap_check, len(states)))), suffix=".swapcheck")
+        run_expert(a.name, idx=list(range(min(a.n_reset_check, len(states)))), suffix=".resetcheck")
     print("DONE", flush=True)
 
 

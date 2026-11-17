@@ -30425,6 +30425,20 @@
      "plans_ending_at_rest_above_2mps_pct": 1.993627797921804,
      "crawl_pct_0.1_to_1.0": 12.58537271293718,
      "success": 11.363636363636363
+    },
+    "Flooded-6400-Hist": {
+     "plan_rate_L<1.5_pct": 9.516820898913254,
+     "low_speed_stays_put_pct": 10.415179284240871,
+     "at_rest_stays_put_pct": 11.948048939311233,
+     "time_blocked_pct": 2.11207836829775,
+     "standstill_without_blocked_pct": 31.796110726368816,
+     "standstill_pct": 33.90818909466657,
+     "driving_score": 49.03712220454545,
+     "route_completion": 77.75636363636364,
+     "collision_events": 1.1590909090909092,
+     "plans_ending_at_rest_above_2mps_pct": 1.8109884392255848,
+     "crawl_pct_0.1_to_1.0": 13.31195355604113,
+     "success": 11.363636363636363
     }
    },
    "base_rerun_minus": {
@@ -31991,6 +32005,58 @@
     }
    }
   },
-  "status_line": "complete"
+  "h3_statistic_composition": {
+   "Golden-6400 run1": {
+    "steps_with_plan_below_1.5m": 1468,
+    "of_these_at_standstill_pct": 95.57220708446866,
+    "of_these_at_0.5mps_or_less_pct": 98.84196185286103
+   },
+   "Flooded-6400-Matched run1": {
+    "steps_with_plan_below_1.5m": 10642,
+    "of_these_at_standstill_pct": 98.16763766209358,
+    "of_these_at_0.5mps_or_less_pct": 99.46438639353505
+   },
+   "Golden-6400 run2": {
+    "steps_with_plan_below_1.5m": 2000,
+    "of_these_at_standstill_pct": 96.5,
+    "of_these_at_0.5mps_or_less_pct": 99.2
+   },
+   "Flooded-6400-Matched run2": {
+    "steps_with_plan_below_1.5m": 7204,
+    "of_these_at_standstill_pct": 97.57079400333149,
+    "of_these_at_0.5mps_or_less_pct": 99.52803997779012
+   },
+   "Golden-6400 nogate": {
+    "steps_with_plan_below_1.5m": 1924,
+    "of_these_at_standstill_pct": 95.11434511434511,
+    "of_these_at_0.5mps_or_less_pct": 98.96049896049897
+   },
+   "Flooded-6400-Matched nogate": {
+    "steps_with_plan_below_1.5m": 6654,
+    "of_these_at_standstill_pct": 92.18515178839796,
+    "of_these_at_0.5mps_or_less_pct": 98.96302975653742
+   }
+  },
+  "status_line": "complete",
+  "holm_4_test_family_with_base_run2": {
+   "tests": [
+    "H1 Golden-1600 vs Base run2 DS (two-sided Wilcoxon)",
+    "H2 Golden-6400 vs Flooded-6400-Matched standstill",
+    "Golden-6400 vs Golden-1600 DS equivalence (bootstrap TOST p)",
+    "Golden-1600 vs Flooded-6400-Matched DS non-inferiority (bootstrap p)"
+   ],
+   "raw_p": [
+    0.04830816499395985,
+    0.0007092337563108231,
+    0.0278,
+    0.15865
+   ],
+   "holm_p": [
+    0.0966163299879197,
+    0.0028369350252432923,
+    0.0834,
+    0.15865
+   ]
+  }
  }
 }
