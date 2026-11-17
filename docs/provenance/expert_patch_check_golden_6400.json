@@ -1,0 +1,402 @@
+{
+ "model_path": "/home/aimslab/checkpoints/action_experts/Alpamayo-1.5-10B-Matrix-Golden-6400-A15",
+ "n_file_keys": 416,
+ "file_keys_present_in_served_model": 229,
+ "file_keys_absent_from_served_model": [
+  "action_in_proj.sinus.0.freqs",
+  "action_in_proj.sinus.1.freqs",
+  "action_in_proj.timestep_fourier_encoder.freqs",
+  "action_space.accel_mean",
+  "action_space.accel_std",
+  "action_space.curvature_mean",
+  "action_space.curvature_std",
+  "expert.layers.0.mlp.gate_proj.weight",
+  "expert.layers.0.mlp.up_proj.weight",
+  "expert.layers.0.self_attn.k_proj.weight",
+  "expert.layers.0.self_attn.q_proj.weight",
+  "expert.layers.0.self_attn.v_proj.weight"
+ ],
+ "n_file_keys_absent": 187,
+ "served_expert_keys_not_in_file": [
+  "expert.layers.0.mlp.gate_up_proj.weight",
+  "expert.layers.0.self_attn.qkv_proj.weight",
+  "expert.layers.1.mlp.gate_up_proj.weight",
+  "expert.layers.1.self_attn.qkv_proj.weight",
+  "expert.layers.10.mlp.gate_up_proj.weight",
+  "expert.layers.10.self_attn.qkv_proj.weight"
+ ],
+ "layers": {
+  "0": {
+   "qkv: served vs fine-tuned file": 0.021270751953125,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.025390625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.020751953125,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.02130126953125
+  },
+  "1": {
+   "qkv: served vs fine-tuned file": 0.02630615234375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.020538330078125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.021636962890625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.021453857421875
+  },
+  "2": {
+   "qkv: served vs fine-tuned file": 0.02349853515625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.018707275390625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.021331787109375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0220947265625
+  },
+  "3": {
+   "qkv: served vs fine-tuned file": 0.02349853515625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.02105712890625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.020843505859375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.02203369140625
+  },
+  "4": {
+   "qkv: served vs fine-tuned file": 0.02081298828125,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.019500732421875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.021820068359375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.021636962890625
+  },
+  "5": {
+   "qkv: served vs fine-tuned file": 0.025604248046875,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.020294189453125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.0224609375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.02313232421875
+  },
+  "6": {
+   "qkv: served vs fine-tuned file": 0.0234375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.0224609375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02081298828125,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0227813720703125
+  },
+  "7": {
+   "qkv: served vs fine-tuned file": 0.025390625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.02239990234375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.0242919921875,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.02276611328125
+  },
+  "8": {
+   "qkv: served vs fine-tuned file": 0.027099609375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.021484375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02337646484375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.025970458984375
+  },
+  "9": {
+   "qkv: served vs fine-tuned file": 0.03240966796875,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.02197265625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02288818359375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03118896484375
+  },
+  "10": {
+   "qkv: served vs fine-tuned file": 0.02716064453125,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.026123046875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.0242919921875,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.027099609375
+  },
+  "11": {
+   "qkv: served vs fine-tuned file": 0.0306396484375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.02655029296875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02398681640625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0250244140625
+  },
+  "12": {
+   "qkv: served vs fine-tuned file": 0.0355224609375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.02520751953125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02874755859375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03021240234375
+  },
+  "13": {
+   "qkv: served vs fine-tuned file": 0.0269775390625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.031097412109375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.025146484375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.031494140625
+  },
+  "14": {
+   "qkv: served vs fine-tuned file": 0.02935791015625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.026123046875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02935791015625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.02691650390625
+  },
+  "15": {
+   "qkv: served vs fine-tuned file": 0.02935791015625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.0279541015625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02911376953125,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.030029296875
+  },
+  "16": {
+   "qkv: served vs fine-tuned file": 0.032958984375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.029242515563964844,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02752685546875,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0284423828125
+  },
+  "17": {
+   "qkv: served vs fine-tuned file": 0.037078857421875,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.0284423828125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.029296875,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0289306640625
+  },
+  "18": {
+   "qkv: served vs fine-tuned file": 0.032470703125,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.0360107421875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.03033447265625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.031982421875
+  },
+  "19": {
+   "qkv: served vs fine-tuned file": 0.0394287109375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03314208984375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.0306396484375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0311279296875
+  },
+  "20": {
+   "qkv: served vs fine-tuned file": 0.048583984375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.034912109375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02789306640625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0298309326171875
+  },
+  "21": {
+   "qkv: served vs fine-tuned file": 0.0364990234375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03338623046875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.033935546875,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0318603515625
+  },
+  "22": {
+   "qkv: served vs fine-tuned file": 0.03546142578125,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.034698486328125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02960205078125,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.02972412109375
+  },
+  "23": {
+   "qkv: served vs fine-tuned file": 0.0364990234375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.034423828125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.03076171875,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03057861328125
+  },
+  "24": {
+   "qkv: served vs fine-tuned file": 0.0452880859375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03277587890625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.029541015625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.031951904296875
+  },
+  "25": {
+   "qkv: served vs fine-tuned file": 0.03680419921875,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03759765625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.034515380859375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03240966796875
+  },
+  "26": {
+   "qkv: served vs fine-tuned file": 0.037750244140625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03570556640625,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02886962890625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03228759765625
+  },
+  "27": {
+   "qkv: served vs fine-tuned file": 0.032318115234375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03900146484375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02783203125,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0333404541015625
+  },
+  "28": {
+   "qkv: served vs fine-tuned file": 0.0423583984375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.0382080078125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02972412109375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.032135009765625
+  },
+  "29": {
+   "qkv: served vs fine-tuned file": 0.03997802734375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.032806396484375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.03094482421875,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.033447265625
+  },
+  "30": {
+   "qkv: served vs fine-tuned file": 0.0394287109375,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03778076171875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.03009033203125,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03277587890625
+  },
+  "31": {
+   "qkv: served vs fine-tuned file": 0.0389404296875,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.037445068359375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.0345458984375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03729248046875
+  },
+  "32": {
+   "qkv: served vs fine-tuned file": 0.04266357421875,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.03466796875,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.03106689453125,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.03237152099609375
+  },
+  "33": {
+   "qkv: served vs fine-tuned file": 0.038330078125,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.04193115234375,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.0289306640625,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.038970947265625
+  },
+  "34": {
+   "qkv: served vs fine-tuned file": 0.04278564453125,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.04229736328125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02972412109375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.04345703125
+  },
+  "35": {
+   "qkv: served vs fine-tuned file": 0.0390625,
+   "qkv: served vs base": 2.9802322387695312e-08,
+   "gate_up: served vs fine-tuned file": 0.042236328125,
+   "gate_up: served vs base": 2.9802322387695312e-08,
+   "o_proj: served vs fine-tuned file": 0.0,
+   "o_proj: served vs base": 0.02679443359375,
+   "down_proj: served vs fine-tuned file": 0.0,
+   "down_proj: served vs base": 0.0474853515625
+  }
+ },
+ "max_over_layers": {
+  "down_proj: served vs base": 0.0474853515625,
+  "down_proj: served vs fine-tuned file": 0.0,
+  "gate_up: served vs base": 2.9802322387695312e-08,
+  "gate_up: served vs fine-tuned file": 0.04229736328125,
+  "o_proj: served vs base": 0.0345458984375,
+  "o_proj: served vs fine-tuned file": 0.0,
+  "qkv: served vs base": 2.9802322387695312e-08,
+  "qkv: served vs fine-tuned file": 0.048583984375
+ },
+ "action_out_proj.weight: served vs fine-tuned file": 0.0,
+ "action_out_proj.weight: served vs base": 0.063262939453125
+}

@@ -405,3 +405,20 @@ Post hoc; a diagnostic of the replay of Section 21, not a new hypothesis. The pr
 - If the texts and the plans of `Base-SelfPatch` equal those of `Base` (allowing the 0 to 3 states in which two fine-tuned processes differ from each other), the patch step is neutral. The text difference then comes from the expert weights, and the route by which they reach the text decoder is looked for and reported.
 - If they differ from `Base`, the serving route itself changes the output of the model. The contrasts of `Base` with the fine-tuned checkpoints, in closed loop (Section 22a) and in the replay, then contain a component that is not fine-tuning. The manuscript then reports `Base-SelfPatch` next to `Base`, with p_stay(`Base-SelfPatch`) − p_stay(`Base`) under the statistics of Section 21, and says that the comparison with the unadapted policy is confounded by the serving route.
 - Contrasts among the fine-tuned checkpoints share one serving route and are not affected in either case.
+
+## 24. The patch step of the model server loads the checkpoints in part; replay with the checkpoints loaded in full, written 17 November 2026, 21:02 (UTC+7), before any fully loaded checkpoint was run
+
+**Finding (a fact about the serving code, not an analysis).** The engine fuses the q/k/v projections and the gate/up projections of each of the 36 expert layers when the base model is loaded (`flashdrive/__init__.py`, `setup_expert_fusion`, unchanged since 29 September 2026). The server then loads the fine-tuned expert tensors with `strict=False` (`scripts/flashdrive_server.py`, lines 132 to 181). The 180 tensors of the fused projections no longer have a matching name and are dropped without a message. Checked in memory for `Golden-6400` (`scripts/evaluation/check_expert_patch.py`, `docs/provenance/expert_patch_check_golden_6400.json`): the output projection, the down projection and the action output projection equal the checkpoint file (largest difference 0); the fused q/k/v and gate/up weights equal the base model (largest difference 3 × 10⁻⁸) and differ from the checkpoint file (largest difference 0.049). Every fine-tuned checkpoint in every closed-loop evaluation of this study, and in the replay of Section 21, was therefore served with base values in 180 of its 396 expert-layer tensors. `Base` is not affected by this, but see Section 23: the control `Base-SelfPatch` differs from `Base` in the rationale text in 176 of 384 states and in the plans in all states, so the patch step also changes the served model in a second way whose cause is not yet known.
+
+**What had been seen.** All results of Sections 21 and 23; the weight check above.
+
+**Replay with full loading.** The five fine-tuned checkpoints again, same 384 states, seeds, 16 plans and script, with every tensor of the checkpoint loaded: the q/k/v and gate/up tensors are concatenated in the order of the fusion and loaded into the fused weights, and the script stops if any expert tensor is left unpatched (`same_input_replay.py --full-patch`). Names `<checkpoint>-Full`.
+
+**Statistic and reading, fixed now.** SI-1F: p_stay(`Golden-6400-Full`) − p_stay(`Flooded-6400-Matched-Full`), with the unit and the statistics of Section 21.
+- Negative with the interval below 0: the fully loaded experts differ on identical inputs in the direction seen for the served models.
+- Interval includes 0: the difference seen for the served models is not shown for the fully loaded experts.
+- Positive with the interval above 0: the fully loaded experts differ in the opposite direction.
+
+**Secondary, descriptive, no rule.** Each fully loaded checkpoint against its served version (p_stay, p_start, mean extent); the decoupling checkpoint against each of the pair; the 1,600-sample pair; each fully loaded checkpoint against `Base-SelfPatch` and `Base`.
+
+**Limit.** The replay says nothing about the closed-loop behaviour of the fully loaded checkpoints. All closed-loop results of the study come from the partly loaded models.

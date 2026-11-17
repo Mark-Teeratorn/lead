@@ -133,15 +133,47 @@ def main():
     res["states_with_any_stay_put_plan"] = {e: int(sum(state_metrics(D[e][s])["p_stay"] > 0 for s in common)) for e in EXPERTS}
     res["speed_of_states"] = {"n_below_0.1": int(np.sum(sp < 0.1)), "n_0.1_to_0.5": int(np.sum(sp >= 0.1))}
 
-    # swap check: the first patched expert, patched in again at the end, on the first states with the same seeds
-    try:
-        chk = load(G, ".swapcheck")
-        diffs = [float(np.max(np.abs(np.asarray(chk[s]["L"]) - np.asarray(D[G][s]["L"])))) for s in chk if s in D[G] and "error" not in chk[s]]
-        res["swap_check"] = {"n_states": len(diffs), "max_abs_difference_of_L_m": max(diffs) if diffs else None,
-                             "identical_rationale_texts": bool(all(chk[s].get("cot") == D[G][s].get("cot") for s in chk if s in D[G]))}
-    except FileNotFoundError:
-        res["swap_check"] = "not run"
+    # reset check: every expert repeats its first states at the end of its process with the same seeds; state 0 was the
+    # first state of the fresh process, so agreement shows that the per-state stream reset reproduces a fresh stream
+    res["reset_check"] = {}
+    for e in EXPERTS:
+        try:
+            chk = load(e, ".resetcheck")
+        except FileNotFoundError:
+            res["reset_check"][e] = "not run"
+            continue
+        ss = [s for s in chk if s in D[e] and "error" not in chk[s]]
+        diffs = [float(np.max(np.abs(np.asarray(chk[s]["L"]) - np.asarray(D[e][s]["L"])))) for s in ss]
+        res["reset_check"][e] = {"n_states": len(ss), "max_abs_difference_of_L_m": max(diffs) if diffs else None,
+                                 "difference_of_L_state_0_m": diffs[0] if 0 in ss and diffs else None,
+                                 "identical_rationale_texts": bool(all(chk[s].get("cot") == D[e][s].get("cot") for s in ss)),
+                                 "stay_put_plans_first_run": [int(np.sum(np.asarray(D[e][s]["L"]) < 0.64)) for s in ss],
+                                 "stay_put_plans_repeat": [int(np.sum(np.asarray(chk[s]["L"]) < 0.64)) for s in ss]}
     res["seconds_per_state_median"] = float(np.median([D[G][s]["seconds"] for s in common]))
+
+    # control of ANALYSIS_ADDENDUM section 23: the expert of the base model loaded through the patch step
+    CTRL = "Base-SelfPatch"
+    if (IN_DIR / f"{CTRL}.jsonl").exists():
+        rows = load(CTRL)
+        D[CTRL] = {s: r for s, r in rows.items() if "error" not in r}
+        cs = [s for s in common if s in D[CTRL]]
+        maxd = [float(np.max(np.abs(np.asarray(D[CTRL][s]["L"]) - np.asarray(D[BASE][s]["L"])))) for s in cs]
+        ctrl = {"label": "ANALYSIS_ADDENDUM section 23; reading fixed before the control was run",
+                "n_states": len(cs), "states_with_error": len(rows) - len(D[CTRL]),
+                "states_with_identical_rationale_text_pct": {f"{CTRL} vs {e}": float(np.mean([D[CTRL][s].get("cot") == D[e][s].get("cot") for s in cs]) * 100) for e in EXPERTS},
+                "states_with_identical_rationale_text_n": {f"{CTRL} vs {e}": int(sum(D[CTRL][s].get("cot") == D[e][s].get("cot") for s in cs)) for e in EXPERTS},
+                "states_with_identical_plans_vs_Base_n": int(sum(d == 0.0 for d in maxd)),
+                "states_with_plans_within_1cm_of_Base_n": int(sum(d < 0.01 for d in maxd)),
+                "max_abs_difference_of_L_vs_Base_m": float(max(maxd)), "median_abs_max_difference_of_L_vs_Base_m": float(np.median(maxd)),
+                "pooled_means_pct": {k: float(np.mean([state_metrics(D[CTRL][s])[k] for s in cs]) * (1 if k == "mean_L" else 100))
+                                     for k in ("p_stay", "p_start", "p_below_1.5", "p_ends_at_rest", "mean_L")},
+                "comparisons": {f"p_stay, {CTRL} minus {e}": compare(D, CTRL, e, cs) for e in EXPERTS}}
+        same_text = [s for s in cs if D[CTRL][s].get("cot") == D[BASE][s].get("cot")]
+        ctrl["states_with_identical_text_vs_Base"] = {"n": len(same_text), "identical_plans_n": int(sum(maxd[cs.index(s)] == 0.0 for s in same_text))}
+        res["control_base_selfpatch"] = ctrl
+        print("CONTROL", json.dumps({k: v for k, v in ctrl.items() if k != "comparisons"}, indent=1))
+        for k, v in ctrl["comparisons"].items():
+            print(f"{k}: {v['mean_first']:.2f} vs {v['mean_second']:.2f}, diff {v['mean_diff']:.2f}, CI {[round(x, 2) for x in v['bca95']] if isinstance(v['bca95'], list) else v['bca95']}, p {v['wilcoxon'].get('p')}")
     OUT.write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps({k: v for k, v in res.items() if k != "secondary"}, indent=1)[:6000])
     for k, v in sec.items():

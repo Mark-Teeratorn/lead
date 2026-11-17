@@ -55,6 +55,9 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--seed-base", type=int, default=1000)
     ap.add_argument("--n-reset-check", type=int, default=3)
+    ap.add_argument("--full-patch", action="store_true",
+                    help="load every tensor of the checkpoint, including the q/k/v and gate/up projections that the engine "
+                         "fuses at load time and that the server's own patch step therefore leaves at their base values")
     a = ap.parse_args()
 
     ds = Path(a.ds)
@@ -90,8 +93,28 @@ def main():
 
     avdi = LocalAVDI(ds)
     t_load = time.time()
-    model_path = "z-lab/Alpamayo-1.5-10B" if a.model_path == "BASE" else a.model_path
+    model_path = "z-lab/Alpamayo-1.5-10B" if (a.model_path == "BASE" or a.full_patch) else a.model_path
     engine = fs.FlashDriveEngine(model_path=model_path, num_samples=a.k)
+    if a.full_patch:
+        # The engine fuses q/k/v and gate/up of every expert layer when the base model is loaded (flashdrive/__init__.py,
+        # setup_expert_fusion), so the checkpoint's unfused tensors are concatenated in the fusion order before loading.
+        from safetensors.torch import load_file
+        w = load_file(str(Path(a.model_path) / "action_expert.safetensors"), device="cpu")
+        mapped = {}
+        for i in range(len(engine.model.expert.layers)):
+            pre = f"expert.layers.{i}."
+            mapped[pre + "self_attn.qkv_proj.weight"] = torch.cat([w.pop(pre + f"self_attn.{n}.weight") for n in ("q_proj", "k_proj", "v_proj")], 0)
+            mapped[pre + "mlp.gate_up_proj.weight"] = torch.cat([w.pop(pre + f"mlp.{n}.weight") for n in ("gate_proj", "up_proj")], 0)
+        mapped.update(w)
+        missing, unexpected = engine.model.load_state_dict(mapped, strict=False)
+        left = [k for k in missing if k.startswith(("expert.", "action_in_proj.", "action_out_proj."))]
+        print(f"full patch: {len(mapped)} tensors given, {len(unexpected)} not taken {sorted(unexpected)}, expert tensors left unpatched: {left}", flush=True)
+        assert not left, left
+        chk = engine.model.expert.layers[0].self_attn.qkv_proj.weight.detach().float().cpu()
+        assert float((chk - mapped["expert.layers.0.self_attn.qkv_proj.weight"].float()).abs().max()) == 0.0
+        del w, mapped
+        gc.collect()
+        torch.cuda.empty_cache()
     fs.logger.setLevel("WARNING")
     print(f"backbone loaded in {time.time() - t_load:.0f} s", flush=True)
     holder = {}
