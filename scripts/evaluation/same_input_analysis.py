@@ -174,6 +174,63 @@ def main():
         print("CONTROL", json.dumps({k: v for k, v in ctrl.items() if k != "comparisons"}, indent=1))
         for k, v in ctrl["comparisons"].items():
             print(f"{k}: {v['mean_first']:.2f} vs {v['mean_second']:.2f}, diff {v['mean_diff']:.2f}, CI {[round(x, 2) for x in v['bca95']] if isinstance(v['bca95'], list) else v['bca95']}, p {v['wilcoxon'].get('p')}")
+    # ANALYSIS_ADDENDUM section 24: the fine-tuned checkpoints loaded in full
+    FT = [G, F, B, G16, F16]
+    if all((IN_DIR / f"{e}-Full.jsonl").exists() for e in FT):
+        for e in FT:
+            rows = load(f"{e}-Full")
+            D[f"{e}-Full"] = {s: r for s, r in rows.items() if "error" not in r}
+        cs = sorted(set(common).intersection(*[set(D[f"{e}-Full"]) for e in FT]))
+        full = {"label": "ANALYSIS_ADDENDUM section 24; rule fixed before any fully loaded checkpoint was run",
+                "n_states": len(cs), "states_with_error": {e: 384 - len(D[f"{e}-Full"]) for e in FT},
+                "pooled_means_pct": {f"{e}-Full": {k: float(np.mean([state_metrics(D[f"{e}-Full"][s])[k] for s in cs]) * (1 if k == "mean_L" else 100))
+                                                  for k in ("p_stay", "p_start", "p_below_1.5", "p_ends_at_rest", "mean_L")} for e in FT},
+                "states_with_any_stay_put_plan": {f"{e}-Full": int(sum(state_metrics(D[f"{e}-Full"][s])["p_stay"] > 0 for s in cs)) for e in FT},
+                "states_with_identical_rationale_text_n": {f"{e}-Full vs {e}": int(sum(D[f"{e}-Full"][s].get("cot") == D[e][s].get("cot") for s in cs)) for e in FT}}
+        prim_f = compare(D, f"{G}-Full", f"{F}-Full", cs)
+        lo, hi = prim_f["bca95"]
+        prim_f["reading"] = ("negative with the interval below 0: the fully loaded experts differ on identical inputs in the direction seen for the served models" if hi < 0
+                             else "positive with the interval above 0: the fully loaded experts differ in the opposite direction" if lo > 0
+                             else "interval includes 0: the difference seen for the served models is not shown for the fully loaded experts")
+        full["SI-1F primary: p_stay, Golden-6400-Full minus Flooded-6400-Matched-Full"] = prim_f
+        sec_f = {}
+        for e in FT:
+            for key in ("p_stay", "p_start", "mean_L"):
+                sec_f[f"{key}, {e}-Full minus {e} (as served)"] = compare(D, f"{e}-Full", e, cs, key)
+        for a_, b_ in [(B, F), (B, G), (G16, F16)]:
+            sec_f[f"p_stay, {a_}-Full minus {b_}-Full"] = compare(D, f"{a_}-Full", f"{b_}-Full", cs)
+        for key in ("p_start", "p_below_1.5", "mean_L"):
+            sec_f[f"{key}, {G}-Full minus {F}-Full"] = compare(D, f"{G}-Full", f"{F}-Full", cs, key)
+        rest_f = [s for s in cs if D[G][s]["speed_mps"] < 0.1]
+        sec_f[f"p_stay, {G}-Full minus {F}-Full, states with speed below 0.1 m/s"] = compare(D, f"{G}-Full", f"{F}-Full", rest_f)
+        refs = [BASE] + (["Base-SelfPatch"] if "Base-SelfPatch" in D else [])
+        for e in FT:
+            for r_ in refs:
+                sec_f[f"p_stay, {e}-Full minus {r_}"] = compare(D, f"{e}-Full", r_, cs)
+        full["secondary"] = sec_f
+        full["p_stay_pct_by_class_of_demonstrated_future"] = {
+            c: {"n_states": len([s for s in ss if s in cs]), **{f"{e}-Full": float(np.mean([state_metrics(D[f"{e}-Full"][s])["p_stay"] for s in ss if s in cs]) * 100) for e in FT}}
+            for c, ss in cls.items()}
+        res["full_loading"] = full
+        print("FULL LOADING", json.dumps({k: v for k, v in full.items() if k != "secondary"}, indent=1)[:5000])
+        for k, v in sec_f.items():
+            print(f"{k}: {v['mean_first']:.2f} vs {v['mean_second']:.2f}, diff {v['mean_diff']:.2f}, CI {[round(x, 2) for x in v['bca95']] if isinstance(v['bca95'], list) else v['bca95']}, p {v['wilcoxon'].get('p')}")
+
+    # diagnostics of the follow-up to section 23 (first states only)
+    diag = {}
+    for name, refs in (("Base-Repeat", [BASE]), ("Base-EmptyLoad", [BASE, "Base-SelfPatch"])):
+        if (IN_DIR / f"{name}.jsonl").exists():
+            rows = {s: r for s, r in load(name).items() if "error" not in r}
+            for r_ in refs:
+                if r_ not in D:
+                    continue
+                ss = [s for s in rows if s in D[r_]]
+                md = [float(np.max(np.abs(np.asarray(rows[s]["L"]) - np.asarray(D[r_][s]["L"])))) for s in ss]
+                diag[f"{name} vs {r_}"] = {"n_states": len(ss), "identical_rationale_text_n": int(sum(rows[s].get("cot") == D[r_][s].get("cot") for s in ss)),
+                                           "identical_plans_n": int(sum(d == 0.0 for d in md)), "max_abs_difference_of_L_m": max(md) if md else None}
+    if diag:
+        res["diagnostics_section_23"] = diag
+        print("DIAGNOSTICS", json.dumps(diag, indent=1))
     OUT.write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps({k: v for k, v in res.items() if k != "secondary"}, indent=1)[:6000])
     for k, v in sec.items():

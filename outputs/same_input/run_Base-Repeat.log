@@ -1,0 +1,15 @@
+24 states; expert Base-Repeat from BASE
+2026-11-17 23:08:31,374 [INFO] [FlashDriveServer] Loading Alpamayo model from z-lab/Alpamayo-1.5-10B onto cuda (torch_compile=None)...
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:03,  1.06it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:02,  1.45it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:01,  1.71it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:02<00:00,  1.50it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.60it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.53it/s]
+2026-11-17 23:14:48,890 [WARNING] [FlashDriveServer] Missing 252 quantization keys: ['vlm.model.language_model.layers.0.self_attn.q_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.k_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.v_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.o_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.mlp.gate_proj.rotate_linear.qlinear.bias']
+2026-11-17 23:14:48,906 [WARNING] [FlashDriveServer] Unexpected 7 keys: ['action_space.accel_mean', 'action_space.accel_std', 'action_space.curvature_mean', 'action_space.curvature_std', 'action_in_proj.sinus.0.freqs']
+2026-11-17 23:15:30,917 [INFO] [FlashDriveServer] Loading DFlash draft model from z-lab/Alpamayo-1.5-10B-DFlash
+2026-11-17 23:15:42,556 [INFO] [FlashDriveServer] DFlash configured: block_size=8, context_len=8, target_layers=[24, 30, 31, 32, 34], mask_token_id=155697
+2026-11-17 23:15:42,698 [INFO] [FlashDriveServer] Base model loaded. Optimized FlashDrive: True
+backbone loaded in 448 s
+Base-Repeat: 24 states to run, 0 already done
+INFO 11-17 23:16:22 [marlin_utils.py:451] Marlin kernel can achieve better performance for small size_n with experimental use_atomic_add feature. You can consider set environment variable VLLM_MARLIN_USE_ATOMIC_ADD to 1 if possible.
+Base-Repeat 0/24 state 0: 35.22 s, K 16, mem 20.6 GB 
+Base-Repeat 20/24 state 20: 2.32 s, K 16, mem 20.6 GB 
+finished Base-Repeat at 23:17:14
+DONE

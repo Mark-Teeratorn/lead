@@ -1,0 +1,16 @@
+24 states; expert Base-EmptyLoad from BASE
+2026-11-17 23:17:51,551 [INFO] [FlashDriveServer] Loading Alpamayo model from z-lab/Alpamayo-1.5-10B onto cuda (torch_compile=None)...
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:03,  1.14it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:01,  1.55it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:01,  1.73it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:02<00:00,  1.55it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:02<00:00,  1.88it/s]
+2026-11-17 23:24:50,098 [WARNING] [FlashDriveServer] Missing 252 quantization keys: ['vlm.model.language_model.layers.0.self_attn.q_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.k_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.v_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.o_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.mlp.gate_proj.rotate_linear.qlinear.bias']
+2026-11-17 23:24:50,109 [WARNING] [FlashDriveServer] Unexpected 7 keys: ['action_space.accel_mean', 'action_space.accel_std', 'action_space.curvature_mean', 'action_space.curvature_std', 'action_in_proj.sinus.0.freqs']
+2026-11-17 23:25:32,928 [INFO] [FlashDriveServer] Loading DFlash draft model from z-lab/Alpamayo-1.5-10B-DFlash
+2026-11-17 23:25:45,024 [INFO] [FlashDriveServer] DFlash configured: block_size=8, context_len=8, target_layers=[24, 30, 31, 32, 34], mask_token_id=155697
+2026-11-17 23:25:45,164 [INFO] [FlashDriveServer] Base model loaded. Optimized FlashDrive: True
+empty load: 5360 missing, 0 unexpected
+backbone loaded in 490 s
+Base-EmptyLoad: 24 states to run, 0 already done
+INFO 11-17 23:26:21 [marlin_utils.py:451] Marlin kernel can achieve better performance for small size_n with experimental use_atomic_add feature. You can consider set environment variable VLLM_MARLIN_USE_ATOMIC_ADD to 1 if possible.
+Base-EmptyLoad 0/24 state 0: 31.97 s, K 16, mem 20.6 GB 
+Base-EmptyLoad 20/24 state 20: 2.28 s, K 16, mem 20.6 GB 
+finished Base-EmptyLoad at 23:27:13
+DONE

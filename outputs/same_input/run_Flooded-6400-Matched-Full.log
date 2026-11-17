@@ -1,0 +1,37 @@
+384 states; expert Flooded-6400-Matched-Full from /home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400
+2026-11-17 21:34:52,237 [INFO] [FlashDriveServer] Loading Alpamayo model from z-lab/Alpamayo-1.5-10B onto cuda (torch_compile=None)...
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:03,  1.10it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:02,  1.47it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:01,  1.66it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:02<00:00,  1.48it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.58it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.52it/s]
+2026-11-17 21:41:16,719 [WARNING] [FlashDriveServer] Missing 252 quantization keys: ['vlm.model.language_model.layers.0.self_attn.q_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.k_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.v_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.self_attn.o_proj.rotate_linear.qlinear.bias', 'vlm.model.language_model.layers.0.mlp.gate_proj.rotate_linear.qlinear.bias']
+2026-11-17 21:41:16,735 [WARNING] [FlashDriveServer] Unexpected 7 keys: ['action_space.accel_mean', 'action_space.accel_std', 'action_space.curvature_mean', 'action_space.curvature_std', 'action_in_proj.sinus.0.freqs']
+2026-11-17 21:41:58,739 [INFO] [FlashDriveServer] Loading DFlash draft model from z-lab/Alpamayo-1.5-10B-DFlash
+2026-11-17 21:42:10,506 [INFO] [FlashDriveServer] DFlash configured: block_size=8, context_len=8, target_layers=[24, 30, 31, 32, 34], mask_token_id=155697
+2026-11-17 21:42:10,643 [INFO] [FlashDriveServer] Base model loaded. Optimized FlashDrive: True
+full patch: 308 tensors given, 7 not taken ['action_in_proj.sinus.0.freqs', 'action_in_proj.sinus.1.freqs', 'action_in_proj.timestep_fourier_encoder.freqs', 'action_space.accel_mean', 'action_space.accel_std', 'action_space.curvature_mean', 'action_space.curvature_std'], expert tensors left unpatched: []
+backbone loaded in 507 s
+Flooded-6400-Matched-Full: 384 states to run, 0 already done
+INFO 11-17 21:43:41 [marlin_utils.py:451] Marlin kernel can achieve better performance for small size_n with experimental use_atomic_add feature. You can consider set environment variable VLLM_MARLIN_USE_ATOMIC_ADD to 1 if possible.
+Flooded-6400-Matched-Full 0/384 state 0: 34.2 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 20/384 state 20: 2.28 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 40/384 state 40: 1.93 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 60/384 state 60: 2.21 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 80/384 state 80: 2.51 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 100/384 state 100: 2.1 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 120/384 state 120: 2.01 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 140/384 state 140: 2.22 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 160/384 state 160: 2.34 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 180/384 state 180: 1.94 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 200/384 state 200: 2.26 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 220/384 state 220: 2.67 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 240/384 state 240: 2.01 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 260/384 state 260: 1.8 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 280/384 state 280: 2.02 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 300/384 state 300: 2.14 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 320/384 state 320: 2.45 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 340/384 state 340: 1.85 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 360/384 state 360: 2.1 s, K 16, mem 20.6 GB 
+Flooded-6400-Matched-Full 380/384 state 380: 2.35 s, K 16, mem 20.6 GB 
+finished Flooded-6400-Matched-Full at 21:57:34
+Flooded-6400-Matched-Full.resetcheck: 3 states to run, 0 already done
+Flooded-6400-Matched-Full.resetcheck 0/3 state 0: 1.91 s, K 16, mem 20.6 GB 
+finished Flooded-6400-Matched-Full.resetcheck at 21:57:40
+DONE
