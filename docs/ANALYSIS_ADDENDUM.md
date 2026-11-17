@@ -393,7 +393,7 @@ Post hoc; existing logs, result records and dataset annotation files only. No de
 
 Two section headings give a time that is later than the commit that first contained the section. The commit times are the record: Section 6 is headed 23:40 on 12 November 2026 and was committed at 23:32:16 (`c56dbdee`); Section 7 is headed 22:30 on 13 November 2026 and was committed at 21:19:48 (`845e061d`). The headings were written as estimates before the commit was made. Neither difference changes the order of a rule and the data it refers to. The headings are left as they were, so that earlier citations of them remain valid.
 
-## 23. Control for the same-input replay: the unadapted expert loaded through the patch route, written 17 November 2026, 20:25 (UTC+7), before the control was run
+## 23. Control for the same-input replay: the unadapted expert loaded through the patch route, written 17 November 2026, 20:23 (UTC+7), before the control was run
 
 Post hoc; a diagnostic of the replay of Section 21, not a new hypothesis. The primary result of Section 21 and its reading are not changed by it.
 
