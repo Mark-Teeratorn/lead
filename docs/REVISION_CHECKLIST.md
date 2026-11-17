@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 17 November 2026, 22:20. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 17 November 2026, 23:35. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -18,8 +18,8 @@ Updated 17 November 2026, 22:20. `[x]` = done and committed. `[ ]` = not done; t
 - [x] Control run and weight check: the model server loaded every fine-tuned checkpoint in part (180 of 396 expert-layer tensors left at base values)
 - [x] Run note 13 on this fault
 - [x] Corrected model server and re-run queue written (not yet run)
-- [ ] Same-input replay with the checkpoints loaded in full (running; ends about 23:30)
-- [ ] Cause of the second effect of the patch step (two short diagnostics, in the same queue)
+- [x] Same-input replay with the checkpoints loaded in full: stay-put share 0.35 % (Golden-6400) against 17.61 % (Flooded-6400), −17.26 pp, interval [−23.78, −12.13]; the partial loading had reduced this contrast to about a third
+- [x] Second effect of the patch step: not caused by the patch step. An empty loading call changes nothing; the first base-model process differs from later base-model processes (cause unknown; recorded in the addendum)
 - [ ] Test of the corrected server on the GPU (after the replay)
 
 ## 2. Decision needed from the author
