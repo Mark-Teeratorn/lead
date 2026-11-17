@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 17 November 2026, 21:40. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 17 November 2026, 22:20. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -24,12 +24,14 @@ Updated 17 November 2026, 21:40. `[x]` = done and committed. `[ ]` = not done; t
 
 ## 2. Decision needed from the author
 
-- [ ] Re-run the closed-loop evaluation with the corrected server, or keep the data and describe the models as partly loaded
+- [x] Decided 17 November: re-run the closed-loop evaluation with the corrected server, in stages
+- [x] Rules for the re-run written and committed before any route (addendum section 25)
 
-## 3. If the re-run is chosen
+## 3. Re-run with the corrected server
 
-- [ ] Two 6,400-sample checkpoints, first pass (about 1.5 days)
-- [ ] Decoupling checkpoint; second pass; gate-off runs; 1,600-sample pair (about 5 more days in total)
+- [ ] Stage 1: two 6,400-sample checkpoints, first pass (about 1.5 days; starts after the replay, about 23:40 on 17 November)
+- [ ] Stage 1 read by the rule of section 25 (F1, F2)
+- [ ] Stage 2: second pass; gate-off runs; decoupling checkpoint; 1,600-sample pair; history-swap runs (about 5 more days)
 - [ ] Analysis script run on the new results; every number, table and figure updated
 
 ## 4. Manuscript text
