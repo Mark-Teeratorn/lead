@@ -392,3 +392,16 @@ Post hoc; existing logs, result records and dataset annotation files only. No de
 ## Correction note on heading times, written 17 November 2026, 18:15 (UTC+7)
 
 Two section headings give a time that is later than the commit that first contained the section. The commit times are the record: Section 6 is headed 23:40 on 12 November 2026 and was committed at 23:32:16 (`c56dbdee`); Section 7 is headed 22:30 on 13 November 2026 and was committed at 21:19:48 (`845e061d`). The headings were written as estimates before the commit was made. Neither difference changes the order of a rule and the data it refers to. The headings are left as they were, so that earlier citations of them remain valid.
+
+## 23. Control for the same-input replay: the unadapted expert loaded through the patch route, written 17 November 2026, 20:25 (UTC+7), before the control was run
+
+Post hoc; a diagnostic of the replay of Section 21, not a new hypothesis. The primary result of Section 21 and its reading are not changed by it.
+
+**What had been seen.** All results of Section 21 (`docs/provenance/same_input_results.json`). The primary difference is −5.25 pp with interval [−7.22, −3.75]. One check of the set-up did not come out as expected: the sampled rationale text is the same for the five fine-tuned experts in 381 to 384 of the 384 states, but the same as that of `Base` in only 208 to 210 states. The backbone weights are the same in all six processes, the 416 patched tensors are all expert tensors (`expert.*`, `action_in_proj.*`, `action_out_proj.*`, `action_space.*`), and the four `action_space` values are equal in the base model and in the checkpoints. The cause of the text difference is therefore not known. The only difference in set-up is that `Base` is served without the patch step, in the replay as in the closed-loop evaluation.
+
+**Control.** A seventh process, `Base-SelfPatch`: the same base model, with the 416 expert tensors of the base model itself (copied unchanged from the published base model files) loaded through the patch step that serves the fine-tuned checkpoints. Same 384 states, same seeds, same 16 plans per state, same script.
+
+**Reading, fixed now.**
+- If the texts and the plans of `Base-SelfPatch` equal those of `Base` (allowing the 0 to 3 states in which two fine-tuned processes differ from each other), the patch step is neutral. The text difference then comes from the expert weights, and the route by which they reach the text decoder is looked for and reported.
+- If they differ from `Base`, the serving route itself changes the output of the model. The contrasts of `Base` with the fine-tuned checkpoints, in closed loop (Section 22a) and in the replay, then contain a component that is not fine-tuning. The manuscript then reports `Base-SelfPatch` next to `Base`, with p_stay(`Base-SelfPatch`) − p_stay(`Base`) under the statistics of Section 21, and says that the comparison with the unadapted policy is confounded by the serving route.
+- Contrasts among the fine-tuned checkpoints share one serving route and are not affected in either case.
