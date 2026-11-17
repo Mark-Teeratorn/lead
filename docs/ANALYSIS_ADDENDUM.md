@@ -424,3 +424,29 @@ Post hoc; a diagnostic of the replay of Section 21, not a new hypothesis. The pr
 **Limit.** The replay says nothing about the closed-loop behaviour of the fully loaded checkpoints. All closed-loop results of the study come from the partly loaded models.
 
 **Follow-up to Section 23, written 17 November 2026, 21:10 (UTC+7), before the two runs below.** Outcome of the control: `Base-SelfPatch` has the rationale text of the fine-tuned processes in 382 to 384 of 384 states and that of `Base` in 208; its plans equal those of `Base` in no state; p_stay 4.23 % against 3.28 % (+0.95 pp, interval [0.36, 2.20]). By the reading fixed above, the serving route changes the output. A check in memory (`docs/provenance/expert_patch_check_base.json`) found no tensor shared between the expert and the rest of the model, and the expert tensors of the unpatched model equal the base files up to 3 × 10⁻⁸. Two diagnostics on the first 24 states, to find the cause: `Base-Repeat`, a second `Base` process (does `Base` reproduce itself across processes?), and `Base-EmptyLoad`, the base model after a loading call with an empty dictionary (does the call itself change the model?). They are checks of the serving code, with no decision rule.
+
+## 25. Closed-loop evaluation of the checkpoints loaded in full, written 17 November 2026, 22:17 (UTC+7), before any closed-loop route of a fully loaded checkpoint was run
+
+**Why.** Section 24: every closed-loop result of a fine-tuned checkpoint so far describes a model with base values in 180 of its 396 expert-layer tensors. The author decided on 17 November to evaluate the checkpoints again with a server that loads every tensor (`scripts/evaluation/flashdrive_server_fullpatch.py`; queue `scripts/common/run_fullload_suite.sh`).
+
+**What had been seen when this was written.** Every result of the partly loaded models, including all of the manuscript; the replay of Section 21 and the control of Section 23. Not computed or viewed: any plan of a fully loaded checkpoint. The replay files of Section 24 for `Golden-6400-Full` and `Flooded-6400-Matched-Full` existed on disk and had not been opened or analysed. No closed-loop route had been run with the new server.
+
+**Status of the earlier results.** The confirmatory record of Section 1 and all follow-up results are kept unchanged as results for the models as served. They are no longer the main results of the paper. The tests below are new tests on new data for the checkpoints as trained; they do not replace or re-run the registered tests, and the paper states both.
+
+**Harness.** As in the second pass (Section 5a): the same agent file (SHA-256 `082c6ecc…10d3`), launcher, 44 routes, termination rule and rerun rule. Two differences. The model server is the full-loading server, which refuses to start unless all 416 tensors of the checkpoint are in memory with largest difference 0 from the checkpoint file; its loading report is stored with every route. A route counts only if that server served it from start to end; otherwise its output is moved aside and the route is launched again within the limit of three attempts. The stream cache of the server is still not cleared between routes, as in all earlier runs; this is unchanged on purpose and is disclosed.
+
+**Stage 1.** `Golden-6400` and `Flooded-6400` (schedule-matched), 44 routes each, default controller, in this order (tags `model_matrix_golden_6400_full`, `model_matrix_flooded_6400_full`). Paired by route; paired mean difference Golden − Flooded; 95 % BCa interval with 20,000 resamples and seed 0; two-sided Wilcoxon signed-rank test; code of `paper_reanalysis.py` with the definitions of Sections 7a, 8 and 10 unchanged. If a route has no score after the rerun rule, the tests use the routes scored in both.
+
+- **F1 (plans; primary).** Share of logged steps with predicted extent L < 1.5 m. *Met* if the difference is negative, the interval lies entirely below 0 and p < 0.05. Otherwise *not met*.
+- **F2 (standstill time).** Share of route time below 0.1 m/s, read by the cases of the pre-specification of H2: interval below 0 and point estimate at most −4.0 pp (strong); interval below 0 and point estimate above −4.0 pp (partial); negative point estimate with an interval that includes 0 (inconclusive); point estimate 0 or positive (not shown).
+- F1 and F2 are reported with unadjusted and Holm-adjusted p-values over the two.
+- **Descriptive, no rule:** stay-put share at 0.5 m/s or less and at rest; standstill outside blocked time; blocked time with the permutation test of Section 22c; crawling; Driving Score, route completion, collision events; each next to the value of the partly loaded model.
+
+**Reading, fixed now.**
+- F1 met: the plan-level difference holds for the checkpoints as trained. Stage 2 follows.
+- F1 not met: the plan-level difference reported for the served models is not shown for the checkpoints as trained. The paper reports this as its result for the pair, and Stage 2 is decided with the author before any further run.
+- Whatever the outcome, the paper reports the earlier results as results for partly loaded models and does not pool them with the new runs.
+
+**Stage 2 (only after Stage 1 is read).** Second pass of both checkpoints (repeat test with the rule of Section 9, R1 to R3, applied to the fully loaded runs), gate-off runs (Section 5b), decoupling checkpoint (Sections 6 and 15), 1,600-sample pair, history-swap runs (Section 11). Their rules are those sections' rules, applied to the new runs; any change is written here before the run concerned starts.
+
+**Order of the replay of Section 24.** The replay queue (five fully loaded checkpoints, then the two diagnostics of Section 23) is left to finish before the first closed-loop route starts; its primary statistic SI-1F is read after this section is committed.
