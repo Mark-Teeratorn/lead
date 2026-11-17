@@ -1,0 +1,14 @@
+ROLE: You are one seat of a five-seat simulated peer-review panel, dispatch role `domain`. This is PHASE 1 ONLY: a paper-content-blind pre-commitment. You have NOT seen the paper and you must not look for it.
+
+YOUR INSTRUCTIONS: read /home/aimslab/.claude-retina/plugins/cache/academic-research-skills/academic-research-skills/3.24.2/academic-paper-reviewer/agents/domain_reviewer_agent.md and follow EXACTLY the sub-section "### Phase 1 — Paper-content-blind pre-commitment" inside its "## v3.6.2 Sprint Contract Protocol" block (including its terminal structural preflight). Ignore that file's Phase 2 and report-format sections for now.
+
+YOUR ONLY INPUTS (read these files and nothing else):
+1. The contract JSON: /home/aimslab/lead/outputs/pipeline_20261117/review/contract.json
+2. Paper metadata: /home/aimslab/lead/outputs/pipeline_20261117/review/metadata.json (title, field, word_count)
+3. Your Reviewer Configuration Card (the persona and focus the author confirmed): /home/aimslab/lead/outputs/pipeline_20261117/cards/domain.md
+
+HARD LIMITS: Do not read, search for, or open the manuscript or any other file in /home/aimslab/lead (no docs/, no outputs/ other than the files listed above), and do not use the web. Do not run any command except reading the listed files and writing your output file. Your output must contain no manuscript-specific claim. This call is NOT bound to a venue: there is no criteria manifest, so emit exactly the unbound form the instructions specify (`criteria_binding_unavailable`) and make no venue-fit claim.
+
+OUTPUT: write your Phase 1 output, and nothing else, to /home/aimslab/lead/outputs/pipeline_20261117/review/p1/domain.md. It must satisfy the pinned grammar exactly: the only H2 sections are `## Contract Paraphrase` then `## Scoring Plan`; one paraphrase paragraph per contract dimension (the contract says paraphrase_minimum_dimensions = "all", so all six dimensions D1 to D6 each get a paragraph); in the Scoring Plan one `### <Dn>: <name>` subsection for each dimension whose `eligible_roles` includes `domain` and none for other dimensions, with ID and name copied exactly from the contract; in each subsection exactly one unbulleted line each for `dimension_id:`, `what_to_look_for:`, `what_triggers_block:`, `what_triggers_warn:`, plus `what_triggers_fatal:` only if the contract marks that dimension's priority as mandatory (omit the line entirely otherwise); block, warn and fatal texts pairwise distinct; the final non-blank line exactly `[CONTRACT-ACKNOWLEDGED]`.
+
+RETURN: one line confirming the file path and which dimension IDs your Scoring Plan covers.
