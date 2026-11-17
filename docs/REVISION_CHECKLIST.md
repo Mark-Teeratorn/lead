@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 17 November 2026, 23:35. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 17 November 2026, 23:57. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -20,7 +20,7 @@ Updated 17 November 2026, 23:35. `[x]` = done and committed. `[ ]` = not done; t
 - [x] Corrected model server and re-run queue written (not yet run)
 - [x] Same-input replay with the checkpoints loaded in full: stay-put share 0.35 % (Golden-6400) against 17.61 % (Flooded-6400), −17.26 pp, interval [−23.78, −12.13]; the partial loading had reduced this contrast to about a third
 - [x] Second effect of the patch step: not caused by the patch step. An empty loading call changes nothing; the first base-model process differs from later base-model processes (cause unknown; recorded in the addendum)
-- [ ] Test of the corrected server on the GPU (after the replay)
+- [x] Corrected server tested on the GPU: all 416 tensors in memory, largest difference 0 from the checkpoint file; first route driving
 
 ## 2. Decision needed from the author
 
@@ -29,7 +29,7 @@ Updated 17 November 2026, 23:35. `[x]` = done and committed. `[ ]` = not done; t
 
 ## 3. Re-run with the corrected server
 
-- [ ] Stage 1: two 6,400-sample checkpoints, first pass (about 1.5 days; starts after the replay, about 23:40 on 17 November)
+- [ ] Stage 1: two 6,400-sample checkpoints, first pass (running since 23:30 on 17 November; ends about midday on 19 November)
 - [ ] Stage 1 read by the rule of section 25 (F1, F2)
 - [ ] Stage 2: second pass; gate-off runs; decoupling checkpoint; 1,600-sample pair; history-swap runs (about 5 more days)
 - [ ] Analysis script run on the new results; every number, table and figure updated
