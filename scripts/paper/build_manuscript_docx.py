@@ -275,7 +275,7 @@ def main(txt_path=TXT_PATH, docx_path=DOCX_PATH):
             continue
 
         # Table Caption (Table X: ...)
-        if re.match(r"^Table \d+:", line):
+        if re.match(r"^Table S?\d+:", line):
             p = doc.add_paragraph()
             format_paragraph_spacing(p, space_before=8, space_after=4, line_spacing=1.15)
             add_formatted_text_and_math(p, line, size_pt=11, default_bold=True)
