@@ -2733,6 +2733,73 @@ def blocked_runs(rd):
 CONTACT_TOL, CONTACT_SENS = 10.0, [5.0, 20.0]
 
 
+def contact_arm(arm):
+    """Blocked runs of one arm relative to recorded collision positions (addendum section 18a)."""
+    listing, n_runs, steps_all, steps_at = [], 0, 0, {t: 0 for t in [CONTACT_TOL] + CONTACT_SENS}
+    pct_without = []
+    for r in CANONICAL_44:
+        rd = arm[r]
+        runs = blocked_runs(rd)
+        keep = np.zeros(len(rd['speed']), bool)
+        if runs:
+            pts, seg, cum = route_polyline(r)
+            scale = rd['route_length'] / cum[-1]
+            cols = parse_collisions(rd)
+            sc = [arc_length_of(np.array([x['x'], x['y']]), pts, seg, cum) * scale for x in cols]
+            odo = np.concatenate([[0.0], np.cumsum(np.asarray(rd['speed']) * DT)])
+            for (i, j) in runs:
+                gap = min(abs(odo[i] - s) for s in sc) if sc else None
+                n_runs += 1
+                steps_all += j - i
+                for t in steps_at:
+                    if gap is not None and gap <= t:
+                        steps_at[t] += j - i
+                if gap is None or gap > CONTACT_TOL:
+                    keep[i:j] = True
+                listing.append({'route': r, 'onset_step': int(i), 'steps': int(j - i), 'distance_travelled_m': float(odo[i]),
+                                'collision_arc_lengths_m': [float(s) for s in sc], 'gap_m': None if gap is None else float(gap),
+                                'collision_actors': sorted({x['actor_type'] for x in cols})})
+        pct_without.append(pct(keep))
+    return ({'n_blocked_runs': n_runs, 'blocked_steps': steps_all,
+             'share_of_blocked_steps_at_collision_position_pct': {f'{t:g} m': (100.0 * v / steps_all if steps_all else None) for t, v in steps_at.items()},
+             'n_runs_at_collision_position_10m': sum(1 for x in listing if x['gap_m'] is not None and x['gap_m'] <= CONTACT_TOL),
+             'mean_blocked_pct_without_runs_at_collision_position': float(np.mean(pct_without)), 'runs': listing},
+            np.array(pct_without))
+
+
+def analysis_contact_balanced(arms, B='Balanced-6400 run1'):
+    """ANALYSIS_ADDENDUM.md section 20: the section 18a measure applied to the decoupling model (post hoc, after S15 was seen)."""
+    res = {'label': 'post hoc; addendum section 20, written after the section 15 values were seen; definition of section 18a unchanged'}
+    comps = (('Flooded-6400-Matched run1', 'Flooded-6400-Matched run2'), ('Golden-6400 run1', 'Golden-6400 run2'))
+    p = pending(arms, [(B, CANONICAL_44)] + [(n, CANONICAL_44) for pair in comps for n in pair])
+    if p:
+        res['status'] = p
+        res['status_line'] = status_line({'row': p})
+        return res
+    d, wb = contact_arm(arms[B])
+    n_blocked_routes = int(sum(bool(blocked_runs(arms[B][r])) for r in CANONICAL_44))
+    res['balanced'] = dict(d, n_routes_with_blocked_time=n_blocked_routes)
+    for label, pair in zip(('Balanced minus Flooded-6400-Matched', 'Balanced minus Golden-6400'), comps):
+        wc = (contact_arm(arms[pair[0]])[1] + contact_arm(arms[pair[1]])[1]) / 2.0
+        res[f'paired blocked time without runs at a collision position ({label}; comparator = mean of two passes)'] = paired(wb, wc)
+    res['status_line'] = 'complete'
+    return res
+
+
+def render_contact_balanced(man):
+    C = man['contact_balanced']
+    L = ['## S20. Blocked runs of the decoupling model and recorded collisions (addendum section 20)', '', f"Status: {C['status_line']}", '', C['label'], '']
+    if 'balanced' not in C:
+        return '\n'.join(L)
+    b = C['balanced']
+    L += [f"- blocked runs: {b['n_blocked_runs']} on {b['n_routes_with_blocked_time']} routes; blocked steps: {b['blocked_steps']}",
+          f"- runs at a recorded collision position (10 m): {b['n_runs_at_collision_position_10m']}",
+          f"- share of blocked steps at a recorded collision position (%): {b['share_of_blocked_steps_at_collision_position_pct']}",
+          f"- mean blocked time without runs at a collision position (%): {b['mean_blocked_pct_without_runs_at_collision_position']:.2f}", '']
+    L += paired_block('Blocked time without runs at a collision position', {k: v for k, v in C.items() if k.startswith('paired')}, 2)
+    return '\n'.join(L)
+
+
 def analysis_contact(arms):
     """ANALYSIS_ADDENDUM.md section 18a: blocked runs relative to recorded collision positions."""
     names = {'default controller, run1': ('Golden-6400 run1', 'Flooded-6400-Matched run1'),
@@ -2749,36 +2816,7 @@ def analysis_contact(arms):
             continue
         out, without = {}, {}
         for name in pair:
-            listing, n_runs, steps_all, steps_at = [], 0, 0, {t: 0 for t in [CONTACT_TOL] + CONTACT_SENS}
-            pct_without = []
-            for r in CANONICAL_44:
-                rd = arms[name][r]
-                runs = blocked_runs(rd)
-                keep = np.zeros(len(rd['speed']), bool)
-                if runs:
-                    pts, seg, cum = route_polyline(r)
-                    scale = rd['route_length'] / cum[-1]
-                    cols = parse_collisions(rd)
-                    sc = [arc_length_of(np.array([x['x'], x['y']]), pts, seg, cum) * scale for x in cols]
-                    odo = np.concatenate([[0.0], np.cumsum(np.asarray(rd['speed']) * DT)])
-                    for (i, j) in runs:
-                        gap = min(abs(odo[i] - s) for s in sc) if sc else None
-                        n_runs += 1
-                        steps_all += j - i
-                        for t in steps_at:
-                            if gap is not None and gap <= t:
-                                steps_at[t] += j - i
-                        if gap is None or gap > CONTACT_TOL:
-                            keep[i:j] = True
-                        listing.append({'route': r, 'onset_step': int(i), 'steps': int(j - i), 'distance_travelled_m': float(odo[i]),
-                                        'collision_arc_lengths_m': [float(s) for s in sc], 'gap_m': None if gap is None else float(gap),
-                                        'collision_actors': sorted({x['actor_type'] for x in cols})})
-                pct_without.append(pct(keep))
-            out[name] = {'n_blocked_runs': n_runs, 'blocked_steps': steps_all,
-                         'share_of_blocked_steps_at_collision_position_pct': {f'{t:g} m': (100.0 * v / steps_all if steps_all else None) for t, v in steps_at.items()},
-                         'n_runs_at_collision_position_10m': sum(1 for x in listing if x['gap_m'] is not None and x['gap_m'] <= CONTACT_TOL),
-                         'mean_blocked_pct_without_runs_at_collision_position': float(np.mean(pct_without)), 'runs': listing}
-            without[name] = np.array(pct_without)
+            out[name], without[name] = contact_arm(arms[name])
         out['paired blocked time without runs at a collision position (Golden minus Flooded)'] = paired(without[pair[0]], without[pair[1]])
         res['rows'][row] = out
     res['status_line'] = status_line(res['rows'])
@@ -2844,11 +2882,11 @@ def clean(o):
     return o
 
 
-def analysis_tables_base_rerun(arms, scen):
+def analysis_tables_base_rerun(arms, scen, arm='Base run2'):
     """Table 3 and Table 4 values for the `Base-Rerun` row (base_run2), computed as for the other rows:
     summary_row and the analysis F event-rate interval (Table 3); analysis A gate share, analysis D bands,
     analysis C primary-ability strata and the 60 s rule / tick-cap split of analysis M (Table 4)."""
-    runs = arms.get('Base run2', {})
+    runs = arms.get(arm, {})
     if any(r not in runs for r in CANONICAL_44):
         return {'status': 'pending', 'have': sum(r in runs for r in CANONICAL_44), 'need': 44}
     rds = [runs[r] for r in CANONICAL_44]
@@ -2940,12 +2978,15 @@ def main():
     man['pass_agreement'] = analysis_pass_agreement(arms)
     man['braking'] = analysis_braking(arms, data)
     man['contact'] = analysis_contact(arms)
+    man['contact_balanced'] = analysis_contact_balanced(arms)
     man['R13'] = analysis_R13(arms)
     man['pair1600'] = analysis_pair1600(data)
     man['tables_base_rerun'] = analysis_tables_base_rerun(arms, scen)
+    # same row computation for the decoupling model (Tables 3 and 4), descriptive
+    man['tables_balanced'] = analysis_tables_base_rerun(arms, scen, arm='Balanced-6400 run1')
     man = clean(man)
     OUT_MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=False, ensure_ascii=False) + '\n')
-    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man))
+    OUT_REPORT.write_text(render(man) + '\n' + render_new(man) + '\n' + render_W(man) + '\n' + render_X(man) + '\n' + render_Y(man) + '\n' + render_Z(man) + '\n' + render_S15(man) + '\n' + render_contact_balanced(man))
     p = man['A']['pairs'][f'{G64} vs {FM}']['standstill_pct']
     print(f"primary H2 reproduced: diff={p['mean_diff']:.4f} BCa={p['bca95']} W={p['wilcoxon']['statistic']} p={p['wilcoxon']['p']:.6f}")
     print(f'wrote {OUT_MANIFEST}\nwrote {OUT_REPORT}')

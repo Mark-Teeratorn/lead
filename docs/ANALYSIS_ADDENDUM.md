@@ -328,3 +328,15 @@ Reading: no decision rule. If the stay-put difference without blocked steps keep
 ## 19. Low-speed stay-put plans in the 1,600-sample pair, written 15 November 2026, 22:30 (UTC+7), before computing
 
 Post hoc, existing step logs only; suggested in review (S23). What had been seen: the pooled stay-put shares of all six models (Section 10a; 19.77 % for `Flooded-1600`, 16.41 % for `Golden-1600`). Not computed: any per-route paired comparison for this pair. Analysis: the paired per-route comparison of Section 10a (stay-put share at ≤ 0.5 m/s, and at rest < 0.1 m/s), `Golden-1600` − `Flooded-1600`, default controller, one pass; routes with at least 20 conditioning steps in both models; BCa interval and Wilcoxon test of Section 1. No decision rule; reported next to the 6,400-sample result.
+
+## 20. Blocked runs of the decoupling model relative to recorded collisions, written 17 November 2026, 12:35 (UTC+7), after the Section 15 values were seen
+
+Post hoc, existing step logs and result records only. The confirmatory record of Section 1 and the readings of Sections 6 and 15 are not changed.
+
+**What had been seen when this was written.** The complete Section 6 and Section 15 results for `Matrix-FloodedGroups-Balanced-6400` on 44 routes (near-stationary plan rate, stay-put shares, blocked time, standstill, Driving Score, route completion, collision events, each against both comparators), and the Section 18a result for `Golden-6400` and `Flooded-6400-Matched`. No value of the quantities below for the decoupling model.
+
+**Why.** Section 15 names blocked time as the cost when the blocked-time interval lies above 0. Section 18a found that, for the two original models, blocked runs lie at recorded collision positions, so that blocked time follows from contacts already counted. Whether the same holds for the decoupling model decides how its blocked time may be described.
+
+**Analysis.** The definition of Section 18a, unchanged (gap of at most 10 m; sensitivity 5 m and 20 m), applied to the one default-controller pass of the decoupling model: number of blocked runs, number of routes with blocked time, share of blocked steps at a recorded collision position, and blocked time recomputed without the runs at a recorded collision position. The recomputed value is compared, paired over the 44 routes with the interval and test of Section 1, with the per-route mean of the two default-controller passes of each comparator, as in Section 15.
+
+**Reading.** No decision rule, and the Section 15 reading stands as computed. If most of the decoupling model's blocked steps lie at a recorded collision position, the paper describes its blocked time as it does for the balanced model: time commanded to accelerate at the site of a recorded collision, not an independent cost. Otherwise it reports the split as found. The limits of Section 18a apply.
