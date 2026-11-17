@@ -176,7 +176,7 @@ def fig_low_speed_plans():
               ("Flooded-6400-Hist", "Flooded-\n6400-Hist", C_FLOOD, None),
               ("Flooded-6400-Matched run1", "Flooded-\n6400", C_FLOOD, "flooded_6400"),
               ("Golden-6400 run1", "Golden-\n6400", C_GOLD, "golden_6400"),
-              ("Balanced-6400 run1", "Decoupling-\n6400", "0.3", "floodedgroups_balanced_6400")]
+              ("Balanced-6400 run1", "Decou-\npling-\n6400", "0.3", "floodedgroups_balanced_6400")]
     for k, (name, lab, c, tkey) in enumerate(models):
         v = means[name]["low_speed_stays_put_pct"]
         b.bar(k, v, 0.62, color=c, edgecolor="white", alpha=0.6 if name == "Flooded-6400-Hist" else 1.0)
