@@ -55,6 +55,9 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--seed-base", type=int, default=1000)
     ap.add_argument("--n-reset-check", type=int, default=3)
+    ap.add_argument("--empty-load", action="store_true",
+                    help="diagnostic (addendum 23): base model, then load_state_dict with an empty dictionary, as a test of "
+                         "whether the loading call itself changes the served model")
     ap.add_argument("--full-patch", action="store_true",
                     help="load every tensor of the checkpoint, including the q/k/v and gate/up projections that the engine "
                          "fuses at load time and that the server's own patch step therefore leaves at their base values")
@@ -95,6 +98,12 @@ def main():
     t_load = time.time()
     model_path = "z-lab/Alpamayo-1.5-10B" if (a.model_path == "BASE" or a.full_patch) else a.model_path
     engine = fs.FlashDriveEngine(model_path=model_path, num_samples=a.k)
+    if a.empty_load:
+        assert a.model_path == "BASE"
+        missing, unexpected = engine.model.load_state_dict({}, strict=False)
+        gc.collect()
+        torch.cuda.empty_cache()
+        print(f"empty load: {len(missing)} missing, {len(unexpected)} unexpected", flush=True)
     if a.full_patch:
         # The engine fuses q/k/v and gate/up of every expert layer when the base model is loaded (flashdrive/__init__.py,
         # setup_expert_fusion), so the checkpoint's unfused tensors are concatenated in the fusion order before loading.
