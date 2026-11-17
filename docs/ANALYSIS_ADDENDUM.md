@@ -340,3 +340,51 @@ Post hoc, existing step logs and result records only. The confirmatory record of
 **Analysis.** The definition of Section 18a, unchanged (gap of at most 10 m; sensitivity 5 m and 20 m), applied to the one default-controller pass of the decoupling model: number of blocked runs, number of routes with blocked time, share of blocked steps at a recorded collision position, and blocked time recomputed without the runs at a recorded collision position. The recomputed value is compared, paired over the 44 routes with the interval and test of Section 1, with the per-route mean of the two default-controller passes of each comparator, as in Section 15.
 
 **Reading.** No decision rule, and the Section 15 reading stands as computed. If most of the decoupling model's blocked steps lie at a recorded collision position, the paper describes its blocked time as it does for the balanced model: time commanded to accelerate at the site of a recorded collision, not an independent cost. Otherwise it reports the split as found. The limits of Section 18a apply.
+
+## 21. Same-input comparison of the action experts (offline replay), written 17 November 2026, 15:25 (UTC+7), before any inference of this analysis was run
+
+Requested by the review of 17 November 2026 (required item R4, route (a)) and, in an earlier form, by the review of 15 November (item R10). New inference on existing checkpoints; no simulator, no training. The confirmatory record of Section 1 and all earlier readings are not changed.
+
+**What had been seen when this was written.** All results reported in the manuscript up to commit `1daeeeda`, including the closed-loop plan shares of every checkpoint, and the review of 17 November. Of the validation data: the annotation file only (1,567 samples in 117 clips from 40 source logs; 384 samples with annotated speed of 0.5 m/s or less, in 67 clips from 31 logs; among these 384 the demonstrated future stays within 0.64 m in 15, reaches 2 m or more in 332 and lies between in 37). No output of any checkpoint on any validation sample.
+
+**Why.** Every plan share in the manuscript is a closed-loop rate in the states each checkpoint reached, counted per logged step. It cannot say whether two experts differ when they are given the same input.
+
+**State set.** All samples of the shared validation split (file `annotations_val.json`, the same for every dataset cell; held out by route from every training set) whose annotated ego speed at the current frame is 0.5 m/s or less: 384 states. A state that cannot be loaded is dropped and counted.
+
+**Procedure.** Inputs are built by the model's own dataset loader (four cameras, four frames each, 16-pose ego history) with the navigation text of the annotation, and passed through the engine of the deployed model server (same quantized backbone, same sampler of eight Euler steps with four expert evaluations). For each state the engine receives the full window at 0.1 s before the sample time (prefill) and then the streaming window at the sample time, and returns K = 16 trajectories in one call. The random seed is set to 1000 plus the state index before the prefill call, for every expert, and the rationale texts are stored, so that it can be checked whether the backbone output was the same for the experts compared. If 16 trajectories do not fit in memory, K = 8 is used; this is decided on the first states of the first expert, without looking at trajectories.
+
+**Experts.** Primary pair: `Golden-6400` and `Flooded-6400-Matched`. Secondary: `Matrix-FloodedGroups-Balanced-6400` (the decoupling model), the unadapted model (`Base`), `Golden-1600` and `Flooded-1600`.
+
+**Outcomes per state and expert.** With L the path length from the first to the last waypoint (as in the manuscript): p_stay, the share of the K plans with L < 0.64 m; p_start, the share with L of 2 m or more; and the mean of L.
+
+**Primary comparison (SI-1).** p_stay of `Golden-6400` minus p_stay of `Flooded-6400-Matched`, per state; averaged within each source log, because states of one log are dependent; then paired over the logs: mean of the per-log differences, two-sided 95 % BCa interval (20,000 resamples, seed 0) and two-sided Wilcoxon signed-rank test, as in Section 1. The pooled means over the 384 states are reported as description.
+
+**Reading, fixed now.**
+- Difference negative with the interval below 0: on identical inputs the obstacle-heavy expert returns stay-put plans more often than the balanced one. The manuscript may then say that the two experts differ, for low-speed states reached by the demonstrator and replayed offline; it still may not attribute this to data composition across training runs.
+- Interval includes 0: a difference between the experts on identical inputs is not shown. The manuscript withdraws every model-level or per-decision reading of the closed-loop shares and describes them as occupancy (route (b) of item R4).
+- Difference positive with the interval above 0: reported as contrary to the closed-loop pattern, with the same withdrawal.
+In every case the size of the same-input difference is printed next to the closed-loop shares, and the manuscript states that the closed-loop ratio also reflects how long each checkpoint stays in the states concerned.
+
+**Secondary, descriptive, no rule.** The same comparison for the decoupling model against each of the primary pair, for `Base` against each 6,400-sample checkpoint, and for the 1,600-sample pair; the primary comparison on the states with speed below 0.1 m/s; on p_start; with L < 1.5 m in place of 0.64 m; p_stay of each expert by the class of the demonstrated future (stays put, starts, between) and against the demonstrated stay-put share of the state set; and a sign test over states that ignores the clustering.
+
+**Limits known in advance.** The states are those a privileged expert driver reached, so states after a collision and other states that only the learned policies reach are absent. Each state is one prefill and one streaming step, not a long stream. The validation split was not drawn to the target mix of either training regime, and it holds few demonstrated stay-put futures (15 of 384).
+
+## 22. Analyses requested by the review of 17 November 2026, written 17 November 2026, 15:25 (UTC+7), before computing
+
+Post hoc; existing logs, result records and dataset annotation files only. No decision rule is attached to any of them, and no earlier decision is changed.
+
+**What had been seen.** Everything in the manuscript up to commit `1daeeeda`; the review of 17 November. Not computed or viewed: any quantity below.
+
+**(a) Reference values for the unadapted policy (item R1).** The plan-level and motion-level measures of manuscript Table 4 (near-stationary plans; stay-put plans at 0.5 m/s or less and at rest; plans ending at rest above 2 m/s; standstill outside blocked time; blocked time; crawling; standstill), as means of per-route percentages, for `Base run2` (the re-evaluated unadapted policy), with the paired difference to the two-pass mean of `Golden-6400`, of `Flooded-6400-Matched` and to the decoupling model, each with the interval of Section 1.
+
+**(b) Composition and overlap of the decoupling dataset (items R3 and R11).** From the published annotation files: realised scenario-group, manoeuvre and stationary shares of `floodedgroups_balanced_6400`; its samples at 0.5 m/s or less by class of future (stays put, starts, between), with the definitions of manuscript Table 1; and the number of training samples it shares with `golden_6400` and with `flooded_6400`, as counts and shares.
+
+**(c) Tests of blocked time (item R6).** For every blocked-time contrast printed in the manuscript: the number of routes with a non-zero paired difference, and a sign-flip permutation test of the mean paired difference (all sign assignments over the non-zero pairs when there are at most 20, otherwise 100,000 random assignments with seed 0), two-sided. The values are printed next to the existing ones; the outcome of rule R3 of Section 9 is not re-decided.
+
+**(d) Chance rate of the position match (item R7).** The 10 m rule of Section 18a applied (i) to runs of at least 100 consecutive standstill steps that are not blocked runs, for the same models and passes, and (ii) as a placement rate: for each route with a blocked run, the share of the distance travelled on that route that lies within 10 m of a recorded collision position, averaged over blocked runs.
+
+**(e) Collision events on the routes with blocked time (item R8).** For each checkpoint and pass, the collision events on the routes on which either model of the comparison has blocked time.
+
+**(f) Plans per stop episode (item R4, supplementary to Section 21).** A stop episode is a run of at least 20 consecutive steps below 0.1 m/s (Section 7b). For each episode: whether the plan at its first step is a stay-put plan (L < 0.64 m), and the number of steps from the start of the episode to the first plan with L of 2 m or more (censored at the end of the episode). Per route: the share of episodes that begin with a stay-put plan and the median delay. Paired over the routes with at least three episodes for both models, `Golden-6400` against `Flooded-6400-Matched`, in each pass and without the gate. This counts each stop once, whatever its length.
+
+**(g) Success rate (suggested item S20).** The share of routes completed in full without an infraction, per checkpoint and pass, as description.
