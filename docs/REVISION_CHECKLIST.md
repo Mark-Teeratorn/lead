@@ -62,7 +62,7 @@ Items R1–R12 were drafted in a working copy before the fault was found. None o
 - [ ] Target journal
 - [ ] Author contributions, funding, competing interests
 - [ ] Sentence on verification of AI-assisted work
-- [ ] Rendering quality used for data collection (Epic or Low)
+- [x] Rendering quality used for data collection: Epic, from the code (lead2alpa `scripts/multirig_collect_budget.sh` passes no `--quality`; the default of `collect_multirig.py` has been `Epic` in every version). No CARLA log of the collection machine is on this machine
 - [ ] Permission to push to GitHub and create a DOI archive
 - [ ] Trainer log details of the decoupling model
 - [ ] Whether the expert weights are released, and where the repository is hosted
