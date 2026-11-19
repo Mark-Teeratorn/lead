@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 19 November 2026, 17:30. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 19 November 2026, 20:50. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
