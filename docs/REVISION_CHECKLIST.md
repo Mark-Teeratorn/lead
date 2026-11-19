@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 19 November 2026, 15:47. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 19 November 2026, 17:30. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -36,20 +36,23 @@ Updated 19 November 2026, 15:47. `[x]` = done and committed. `[ ]` = not done; t
 
 ## 4. Manuscript text
 
-Items R1–R12 were drafted in a working copy before the fault was found. None of it is in the manuscript file yet, and all of it is on hold until the decision in section 2.
+First part written on 19 November, from the results that no longer depend on Stage 2. The rest waits for Stage 2, because the fully loaded runs become the main result and the order of Section 4 changes with them.
 
-- [ ] R1: direction relative to the unadapted policy; new title in the manuscript
+- [x] New title in the manuscript and the supplement
+- [x] Section 3.4: loading fault and corrected server; Section 4.1: the two evaluation series
+- [x] New Section 4.13 with Table 5: first pass of the fully loaded 6,400-sample pair (F1, F2, descriptive results)
+- [ ] R1: direction relative to the unadapted policy (done for the replay, Section 4.12; closed loop waits for Stage 2)
 - [ ] R2: wording at the level of checkpoints, not of data composition
 - [ ] R3: decoupling set in Table 1
-- [ ] R4: new section on the same-input replay
+- [x] R4: new Section 4.12 on the same-input replay (as served and loaded in full)
 - [ ] R5: H1 reported as inconclusive
 - [ ] R6–R8: blocked time (tests, chance rate, collision counts; no "not an additional cost")
 - [ ] R9, R10: history-swap test as inconclusive; inertia and the conjecture not set against each other
 - [ ] R11, R12: decoupling overlap; three-of-four-cells wording
 - [ ] Abstract, discussion, conclusion
-- [ ] Disclosure of the loading fault and of the server cache not cleared between routes
-- [ ] Both Word files renamed to the new title; Word and LaTeX rebuilt
-- [ ] Number check: zero unsupported numbers
+- [x] Disclosure of the loading fault and of the server cache not cleared between routes (Sections 3.4, 4.1; limitations 12, 13); rendering quality of the data collection (limitation 10)
+- [ ] Both Word files renamed to the new title and rebuilt (done 19 November); LaTeX not rebuilt yet
+- [ ] Number check: zero unsupported numbers (0 of 1,110 on 19 November; to be repeated on the final text)
 
 ## 5. Rest of the pipeline
 

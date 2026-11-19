@@ -1,4 +1,4 @@
-Supplementary Material for "Learning to Wait: Fine-Tuning Data Composition and the Stay-Put Plans of a Vision-Language-Action Driving Policy"
+Supplementary Material for "Stay-Put Plans at Low Speed in a Fine-Tuned Vision-Language-Action Driving Policy: A Closed-Loop Comparison of Checkpoints Trained on Different Data Mixes"
 
 This supplement gives the full account of the methods and analyses that the main text summarises. Section numbers follow the main text with the prefix S, so Supplementary Section S4.6 belongs to Section 4.6. Tables S1 to S3 are in this supplement; tables, figures and sections without the prefix S are those of the main text, and reference numbers in square brackets refer to its reference list. Some statements of the main text are repeated here so that each section can be read on its own. ANALYSIS_ADDENDUM and CONFIRMATORY_DEVIATIONS are files in the project repository.
 

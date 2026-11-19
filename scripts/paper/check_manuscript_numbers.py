@@ -19,6 +19,7 @@ DEFAULT_MS = ROOT / ("docs/Distribution-Curated Fine-Tuning Reduces Closed-Loop 
 DEFAULT_SOURCES = [ROOT / "docs/provenance/paper_reanalysis_manifest.json",
                    ROOT / "docs/provenance/paper_tables_confirmatory_record.json",
                    ROOT / "docs/provenance/same_input_results.json",
+                   ROOT / "docs/provenance/fullload_stage1_results.json",
                    ROOT / "docs/provenance/decoupling_dataset_composition.json"]
 
 UNIT_WORDS = ["routes", "route", "steps", "step", "models", "model", "tests", "test", "seeds", "seed",
