@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 17 November 2026, 23:57. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 19 November 2026, 15:47. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -29,8 +29,8 @@ Updated 17 November 2026, 23:57. `[x]` = done and committed. `[ ]` = not done; t
 
 ## 3. Re-run with the corrected server
 
-- [ ] Stage 1: two 6,400-sample checkpoints, first pass (running since 23:30 on 17 November; ends about midday on 19 November)
-- [ ] Stage 1 read by the rule of section 25 (F1, F2)
+- [x] Stage 1: two 6,400-sample checkpoints, first pass (17 Nov 23:29 to 19 Nov 15:45; 44 of 44 routes in each arm)
+- [x] Stage 1 read by the rule of section 25: F1 met (stay-put plans 1.31 % against 26.80 %, −25.49 pp [−31.69, −19.63]); F2 strong (standstill 22.97 % against 46.66 %, −23.69 pp [−33.48, −15.08])
 - [ ] Stage 2: second pass; gate-off runs; decoupling checkpoint; 1,600-sample pair; history-swap runs (about 5 more days)
 - [ ] Analysis script run on the new results; every number, table and figure updated
 
