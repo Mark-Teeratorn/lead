@@ -497,3 +497,16 @@ The job `model_matrix_fgbalanced_6400_full` ended on 20 Nov 2026 at 06:46: 44 of
 
 - Against Flooded-6400 (first pass): share of steps with L < 1.5 m 1.58 % against 26.80 %, −25.23 pp [−31.44, −19.58]; standstill 27.79 % against 46.66 %, −18.87 pp [−28.90, −9.12]; blocked time 15.39 % against 0.00 %, +15.39 pp [8.78, 24.42]; Driving Score 47.69 against 43.51, +4.18 [−2.56, 12.83]; route completion +8.28 [2.98, 14.48]; collision events 37 against 28.
 - Against Golden-6400 (first pass): L < 1.5 m +0.26 pp [−0.54, 1.57]; standstill +4.82 pp [−4.77, 15.05]; blocked time +2.69 pp [−5.36, 11.45]; Driving Score −6.33 [−14.26, 0.87]; route completion −0.08 [−4.84, 5.23]; collision events 37 against 28.
+
+## 27. Choice of the scenes for a qualitative figure of the same-input replay (illustrative), written 20 Nov 2026, 17:26 (UTC+7), before any scene was looked at for this purpose
+
+**Why.** A figure that shows, for one input, the 16 plans of each fully loaded 6,400-sample checkpoint (Golden, Flooded, decoupling). A scene chosen by eye would be a selected example, so the choice is fixed here by a rule. The figure is illustrative; no test is attached to it and no number in the text depends on it.
+
+**What had been seen when this was written.** The aggregate replay results of Sections 21 and 24. Of single records: the first record of `outputs/same_input/Golden-6400-Full.jsonl` (state 0, printed to inspect the fields of the file). No per-state comparison between checkpoints.
+
+**Rule.** Source: the fully loaded replays `Golden-6400-Full` and `Flooded-6400-Matched-Full` (384 states, 16 plans each). Candidate states: speed of 0.5 m/s or less. For each candidate, d = number of Flooded plans with L < 0.64 m minus number of Golden plans with L < 0.64 m.
+- Panel A, the typical state: the candidate whose d is closest to the mean of d over the candidates; ties go to the lowest state index.
+- Panel B, the largest difference: the candidate with the largest d; ties go to the lowest state index. The caption says that this is the largest difference of the set and gives the mean.
+The decoupling checkpoint (`Balanced-6400-Full`) is shown for the same two states and plays no part in the choice. If a chosen state lacks 16 plans for any of the three checkpoints, the next state by the same rule is taken and this is reported.
+
+**Drawing.** The replay stored the length of each plan, not its waypoints. The figure shows the camera frames of the state next to the 16 plan lengths of each checkpoint. If plan paths are drawn, the three checkpoints are run again on the chosen states only, with the replay code and seeds unchanged, after the closed-loop queue has ended (one GPU job at a time); the lengths of the new plans are compared with the stored lengths, and a mismatch is reported in the caption.
