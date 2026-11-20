@@ -510,3 +510,10 @@ The job `model_matrix_fgbalanced_6400_full` ended on 20 Nov 2026 at 06:46: 44 of
 The decoupling checkpoint (`Balanced-6400-Full`) is shown for the same two states and plays no part in the choice. If a chosen state lacks 16 plans for any of the three checkpoints, the next state by the same rule is taken and this is reported.
 
 **Drawing.** The replay stored the length of each plan, not its waypoints. The figure shows the camera frames of the state next to the 16 plan lengths of each checkpoint. If plan paths are drawn, the three checkpoints are run again on the chosen states only, with the replay code and seeds unchanged, after the closed-loop queue has ended (one GPU job at a time); the lengths of the new plans are compared with the stored lengths, and a mismatch is reported in the caption.
+
+### Interim look at the second pass of the fully loaded Golden-6400, recorded 20 Nov 2026, 20:57
+
+The job `model_matrix_golden_6400_run2_full` ended on 20 Nov 2026 at 20:25: 44 of 44 routes scored, each with a clean loading report; route 26458 ended without a score at its first launch (exit 134) and was scored at its second. When this look was taken, the second pass of Flooded-6400 had one route scored and none of its values had been computed or viewed. The repeat test (Section 9, R1 to R3, applied to the fully loaded second passes) is not made yet and its rule is unchanged. Looked at: the second pass of Golden-6400 against its own first pass, paired over 44 routes, descriptive.
+
+- Share of steps with L < 1.5 m: 1.12 % against 1.31 % (−0.19 pp [−0.68, 0.17]). Standstill: 25.05 % against 22.97 % (+2.08 pp [−4.76, 9.70]). Standstill outside blocked time: 9.15 % against 10.28 %. Blocked time: 15.90 % against 12.69 % (+3.21 pp [−1.80, 10.76]); 11 against 10 routes.
+- Driving Score: 49.01 against 54.02 (−5.01 [−12.25, 1.33]). Route completion: 70.94 % against 71.55 %. Collision events: 36 against 28. Routes completed: 19 against 21.
