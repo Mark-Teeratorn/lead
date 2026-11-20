@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 19 November 2026, 20:50. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 20 November 2026, 18:10. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -38,7 +38,7 @@ Updated 19 November 2026, 20:50. `[x]` = done and committed. `[ ]` = not done; t
 
 First part written on 19 November, from the results that no longer depend on Stage 2. The rest waits for Stage 2, because the fully loaded runs become the main result and the order of Section 4 changes with them.
 
-- [x] New title in the manuscript and the supplement
+- [x] New title in the manuscript and the supplement (20 November: main title "The Inertia Problem in a Fine-Tuned Vision-Language-Action Driving Policy", subtitle unchanged; body text on the inertia mechanism to be aligned in the rewrite)
 - [x] Section 3.4: loading fault and corrected server; Section 4.1: the two evaluation series
 - [x] New Section 4.13 with Table 5: first pass of the fully loaded 6,400-sample pair (F1, F2, descriptive results)
 - [ ] R1: direction relative to the unadapted policy (done for the replay, Section 4.12; closed loop waits for Stage 2)
