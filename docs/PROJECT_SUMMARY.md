@@ -1,6 +1,6 @@
 # Project summary
 
-Written 21 November 2026, 12:09. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
+Written 21 November 2026, 12:09; results updated 21 November 2026, 23:58. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
 
 ## What the project is
 
@@ -50,14 +50,16 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 - Golden-6400 against the unadapted model (post hoc): Driving Score +11.42, interval [2.83, 21.62]; 28 against 49 collision events.
 - The decoupling checkpoint behaves like Golden, not like Flooded. This points to the manoeuvre mix and stationary share, not the scenario mix (single-pass look; final reading pending).
 - Cost: the checkpoints that wait less have more blocked time.
-- Golden-6400, second pass: plans and standstill repeat (1.12 % and 25.05 %); Driving Score 49.01, lower than the first pass but within run-to-run variation.
+- **Second pass (added 22 Nov).** The repeat test is met on all three measures: near-stationary plans 1.12 % against 29.28 % (−28.16 pp, interval [−34.81, −21.75]). Over both passes Golden-6400 stood still about half as long (−23.54 pp) and completed more of each route (+6.84 pp, interval [0.80, 13.29]).
+- **The Driving Score lead did not repeat.** Second pass 49.01 against 51.60; over both passes +3.96, interval [−3.06, 11.67]. Collision events per kilometre driven: ratio 1.29, interval [0.90, 1.92]. The table above shows the first pass only.
+- Decoupling checkpoint, final reading: it closes 98.7 % of the gap in near-stationary plans, with more blocked time; by the rule fixed in advance it reduces hesitation at a cost and is not called a remedy.
 
 ## What is still running or open
 
 | Item | Status |
 |---|---|
-| Flooded-6400, second pass | Running, 25 of 44 routes |
-| Runs without the standstill gate (both 6,400 checkpoints) | Queued |
+| Second pass of both 6,400 checkpoints; decoupling checkpoint | Done (21 Nov) |
+| Runs without the standstill gate (both 6,400 checkpoints) | Golden running since 21 Nov 22:01; Flooded queued |
 | 1,600-sample pair | Queued |
 | History-swap test on fully loaded checkpoints | Queue not yet prepared; runs after the suite |
 | Rewrite of the manuscript | Planned for about 24 to 26 Nov, after the runs |
