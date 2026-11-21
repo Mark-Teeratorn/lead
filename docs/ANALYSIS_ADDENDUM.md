@@ -525,3 +525,16 @@ Taken at the author's request while the job `model_matrix_flooded_6400_run2_full
 - Share of steps with L < 1.5 m: 0.80 % against 28.45 %, −27.65 pp [−35.99, −19.55]. Standstill outside blocked time: 7.31 % against 47.21 %, −39.90 pp [−51.63, −28.55]. Blocked time: 17.92 % against 0.00 %, +17.92 pp [8.32, 31.41]. Standstill time: −21.98 pp [−34.99, −7.72].
 - Driving Score: 55.20 against 54.15, +1.05 [−10.24, 12.74]. Route completion: +7.05 pp [−0.84, 15.56]. Collision events per route: 0.80 against 0.33, +0.47 [0.17, 0.90].
 - On these 30 routes the second pass of Flooded-6400 had a higher Driving Score than its first pass (54.15 against 43.40, +10.75 [3.22, 19.56]) and fewer collision events (10 against 23).
+
+### Outcome of the repeat test on the fully loaded second passes (Sections 9 and 25), recorded 21 Nov 2026, 23:46
+
+The job `model_matrix_flooded_6400_run2_full` ended on 21 Nov 2026 at 22:01: 44 of 44 routes scored at the first attempt, each with a clean loading report. Results: `docs/provenance/fullload_repeat_test_results.json` (script `scripts/evaluation/fullload_repeat_test.py`). Second pass alone, Golden-6400 minus Flooded-6400, 44 routes.
+
+- **R1, replicated.** Share of steps with L < 1.5 m: 1.12 % against 29.28 %, −28.16 pp [−34.81, −21.75], p = 1.1e-13.
+- **R2, replicated.** Standstill outside blocked time: 9.15 % against 48.44 %, −39.29 pp [−48.36, −30.34].
+- **R3, replicated.** Blocked time: 15.90 % against 0.00 %, +15.90 pp [8.06, 26.85].
+- No decision attached. Standstill time on the second pass alone: 25.05 % against 48.44 %, −23.39 pp [−34.18, −12.11] (case A1 of Section 1); on the mean of the two passes −23.54 pp [−32.98, −14.89] (case A1).
+- Benchmark outcomes, second pass alone: Driving Score 49.01 against 51.60, −2.59 [−11.94, 6.51]; route completion 70.94 % against 65.62 %, +5.32 pp [−1.67, 12.25]; collision events 36 against 15, +0.48 per route [0.23, 0.77]. Mean of the two passes: Driving Score 51.52 against 47.55, +3.96 [−3.06, 11.67]; route completion +6.84 pp [0.80, 13.29]; collision events per route 0.73 against 0.49, +0.24 [0.00, 0.43].
+- Second pass against first pass. Golden-6400: no measure with an interval that excludes 0. Flooded-6400: Driving Score 51.60 against 43.51, +8.09 [1.93, 15.16]; collision events 15 against 28, −0.30 per route [−0.61, −0.11]; plan and standstill measures with intervals that include 0.
+
+**Consequence for Sections 25 and 26.** The Driving Score difference of the first pass (+10.52, reported there as an observation of one pass) did not recur: on the second pass the point estimate has the opposite sign, and on the two-pass mean the interval includes 0. The comparison of Section 26 with the unadapted model rests on one pass of each arm and is to be read with the same reservation.
