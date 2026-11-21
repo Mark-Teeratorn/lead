@@ -517,3 +517,11 @@ The job `model_matrix_golden_6400_run2_full` ended on 20 Nov 2026 at 20:25: 44 o
 
 - Share of steps with L < 1.5 m: 1.12 % against 1.31 % (−0.19 pp [−0.68, 0.17]). Standstill: 25.05 % against 22.97 % (+2.08 pp [−4.76, 9.70]). Standstill outside blocked time: 9.15 % against 10.28 %. Blocked time: 15.90 % against 12.69 % (+3.21 pp [−1.80, 10.76]); 11 against 10 routes.
 - Driving Score: 49.01 against 54.02 (−5.01 [−12.25, 1.33]). Route completion: 70.94 % against 71.55 %. Collision events: 36 against 28. Routes completed: 19 against 21.
+
+### Partial look at the second pass of the fully loaded Flooded-6400, recorded 21 Nov 2026, 15:05
+
+Taken at the author's request while the job `model_matrix_flooded_6400_run2_full` was running: 30 of its 44 routes were scored. The script `scripts/evaluation/fullload_repeat_test.py` was committed (94e647f8) before the look; after it, only its printout was changed (a comparison in which every difference is 0 has no interval, which the printout did not handle). The rule of Section 9 is unchanged, and the decisions R1 to R3 are made only on the 44 routes. Values on the 30 routes scored in both second passes, Golden minus Flooded, second pass alone:
+
+- Share of steps with L < 1.5 m: 0.80 % against 28.45 %, −27.65 pp [−35.99, −19.55]. Standstill outside blocked time: 7.31 % against 47.21 %, −39.90 pp [−51.63, −28.55]. Blocked time: 17.92 % against 0.00 %, +17.92 pp [8.32, 31.41]. Standstill time: −21.98 pp [−34.99, −7.72].
+- Driving Score: 55.20 against 54.15, +1.05 [−10.24, 12.74]. Route completion: +7.05 pp [−0.84, 15.56]. Collision events per route: 0.80 against 0.33, +0.47 [0.17, 0.90].
+- On these 30 routes the second pass of Flooded-6400 had a higher Driving Score than its first pass (54.15 against 43.40, +10.75 [3.22, 19.56]) and fewer collision events (10 against 23).

@@ -97,6 +97,9 @@ def main():
                   'routes_with_blocked_time': int((v(arm, R['R3 blocked time'], both) > 0).sum())} for arm in TAGS}
 
     def show(k, p):
+        if not isinstance(p['bca95'], (list, tuple)):  # every paired difference is 0: no interval, no test
+            print(f"{k}: {p['mean_first']:.2f} vs {p['mean_second']:.2f}, diff {p['mean_diff']:.2f}, not computable (all differences equal), n {p['n']}")
+            return
         print(f"{k}: {p['mean_first']:.2f} vs {p['mean_second']:.2f}, diff {p['mean_diff']:.2f}, CI {[round(x, 2) for x in p['bca95']]}, "
               f"p {p['wilcoxon']['p']:.3g}, n {p['n']}  {p.get('decision', p.get('case_by_rule_of_section_1', ''))}")
     print(json.dumps(res['routes_counted']), res.get('status', 'complete'))
