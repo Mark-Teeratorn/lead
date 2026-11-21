@@ -1,0 +1,1565 @@
+{
+ "label": "ANALYSIS_ADDENDUM section 28; post hoc, descriptive",
+ "tags": {
+  "Golden-6400 full, first pass": "model_matrix_golden_6400_full",
+  "Golden-6400 full, second pass": "model_matrix_golden_6400_run2_full",
+  "Decoupling-6400 full": "model_matrix_fgbalanced_6400_full"
+ },
+ "Golden-6400 full, first pass": {
+  "n_blocked_runs": 31,
+  "blocked_steps": 10460,
+  "share_of_blocked_steps_at_collision_position_pct": {
+   "10 m": 91.37667304015297,
+   "5 m": 90.30592734225621,
+   "20 m": 100.0
+  },
+  "n_runs_at_collision_position_10m": 26,
+  "mean_blocked_pct_without_runs_at_collision_position": 1.3166345536287734,
+  "routes_with_blocked_time": 10,
+  "plans_during_blocked_steps": {
+   "n_steps": 10460,
+   "share_L_lt_1.5_pct": 0.8030592734225621,
+   "share_L_ge_2_pct": 97.7151051625239,
+   "median_L_m": 11.78192427197769
+  },
+  "blocked_steps_by_scenario": {
+   "VehicleOpensDoorTwoWays": 2853,
+   "ConstructionObstacleTwoWays": 1200,
+   "ParkedObstacleTwoWays": 1200,
+   "ParkingExit": 1200,
+   "AccidentTwoWays": 1175,
+   "SignalizedJunctionRightTurn": 1153,
+   "VanillaSignalizedTurnEncounterRedLight": 902,
+   "DynamicObjectCrossing": 346,
+   "EnterActorFlow": 319,
+   "VanillaSignalizedTurnEncounterGreenLight": 112
+  },
+  "runs_ending_at_last_logged_step": 5,
+  "status_of_routes_with_blocked_time": {
+   "Completed": 1,
+   "Failed - Agent deviated from the route": 1,
+   "Failed - Agent got blocked": 2,
+   "Failed - TickRuntime": 6
+  },
+  "runs": [
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 20.9,
+    "gap_m": 0.7236679216807715,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 6.3715854676996795,
+    "share_L_ge_2_pct": 95.69377990430623
+   },
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 9.2,
+    "gap_m": 0.7473584819932668,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 6.704847504423536,
+    "share_L_ge_2_pct": 94.05405405405406
+   },
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 28.6,
+    "gap_m": 0.7504715081085607,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 7.7057890577153625,
+    "share_L_ge_2_pct": 98.6013986013986
+   },
+   {
+    "route": "1825",
+    "scenario": "ConstructionObstacleTwoWays",
+    "seconds": 60.0,
+    "gap_m": 0.1922338100587737,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 5.695295438610501,
+    "share_L_ge_2_pct": 98.25
+   },
+   {
+    "route": "17752",
+    "scenario": "DynamicObjectCrossing",
+    "seconds": 17.3,
+    "gap_m": 0.9948613791323737,
+    "collision_actors": [
+     "vehicle.ford.mustang"
+    ],
+    "status": "Completed",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 7.538569412128622,
+    "share_L_ge_2_pct": 93.9306358381503
+   },
+   {
+    "route": "2201",
+    "scenario": "EnterActorFlow",
+    "seconds": 10.8,
+    "gap_m": 2.5836123689554853,
+    "collision_actors": [
+     "traffic.traffic_light",
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang",
+     "vehicle.nissan.patrol_2021"
+    ],
+    "status": "Failed - Agent deviated from the route",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 10.597595953771169,
+    "share_L_ge_2_pct": 95.37037037037037
+   },
+   {
+    "route": "2201",
+    "scenario": "EnterActorFlow",
+    "seconds": 5.2,
+    "gap_m": 2.3597856602121254,
+    "collision_actors": [
+     "traffic.traffic_light",
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang",
+     "vehicle.nissan.patrol_2021"
+    ],
+    "status": "Failed - Agent deviated from the route",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 8.02811520045856,
+    "share_L_ge_2_pct": 94.1747572815534
+   },
+   {
+    "route": "2664",
+    "scenario": "ParkedObstacleTwoWays",
+    "seconds": 60.0,
+    "gap_m": 0.4091948208654088,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 17.88003999230278,
+    "share_L_ge_2_pct": 99.25
+   },
+   {
+    "route": "1956",
+    "scenario": "ParkingExit",
+    "seconds": 60.0,
+    "gap_m": 0.06978443283501345,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 20.912147785950115,
+    "share_L_ge_2_pct": 99.0
+   },
+   {
+    "route": "2050",
+    "scenario": "SignalizedJunctionRightTurn",
+    "seconds": 32.8,
+    "gap_m": 2.151460196922315,
+    "collision_actors": [
+     "static.fence",
+     "vehicle.nissan.patrol_2021"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 4.297208244024974,
+    "share_L_ge_2_pct": 95.57926829268293
+   },
+   {
+    "route": "2050",
+    "scenario": "SignalizedJunctionRightTurn",
+    "seconds": 18.6,
+    "gap_m": 2.1821388360940475,
+    "collision_actors": [
+     "static.fence",
+     "vehicle.nissan.patrol_2021"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 4.259580351303703,
+    "share_L_ge_2_pct": 95.4177897574124
+   },
+   {
+    "route": "2050",
+    "scenario": "SignalizedJunctionRightTurn",
+    "seconds": 6.3,
+    "gap_m": 2.227923471278828,
+    "collision_actors": [
+     "static.fence",
+     "vehicle.nissan.patrol_2021"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 3.7279941800774234,
+    "share_L_ge_2_pct": 92.85714285714286
+   },
+   {
+    "route": "14842",
+    "scenario": "VanillaSignalizedTurnEncounterGreenLight",
+    "seconds": 5.6,
+    "gap_m": 9.100729259630175,
+    "collision_actors": [
+     "static.prop.mesh"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 3.7479497469421528,
+    "share_L_ge_2_pct": 89.28571428571429
+   },
+   {
+    "route": "3144",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "seconds": 6.8,
+    "gap_m": 10.653206443314975,
+    "collision_actors": [
+     "static.prop.mesh"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 8.370285208394556,
+    "share_L_ge_2_pct": 97.05882352941177
+   },
+   {
+    "route": "3144",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "seconds": 5.7,
+    "gap_m": 10.664658799302682,
+    "collision_actors": [
+     "static.prop.mesh"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 10.561318343566128,
+    "share_L_ge_2_pct": 92.03539823008849
+   },
+   {
+    "route": "3144",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "seconds": 11.4,
+    "gap_m": 10.670219232040825,
+    "collision_actors": [
+     "static.prop.mesh"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 8.950618020953174,
+    "share_L_ge_2_pct": 93.3920704845815
+   },
+   {
+    "route": "3144",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "seconds": 5.8,
+    "gap_m": 10.68679265535874,
+    "collision_actors": [
+     "static.prop.mesh"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 11.086325851880357,
+    "share_L_ge_2_pct": 94.82758620689656
+   },
+   {
+    "route": "3144",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "seconds": 15.5,
+    "gap_m": 10.723935831560606,
+    "collision_actors": [
+     "static.prop.mesh"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 15.66162797842017,
+    "share_L_ge_2_pct": 94.51612903225806
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 12.9,
+    "gap_m": 0.3501776054288399,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 19.327600067220672,
+    "share_L_ge_2_pct": 99.6124031007752
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 14.2,
+    "gap_m": 0.38502082481664246,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 18.8141065075801,
+    "share_L_ge_2_pct": 99.29577464788733
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 16.1,
+    "gap_m": 0.45231750825880823,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 17.820130015059657,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.2,
+    "gap_m": 0.4756969719180475,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 18.275065494091344,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 8.5,
+    "gap_m": 0.5998648962971416,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 20.381121769833133,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 18.8,
+    "gap_m": 0.6334767944941291,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 21.51540522801827,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 18.8,
+    "gap_m": 0.7305262647797193,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 23.560138419184145,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 10.8,
+    "gap_m": 0.7713141680901217,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 21.757736340576393,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.7,
+    "gap_m": 0.7896591044754686,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 20.179714913430068,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.0,
+    "gap_m": 0.7905995442357181,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 19.89287695184372,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 15.1,
+    "gap_m": 0.8350226426676457,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 21.998166043134933,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 6.6,
+    "gap_m": 0.8256634312440738,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 20.158556667239594,
+    "share_L_ge_2_pct": 99.23664122137404
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.3,
+    "gap_m": 0.807276867216423,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 21.50332206175107,
+    "share_L_ge_2_pct": 99.05660377358491
+   }
+  ]
+ },
+ "Golden-6400 full, second pass": {
+  "n_blocked_runs": 17,
+  "blocked_steps": 13544,
+  "share_of_blocked_steps_at_collision_position_pct": {
+   "10 m": 100.0,
+   "5 m": 100.0,
+   "20 m": 100.0
+  },
+  "n_runs_at_collision_position_10m": 17,
+  "mean_blocked_pct_without_runs_at_collision_position": 0.0,
+  "routes_with_blocked_time": 11,
+  "plans_during_blocked_steps": {
+   "n_steps": 13544,
+   "share_L_lt_1.5_pct": 0.08121677495569994,
+   "share_L_ge_2_pct": 99.682516243355,
+   "median_L_m": 20.011677545049494
+  },
+  "blocked_steps_by_scenario": {
+   "VehicleOpensDoorTwoWays": 3663,
+   "ConstructionObstacleTwoWays": 1208,
+   "SignalizedJunctionRightTurn": 1202,
+   "Accident": 1201,
+   "HardBreakRoute": 1200,
+   "InvadingTurn": 1200,
+   "ParkingExit": 1200,
+   "ParkedObstacleTwoWays": 1192,
+   "AccidentTwoWays": 1190,
+   "DynamicObjectCrossing": 146,
+   "PedestrianCrossing": 142
+  },
+  "runs_ending_at_last_logged_step": 9,
+  "status_of_routes_with_blocked_time": {
+   "Completed": 2,
+   "Failed - Agent got blocked": 1,
+   "Failed - TickRuntime": 8
+  },
+  "runs": [
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 60.1,
+    "gap_m": 0.7249183689081207,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 21.923690519301605,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 59.5,
+    "gap_m": 0.7332801808674319,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 11.589845889255294,
+    "share_L_ge_2_pct": 99.74789915966386
+   },
+   {
+    "route": "1825",
+    "scenario": "ConstructionObstacleTwoWays",
+    "seconds": 43.8,
+    "gap_m": 1.2712580012761308,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 6.025236659892954,
+    "share_L_ge_2_pct": 99.31506849315068
+   },
+   {
+    "route": "1825",
+    "scenario": "ConstructionObstacleTwoWays",
+    "seconds": 16.6,
+    "gap_m": 1.2788779766867435,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 6.604300507975672,
+    "share_L_ge_2_pct": 99.69879518072288
+   },
+   {
+    "route": "17752",
+    "scenario": "DynamicObjectCrossing",
+    "seconds": 7.3,
+    "gap_m": 2.0430330365133784,
+    "collision_actors": [
+     "vehicle.ford.mustang"
+    ],
+    "status": "Completed",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 8.737919600745014,
+    "share_L_ge_2_pct": 93.15068493150685
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 60.0,
+    "gap_m": 3.1731194112403642,
+    "collision_actors": [
+     "vehicle.audi.tt",
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 27.037916957107313,
+    "share_L_ge_2_pct": 99.83333333333333
+   },
+   {
+    "route": "2790",
+    "scenario": "InvadingTurn",
+    "seconds": 60.0,
+    "gap_m": 1.2009845788359428,
+    "collision_actors": [
+     "vehicle.mini.cooper_s_2021"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 35.143830740515654,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "2664",
+    "scenario": "ParkedObstacleTwoWays",
+    "seconds": 59.6,
+    "gap_m": 0.37921724070813667,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 25.500959525025493,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "1956",
+    "scenario": "ParkingExit",
+    "seconds": 60.0,
+    "gap_m": 0.08320890454770957,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 19.543707263682915,
+    "share_L_ge_2_pct": 99.16666666666667
+   },
+   {
+    "route": "14194",
+    "scenario": "PedestrianCrossing",
+    "seconds": 7.1,
+    "gap_m": 1.5335268285699044,
+    "collision_actors": [
+     "static.pole",
+     "vehicle.lincoln.mkz_2020"
+    ],
+    "status": "Completed",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 18.421779803362448,
+    "share_L_ge_2_pct": 98.59154929577466
+   },
+   {
+    "route": "2050",
+    "scenario": "SignalizedJunctionRightTurn",
+    "seconds": 60.1,
+    "gap_m": 2.0384577187094663,
+    "collision_actors": [
+     "vehicle.ford.mustang",
+     "vehicle.lincoln.mkz_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 15.072635812328778,
+    "share_L_ge_2_pct": 99.7504159733777
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 16.6,
+    "gap_m": 2.2001770860965735,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 22.216978095475845,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 25.4,
+    "gap_m": 2.2246390406630923,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 22.275458176226703,
+    "share_L_ge_2_pct": 99.80314960629921
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 23.1,
+    "gap_m": 2.228372104855076,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 20.51790429112375,
+    "share_L_ge_2_pct": 99.78354978354979
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 61.7,
+    "gap_m": 2.222030524509506,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 21.085008834523126,
+    "share_L_ge_2_pct": 99.83779399837795
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 22.3,
+    "gap_m": 2.1917052278292246,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 23.578634193649364,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 34.1,
+    "gap_m": 2.210430430743749,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 22.031826602746484,
+    "share_L_ge_2_pct": 99.70674486803519
+   }
+  ]
+ },
+ "Decoupling-6400 full": {
+  "n_blocked_runs": 59,
+  "blocked_steps": 14781,
+  "share_of_blocked_steps_at_collision_position_pct": {
+   "10 m": 97.01644002435559,
+   "5 m": 83.70204992896286,
+   "20 m": 100.0
+  },
+  "n_runs_at_collision_position_10m": 56,
+  "mean_blocked_pct_without_runs_at_collision_position": 0.5874986678034744,
+  "routes_with_blocked_time": 15,
+  "plans_during_blocked_steps": {
+   "n_steps": 14781,
+   "share_L_lt_1.5_pct": 1.5898788985860228,
+   "share_L_ge_2_pct": 96.39401934916447,
+   "median_L_m": 13.006122119371227
+  },
+  "blocked_steps_by_scenario": {
+   "Accident": 2956,
+   "HardBreakRoute": 2525,
+   "VehicleOpensDoorTwoWays": 2062,
+   "ParkingExit": 1177,
+   "NonSignalizedJunctionRightTurn": 1119,
+   "VehicleTurningRoute": 1098,
+   "AccidentTwoWays": 1009,
+   "ParkedObstacleTwoWays": 811,
+   "ParkingCrossingPedestrian": 601,
+   "SignalizedJunctionLeftTurnEnterFlow": 441,
+   "StaticCutIn": 419,
+   "BlockedIntersection": 217,
+   "ConstructionObstacleTwoWays": 128,
+   "InvadingTurn": 113,
+   "SignalizedJunctionLeftTurn": 105
+  },
+  "runs_ending_at_last_logged_step": 3,
+  "status_of_routes_with_blocked_time": {
+   "Completed": 2,
+   "Failed - Agent deviated from the route": 1,
+   "Failed - Agent got blocked": 2,
+   "Failed - TickRuntime": 10
+  },
+  "runs": [
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 27.6,
+    "gap_m": 0.9889038593384925,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 22.317173312223254,
+    "share_L_ge_2_pct": 99.81884057971014
+   },
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 9.4,
+    "gap_m": 1.0786013724558643,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 19.062382655735817,
+    "share_L_ge_2_pct": 99.46808510638297
+   },
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 16.7,
+    "gap_m": 1.8469639087173348,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 23.393604731067093,
+    "share_L_ge_2_pct": 99.69969969969969
+   },
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 32.4,
+    "gap_m": 2.395343200851862,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 29.212749219096313,
+    "share_L_ge_2_pct": 99.84544049459042
+   },
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 6.8,
+    "gap_m": 3.2958529827550436,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 28.258630080624723,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 7.7,
+    "gap_m": 3.7119044003545483,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 33.972931652147636,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 5.7,
+    "gap_m": 4.316369530680603,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 31.827962833469027,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "2534",
+    "scenario": "Accident",
+    "seconds": 41.7,
+    "gap_m": 4.637458574706386,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 23.19543644863346,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 10.3,
+    "gap_m": 0.7371834690713897,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 7.524888752122282,
+    "share_L_ge_2_pct": 96.60194174757282
+   },
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 16.8,
+    "gap_m": 0.7270251255009228,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 5.676139295284244,
+    "share_L_ge_2_pct": 92.53731343283582
+   },
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 18.3,
+    "gap_m": 0.7341655946184673,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 6.443423948224545,
+    "share_L_ge_2_pct": 95.62841530054644
+   },
+   {
+    "route": "1852",
+    "scenario": "AccidentTwoWays",
+    "seconds": 5.1,
+    "gap_m": 0.7448343691743702,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 5.307418852919601,
+    "share_L_ge_2_pct": 90.19607843137256
+   },
+   {
+    "route": "2204",
+    "scenario": "BlockedIntersection",
+    "seconds": 10.9,
+    "gap_m": 0.8270725115937125,
+    "collision_actors": [
+     "static.fence"
+    ],
+    "status": "Failed - Agent deviated from the route",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 6.720206207885932,
+    "share_L_ge_2_pct": 96.7741935483871
+   },
+   {
+    "route": "1825",
+    "scenario": "ConstructionObstacleTwoWays",
+    "seconds": 6.4,
+    "gap_m": 0.7358069336959474,
+    "collision_actors": [
+     "static.prop.trafficwarning"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 9.970563184625671,
+    "share_L_ge_2_pct": 99.21875
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 14.9,
+    "gap_m": 0.4211106081541658,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 10.979701296908406,
+    "share_L_ge_2_pct": 95.9731543624161
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 8.4,
+    "gap_m": 0.29236982351660856,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 9.51449820908819,
+    "share_L_ge_2_pct": 95.23809523809523
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 5.6,
+    "gap_m": 0.15762634489497884,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 9.410222056371538,
+    "share_L_ge_2_pct": 92.85714285714286
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 5.4,
+    "gap_m": 0.07394427454573815,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 7.342474445722121,
+    "share_L_ge_2_pct": 94.39252336448598
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 9.1,
+    "gap_m": 0.01743505363461395,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 6.669081205742552,
+    "share_L_ge_2_pct": 95.02762430939227
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 24.8,
+    "gap_m": 0.20401346796178643,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 8.186869075519219,
+    "share_L_ge_2_pct": 98.58585858585859
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 15.8,
+    "gap_m": 0.34504084585918804,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 9.387126542909899,
+    "share_L_ge_2_pct": 99.04761904761905
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 14.4,
+    "gap_m": 7.114760987367632,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 13.374201194149347,
+    "share_L_ge_2_pct": 97.21254355400697
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 13.1,
+    "gap_m": 7.1246701089878,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 14.639416035958234,
+    "share_L_ge_2_pct": 95.41984732824427
+   },
+   {
+    "route": "3540",
+    "scenario": "HardBreakRoute",
+    "seconds": 15.0,
+    "gap_m": 7.117188428353728,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 13.74149640026118,
+    "share_L_ge_2_pct": 93.66666666666667
+   },
+   {
+    "route": "2790",
+    "scenario": "InvadingTurn",
+    "seconds": 5.7,
+    "gap_m": 1.534280122181869,
+    "collision_actors": [
+     "vehicle.mini.cooper_s_2021"
+    ],
+    "status": "Completed",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 37.31873184011264,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "2115",
+    "scenario": "NonSignalizedJunctionRightTurn",
+    "seconds": 56.0,
+    "gap_m": 7.69732911878954,
+    "collision_actors": [
+     "vehicle.chevrolet.impala",
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 9.086099173917061,
+    "share_L_ge_2_pct": 96.69347631814121
+   },
+   {
+    "route": "2664",
+    "scenario": "ParkedObstacleTwoWays",
+    "seconds": 9.8,
+    "gap_m": 0.40432044326694694,
+    "collision_actors": [
+     "static.prop.mesh",
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 12.998283824483218,
+    "share_L_ge_2_pct": 97.44897959183673
+   },
+   {
+    "route": "2664",
+    "scenario": "ParkedObstacleTwoWays",
+    "seconds": 8.2,
+    "gap_m": 0.4120580680702872,
+    "collision_actors": [
+     "static.prop.mesh",
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 8.561916957830556,
+    "share_L_ge_2_pct": 90.79754601226993
+   },
+   {
+    "route": "2664",
+    "scenario": "ParkedObstacleTwoWays",
+    "seconds": 11.1,
+    "gap_m": 0.4281698385683299,
+    "collision_actors": [
+     "static.prop.mesh",
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 13.190925474903219,
+    "share_L_ge_2_pct": 96.3963963963964
+   },
+   {
+    "route": "2664",
+    "scenario": "ParkedObstacleTwoWays",
+    "seconds": 11.5,
+    "gap_m": 0.4492331741055722,
+    "collision_actors": [
+     "static.prop.mesh",
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 11.960785090369168,
+    "share_L_ge_2_pct": 93.04347826086956
+   },
+   {
+    "route": "3248",
+    "scenario": "ParkingCrossingPedestrian",
+    "seconds": 8.7,
+    "gap_m": 0.6242490380036401,
+    "collision_actors": [
+     "static.prop.mesh",
+     "walker.pedestrian.0017"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 12.085745702014245,
+    "share_L_ge_2_pct": 93.67816091954023
+   },
+   {
+    "route": "3248",
+    "scenario": "ParkingCrossingPedestrian",
+    "seconds": 8.7,
+    "gap_m": 0.7669007409826349,
+    "collision_actors": [
+     "static.prop.mesh",
+     "walker.pedestrian.0017"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 7.997610737166427,
+    "share_L_ge_2_pct": 93.64161849710982
+   },
+   {
+    "route": "3248",
+    "scenario": "ParkingCrossingPedestrian",
+    "seconds": 7.2,
+    "gap_m": 0.9581223499181277,
+    "collision_actors": [
+     "static.prop.mesh",
+     "walker.pedestrian.0017"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 5.736250438057555,
+    "share_L_ge_2_pct": 88.88888888888889
+   },
+   {
+    "route": "3248",
+    "scenario": "ParkingCrossingPedestrian",
+    "seconds": 5.5,
+    "gap_m": 1.046891656462563,
+    "collision_actors": [
+     "static.prop.mesh",
+     "walker.pedestrian.0017"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 6.504235299547694,
+    "share_L_ge_2_pct": 91.81818181818183
+   },
+   {
+    "route": "1956",
+    "scenario": "ParkingExit",
+    "seconds": 12.9,
+    "gap_m": 0.059185463028084584,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 16.218680649136832,
+    "share_L_ge_2_pct": 94.55252918287937
+   },
+   {
+    "route": "1956",
+    "scenario": "ParkingExit",
+    "seconds": 28.4,
+    "gap_m": 0.058380729437648604,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 17.09929216321852,
+    "share_L_ge_2_pct": 94.71830985915493
+   },
+   {
+    "route": "1956",
+    "scenario": "ParkingExit",
+    "seconds": 10.2,
+    "gap_m": 0.07196806066254702,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 15.234784469393524,
+    "share_L_ge_2_pct": 93.13725490196079
+   },
+   {
+    "route": "1956",
+    "scenario": "ParkingExit",
+    "seconds": 7.4,
+    "gap_m": 0.07298904127390582,
+    "collision_actors": [
+     "vehicle.dodge.charger_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 19.609512954399094,
+    "share_L_ge_2_pct": 95.94594594594594
+   },
+   {
+    "route": "3936",
+    "scenario": "SignalizedJunctionLeftTurn",
+    "seconds": 5.2,
+    "gap_m": 0.0813618537259373,
+    "collision_actors": [
+     "vehicle.ford.mustang"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 9.45105572941302,
+    "share_L_ge_2_pct": 89.52380952380953
+   },
+   {
+    "route": "28099",
+    "scenario": "SignalizedJunctionLeftTurnEnterFlow",
+    "seconds": 7.1,
+    "gap_m": 17.82383776324895,
+    "collision_actors": [
+     "vehicle.lincoln.mkz_2017"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 5.087337346172671,
+    "share_L_ge_2_pct": 89.43661971830986
+   },
+   {
+    "route": "28099",
+    "scenario": "SignalizedJunctionLeftTurnEnterFlow",
+    "seconds": 6.1,
+    "gap_m": 17.83156091126156,
+    "collision_actors": [
+     "vehicle.lincoln.mkz_2017"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 3.9983307429069197,
+    "share_L_ge_2_pct": 88.42975206611571
+   },
+   {
+    "route": "28099",
+    "scenario": "SignalizedJunctionLeftTurnEnterFlow",
+    "seconds": 8.9,
+    "gap_m": 17.91543015937128,
+    "collision_actors": [
+     "vehicle.lincoln.mkz_2017"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 5.101621393304564,
+    "share_L_ge_2_pct": 92.69662921348315
+   },
+   {
+    "route": "2709",
+    "scenario": "StaticCutIn",
+    "seconds": 21.0,
+    "gap_m": 1.4745686228832824,
+    "collision_actors": [
+     "vehicle.nissan.patrol_2021"
+    ],
+    "status": "Completed",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 20.006993649926546,
+    "share_L_ge_2_pct": 100.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 11.5,
+    "gap_m": 0.6833600735997223,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 12.330362114940153,
+    "share_L_ge_2_pct": 92.57641921397381
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.1,
+    "gap_m": 0.721450057610987,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 11.36018424424066,
+    "share_L_ge_2_pct": 95.09803921568627
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 7.8,
+    "gap_m": 0.7876784921298707,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 11.531917228406055,
+    "share_L_ge_2_pct": 96.15384615384616
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 11.5,
+    "gap_m": 0.8413547819477287,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 8.879611945328204,
+    "share_L_ge_2_pct": 95.65217391304348
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.2,
+    "gap_m": 0.915120183646124,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 7.120224313043125,
+    "share_L_ge_2_pct": 99.04761904761905
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 16.4,
+    "gap_m": 0.9620453717286566,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 12.558527480265214,
+    "share_L_ge_2_pct": 97.56838905775076
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.9,
+    "gap_m": 1.0713963356543559,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 15.808024766617372,
+    "share_L_ge_2_pct": 97.45762711864407
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 16.4,
+    "gap_m": 1.0862477971438835,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 13.778577734165273,
+    "share_L_ge_2_pct": 98.1651376146789
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 6.1,
+    "gap_m": 1.179843350677146,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 12.815244421571428,
+    "share_L_ge_2_pct": 96.69421487603306
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.0,
+    "gap_m": 1.1802391624397615,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 12.72880084468974,
+    "share_L_ge_2_pct": 97.0
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 5.7,
+    "gap_m": 1.1874403943902294,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 9.834468798393482,
+    "share_L_ge_2_pct": 97.34513274336283
+   },
+   {
+    "route": "3464",
+    "scenario": "VehicleOpensDoorTwoWays",
+    "seconds": 6.6,
+    "gap_m": 2.486927136745024,
+    "collision_actors": [
+     "vehicle.dodge.charger_police_2020"
+    ],
+    "status": "Failed - TickRuntime",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 4.1263097767718175,
+    "share_L_ge_2_pct": 90.9090909090909
+   },
+   {
+    "route": "2144",
+    "scenario": "VehicleTurningRoute",
+    "seconds": 22.6,
+    "gap_m": 0.7080281149595251,
+    "collision_actors": [
+     "traffic.traffic_light",
+     "vehicle.audi.tt"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 16.142400781574004,
+    "share_L_ge_2_pct": 95.57522123893806
+   },
+   {
+    "route": "2144",
+    "scenario": "VehicleTurningRoute",
+    "seconds": 8.0,
+    "gap_m": 0.738457200189977,
+    "collision_actors": [
+     "traffic.traffic_light",
+     "vehicle.audi.tt"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 14.385759161693539,
+    "share_L_ge_2_pct": 96.25
+   },
+   {
+    "route": "2144",
+    "scenario": "VehicleTurningRoute",
+    "seconds": 7.2,
+    "gap_m": 0.7388531448278002,
+    "collision_actors": [
+     "traffic.traffic_light",
+     "vehicle.audi.tt"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": false,
+    "median_L_m": 12.979846283391954,
+    "share_L_ge_2_pct": 93.05555555555556
+   },
+   {
+    "route": "2144",
+    "scenario": "VehicleTurningRoute",
+    "seconds": 17.1,
+    "gap_m": 0.7340742776308886,
+    "collision_actors": [
+     "traffic.traffic_light",
+     "vehicle.audi.tt"
+    ],
+    "status": "Failed - Agent got blocked",
+    "ends_at_last_logged_step": true,
+    "median_L_m": 16.327880210705693,
+    "share_L_ge_2_pct": 96.49122807017544
+   }
+  ]
+ }
+}

@@ -563,3 +563,12 @@ Results: `docs/provenance/fullload_stage2_readings.json`.
 **What had been seen when this was written.** The route-level blocked time of the fully loaded runs (Sections 25 and the repeat test), and the Section 18a and Section 20 results of the first series. Nothing below for the fully loaded runs.
 
 **Analysis.** For the fully loaded `Golden-6400` (both passes) and the decoupling checkpoint (one pass), default controller: (a) the Section 18a measure, unchanged (number of blocked runs, share of blocked steps within 10 m of a recorded collision position, sensitivity 5 m and 20 m, blocked time without those runs); (b) per blocked run: route, scenario type, actor types of the route's collision records, duration, route status; (c) the plans during blocked steps: share with L < 1.5 m, share with L of 2.0 m or more, median L; (d) blocked steps by scenario type. Script `scripts/evaluation/fullload_blocked_diagnosis.py`, result `docs/provenance/fullload_blocked_diagnosis.json`.
+
+### Outcome of section 28, recorded 22 Nov 2026, 00:37
+
+Result file `docs/provenance/fullload_blocked_diagnosis.json`.
+
+- **At recorded collision positions.** Share of blocked steps within 10 m of a recorded collision position: Golden-6400 first pass 91.4 % (31 runs, 10 routes), second pass 100.0 % (17 runs, 11 routes), decoupling checkpoint 97.0 % (59 runs, 15 routes). Blocked time without those runs: 1.32 %, 0.00 % and 0.59 % of steps.
+- **Plans while blocked.** The checkpoints keep planning to drive on: plans of 2.0 m or more in 97.7 %, 99.7 % and 96.4 % of blocked steps (median plan length 11.8 m, 20.0 m and 13.0 m); plans shorter than 1.5 m in 0.8 %, 0.1 % and 1.6 %.
+- **Where.** Mostly at another vehicle (routes with blocked time whose collision records name a vehicle: 8 of 10, 11 of 11, 12 of 15), in scenarios with an obstacle in the lane (door opening, accident, parked or construction obstacle, hard braking of a lead vehicle) and at junction turns. Most of these routes then end by the time limit (6 of 10, 8 of 11, 10 of 15).
+- **Reading (descriptive).** In these runs a blocked run is a vehicle that has made contact and keeps commanding forward motion against the obstacle. The decoupling checkpoint, trained on the obstacle-heavy scenario mix, is blocked on more routes than Golden-6400, so a larger share of obstacle scenarios did not by itself prevent it.
