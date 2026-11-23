@@ -593,3 +593,20 @@ Taken at the author's request. `model_matrix_golden_6400_nogate_full` ended on 2
 - **Other outcomes without the gate, Golden minus Flooded.** Driving Score 51.45 against 45.69, +5.77 [−1.68, 13.84]; route completion 72.36 % against 75.35 %, −2.99 pp [−9.92, 4.16]; collision events per route 0.73 against 0.91, −0.18 [−0.45, 0.05]; blocked time 12.62 % against 0.35 %, +12.27 pp [5.14, 22.77].
 - **Reading by the rule of Section 4c.** Both parts of the rule apply, to different measures. The difference in standstill below 0.1 m/s shrinks to an interval that includes 0, and the interaction lies well outside the noise reference: the gate amplifies the difference in full stops. The difference in short plans and in time at low speed persists without the gate: its origin is in the plans. Without the gate Flooded-6400 crawls where it stood still before.
 - **Not expected in advance.** Without the gate the share of short plans of Flooded-6400 is about half of its value with the gate (14.58 % against 28.04 %). The plans depend on the state, and the gate keeps the vehicle at rest, where short plans are most frequent. The closed-loop share of short plans is therefore not a property of the model alone.
+
+## 29. Driving efficiency of the fully loaded checkpoints (post hoc, descriptive), written 23 Nov 2026, 22:17 (UTC+7), before computing
+
+**Why.** Over both passes the Driving Score of the two 6,400-sample checkpoints did not differ detectably, while standstill time and mean speed did. The author asked whether the checkpoints can be compared by time or efficiency of driving. Mean speed over all logged steps is already reported (Section 25); the measures below were not computed before this section was committed.
+
+**Runs.** `model_matrix_golden_6400_full`, `model_matrix_flooded_6400_full`, their second passes (`…_run2_full`) and `model_matrix_fgbalanced_6400_full`; 44 routes, default controller, clean loading report. No gate-off run.
+
+**Measures (per route).**
+- **E1, time to complete.** Game time of the route in seconds (`duration_game`), only on routes that every compared run completed (status Completed or Perfect). On these routes both vehicles covered the same distance, so the time is comparable.
+- **E2, progress rate.** Route distance completed per second of route time: route completion × route length / `duration_game`, in m/s, on all 44 routes. It includes routes that ended early, so it depends on the termination rules.
+- **E3, speed while moving.** Mean speed over the logged steps at 0.1 m/s or more, on routes with at least 20 such steps in every compared run. It separates driving faster from waiting less.
+
+**Comparisons.** Golden minus Flooded on the per-route mean of the two passes, and on each pass alone; decoupling checkpoint (one pass) minus the two-pass mean of each of the other two. Paired by route, 95 % BCa interval (20,000 resamples, seed 0), two-sided Wilcoxon signed-rank test, as in `paper_reanalysis.py`. The number of routes is reported with every comparison; a comparison with fewer than 5 routes is reported as not computable.
+
+**Reading.** Descriptive, no decision rule and no adjustment. A higher value of E2 or E3, or a lower E1, is described as faster or as more progress per unit time, not as better driving, and is reported next to blocked time and collision events per distance. If the Driving Scores are similar while route completion differs, the infraction penalty differs in the other direction; the mean penalty factor of each checkpoint is reported for that reason.
+
+**Script.** `scripts/evaluation/fullload_efficiency.py`, result file `docs/provenance/fullload_efficiency.json`.
