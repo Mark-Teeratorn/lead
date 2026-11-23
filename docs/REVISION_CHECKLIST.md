@@ -40,7 +40,7 @@ Updated 23 Nov 2026, 22:37. `[x]` = done and committed. `[ ]` = not done; the no
 
 ## 4. Manuscript text
 
-Restructured on 24 November: the fully loaded runs are the main Section 4 (4.2 to 4.6), the first series is in Supplementary Section S6, and Section 4.7 with Table 6 keeps the registered tests in the main text. Section numbers in the items below that were written before that date are the old ones.
+Restructured on 23 November: the fully loaded runs are the main Section 4 (4.2 to 4.6), the first series is in Supplementary Section S6, and Section 4.7 with Table 6 keeps the registered tests in the main text. Section numbers in the items below that were written before that date are the old ones.
 
 - [x] New title in the manuscript and the supplement (20 November: main title "The Inertia Problem in a Fine-Tuned Vision-Language-Action Driving Policy", subtitle unchanged; body text on the inertia mechanism to be aligned in the rewrite)
 - [x] Section 3.4: loading fault and corrected server; Section 4.1: the two evaluation series
@@ -59,8 +59,8 @@ Restructured on 24 November: the fully loaded runs are the main Section 4 (4.2 t
 - [x] Section 4.13 extended to both passes (Table 6, repeat rule); new Sections 4.14 (decoupling checkpoint loaded in full) and 4.15 (against the unadapted policy, post hoc)
 - [x] New Section 4.16 with Table 7 (run without the gate, loaded in full); gate statements in the abstract, Sections 1, 5 and 6 now rest on the second series
 - [x] Disclosure of the loading fault and of the server cache not cleared between routes (Sections 3.4, 4.1; limitations 12, 13); rendering quality of the data collection (limitation 10)
-- [ ] Word files (main and supplement) and LaTeX rebuilt on 24 November after the restructure; 30 pages (LaTeX file and the author's change to its build script are not committed)
-- [ ] Number check: zero unsupported numbers (24 November: 0 of 1,055 in the main text and 0 of 758 in Supplementary Section S6; to be repeated on the final text)
+- [ ] Word files (main and supplement) and LaTeX rebuilt on 23 November after the restructure; 30 pages (LaTeX file and the author's change to its build script are not committed)
+- [ ] Number check: zero unsupported numbers (23 November: 0 of 1,055 in the main text and 0 of 758 in Supplementary Section S6; to be repeated on the final text)
 
 ## 5. Rest of the pipeline
 
