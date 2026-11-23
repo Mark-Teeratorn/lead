@@ -26,6 +26,7 @@ DEFAULT_SOURCES = [ROOT / "docs/provenance/paper_reanalysis_manifest.json",
                    ROOT / "docs/provenance/fullload_gateoff_results.json",
                    ROOT / "docs/provenance/fullload_efficiency.json",
                    ROOT / "docs/provenance/fullload_b2d_efficiency.json",
+                   ROOT / "docs/provenance/fullload_blocked_diagnosis.json",
                    ROOT / "docs/provenance/decoupling_dataset_composition.json"]
 
 UNIT_WORDS = ["routes", "route", "steps", "step", "models", "model", "tests", "test", "seeds", "seed",
@@ -76,8 +77,8 @@ def flatten(obj, path=""):
             yield from flatten(v, f"{path}[{i}]")
 
 
-def results_lines(text):
-    """Return list of (lineno, text) for the results section, with notes/PENDING blanked."""
+def results_lines(text, start_regex=r"^4\. [A-Z]"):
+    """Return list of (lineno, text) from the results heading to the references, with notes/PENDING blanked."""
     lines = text.splitlines()
     in_notes = False
     for i, l in enumerate(lines):
@@ -88,9 +89,9 @@ def results_lines(text):
             lines[i] = ""
         if s == "%%% END NOTES":
             in_notes = False
-    start = next((i for i, l in enumerate(lines) if re.match(r"^4\. [A-Z]", l)), None)
+    start = next((i for i, l in enumerate(lines) if re.match(start_regex, l)), None)
     if start is None:
-        sys.exit("results heading ('4. <Capital>...') not found")
+        sys.exit(f"results heading ({start_regex}) not found")
     end = next((i for i in range(start + 1, len(lines)) if lines[i].startswith("References")), len(lines))
     block = "\n".join(lines[start:end])
     block = re.sub(r"\[\[PENDING:.*?\]\]", lambda m: re.sub(r"[^\n]", " ", m.group(0)), block, flags=re.S)
@@ -152,6 +153,8 @@ def main():
                                  epilog=RULES, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--manuscript", default=str(DEFAULT_MS))
     ap.add_argument("--sources", nargs="+", default=[str(p) for p in DEFAULT_SOURCES])
+    ap.add_argument("--start-regex", default=r"^4\. [A-Z]",
+                    help="first line to check; for the supplement use '^## S6 ' (the first evaluation series)")
     ap.add_argument("--show-supported", action="store_true", help="also list supported tokens and the matching source path")
     a = ap.parse_args()
 
@@ -163,7 +166,7 @@ def main():
 
     sup = unsup = ign = 0
     rows = []
-    for ln, line in results_lines(Path(a.manuscript).read_text(encoding="utf-8")):
+    for ln, line in results_lines(Path(a.manuscript).read_text(encoding="utf-8"), a.start_regex):
         for m in TOKEN_RE.finditer(line):
             tok = m.group(0)
             val, d, sci = parse(tok)

@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """Generate revision figures (PNG, 300 dpi) into docs/figures/revision/.
 
-figure_1.png  fig_pipeline: inference/control pipeline schematic
-figure_2.png  fig_paired_standstill: per-route standstill dumbbell (Golden-6400 vs Flooded-6400-Matched)
-figure_3.png  fig_extent_cdf: empirical CDFs of predicted trajectory extent L
-figure_4.png  fig_model_by_controller: model x controller standstill, split into blocked time and the rest
-              (only if the gate-off runs are complete; needs analysis U in the manifest)
-figure_5.png  fig_low_speed_plans: plans at 0.5 m/s or less (analysis V of the manifest): plan mix of the
-              matched pair under both controllers, and stay-put share of all six models against their training sets
+figure_1.png   fig_pipeline: inference/control pipeline schematic
+Second series (checkpoints loaded in full; main text):
+figure_2.png   fig_full_extent_cdf: empirical CDFs of the predicted extent L (Golden-6400, Flooded-6400, Decoupling-6400, Base-Rerun)
+figure_3.png   fig_full_paired_plans: per-route share of near-stationary plans, mean of the two passes (dumbbell)
+figure_4.png   fig_full_by_controller: checkpoint x controller standstill, split into blocked time and the rest
+First series (partly loaded models; supplement):
+figure_S1.png  fig_paired_standstill: per-route standstill dumbbell (Golden-6400 vs Flooded-6400-Matched)
+figure_S2.png  fig_extent_cdf: empirical CDFs of predicted trajectory extent L
+figure_S3.png  fig_model_by_controller: model x controller standstill, split into blocked time and the rest
+figure_S4.png  fig_low_speed_plans: plans at 0.5 m/s or less (analysis V of the manifest)
+
+Usage: make_figures.py [--series first|second|all]   (default all)
 """
 import json
 import sys
@@ -65,7 +70,7 @@ def fig_paired_standstill(g, f):
     ax.set_xlabel("Standstill time (% of route steps)")
     ax.set_ylabel("Route")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False)
-    save(fig, "figure_2.png")
+    save(fig, "figure_S1.png")
 
 
 def fig_extent_cdf(g, f):
@@ -84,7 +89,7 @@ def fig_extent_cdf(g, f):
     ax.set_xlabel("Predicted trajectory extent L (m)")
     ax.set_ylabel("Cumulative fraction of steps")
     ax.legend(loc="lower right", frameon=False)
-    save(fig, "figure_3.png")
+    save(fig, "figure_S2.png")
 
 
 def route_bootstrap_ci(vals, n=10000, seed=0):
@@ -127,7 +132,7 @@ def fig_model_by_controller():
     ax.set_ylabel("Standstill time (% of route steps)")
     ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.14), ncol=3, fontsize=9.5,
               columnspacing=1.2, handlelength=1.6)
-    save(fig, "figure_4.png")
+    save(fig, "figure_S3.png")
 
 
 def fig_low_speed_plans():
@@ -192,7 +197,7 @@ def fig_low_speed_plans():
     b.set_ylabel("Plan stays put at \u2264 0.5 m/s (% of steps, route mean)")
     b.legend(frameon=False, loc="upper right", fontsize=9.5)
     b.set_title("(b)", loc="left", fontsize=11, y=1.3)
-    save(fig, "figure_5.png")
+    save(fig, "figure_S4.png")
 
 
 def fig_pipeline():
@@ -231,13 +236,111 @@ def fig_pipeline():
     save(fig, "figure_1.png")
 
 
+# ---------------------------------------------------------------- second series (checkpoints loaded in full)
+FULL_TAGS = {"G1": "model_matrix_golden_6400_full", "G2": "model_matrix_golden_6400_run2_full",
+             "F1": "model_matrix_flooded_6400_full", "F2": "model_matrix_flooded_6400_run2_full",
+             "D": "model_matrix_fgbalanced_6400_full", "B": "base_run2",
+             "GN": "model_matrix_golden_6400_nogate_full", "FN": "model_matrix_flooded_6400_nogate_full"}
+C_DEC, C_BASE = "#009E73", "0.35"
+
+
+def load_full():
+    import fullload_analysis as fa
+    arms = {}
+    for k, tag in FULL_TAGS.items():
+        arms[k], skipped = fa.load_arm(tag, require_loading=(k != "B"))
+        assert len(arms[k]) == 44, f"{tag}: {len(arms[k])} of 44 routes ({skipped})"
+    return arms
+
+
+def fig_full_extent_cdf(arms):
+    fig, ax = plt.subplots(figsize=(6.5, 4.2))
+    for keys, name, c, ls in ((("G1", "G2"), "Golden-6400", C_GOLD, "-"), (("F1", "F2"), "Flooded-6400", C_FLOOD, "-"),
+                              (("D",), "Decoupling-6400", C_DEC, "-"), (("B",), "Base-Rerun", C_BASE, "--")):
+        L = np.concatenate([np.asarray(arms[k][r]["L"], float) for k in keys for r in CANONICAL_44])
+        print(f"fig_full_extent_cdf: {name}: {len(L)} steps, share L<1.5 m pooled over steps {100 * np.mean(L < 1.5):.2f} %")
+        L = np.clip(np.sort(L), 0.1, None)
+        ax.step(L, np.arange(1, len(L) + 1) / len(L), where="post", color=c, lw=1.8, ls=ls, label=f"{name} (n={len(L):,} steps)")
+    for x, lab, ha in ((0.64, "0.64 m", "right"), (1.5, "1.5 m", "right"), (2.0, "2.0 m", "left")):
+        ax.axvline(x, color="0.4", ls=":", lw=1)
+        ax.text(x, 1.02, lab, ha=ha, va="bottom", fontsize=9, color="0.25", transform=ax.get_xaxis_transform())
+    ax.set_xscale("log")
+    ax.set_xlim(0.1, 100)
+    ax.set_ylim(0, 1)
+    ax.set_xlabel("Predicted trajectory extent L (m)")
+    ax.set_ylabel("Cumulative fraction of steps")
+    ax.legend(loc="upper left", bbox_to_anchor=(0.0, 0.97), frameon=False, fontsize=9.5)
+    save(fig, "figure_2.png")
+
+
+def fig_full_paired_plans(arms):
+    import paper_reanalysis as pr
+    fn = pr.T_METRICS["plan_rate_L<1.5_pct"]
+    routes = list(CANONICAL_44)
+    vg = np.mean([[fn(arms[k][r]) for r in routes] for k in ("G1", "G2")], axis=0)
+    vf = np.mean([[fn(arms[k][r]) for r in routes] for k in ("F1", "F2")], axis=0)
+    ref = json.loads((ROOT / "docs/provenance/fullload_repeat_test_results.json").read_text())
+    ref = ref["no decision"]["mean of the two passes, Golden minus Flooded"]["R1 near-stationary plan rate (L < 1.5 m)"]
+    assert abs(vg.mean() - ref["mean_first"]) < 1e-9 and abs(vf.mean() - ref["mean_second"]) < 1e-9, "figure and result file disagree"
+    print(f"fig_full_paired_plans: mean Golden {vg.mean():.2f}, Flooded {vf.mean():.2f}; Golden lower on {int(np.sum(vg < vf))} of {len(routes)} routes")
+    order = np.argsort(vf - vg, kind="stable")
+    routes, vg, vf = [routes[i] for i in order], vg[order], vf[order]
+    y = np.arange(len(routes))
+    fig, ax = plt.subplots(figsize=(6.5, 9))
+    ax.hlines(y, vg, vf, color="0.7", lw=1.5, zorder=1)
+    ax.scatter(vg, y, color=C_GOLD, s=28, zorder=2, label="Golden-6400")
+    ax.scatter(vf, y, color=C_FLOOD, s=28, zorder=2, label="Flooded-6400")
+    ax.axvline(vg.mean(), color=C_GOLD, ls="--", lw=1.2)
+    ax.axvline(vf.mean(), color=C_FLOOD, ls="--", lw=1.2)
+    tuning = {str(r) for r in json.loads(MANIFEST.read_text())["H"]["tuning_routes_union"]}
+    labels = [r + ("*" if r in OVERLAP_7 else "") + ("\u2020" if r in tuning else "") for r in routes]
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels, fontsize=8)
+    ax.set_ylim(-0.8, len(routes) - 0.2)
+    ax.set_xlabel("Near-stationary plans, L < 1.5 m (% of route steps, mean of two passes)")
+    ax.set_ylabel("Route")
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False)
+    save(fig, "figure_3.png")
+
+
+def fig_full_by_controller(arms):
+    import paper_reanalysis as pr
+    ss, blk = pr.RUN_METRICS["standstill_pct"], pr.u_metrics()["time_blocked_pct"]
+    val = lambda keys, fn: np.mean([[fn(arms[k][r]) for r in CANONICAL_44] for k in keys], axis=0)
+    groups = [(("G1", "G2"), ("F1", "F2")), (("GN",), ("FN",))]
+    fig, ax = plt.subplots(figsize=(6, 4.2))
+    x, w = np.arange(2), 0.36
+    for j, pair in enumerate(groups):
+        for i, keys in enumerate(pair):
+            v, b = val(keys, ss), val(keys, blk).mean()
+            m, (lo, hi) = v.mean(), route_bootstrap_ci(v)
+            c, xpos = (C_GOLD, C_FLOOD)[i], x[j] + (i - 0.5) * w
+            ax.bar(xpos, m - b, w, color=c, edgecolor="white", label=("Golden-6400", "Flooded-6400")[i] if j == 0 else None)
+            ax.bar(xpos, b, w, bottom=m - b, color=c, alpha=0.45, hatch="///", edgecolor="white")
+            ax.errorbar(xpos, m, yerr=[[m - lo], [hi - m]], color="k", capsize=3, lw=1)
+            print(f"fig_full_by_controller: {'+'.join(keys)}: standstill {m:.2f} %, of which blocked {b:.2f} %")
+    ax.bar(0, 0, 0, color="0.6", alpha=0.45, hatch="///", edgecolor="white", label="of which blocked time")
+    ax.set_xticks(x)
+    ax.set_xticklabels(["Default controller\n(mean of two passes)", "Gate-off controller\n(one pass)"])
+    ax.set_ylabel("Standstill time (% of route steps)")
+    ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.14), ncol=3, fontsize=9.5, columnspacing=1.2, handlelength=1.6)
+    save(fig, "figure_4.png")
+
+
 def main():
-    g = load_model_data(MODEL_PREFIXES[NAME_G])
-    f = load_model_data(MODEL_PREFIXES[NAME_F])
-    fig_paired_standstill(g, f)
-    fig_extent_cdf(g, f)
-    fig_model_by_controller()
-    fig_low_speed_plans()
+    series = sys.argv[sys.argv.index("--series") + 1] if "--series" in sys.argv else "all"
+    if series in ("second", "all"):
+        arms = load_full()
+        fig_full_extent_cdf(arms)
+        fig_full_paired_plans(arms)
+        fig_full_by_controller(arms)
+    if series in ("first", "all"):
+        g = load_model_data(MODEL_PREFIXES[NAME_G])
+        f = load_model_data(MODEL_PREFIXES[NAME_F])
+        fig_paired_standstill(g, f)
+        fig_extent_cdf(g, f)
+        fig_model_by_controller()
+        fig_low_speed_plans()
     fig_pipeline()
 
 

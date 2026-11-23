@@ -21,7 +21,7 @@ DOCX_PATH = Path(
     "/home/aimslab/lead/outputs/paper_build_test/Distribution-Curated Fine-Tuning Reduces Closed-Loop Standstill at Scale in Continuous-Action Autonomous Driving.docx"
 )
 FIG_DIR = Path("/home/aimslab/lead/docs/figures/revision")
-FIGURE_RE = re.compile(r"^\[\[FIGURE\s+(\d+)\s*:\s*(.*?)\]\]$")
+FIGURE_RE = re.compile(r"^\[\[FIGURE\s+(S?\d+)\s*:\s*(.*?)\]\]$")
 PENDING_RE = re.compile(r"\[\[PENDING:.*?\]\]")
 
 M_NS = "http://schemas.openxmlformats.org/officeDocument/2006/math"
