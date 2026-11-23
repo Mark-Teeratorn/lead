@@ -1,6 +1,6 @@
 # Project summary
 
-Written 21 November 2026, 12:09; results updated 21 November 2026, 23:58. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
+Written 21 November 2026, 12:09; results updated 23 Nov 2026, 22:07. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
 
 ## What the project is
 
@@ -54,13 +54,15 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 - **The Driving Score lead did not repeat.** Second pass 49.01 against 51.60; over both passes +3.96, interval [−3.06, 11.67]. Collision events per kilometre driven: ratio 1.29, interval [0.90, 1.92]. The table above shows the first pass only.
 - Decoupling checkpoint, final reading: it closes 98.7 % of the gap in near-stationary plans, with more blocked time; by the rule fixed in advance it reduces hesitation at a cost and is not called a remedy.
 
+- **Without the standstill gate (added 23 Nov).** The difference in full stops is no longer established (18.76 % against 23.41 %; −4.65 pp, interval [−11.44, 3.20]; with the gate −23.54 pp). The difference in near-stationary plans remains (0.60 % against 14.58 %; −13.99 pp, interval [−20.27, −9.52]). So the plans carry the difference and the gate turns it into held stops. For Flooded-6400, removing the gate gave more route completion (+10.95 pp) and more collision events (+0.42 per route) at an unchanged Driving Score; it is not a remedy.
+
 ## What is still running or open
 
 | Item | Status |
 |---|---|
 | Second pass of both 6,400 checkpoints; decoupling checkpoint | Done (21 Nov) |
-| Runs without the standstill gate (both 6,400 checkpoints) | Golden running since 21 Nov 22:01; Flooded queued |
-| 1,600-sample pair | Queued |
+| Runs without the standstill gate (both 6,400 checkpoints) | Done (23 Nov) |
+| 1,600-sample pair | Golden-1600 done (23 Nov 20:58); Flooded-1600 running, ends about 24 Nov midday |
 | History-swap test on fully loaded checkpoints | Queue not yet prepared; runs after the suite |
 | Rewrite of the manuscript | Planned for about 24 to 26 Nov, after the runs |
 

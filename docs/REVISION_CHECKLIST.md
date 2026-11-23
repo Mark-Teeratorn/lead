@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 21 November 2026, 23:58. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 23 Nov 2026, 22:07. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -33,7 +33,8 @@ Updated 21 November 2026, 23:58. `[x]` = done and committed. `[ ]` = not done; t
 - [x] Stage 1 read by the rule of section 25: F1 met (stay-put plans 1.31 % against 26.80 %, −25.49 pp [−31.69, −19.63]); F2 strong (standstill 22.97 % against 46.66 %, −23.69 pp [−33.48, −15.08])
 - [x] Stage 2, decoupling checkpoint (ended 20 Nov 06:46): plans like Golden (near-stationary plans 1.58 % against 28.04 % for Flooded, 1.22 % for Golden); reduces hesitation at a cost (more blocked time), not a remedy
 - [x] Stage 2, second pass of both checkpoints (ended 21 Nov 22:01): repeat test R1, R2, R3 all replicated; the Driving Score lead of the first pass did not recur (+3.96 [−3.06, 11.67] over both passes)
-- [ ] Stage 2, still to run: gate-off runs (Golden started 21 Nov 22:01), 1,600-sample pair, history-swap runs (queue not yet prepared)
+- [x] Stage 2, gate-off runs (ended 22 Nov 10:31 and 23 Nov 06:43): without the gate the difference in full stops is no longer established (−4.65 pp [−11.44, 3.20], against −23.54 pp with the gate; interaction +18.89 pp [11.29, 27.16]); the difference in near-stationary plans remains (−13.99 pp [−20.27, −9.52])
+- [ ] Stage 2, still to run: 1,600-sample pair (Golden-1600 ended 23 Nov 20:58; Flooded-1600 running), history-swap runs (queue not yet prepared)
 - [ ] Analysis script run on the new results; every number, table and figure updated
 
 ## 4. Manuscript text
@@ -51,11 +52,12 @@ First part written on 19 November, from the results that no longer depend on Sta
 - [ ] R6–R8: blocked time (tests, chance rate, collision counts; no "not an additional cost")
 - [ ] R9, R10: history-swap test as inconclusive; inertia and the conjecture not set against each other
 - [ ] R11, R12: decoupling overlap; three-of-four-cells wording
-- [ ] Abstract, discussion, conclusion (rewritten 22 November for the second series; the statements on the gate, the 1,600-sample pair and the motion history still rest on the first series and carry placeholders)
+- [ ] Abstract, discussion, conclusion (rewritten 22 November for the second series; the statements on the 1,600-sample pair and the motion history still rest on the first series and carry placeholders)
 - [x] Section 4.13 extended to both passes (Table 6, repeat rule); new Sections 4.14 (decoupling checkpoint loaded in full) and 4.15 (against the unadapted policy, post hoc)
+- [x] New Section 4.16 with Table 7 (run without the gate, loaded in full); gate statements in the abstract, Sections 1, 5 and 6 now rest on the second series
 - [x] Disclosure of the loading fault and of the server cache not cleared between routes (Sections 3.4, 4.1; limitations 12, 13); rendering quality of the data collection (limitation 10)
-- [ ] Word files and LaTeX rebuilt on 22 November with the new title (LaTeX file and the author's change to its build script are not committed)
-- [ ] Number check: zero unsupported numbers (0 of 1,434 on 22 November; to be repeated on the final text)
+- [ ] Word files and LaTeX rebuilt on 23 November with Section 4.16 (LaTeX file and the author's change to its build script are not committed)
+- [ ] Number check: zero unsupported numbers (0 of 1,714 on 23 November; to be repeated on the final text)
 
 ## 5. Rest of the pipeline
 
