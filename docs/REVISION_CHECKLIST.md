@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 23 Nov 2026, 22:37. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 23 Nov 2026, 22:44. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -45,22 +45,22 @@ Restructured on 23 November: the fully loaded runs are the main Section 4 (4.2 t
 - [x] New title in the manuscript and the supplement (20 November: main title "The Inertia Problem in a Fine-Tuned Vision-Language-Action Driving Policy", subtitle unchanged; body text on the inertia mechanism to be aligned in the rewrite)
 - [x] Section 3.4: loading fault and corrected server; Section 4.1: the two evaluation series
 - [x] New Section 4.13 with Table 5: first pass of the fully loaded 6,400-sample pair (F1, F2, descriptive results)
-- [ ] R1: direction relative to the unadapted policy (done for the replay, Section 4.12; closed loop waits for Stage 2)
-- [ ] R2: wording at the level of checkpoints, not of data composition
-- [ ] R3: decoupling set in Table 1
+- [x] R1: direction relative to the unadapted policy (abstract, Sections 1, 4.2 and 4.6, Figure 2; title changed)
+- [ ] R2: wording at the level of checkpoints (title, contribution (i) and conclusion done; the 1,600-sample result beside each statement of the 6,400-sample difference waits for the fully loaded 1,600 pair)
+- [x] R3: decoupling set in Table 1, with its low-speed stay-put share; Section 4.5 compares it with the conjecture
 - [x] R4: new Section 4.12 on the same-input replay (as served and loaded in full)
 - [x] Restructure: first series (old 4.2 to 4.11) moved to Supplementary Section S6; new Section 4.7 with Table 6; new Figures 2 to 4 for the fully loaded runs; limitations condensed to four paragraphs; question-led wording in all of Section 4
 - [ ] Still open in the text: results of the 1,600-sample pair and of the history-swap test with full loading; qualitative same-input figure (needs a short GPU run); citation of LOWP (arXiv 2611.10264) after reading it; simulated re-review
-- [ ] R5: H1 reported as inconclusive (now Table 6 and Section 4.7: met at the 0.05 level, interval includes zero, modest and marginal)
-- [ ] R6–R8: blocked time (tests, chance rate, collision counts; no "not an additional cost")
-- [ ] R9, R10: history-swap test as inconclusive; inertia and the conjecture not set against each other
-- [ ] R11, R12: decoupling overlap; three-of-four-cells wording
+- [x] R5: H1 reported as inconclusive (Table 6, Section 4.7, Sections 1 and 6; four-test value 0.097 with Base-Rerun; harness changes named)
+- [x] R6–R8: blocked time (exact tests with non-zero pairs, comparison rate 64 of 71 and collision counts in Supplementary Section S6.7; co-location wording in 4.3, S4.10, S6.10; no "not an additional cost"). Not done for the fully loaded runs: a comparison rate for the position match (stated as a limit in 4.3)
+- [x] R9, R10: history-swap test as inconclusive; outcome cannot separate a history-ignoring from a history-continuing expert; visual route not tested; conjecture as a data-side reading of inertia (4.7, 5, S4.11, S6.11)
+- [x] R11, R12: decoupling overlap (86.3 %) in 3.3, 4.5 and 5; three-of-four-cells wording in 4.5, 5 and 6
 - [ ] Abstract, discussion, conclusion (rewritten 22 November for the second series; the statements on the 1,600-sample pair and the motion history still rest on the first series and carry placeholders)
 - [x] Section 4.13 extended to both passes (Table 6, repeat rule); new Sections 4.14 (decoupling checkpoint loaded in full) and 4.15 (against the unadapted policy, post hoc)
 - [x] New Section 4.16 with Table 7 (run without the gate, loaded in full); gate statements in the abstract, Sections 1, 5 and 6 now rest on the second series
 - [x] Disclosure of the loading fault and of the server cache not cleared between routes (Sections 3.4, 4.1; limitations 12, 13); rendering quality of the data collection (limitation 10)
 - [ ] Word files (main and supplement) and LaTeX rebuilt on 23 November after the restructure; 30 pages (LaTeX file and the author's change to its build script are not committed)
-- [ ] Number check: zero unsupported numbers (23 November: 0 of 1,055 in the main text and 0 of 758 in Supplementary Section S6; to be repeated on the final text)
+- [ ] Number check: zero unsupported numbers (23 November: 0 of 1,068 in the main text and 0 of 780 in Supplementary Section S6; to be repeated on the final text)
 
 ## 5. Rest of the pipeline
 
