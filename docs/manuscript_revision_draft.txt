@@ -176,11 +176,11 @@ The two regimes differ in three factors at once (group mix, lateral balance and 
 
 Training and evaluation routes overlap. Mapped exactly to the 44 evaluation routes we use, training samples in the Matrix sets touch seven routes; the number of touching samples is 20 (golden_1600), 19 (flooded_1600), 78 (golden_6400) and 87 (flooded_6400). Because the overlap is of similar size in both regimes, it bears mainly on comparisons against `Base`. We report H1 and H2 on all 44 routes and on the 37 routes not touched by training samples (Supplementary Sections S6.3 and S6.4). Supplementary Section S3.3 gives the construction and the overlap in full.
 
-Table 1: Composition of the fine-tuning datasets (targets equal realised values for the Matrix sets). The low-speed counts of the decoupling set are taken from its published annotations.
+Table 1: Composition of the fine-tuning datasets (targets equal realised values for the Matrix sets). The low-speed counts of the decoupling set are taken from its published annotations. Pool v4 is `lead_multirig_pai_v4`; `large_v3` is the set of `Flooded-6400-Hist`; dataset names are the last part of the Hugging Face names in Section 6.
 
-| Property | `Flooded` (1,600 / 6,400) | `Golden` (1,600 / 6,400) | `Decoupling` (6,400) | `large_v3` (`Flooded-6400-Hist`) |
+| Property | `Flooded` (1,600 / 6,400) | `Golden` (1,600 / 6,400) | `Decoupling` (6,400) | `large_v3` (historical) |
 | :--- | :---: | :---: | :---: | :---: |
-| Source pool | `lead_multirig_pai_v4`, 34,132 samples | `lead_multirig_pai_v4`, 34,132 samples | `lead_multirig_pai_v4`, 34,132 samples | v3 conversion, 6,440 samples |
+| Source pool | pool v4, 34,132 samples | pool v4, 34,132 samples | pool v4 | v3 conversion, 6,440 samples |
 | Groups A / B / C / D / E / F (%) | 35 / 14 / 22 / 10 / 9 / 10 | 27 / 18 / 17 / 14 / 14 / 10 | 35 / 14 / 22 / 10 / 9 / 10 (target of `Flooded`) | not specified |
 | Straight / swerve L / swerve R / turn L / turn R (%) | 22 / 37 / 12 / 14.5 / 14.5 | 50 / 13 / 13 / 12 / 12 | 50 / 13 / 13 / 12 / 12 | 21.7 / 37.3 / 12.1 / 14.5 / 14.5 |
 | Stationary samples (%) | 10 (160 / 640) | 2 (32 / 128) | 2 (128) | 10.0 |
@@ -188,7 +188,7 @@ Table 1: Composition of the fine-tuning datasets (targets equal realised values 
 | Samples at ≤ 0.5 m/s, 1,600 set: stay put / start / between | 168 / 346 / 35 of 549 (30.6 % stay put) | 44 / 302 / 41 of 387 (11.4 % stay put) | no 1,600 set | not computed |
 | Samples at ≤ 0.5 m/s, 6,400 set: stay put / start / between | 662 / 1,339 / 137 of 2,138 (31.0 % stay put) | 171 / 1,250 / 147 of 1,568 (10.9 % stay put) | 167 / 1,210 / 130 of 1,507 (11.1 % stay put) | not computed |
 | Training samples touching the 44 evaluation routes | 19 / 87 | 20 / 78 | not computed | not computed |
-| Hugging Face dataset | `…_matrix_flooded_1600`, `…_flooded_6400` | `…_matrix_golden_1600`, `…_golden_6400` | `…_matrix_floodedgroups_balanced_6400` | — |
+| Hugging Face dataset | `flooded_1600`, `flooded_6400` | `golden_1600`, `golden_6400` | `floodedgroups_` `balanced_6400` | — |
 
 ---
 
