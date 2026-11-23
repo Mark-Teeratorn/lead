@@ -1,0 +1,288 @@
+{
+ "label": "ANALYSIS_ADDENDUM section 30: Bench2Drive Driving Efficiency (official definition), post hoc, descriptive",
+ "tags": {
+  "G1": "model_matrix_golden_6400_full",
+  "F1": "model_matrix_flooded_6400_full",
+  "G2": "model_matrix_golden_6400_run2_full",
+  "F2": "model_matrix_flooded_6400_run2_full",
+  "D": "model_matrix_fgbalanced_6400_full",
+  "GN": "model_matrix_golden_6400_nogate_full",
+  "FN": "model_matrix_flooded_6400_nogate_full",
+  "B": "base_run2"
+ },
+ "per run": {
+  "G1": {
+   "driving_efficiency": 102.5048216305828,
+   "routes_with_a_record": 43,
+   "mean_records_per_route": 12.863636363636363
+  },
+  "F1": {
+   "driving_efficiency": 77.18371788541863,
+   "routes_with_a_record": 41,
+   "mean_records_per_route": 11.25
+  },
+  "G2": {
+   "driving_efficiency": 102.24686349880231,
+   "routes_with_a_record": 43,
+   "mean_records_per_route": 12.681818181818182
+  },
+  "F2": {
+   "driving_efficiency": 81.98211182016666,
+   "routes_with_a_record": 42,
+   "mean_records_per_route": 11.727272727272727
+  },
+  "D": {
+   "driving_efficiency": 102.44526400003086,
+   "routes_with_a_record": 43,
+   "mean_records_per_route": 12.886363636363637
+  },
+  "GN": {
+   "driving_efficiency": 103.98782710229226,
+   "routes_with_a_record": 43,
+   "mean_records_per_route": 13.159090909090908
+  },
+  "FN": {
+   "driving_efficiency": 83.75739704053795,
+   "routes_with_a_record": 43,
+   "mean_records_per_route": 13.5
+  },
+  "B": {
+   "driving_efficiency": 88.5590348688639,
+   "routes_with_a_record": 43,
+   "mean_records_per_route": 13.113636363636363
+  }
+ },
+ "paired": {
+  "Golden minus Flooded, mean of the two passes": {
+   "n": 41,
+   "mean_first": 103.08059098248242,
+   "mean_second": 80.19224954978655,
+   "mean_diff": 22.88834143269588,
+   "n_first_greater": 36,
+   "n_first_less": 5,
+   "n_tie": 0,
+   "bca95": [
+    6.144251765109969,
+    34.886394992309896
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 134.0,
+    "p": 5.2768651585211046e-05,
+    "p_approx": 0.0001219595762122589,
+    "p_exact": 5.2768651585211046e-05,
+    "rank_biserial": 0.6887340301974448
+   }
+  },
+  "Golden minus Flooded, first pass": {
+   "n": 41,
+   "mean_first": 103.4555012765191,
+   "mean_second": 77.18371788541863,
+   "mean_diff": 26.271783391100453,
+   "n_first_greater": 37,
+   "n_first_less": 4,
+   "n_tie": 0,
+   "bca95": [
+    4.580303508033974,
+    37.702905714238575
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 96.0,
+    "p": 2.974413291667588e-06,
+    "p_approx": 1.4604463378049721e-05,
+    "p_exact": 2.974413291667588e-06,
+    "rank_biserial": 0.7770034843205574
+   }
+  },
+  "Golden minus Flooded, second pass": {
+   "n": 42,
+   "mean_first": 102.75726501067857,
+   "mean_second": 81.98211182016666,
+   "mean_diff": 20.775153190511887,
+   "n_first_greater": 35,
+   "n_first_less": 7,
+   "n_tie": 0,
+   "bca95": [
+    4.950622522998562,
+    34.97217580767624
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 148.0,
+    "p": 6.900015841893037e-05,
+    "p_approx": 0.0001477256360584215,
+    "p_exact": 6.900015841893037e-05,
+    "rank_biserial": 0.6722037652270211
+   }
+  },
+  "Decoupling minus Flooded (two-pass mean)": {
+   "n": 41,
+   "mean_first": 102.81985004881287,
+   "mean_second": 80.19224954978655,
+   "mean_diff": 22.6276004990263,
+   "n_first_greater": 35,
+   "n_first_less": 6,
+   "n_tie": 0,
+   "bca95": [
+    6.264217808881402,
+    37.53174432337127
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 144.0,
+    "p": 0.00010187543557549361,
+    "p_approx": 0.00020516545447998855,
+    "p_exact": 0.00010187543557549361,
+    "rank_biserial": 0.6655052264808362
+   }
+  },
+  "Decoupling minus Golden (two-pass mean)": {
+   "n": 43,
+   "mean_first": 102.44526400003086,
+   "mean_second": 102.37584256469255,
+   "mean_diff": 0.06942143533830454,
+   "n_first_greater": 21,
+   "n_first_less": 22,
+   "n_tie": 0,
+   "bca95": [
+    -6.156652217900744,
+    6.527714766222522
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 461.0,
+    "p": 0.8906927855455251,
+    "p_approx": 0.8847902771395885,
+    "p_exact": 0.8906927855455251,
+    "rank_biserial": -0.02536997885835095
+   }
+  },
+  "Golden (two-pass mean) minus Base-Rerun": {
+   "n": 43,
+   "mean_first": 102.37584256469255,
+   "mean_second": 88.5590348688639,
+   "mean_diff": 13.816807695828647,
+   "n_first_greater": 30,
+   "n_first_less": 13,
+   "n_tie": 0,
+   "bca95": [
+    6.318986212299365,
+    22.13315087196739
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 228.0,
+    "p": 0.0025417909405405226,
+    "p_approx": 0.0030927733700515693,
+    "p_exact": 0.0025417909405405226,
+    "rank_biserial": 0.5179704016913319
+   }
+  },
+  "Flooded (two-pass mean) minus Base-Rerun": {
+   "n": 41,
+   "mean_first": 80.19224954978655,
+   "mean_second": 88.72881502506866,
+   "mean_diff": -8.536565475282098,
+   "n_first_greater": 10,
+   "n_first_less": 31,
+   "n_tie": 0,
+   "bca95": [
+    -21.96183454411157,
+    9.334623479834368
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 234.0,
+    "p": 0.010032928067630564,
+    "p_approx": 0.01088661182273106,
+    "p_exact": 0.010032928067630564,
+    "rank_biserial": -0.4564459930313589
+   }
+  },
+  "Decoupling minus Base-Rerun": {
+   "n": 43,
+   "mean_first": 102.44526400003086,
+   "mean_second": 88.5590348688639,
+   "mean_diff": 13.886229131166953,
+   "n_first_greater": 31,
+   "n_first_less": 12,
+   "n_tie": 0,
+   "bca95": [
+    6.167733639076729,
+    21.682467843321508
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 193.0,
+    "p": 0.00048178300721701817,
+    "p_approx": 0.0007222604387621263,
+    "p_exact": 0.00048178300721701817,
+    "rank_biserial": 0.5919661733615222
+   }
+  },
+  "Golden gate-off minus its two-pass default mean": {
+   "n": 43,
+   "mean_first": 103.98782710229226,
+   "mean_second": 102.37584256469255,
+   "mean_diff": 1.6119845375997202,
+   "n_first_greater": 19,
+   "n_first_less": 24,
+   "n_tie": 0,
+   "bca95": [
+    -1.7908281849680492,
+    6.990817275447921
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 449.0,
+    "p": 0.7787960584423672,
+    "p_approx": 0.7719701213278998,
+    "p_exact": 0.7787960584423672,
+    "rank_biserial": -0.0507399577167019
+   }
+  },
+  "Flooded gate-off minus its two-pass default mean": {
+   "n": 41,
+   "mean_first": 81.63194486365363,
+   "mean_second": 80.19224954978655,
+   "mean_diff": 1.4396953138670845,
+   "n_first_greater": 27,
+   "n_first_less": 14,
+   "n_tie": 0,
+   "bca95": [
+    -14.130414843262487,
+    14.792155480580798
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 314.0,
+    "p": 0.1338770055808709,
+    "p_approx": 0.1311330619004961,
+    "p_exact": 0.1338770055808709,
+    "rank_biserial": 0.2706155632984901
+   }
+  },
+  "Golden minus Flooded, gate-off": {
+   "n": 43,
+   "mean_first": 103.98782710229226,
+   "mean_second": 83.75739704053795,
+   "mean_diff": 20.23043006175431,
+   "n_first_greater": 37,
+   "n_first_less": 6,
+   "n_tie": 0,
+   "bca95": [
+    3.392858474326409,
+    32.05678202640451
+   ],
+   "wilcoxon": {
+    "n_zero_differences": 0,
+    "statistic": 143.0,
+    "p": 2.6072475066030165e-05,
+    "p_approx": 6.755567160971948e-05,
+    "p_exact": 2.6072475066030165e-05,
+    "rank_biserial": 0.6976744186046512
+   }
+  }
+ }
+}

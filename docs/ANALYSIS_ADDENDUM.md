@@ -635,3 +635,14 @@ Result file `docs/provenance/fullload_efficiency.json`; the script was not chang
 **Limits known in advance.** (i) A record is written only when a checkpoint is passed, so the time a vehicle spends in its last, unfinished segment (a final stop, a blocked vehicle) is not counted, and a vehicle that stops early contributes few records. The measure is therefore conditional on progress and understates waiting. (ii) 44 routes and our controller, so the value is not comparable with published 220-route values. (iii) The Driving Smoothness of the same tool needs per-step vehicle kinematics (`metric_info.json`), which our agent did not save; it is not computed.
 
 **Reading.** Descriptive, no decision rule. Script `scripts/evaluation/fullload_b2d_efficiency.py`, result file `docs/provenance/fullload_b2d_efficiency.json`.
+
+### Outcome of Section 30, recorded 23 Nov 2026, 22:25
+
+Result file `docs/provenance/fullload_b2d_efficiency.json`; the script was not changed after the rule was committed.
+
+- **Per run** (Driving Efficiency; routes with a record; mean records per route). Golden-6400: 102.50 (43; 12.86) and 102.25 (43; 12.68). Flooded-6400: 77.18 (41; 11.25) and 81.98 (42; 11.73). Decoupling: 102.45 (43; 12.89). Base-Rerun: 88.56 (43; 13.11). Gate-off: Golden 103.99 (43; 13.16), Flooded 83.76 (43; 13.50).
+- **Golden minus Flooded.** Two-pass mean, 41 routes: 103.08 against 80.19, +22.89 [6.14, 34.89]; first pass +26.27 [4.58, 37.70]; second pass +20.78 [4.95, 34.97] (42 routes).
+- **Decoupling checkpoint.** Against Flooded +22.63 [6.26, 37.53] (41 routes); against Golden +0.07 [−6.16, 6.53] (43 routes).
+- **Against Base-Rerun.** Golden +13.82 [6.32, 22.13] (43 routes); decoupling +13.89 [6.17, 21.68]; Flooded −8.54 [−21.96, 9.33] (41 routes; Wilcoxon p = 0.010, interval includes 0).
+- **Gate-off.** Against the default mean of the same checkpoint: Golden +1.61 [−1.79, 6.99], Flooded +1.44 [−14.13, 14.79]. Golden minus Flooded without the gate: +20.23 [3.39, 32.06] (43 routes).
+- **Reading (descriptive).** The benchmark's own measure gives the order of Section 29: Golden-6400 and the decoupling checkpoint drive at about the speed of the surrounding traffic, Flooded-6400 at about 80 % of it, the unadapted model in between. The difference between the checkpoints stays without the gate, as expected of a measure that leaves out the unfinished last segment (limit (i)). The intervals are wide and skewed, because a few routes with few records carry large differences.
