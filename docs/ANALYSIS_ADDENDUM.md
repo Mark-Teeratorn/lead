@@ -610,3 +610,14 @@ Taken at the author's request. `model_matrix_golden_6400_nogate_full` ended on 2
 **Reading.** Descriptive, no decision rule and no adjustment. A higher value of E2 or E3, or a lower E1, is described as faster or as more progress per unit time, not as better driving, and is reported next to blocked time and collision events per distance. If the Driving Scores are similar while route completion differs, the infraction penalty differs in the other direction; the mean penalty factor of each checkpoint is reported for that reason.
 
 **Script.** `scripts/evaluation/fullload_efficiency.py`, result file `docs/provenance/fullload_efficiency.json`.
+
+### Outcome of Section 29, recorded 23 Nov 2026, 22:18
+
+Result file `docs/provenance/fullload_efficiency.json`; the script was not changed after the rule was committed.
+
+- **E1, time to complete** (routes completed by all compared runs). Golden minus Flooded, two-pass mean, 11 routes: 45.62 s against 76.51 s, −30.89 s [−60.44, −19.98]. First pass (14 routes) −41.33 s [−66.13, −28.44]; second pass (15 routes) −29.62 s [−50.70, −17.36].
+- **E2, progress rate** (44 routes). Two-pass mean 1.83 against 0.92 m/s, +0.91 [0.70, 1.15]; first pass +1.01 [0.78, 1.26]; second pass +0.81 [0.54, 1.07].
+- **E3, speed while moving** (43 routes). Two-pass mean 2.82 against 1.76 m/s, +1.06 [0.93, 1.21]. Golden-6400 is therefore faster while moving as well, not only waiting less.
+- **Penalty factor** (lower = larger infraction penalty). Two-pass mean 0.72 against 0.78, −0.06 [−0.12, 0.01]; first pass 0.75 against 0.75; second pass 0.69 against 0.81, −0.12 [−0.20, −0.04].
+- **Decoupling checkpoint.** Against Flooded-6400: E1 −34.82 s [−48.95, −27.79] (14 routes), E2 +0.96 m/s [0.69, 1.17], E3 +1.13 m/s [0.97, 1.25], penalty factor 0.66 against 0.78, −0.12 [−0.20, −0.03]. Against Golden-6400 no measure differed with an interval excluding 0 (E1 −3.86 s [−9.48, 2.25], 16 routes).
+- **Reading (descriptive).** The two checkpoints that wait less are about twice as fast by progress per unit time. E1 rests on the routes that all runs completed (11 to 16 of 44), which are the easier routes. The penalty factor points the other way in the second pass and for the decoupling checkpoint, so faster is not reported as better.
