@@ -621,3 +621,17 @@ Result file `docs/provenance/fullload_efficiency.json`; the script was not chang
 - **Penalty factor** (lower = larger infraction penalty). Two-pass mean 0.72 against 0.78, −0.06 [−0.12, 0.01]; first pass 0.75 against 0.75; second pass 0.69 against 0.81, −0.12 [−0.20, −0.04].
 - **Decoupling checkpoint.** Against Flooded-6400: E1 −34.82 s [−48.95, −27.79] (14 routes), E2 +0.96 m/s [0.69, 1.17], E3 +1.13 m/s [0.97, 1.25], penalty factor 0.66 against 0.78, −0.12 [−0.20, −0.03]. Against Golden-6400 no measure differed with an interval excluding 0 (E1 −3.86 s [−9.48, 2.25], 16 routes).
 - **Reading (descriptive).** The two checkpoints that wait less are about twice as fast by progress per unit time. E1 rests on the routes that all runs completed (11 to 16 of 44), which are the easier routes. The penalty factor points the other way in the second pass and for the decoupling checkpoint, so faster is not reported as better.
+
+## 30. Driving Efficiency as defined by Bench2Drive (post hoc, descriptive), written 23 Nov 2026, 22:23 (UTC+7), before computing
+
+**Why.** The author asked whether Bench2Drive has a built-in measure of efficiency that can be used in place of, or next to, the measures of Section 29. It has: the Driving Efficiency of the official tool `tools/efficiency_smoothness_benchmark.py`. The evaluation harness places 20 checkpoints along each route (`MinimumSpeedRouteTest`, `checkpoints=20`); each time the ego vehicle passes one, it records the ego speed as a percentage of the mean speed of the background vehicles since the previous checkpoint. These records are in every `checkpoint_endpoint.json` of our runs (`min_speed_infractions`). No value of them was computed before this section was committed; one route file was opened to see the format.
+
+**Definition (that of the official tool, unchanged).** Per route: the mean of the recorded percentages, leaving out values above 1000; a route without any record is left out. Per run: the mean over the routes that remain.
+
+**Runs.** The five fully loaded default runs of Section 29, the two gate-off runs (`…_nogate_full`) and `base_run2` (no loading report required for the unadapted model).
+
+**Reported.** Per run: Driving Efficiency, the number of routes that enter it and the mean number of records per route. Paired by route (95 % BCa interval, Wilcoxon), on the routes with at least one record in every compared run: Golden minus Flooded on the two-pass mean and on each pass; decoupling checkpoint against each; each fully loaded checkpoint (two-pass mean, decoupling one pass) against `base_run2`; gate-off against the two-pass default mean per checkpoint, and Golden minus Flooded gate-off.
+
+**Limits known in advance.** (i) A record is written only when a checkpoint is passed, so the time a vehicle spends in its last, unfinished segment (a final stop, a blocked vehicle) is not counted, and a vehicle that stops early contributes few records. The measure is therefore conditional on progress and understates waiting. (ii) 44 routes and our controller, so the value is not comparable with published 220-route values. (iii) The Driving Smoothness of the same tool needs per-step vehicle kinematics (`metric_info.json`), which our agent did not save; it is not computed.
+
+**Reading.** Descriptive, no decision rule. Script `scripts/evaluation/fullload_b2d_efficiency.py`, result file `docs/provenance/fullload_b2d_efficiency.json`.
