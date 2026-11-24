@@ -61,6 +61,10 @@ def main():
     ap.add_argument("--full-patch", action="store_true",
                     help="load every tensor of the checkpoint, including the q/k/v and gate/up projections that the engine "
                          "fuses at load time and that the server's own patch step therefore leaves at their base values")
+    ap.add_argument("--states", default="", help="comma-separated state indices to run instead of all (addendum 27); "
+                                                 "seeds and the per-state stream reset are unchanged")
+    ap.add_argument("--save-plans-dir", default="", help="if given, the waypoints of the plans and the camera frames of each "
+                                                         "state run are saved there as <name>_state<i>.npz (addendum 27)")
     a = ap.parse_args()
 
     ds = Path(a.ds)
@@ -171,6 +175,12 @@ def main():
                 raise RuntimeError(f"step status {p1.get('status')}: {p1.get('message')}")
             xyz = np.asarray(p1["pred_xyz"], dtype=np.float64).reshape(-1, 64, 3)
             L, last, first = extent(xyz)
+            if a.save_plans_dir:
+                Path(a.save_plans_dir).mkdir(parents=True, exist_ok=True)
+                img = r1["images"]
+                np.savez_compressed(Path(a.save_plans_dir) / f"{name}_state{i}.npz", pred_xyz=xyz,
+                                    images=(img.cpu().numpy() if hasattr(img, "cpu") else np.asarray(img)),
+                                    camera_indices=np.asarray(r1["camera_indices"]))
             h = d1["ego_history_xyz"].numpy().reshape(-1, 3)
             cot = holder.get("extra", {}).get("cot") if isinstance(holder.get("extra"), dict) else None
             rec.update({"prefill_status": p0.get("status"), "n_plans": int(xyz.shape[0]),
@@ -206,7 +216,7 @@ def main():
                           f"mem {torch.cuda.max_memory_allocated() / 2**30:.1f} GB {rec.get('error', '')}", flush=True)
         print(f"finished {name}{suffix} at {time.strftime('%H:%M:%S')}", flush=True)
 
-    run_expert(a.name)
+    run_expert(a.name, idx=[int(x) for x in a.states.split(",")] if a.states else None)
     # reset check: repeat the first states with the same seeds; state 0 was the first state of this fresh process
     if a.n_reset_check:
         chk = out_dir / f"{a.name}.resetcheck.jsonl"
