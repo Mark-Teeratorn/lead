@@ -3,9 +3,9 @@
 
 figure_1.png   fig_pipeline: inference/control pipeline schematic
 Second series (checkpoints loaded in full; main text):
-figure_2.png   fig_full_extent_cdf: empirical CDFs of the predicted extent L (Golden-6400, Flooded-6400, Decoupling-6400, Base-Rerun)
-figure_3.png   fig_full_paired_plans: per-route share of near-stationary plans, mean of the two passes (dumbbell)
-figure_4.png   fig_full_by_controller: checkpoint x controller standstill, split into blocked time and the rest
+figure_3.png   fig_full_extent_cdf: empirical CDFs of the predicted extent L (Golden-6400, Flooded-6400, Decoupling-6400, Base-Rerun)
+figure_4.png   fig_full_paired_plans: per-route share of near-stationary plans, mean of the two passes (dumbbell)
+figure_5.png   fig_full_by_controller: checkpoint x controller standstill, split into blocked time and the rest
 First series (partly loaded models; supplement):
 figure_S1.png  fig_paired_standstill: per-route standstill dumbbell (Golden-6400 vs Flooded-6400-Matched)
 figure_S2.png  fig_extent_cdf: empirical CDFs of predicted trajectory extent L
@@ -270,7 +270,7 @@ def fig_full_extent_cdf(arms):
     ax.set_xlabel("Predicted trajectory extent L (m)")
     ax.set_ylabel("Cumulative fraction of steps")
     ax.legend(loc="upper left", bbox_to_anchor=(0.0, 0.97), frameon=False, fontsize=9.5)
-    save(fig, "figure_2.png")
+    save(fig, "figure_3.png")
 
 
 def fig_full_paired_plans(arms):
@@ -300,7 +300,7 @@ def fig_full_paired_plans(arms):
     ax.set_xlabel("Near-stationary plans, L < 1.5 m (% of route steps, mean of two passes)")
     ax.set_ylabel("Route")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False)
-    save(fig, "figure_3.png")
+    save(fig, "figure_4.png")
 
 
 def fig_full_by_controller(arms):
@@ -324,7 +324,7 @@ def fig_full_by_controller(arms):
     ax.set_xticklabels(["Default controller\n(mean of two passes)", "Gate-off controller\n(one pass)"])
     ax.set_ylabel("Standstill time (% of route steps)")
     ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.14), ncol=3, fontsize=9.5, columnspacing=1.2, handlelength=1.6)
-    save(fig, "figure_4.png")
+    save(fig, "figure_5.png")
 
 
 def main():

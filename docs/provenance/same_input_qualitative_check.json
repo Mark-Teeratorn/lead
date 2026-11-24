@@ -1,0 +1,73 @@
+{
+ "label": "ANALYSIS_ADDENDUM section 27: plan lengths of the re-run against the stored replay",
+ "states": {
+  "7": {
+   "Golden-6400-Full": {
+    "plans": 16,
+    "identical_lengths": true,
+    "stay_put_rerun": 0,
+    "stay_put_stored": 0,
+    "median_L_rerun": 5.466363423780052,
+    "median_L_stored": 5.4664,
+    "largest_abs_difference_sorted_m": 4.711991321748599e-05
+   },
+   "Flooded-6400-Matched-Full": {
+    "plans": 16,
+    "identical_lengths": true,
+    "stay_put_rerun": 4,
+    "stay_put_stored": 4,
+    "median_L_rerun": 1.083542028737538,
+    "median_L_stored": 1.08355,
+    "largest_abs_difference_sorted_m": 4.475531405345734e-05
+   },
+   "Balanced-6400-Full": {
+    "plans": 16,
+    "identical_lengths": true,
+    "stay_put_rerun": 0,
+    "stay_put_stored": 0,
+    "median_L_rerun": 5.441812547182641,
+    "median_L_stored": 5.4418500000000005,
+    "largest_abs_difference_sorted_m": 4.950296527539422e-05
+   }
+  },
+  "120": {
+   "Golden-6400-Full": {
+    "plans": 16,
+    "identical_lengths": true,
+    "stay_put_rerun": 0,
+    "stay_put_stored": 0,
+    "median_L_rerun": 1.4143509286466927,
+    "median_L_stored": 1.41435,
+    "largest_abs_difference_sorted_m": 4.947334105587231e-05
+   },
+   "Flooded-6400-Matched-Full": {
+    "plans": 16,
+    "identical_lengths": true,
+    "stay_put_rerun": 16,
+    "stay_put_stored": 16,
+    "median_L_rerun": 0.21701418019648333,
+    "median_L_stored": 0.217,
+    "largest_abs_difference_sorted_m": 4.41142594807542e-05
+   },
+   "Balanced-6400-Full": {
+    "plans": 16,
+    "identical_lengths": true,
+    "stay_put_rerun": 8,
+    "stay_put_stored": 8,
+    "median_L_rerun": 0.5943066925446404,
+    "median_L_stored": 0.5943,
+    "largest_abs_difference_sorted_m": 4.7318515608241185e-05
+   }
+  }
+ },
+ "selection_rule": {
+  "candidate_states": 384,
+  "mean_d": 3.53125,
+  "typical_state": 7,
+  "d_typical": 4,
+  "largest_state": 120,
+  "d_largest": 16,
+  "matches_figure": true
+ },
+ "largest_abs_lateral_displacement_m": 0.1487342119216919
+}

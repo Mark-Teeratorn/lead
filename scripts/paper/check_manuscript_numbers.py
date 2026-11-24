@@ -31,6 +31,7 @@ DEFAULT_SOURCES = [ROOT / "docs/provenance/paper_reanalysis_manifest.json",
                    ROOT / "docs/provenance/fullload_review_additions.json",
                    ROOT / "docs/provenance/fullload_sensitivity.json",
                    ROOT / "docs/provenance/fullload_histswap_results.json",
+                   ROOT / "docs/provenance/same_input_qualitative_check.json",
                    ROOT / "docs/provenance/decoupling_dataset_composition.json"]
 
 UNIT_WORDS = ["routes", "route", "steps", "step", "models", "model", "tests", "test", "seeds", "seed",
