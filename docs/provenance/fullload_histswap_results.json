@@ -1,0 +1,863 @@
+{
+ "label": "ANALYSIS_ADDENDUM sections 11, 11-B and 32: motion-history swap test, checkpoints loaded in full; exploratory, rules fixed before any such run",
+ "tags": {
+  "Golden-6400 full": "model_matrix_golden_6400_histswap_full",
+  "Flooded-6400-Matched full": "model_matrix_flooded_6400_histswap_full"
+ },
+ "models": {
+  "Golden-6400 full": {
+   "n_routes": 8,
+   "routes": [
+    "17563",
+    "1790",
+    "23695",
+    "2534",
+    "26458",
+    "2664",
+    "28087",
+    "3561"
+   ],
+   "routes_not_counted": {},
+   "steps": {
+    "true": 8443,
+    "moving": 1168,
+    "stationary": 813
+   },
+   "median_first_waypoint_distance_m": {
+    "moving": 0.40020816533034165,
+    "stationary": 0.0010437011951725853
+   },
+   "W-a low speed, plan holds speed (|dv| < 0.5 m/s): moving history minus true history": {
+    "pooled_swapped_pct": 2.0547945205479454,
+    "pooled_true_pct": 2.9511918274687856,
+    "steps_swapped": 1168,
+    "steps_true": 4405,
+    "routes_used": [
+     "2534",
+     "3561",
+     "2664"
+    ],
+    "paired": {
+     "n": 3,
+     "note": "fewer than 5 routes with 20 steps in both conditions"
+    },
+    "reading": "no reading"
+   },
+   "W-b low speed, plan ends at rest (v_end < 0.5 m/s): moving history minus true history": {
+    "pooled_swapped_pct": 0.0,
+    "pooled_true_pct": 1.543700340522134,
+    "steps_swapped": 1168,
+    "steps_true": 4405,
+    "routes_used": [
+     "2534",
+     "3561",
+     "2664"
+    ],
+    "paired": {
+     "n": 3,
+     "note": "fewer than 5 routes with 20 steps in both conditions"
+    },
+    "reading": "no reading"
+   },
+   "description: low speed, plan accelerates (dv >= 0.5 m/s)": {
+    "pooled_swapped_pct": 97.94520547945206,
+    "pooled_true_pct": 96.7082860385925,
+    "steps_swapped": 1168,
+    "steps_true": 4405,
+    "routes_used": [
+     "2534",
+     "3561",
+     "2664"
+    ],
+    "paired": {
+     "n": 3,
+     "note": "fewer than 5 routes with 20 steps in both conditions"
+    }
+   },
+   "description: low speed, plan decelerates (dv <= -0.5 m/s)": {
+    "pooled_swapped_pct": 0.0,
+    "pooled_true_pct": 0.340522133938706,
+    "steps_swapped": 1168,
+    "steps_true": 4405,
+    "routes_used": [
+     "2534",
+     "3561",
+     "2664"
+    ],
+    "paired": {
+     "n": 3,
+     "note": "fewer than 5 routes with 20 steps in both conditions"
+    }
+   },
+   "description: low speed, stays put (L < 0.64 m)": {
+    "pooled_swapped_pct": 0.0,
+    "pooled_true_pct": 0.0,
+    "steps_swapped": 1168,
+    "steps_true": 4405,
+    "routes_used": [
+     "2534",
+     "3561",
+     "2664"
+    ],
+    "paired": {
+     "n": 3,
+     "note": "fewer than 5 routes with 20 steps in both conditions"
+    }
+   },
+   "description: moving, plan holds speed (|dv| < 0.5 m/s): stationary history minus true history": {
+    "pooled_swapped_pct": 3.075030750307503,
+    "pooled_true_pct": 11.837543338286281,
+    "steps_swapped": 813,
+    "steps_true": 4038,
+    "routes_used": [
+     "2534",
+     "3561",
+     "1790",
+     "23695",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 8,
+     "mean_first": 3.189226300035871,
+     "mean_second": 11.523209579605957,
+     "mean_diff": -8.333983279570086,
+     "n_first_greater": 0,
+     "n_first_less": 8,
+     "n_tie": 0,
+     "bca95": [
+      -14.443889747336716,
+      -4.287193958394378
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 0.0078125,
+      "p_approx": 0.011718685599768628,
+      "p_exact": 0.0078125,
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "description: moving, plan ends at rest (v_end < 0.5 m/s): stationary history minus true history": {
+    "pooled_swapped_pct": 2.952029520295203,
+    "pooled_true_pct": 0.0,
+    "steps_swapped": 813,
+    "steps_true": 4038,
+    "routes_used": [
+     "2534",
+     "3561",
+     "1790",
+     "23695",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 8,
+     "mean_first": 3.051863662673234,
+     "mean_second": 0.0,
+     "mean_diff": 3.051863662673234,
+     "n_first_greater": 3,
+     "n_first_less": 0,
+     "n_tie": 5,
+     "bca95": [
+      0.2952755905511811,
+      8.11373092926491
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 5,
+      "statistic": 0.0,
+      "p": 0.10880943004054568,
+      "p_approx": 0.10880943004054568,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 1.0
+     }
+    }
+   },
+   "sensitivity: true-history steps directly after a swap step left out": {
+    "W-a low speed, plan holds speed (|dv| < 0.5 m/s): moving history minus true history": {
+     "pooled_swapped_pct": 2.0547945205479454,
+     "pooled_true_pct": 2.9829545454545454,
+     "steps_swapped": 1168,
+     "steps_true": 3520,
+     "routes_used": [
+      "2534",
+      "3561",
+      "2664"
+     ],
+     "paired": {
+      "n": 3,
+      "note": "fewer than 5 routes with 20 steps in both conditions"
+     },
+     "reading": "no reading"
+    },
+    "W-b low speed, plan ends at rest (v_end < 0.5 m/s): moving history minus true history": {
+     "pooled_swapped_pct": 0.0,
+     "pooled_true_pct": 1.5340909090909092,
+     "steps_swapped": 1168,
+     "steps_true": 3520,
+     "routes_used": [
+      "2534",
+      "3561",
+      "2664"
+     ],
+     "paired": {
+      "n": 3,
+      "note": "fewer than 5 routes with 20 steps in both conditions"
+     },
+     "reading": "no reading"
+    },
+    "description: low speed, plan accelerates (dv >= 0.5 m/s)": {
+     "pooled_swapped_pct": 97.94520547945206,
+     "pooled_true_pct": 96.73295454545455,
+     "steps_swapped": 1168,
+     "steps_true": 3520,
+     "routes_used": [
+      "2534",
+      "3561",
+      "2664"
+     ],
+     "paired": {
+      "n": 3,
+      "note": "fewer than 5 routes with 20 steps in both conditions"
+     }
+    },
+    "description: low speed, plan decelerates (dv <= -0.5 m/s)": {
+     "pooled_swapped_pct": 0.0,
+     "pooled_true_pct": 0.2840909090909091,
+     "steps_swapped": 1168,
+     "steps_true": 3520,
+     "routes_used": [
+      "2534",
+      "3561",
+      "2664"
+     ],
+     "paired": {
+      "n": 3,
+      "note": "fewer than 5 routes with 20 steps in both conditions"
+     }
+    },
+    "description: low speed, stays put (L < 0.64 m)": {
+     "pooled_swapped_pct": 0.0,
+     "pooled_true_pct": 0.0,
+     "steps_swapped": 1168,
+     "steps_true": 3520,
+     "routes_used": [
+      "2534",
+      "3561",
+      "2664"
+     ],
+     "paired": {
+      "n": 3,
+      "note": "fewer than 5 routes with 20 steps in both conditions"
+     }
+    },
+    "description: moving, plan holds speed (|dv| < 0.5 m/s): stationary history minus true history": {
+     "pooled_swapped_pct": 3.075030750307503,
+     "pooled_true_pct": 11.95266272189349,
+     "steps_swapped": 813,
+     "steps_true": 3380,
+     "routes_used": [
+      "2534",
+      "3561",
+      "1790",
+      "23695",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 8,
+      "mean_first": 3.189226300035871,
+      "mean_second": 11.609240715095938,
+      "mean_diff": -8.420014415060066,
+      "n_first_greater": 0,
+      "n_first_less": 8,
+      "n_tie": 0,
+      "bca95": [
+       -14.931131742004116,
+       -4.247374345371901
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 0.0078125,
+       "p_approx": 0.011718685599768628,
+       "p_exact": 0.0078125,
+       "rank_biserial": -1.0
+      }
+     }
+    },
+    "description: moving, plan ends at rest (v_end < 0.5 m/s): stationary history minus true history": {
+     "pooled_swapped_pct": 2.952029520295203,
+     "pooled_true_pct": 0.0,
+     "steps_swapped": 813,
+     "steps_true": 3380,
+     "routes_used": [
+      "2534",
+      "3561",
+      "1790",
+      "23695",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 8,
+      "mean_first": 3.051863662673234,
+      "mean_second": 0.0,
+      "mean_diff": 3.051863662673234,
+      "n_first_greater": 3,
+      "n_first_less": 0,
+      "n_tie": 5,
+      "bca95": [
+       0.2952755905511811,
+       8.11373092926491
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 5,
+       "statistic": 0.0,
+       "p": 0.10880943004054568,
+       "p_approx": 0.10880943004054568,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": 1.0
+      }
+     }
+    }
+   }
+  },
+  "Flooded-6400-Matched full": {
+   "n_routes": 8,
+   "routes": [
+    "17563",
+    "1790",
+    "23695",
+    "2534",
+    "26458",
+    "2664",
+    "28087",
+    "3561"
+   ],
+   "routes_not_counted": {},
+   "steps": {
+    "true": 13758,
+    "moving": 1616,
+    "stationary": 1821
+   },
+   "median_first_waypoint_distance_m": {
+    "moving": 0.40000245382745586,
+    "stationary": 0.0002151489316020186
+   },
+   "W-a low speed, plan holds speed (|dv| < 0.5 m/s): moving history minus true history": {
+    "pooled_swapped_pct": 89.85148514851485,
+    "pooled_true_pct": 53.21531245271599,
+    "steps_swapped": 1616,
+    "steps_true": 6609,
+    "routes_used": [
+     "3561",
+     "1790",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 6,
+     "mean_first": 84.28500943006455,
+     "mean_second": 52.28563670142504,
+     "mean_diff": 31.99937272863951,
+     "n_first_greater": 6,
+     "n_first_less": 0,
+     "n_tie": 0,
+     "bca95": [
+      22.630448520084887,
+      36.03940975218252
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 0.03125,
+      "p_approx": 0.027707849358079864,
+      "p_exact": 0.03125,
+      "rank_biserial": 1.0
+     }
+    },
+    "reading": "the learned controls depend on the ego history"
+   },
+   "W-b low speed, plan ends at rest (v_end < 0.5 m/s): moving history minus true history": {
+    "pooled_swapped_pct": 0.0,
+    "pooled_true_pct": 48.539869874413675,
+    "steps_swapped": 1616,
+    "steps_true": 6609,
+    "routes_used": [
+     "3561",
+     "1790",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 6,
+     "mean_first": 0.0,
+     "mean_second": 44.75779018112539,
+     "mean_diff": -44.75779018112539,
+     "n_first_greater": 0,
+     "n_first_less": 6,
+     "n_tie": 0,
+     "bca95": [
+      -50.511114775604966,
+      -36.41942808636903
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 0.03125,
+      "p_approx": 0.027707849358079864,
+      "p_exact": 0.03125,
+      "rank_biserial": -1.0
+     }
+    },
+    "reading": "stay-put plans are not matched by braking plans"
+   },
+   "description: low speed, plan accelerates (dv >= 0.5 m/s)": {
+    "pooled_swapped_pct": 10.148514851485148,
+    "pooled_true_pct": 46.75442578302315,
+    "steps_swapped": 1616,
+    "steps_true": 6609,
+    "routes_used": [
+     "3561",
+     "1790",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 6,
+     "mean_first": 15.714990569935452,
+     "mean_second": 47.648133192682025,
+     "mean_diff": -31.933142622746562,
+     "n_first_greater": 0,
+     "n_first_less": 6,
+     "n_tie": 0,
+     "bca95": [
+      -36.11654333818996,
+      -22.594354028042076
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 0.03125,
+      "p_approx": 0.027707849358079864,
+      "p_exact": 0.03125,
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "description: low speed, plan decelerates (dv <= -0.5 m/s)": {
+    "pooled_swapped_pct": 0.0,
+    "pooled_true_pct": 0.03026176426085641,
+    "steps_swapped": 1616,
+    "steps_true": 6609,
+    "routes_used": [
+     "3561",
+     "1790",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 6,
+     "mean_first": 0.0,
+     "mean_second": 0.06623010589294356,
+     "mean_diff": -0.06623010589294356,
+     "n_first_greater": 0,
+     "n_first_less": 2,
+     "n_tie": 4,
+     "bca95": [
+      -0.2853881278538813,
+      -0.009152480322167308
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 4,
+      "statistic": 0.0,
+      "p": 0.17971249487899976,
+      "p_approx": 0.17971249487899976,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "description: low speed, stays put (L < 0.64 m)": {
+    "pooled_swapped_pct": 0.0,
+    "pooled_true_pct": 27.069148131336057,
+    "steps_swapped": 1616,
+    "steps_true": 6609,
+    "routes_used": [
+     "3561",
+     "1790",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 6,
+     "mean_first": 0.0,
+     "mean_second": 21.178257011824908,
+     "mean_diff": -21.178257011824908,
+     "n_first_greater": 0,
+     "n_first_less": 6,
+     "n_tie": 0,
+     "bca95": [
+      -28.04930618264191,
+      -14.34206535879698
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 0.03125,
+      "p_approx": 0.027707849358079864,
+      "p_exact": 0.03125,
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "description: moving, plan holds speed (|dv| < 0.5 m/s): stationary history minus true history": {
+    "pooled_swapped_pct": 31.13673805601318,
+    "pooled_true_pct": 46.80374877605259,
+    "steps_swapped": 1821,
+    "steps_true": 7149,
+    "routes_used": [
+     "2534",
+     "3561",
+     "1790",
+     "23695",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 8,
+     "mean_first": 30.300559861980744,
+     "mean_second": 46.55785886955771,
+     "mean_diff": -16.257299007576965,
+     "n_first_greater": 0,
+     "n_first_less": 8,
+     "n_tie": 0,
+     "bca95": [
+      -19.113341079008787,
+      -12.99361324438212
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 0.0078125,
+      "p_approx": 0.011718685599768628,
+      "p_exact": 0.0078125,
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "description: moving, plan ends at rest (v_end < 0.5 m/s): stationary history minus true history": {
+    "pooled_swapped_pct": 31.081823174080174,
+    "pooled_true_pct": 0.0839278220730172,
+    "steps_swapped": 1821,
+    "steps_true": 7149,
+    "routes_used": [
+     "2534",
+     "3561",
+     "1790",
+     "23695",
+     "28087",
+     "2664",
+     "17563",
+     "26458"
+    ],
+    "paired": {
+     "n": 8,
+     "mean_first": 30.22292011042795,
+     "mean_second": 0.08075909901933558,
+     "mean_diff": 30.142161011408614,
+     "n_first_greater": 8,
+     "n_first_less": 0,
+     "n_tie": 0,
+     "bca95": [
+      16.582882913702623,
+      41.99946324584238
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 0.0078125,
+      "p_approx": 0.011718685599768628,
+      "p_exact": 0.0078125,
+      "rank_biserial": 1.0
+     }
+    }
+   },
+   "sensitivity: true-history steps directly after a swap step left out": {
+    "W-a low speed, plan holds speed (|dv| < 0.5 m/s): moving history minus true history": {
+     "pooled_swapped_pct": 89.85148514851485,
+     "pooled_true_pct": 52.741269245212166,
+     "steps_swapped": 1616,
+     "steps_true": 5326,
+     "routes_used": [
+      "3561",
+      "1790",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 6,
+      "mean_first": 84.28500943006455,
+      "mean_second": 51.91324031180533,
+      "mean_diff": 32.371769118259216,
+      "n_first_greater": 6,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": [
+       22.2810008701229,
+       36.5433998654512
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 0.03125,
+       "p_approx": 0.027707849358079864,
+       "p_exact": 0.03125,
+       "rank_biserial": 1.0
+      }
+     },
+     "reading": "the learned controls depend on the ego history"
+    },
+    "W-b low speed, plan ends at rest (v_end < 0.5 m/s): moving history minus true history": {
+     "pooled_swapped_pct": 0.0,
+     "pooled_true_pct": 47.84078107397672,
+     "steps_swapped": 1616,
+     "steps_true": 5326,
+     "routes_used": [
+      "3561",
+      "1790",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 6,
+      "mean_first": 0.0,
+      "mean_second": 44.26342736736771,
+      "mean_diff": -44.26342736736771,
+      "n_first_greater": 0,
+      "n_first_less": 6,
+      "n_tie": 0,
+      "bca95": [
+       -49.73023012217993,
+       -36.43818677993262
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 0.03125,
+       "p_approx": 0.027707849358079864,
+       "p_exact": 0.03125,
+       "rank_biserial": -1.0
+      }
+     },
+     "reading": "stay-put plans are not matched by braking plans"
+    },
+    "description: low speed, plan accelerates (dv >= 0.5 m/s)": {
+     "pooled_swapped_pct": 10.148514851485148,
+     "pooled_true_pct": 47.2399549380398,
+     "steps_swapped": 1616,
+     "steps_true": 5326,
+     "routes_used": [
+      "3561",
+      "1790",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 6,
+      "mean_first": 15.714990569935452,
+      "mean_second": 48.0195553871194,
+      "mean_diff": -32.30456481718395,
+      "n_first_greater": 0,
+      "n_first_less": 6,
+      "n_tie": 0,
+      "bca95": [
+       -36.55088945505065,
+       -22.454617911858648
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 0.03125,
+       "p_approx": 0.027707849358079864,
+       "p_exact": 0.03125,
+       "rank_biserial": -1.0
+      }
+     }
+    },
+    "description: low speed, plan decelerates (dv <= -0.5 m/s)": {
+     "pooled_swapped_pct": 0.0,
+     "pooled_true_pct": 0.01877581674802854,
+     "steps_swapped": 1616,
+     "steps_true": 5326,
+     "routes_used": [
+      "3561",
+      "1790",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 6,
+      "mean_first": 0.0,
+      "mean_second": 0.06720430107526881,
+      "mean_diff": -0.06720430107526881,
+      "n_first_greater": 0,
+      "n_first_less": 1,
+      "n_tie": 5,
+      "bca95": [
+       -0.33602150537634407,
+       0.0
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 5,
+       "statistic": 0.0,
+       "p": 0.31731050786291415,
+       "p_approx": 0.31731050786291415,
+       "p_exact": "not available (zero differences or tied |differences|)",
+       "rank_biserial": -1.0
+      }
+     }
+    },
+    "description: low speed, stays put (L < 0.64 m)": {
+     "pooled_swapped_pct": 0.0,
+     "pooled_true_pct": 26.69921141569658,
+     "steps_swapped": 1616,
+     "steps_true": 5326,
+     "routes_used": [
+      "3561",
+      "1790",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 6,
+      "mean_first": 0.0,
+      "mean_second": 20.939316018481644,
+      "mean_diff": -20.939316018481644,
+      "n_first_greater": 0,
+      "n_first_less": 6,
+      "n_tie": 0,
+      "bca95": [
+       -27.96013929470952,
+       -13.918492742253768
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 0.03125,
+       "p_approx": 0.027707849358079864,
+       "p_exact": 0.03125,
+       "rank_biserial": -1.0
+      }
+     }
+    },
+    "description: moving, plan holds speed (|dv| < 0.5 m/s): stationary history minus true history": {
+     "pooled_swapped_pct": 31.13673805601318,
+     "pooled_true_pct": 46.617979481829245,
+     "steps_swapped": 1821,
+     "steps_true": 5751,
+     "routes_used": [
+      "2534",
+      "3561",
+      "1790",
+      "23695",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 8,
+      "mean_first": 30.300559861980744,
+      "mean_second": 46.47691293378711,
+      "mean_diff": -16.176353071806364,
+      "n_first_greater": 0,
+      "n_first_less": 8,
+      "n_tie": 0,
+      "bca95": [
+       -19.030585624974393,
+       -12.623299469344932
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 0.0078125,
+       "p_approx": 0.011718685599768628,
+       "p_exact": 0.0078125,
+       "rank_biserial": -1.0
+      }
+     }
+    },
+    "description: moving, plan ends at rest (v_end < 0.5 m/s): stationary history minus true history": {
+     "pooled_swapped_pct": 31.081823174080174,
+     "pooled_true_pct": 0.10432968179447052,
+     "steps_swapped": 1821,
+     "steps_true": 5751,
+     "routes_used": [
+      "2534",
+      "3561",
+      "1790",
+      "23695",
+      "28087",
+      "2664",
+      "17563",
+      "26458"
+     ],
+     "paired": {
+      "n": 8,
+      "mean_first": 30.22292011042795,
+      "mean_second": 0.10065578428814458,
+      "mean_diff": 30.122264326139806,
+      "n_first_greater": 8,
+      "n_first_less": 0,
+      "n_tie": 0,
+      "bca95": [
+       16.57602141893215,
+       41.98479718201659
+      ],
+      "wilcoxon": {
+       "n_zero_differences": 0,
+       "statistic": 0.0,
+       "p": 0.0078125,
+       "p_approx": 0.011718685599768628,
+       "p_exact": 0.0078125,
+       "rank_biserial": 1.0
+      }
+     }
+    }
+   }
+  }
+ }
+}

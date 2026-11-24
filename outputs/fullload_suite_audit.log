@@ -851,3 +851,50 @@
 2026-11-24 13:52:48 | 3364 | result | tag=model_matrix_flooded_1600_full attempt=1 exit=0 status=Completed
 2026-11-24 13:52:48 | - | job end | tag=model_matrix_flooded_1600_full
 2026-11-24 13:52:48 | - | fullload suite end | all jobs processed
+2026-11-24 14:00:12 | - | fullload suite start | git_head=0540752c911abd06ccf3b63798d6963af446b0f6 pid=3975236 only=model_matrix_flooded_6400_histswap_full,model_matrix_golden_6400_histswap_full
+2026-11-24 14:04:45 | - | job start | tag=model_matrix_flooded_6400_histswap_full model=/home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400 ckpt_sha=5707c517e2a39f8bd2d5bf2840966fd1b5ecb59ddc3d4fd308dffa7401214940 agent=src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent_histswap.py agent_sha=7a23d87d1daf3187fa984e75ed76831600bb0d29157b62b8553b84b469378192
+2026-11-24 14:04:45 | - | server | (re)starting model server for /home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400
+2026-11-24 14:13:40 | - | server | full loading confirmed: 416 tensors in file, 301 checked in memory, largest difference 0.0
+2026-11-24 14:13:40 | - | server | ready, pid 3979993, model /home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400
+2026-11-24 14:13:43 | 2534 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 14:36:11 | 2534 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 14:36:11 | - | job end | tag=model_matrix_flooded_6400_histswap_full
+2026-11-24 14:36:11 | 2534 | agent check | ok 1128 {'moving': 13, 'true': 919, 'stationary': 196} median first-waypoint distance (m): {'moving': 0.4, 'stationary': 0.001}
+2026-11-24 14:36:11 | - | job start | tag=model_matrix_flooded_6400_histswap_full model=/home/aimslab/checkpoints/action_experts/extracted_matrix_flooded_6400 ckpt_sha=5707c517e2a39f8bd2d5bf2840966fd1b5ecb59ddc3d4fd308dffa7401214940 agent=src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent_histswap.py agent_sha=7a23d87d1daf3187fa984e75ed76831600bb0d29157b62b8553b84b469378192
+2026-11-24 14:36:14 | 3561 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 15:36:13 | 3561 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 15:36:16 | 1790 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 16:03:39 | 1790 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 16:03:43 | 23695 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 16:31:10 | 23695 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 16:31:13 | 28087 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 17:13:56 | 28087 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Failed - Agent deviated from the route
+2026-11-24 17:14:00 | 2664 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 18:20:05 | 2664 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Failed - TickRuntime
+2026-11-24 18:20:08 | 17563 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 18:47:05 | 17563 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 18:47:08 | 26458 | launch | tag=model_matrix_flooded_6400_histswap_full attempt=1 server_pid=3979993
+2026-11-24 19:15:10 | 26458 | result | tag=model_matrix_flooded_6400_histswap_full attempt=1 exit=0 status=Failed - Agent deviated from the route
+2026-11-24 19:15:10 | - | job end | tag=model_matrix_flooded_6400_histswap_full
+2026-11-24 19:15:10 | - | job start | tag=model_matrix_golden_6400_histswap_full model=/home/aimslab/checkpoints/action_experts/Alpamayo-1.5-10B-Matrix-Golden-6400-A15 ckpt_sha=641287335d43877349cc633611ac85fe28628d0e4130eb59d055402926e8a2bf agent=src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent_histswap.py agent_sha=7a23d87d1daf3187fa984e75ed76831600bb0d29157b62b8553b84b469378192
+2026-11-24 19:15:10 | - | server | (re)starting model server for /home/aimslab/checkpoints/action_experts/Alpamayo-1.5-10B-Matrix-Golden-6400-A15
+2026-11-24 19:26:03 | - | server | full loading confirmed: 416 tensors in file, 301 checked in memory, largest difference 0.0
+2026-11-24 19:26:03 | - | server | ready, pid 4127312, model /home/aimslab/checkpoints/action_experts/Alpamayo-1.5-10B-Matrix-Golden-6400-A15
+2026-11-24 19:26:06 | 2534 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 20:10:34 | 2534 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Failed - TickRuntime
+2026-11-24 20:10:38 | 3561 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 20:55:48 | 3561 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Failed - Agent got blocked
+2026-11-24 20:55:52 | 1790 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 21:12:00 | 1790 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 21:12:03 | 23695 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 21:32:24 | 23695 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 21:32:27 | 28087 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 21:43:09 | 28087 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Failed - Agent deviated from the route
+2026-11-24 21:43:12 | 2664 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 22:08:34 | 2664 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Failed - TickRuntime
+2026-11-24 22:08:37 | 17563 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 22:20:47 | 17563 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Completed
+2026-11-24 22:20:50 | 26458 | launch | tag=model_matrix_golden_6400_histswap_full attempt=1 server_pid=4127312
+2026-11-24 22:31:39 | 26458 | result | tag=model_matrix_golden_6400_histswap_full attempt=1 exit=0 status=Failed - Agent deviated from the route
+2026-11-24 22:31:39 | - | job end | tag=model_matrix_golden_6400_histswap_full
+2026-11-24 22:31:39 | - | fullload suite end | all jobs processed
