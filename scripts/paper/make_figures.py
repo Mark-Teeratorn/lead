@@ -297,7 +297,7 @@ def fig_full_paired_plans(arms):
     ax.set_yticks(y)
     ax.set_yticklabels(labels, fontsize=8)
     ax.set_ylim(-0.8, len(routes) - 0.2)
-    ax.set_xlabel("Near-stationary plans, L < 1.5 m (% of route steps, mean of two passes)")
+    ax.set_xlabel("Near-stationary plans, L < 1.5 m\n(% of route steps, mean of two passes)")
     ax.set_ylabel("Route")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False)
     save(fig, "figure_4.png")
