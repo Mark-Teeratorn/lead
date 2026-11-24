@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 24 Nov 2026, 15:36. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 24 Nov 2026, 15:48. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -64,7 +64,9 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 - [ ] Number check: zero unsupported numbers (24 November: 0 of 1,132 in the main text and 0 of 780 in Supplementary Section S6; to be repeated on the final text)
 
 - [x] Suggested review items written in on 24 November: S2 (abstract as a summary), S14, S16, S17 (query rate), S20 (Success Rate), S22, S23; LOWP cited as reference [48] after reading it
-- [ ] Suggested review items still to check against the final text: S1, S3 to S13, S15, S18, S21 (S9 and S12 need the author; S19 is optional)
+- [x] Suggested review items checked against the restructured text (24 November): S1, S2, S5, S7, S11, S13, S14, S16 to S18, S20 to S23 written in; S3, S6, S8, S10, S15 no longer apply (they concern the removed material); S4 covered by the record in Supplementary Section S4.1; S19 optional and not done
+- [ ] Suggested items that need the author: S9 (trainer log of the decoupling model), S12 (weights and repository)
+- [x] Independent end-to-end consistency read of the restructured text (24 November): 20 findings, all fixed (test labels N1 to N3 defined, cross-references, Table 2, leftover wording)
 
 - [x] 24 November, at the author's request: the main text reports the runs with full loading only. Section 4.8 (first series) and Table 6 removed; H1 to H3 replaced in the introduction by the four tests of these runs; partly loaded values removed from Table 3 and Section 4.2; historical checkpoint removed from Table 1. Disclosure kept: paragraph "Earlier runs" in Sections 4.1 and 5, full account with the registered tests in Supplementary Section S6 (new Table S6). Route-subset sensitivity and pass-to-pass variation recomputed on the fully loaded runs (addendum 34). Section 4.8 is now the history-swap test
 
