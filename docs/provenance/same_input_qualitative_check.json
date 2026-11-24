@@ -63,6 +63,7 @@
  "selection_rule": {
   "candidate_states": 384,
   "mean_d": 3.53125,
+  "pooled_stay_put_difference_pp": 22.0703125,
   "typical_state": 7,
   "d_typical": 4,
   "largest_state": 120,

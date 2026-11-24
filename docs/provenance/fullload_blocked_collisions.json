@@ -1,0 +1,509 @@
+{
+ "label": "ANALYSIS_ADDENDUM section 35: collision events on the routes with blocked time; post hoc, descriptive",
+ "passes": {
+  "first pass": {
+   "tags": [
+    "model_matrix_golden_6400_full",
+    "model_matrix_flooded_6400_full"
+   ],
+   "n_routes": 44,
+   "flooded_routes_with_blocked_time": 0,
+   "blocked routes of Golden-6400": {
+    "n_routes": 10,
+    "collision_events": {
+     "Golden-6400": 14.0,
+     "Flooded-6400": 8.0
+    },
+    "events_per_route": {
+     "Golden-6400": 1.4,
+     "Flooded-6400": 0.8
+    },
+    "routes": {
+     "1852": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "1825": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "17752": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "2201": {
+      "Golden-6400": 4.0,
+      "Flooded-6400": 3.0
+     },
+     "2664": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "1956": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "2050": {
+      "Golden-6400": 2.0,
+      "Flooded-6400": 1.0
+     },
+     "14842": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "3144": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "3464": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     }
+    },
+    "paired": {
+     "n": 10,
+     "mean_first": 1.4,
+     "mean_second": 0.8,
+     "mean_diff": 0.6,
+     "n_first_greater": 6,
+     "n_first_less": 0,
+     "n_tie": 4,
+     "bca95": [
+      0.2,
+      0.8
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 4,
+      "statistic": 0.0,
+      "p": 0.014305878435429648,
+      "p_approx": 0.014305878435429648,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 1.0
+     }
+    }
+   },
+   "remaining routes": {
+    "n_routes": 34,
+    "collision_events": {
+     "Golden-6400": 14.0,
+     "Flooded-6400": 20.0
+    },
+    "events_per_route": {
+     "Golden-6400": 0.4117647058823529,
+     "Flooded-6400": 0.5882352941176471
+    },
+    "routes": {
+     "2534": {
+      "Golden-6400": 3.0,
+      "Flooded-6400": 2.0
+     },
+     "2204": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 1.0
+     },
+     "2513": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 3.0
+     },
+     "3561": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 2.0
+     },
+     "3086": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "3540": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "1790": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 4.0
+     },
+     "3436": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2286": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "23687": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "23901": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "23695": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 3.0
+     },
+     "2790": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 1.0
+     },
+     "2283": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "23771": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2084": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "28087": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2115": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "2082": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2127": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "1773": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "3248": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "1711": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "14194": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "17563": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 1.0
+     },
+     "3936": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "28099": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2709": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "26458": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2390": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2416": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2144": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "2164": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "3364": {
+      "Golden-6400": 2.0,
+      "Flooded-6400": 0.0
+     }
+    },
+    "paired": {
+     "n": 34,
+     "mean_first": 0.4117647058823529,
+     "mean_second": 0.5882352941176471,
+     "mean_diff": -0.17647058823529413,
+     "n_first_greater": 5,
+     "n_first_less": 7,
+     "n_tie": 22,
+     "bca95": [
+      -0.5882352941176471,
+      0.08823529411764706
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 22,
+      "statistic": 25.5,
+      "p": 0.27704605920687775,
+      "p_approx": 0.27704605920687775,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": -0.34615384615384615
+     }
+    }
+   }
+  },
+  "second pass": {
+   "tags": [
+    "model_matrix_golden_6400_run2_full",
+    "model_matrix_flooded_6400_run2_full"
+   ],
+   "n_routes": 44,
+   "flooded_routes_with_blocked_time": 0,
+   "blocked routes of Golden-6400": {
+    "n_routes": 11,
+    "collision_events": {
+     "Golden-6400": 15.0,
+     "Flooded-6400": 5.0
+    },
+    "events_per_route": {
+     "Golden-6400": 1.3636363636363635,
+     "Flooded-6400": 0.45454545454545453
+    },
+    "routes": {
+     "2534": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "1852": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "1825": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "17752": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "3540": {
+      "Golden-6400": 3.0,
+      "Flooded-6400": 0.0
+     },
+     "2790": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "2664": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "1956": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "14194": {
+      "Golden-6400": 2.0,
+      "Flooded-6400": 0.0
+     },
+     "2050": {
+      "Golden-6400": 2.0,
+      "Flooded-6400": 1.0
+     },
+     "3464": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     }
+    },
+    "paired": {
+     "n": 11,
+     "mean_first": 1.3636363636363635,
+     "mean_second": 0.45454545454545453,
+     "mean_diff": 0.9090909090909091,
+     "n_first_greater": 7,
+     "n_first_less": 0,
+     "n_tie": 4,
+     "bca95": [
+      0.45454545454545453,
+      1.4545454545454546
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 4,
+      "statistic": 0.0,
+      "p": 0.014058605323737277,
+      "p_approx": 0.014058605323737277,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 1.0
+     }
+    }
+   },
+   "remaining routes": {
+    "n_routes": 33,
+    "collision_events": {
+     "Golden-6400": 21.0,
+     "Flooded-6400": 10.0
+    },
+    "events_per_route": {
+     "Golden-6400": 0.6363636363636364,
+     "Flooded-6400": 0.30303030303030304
+    },
+    "routes": {
+     "2204": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2513": {
+      "Golden-6400": 3.0,
+      "Flooded-6400": 2.0
+     },
+     "3561": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "3086": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2201": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "1790": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 1.0
+     },
+     "3436": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2286": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "23687": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "23901": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "23695": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 1.0
+     },
+     "2283": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "23771": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2084": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "28087": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2115": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "2082": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2127": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "1773": {
+      "Golden-6400": 5.0,
+      "Flooded-6400": 1.0
+     },
+     "3248": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "1711": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "17563": {
+      "Golden-6400": 2.0,
+      "Flooded-6400": 0.0
+     },
+     "3936": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "28099": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "2709": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     },
+     "26458": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 1.0
+     },
+     "2390": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "2416": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "14842": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "3144": {
+      "Golden-6400": 0.0,
+      "Flooded-6400": 0.0
+     },
+     "2144": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "2164": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 0.0
+     },
+     "3364": {
+      "Golden-6400": 1.0,
+      "Flooded-6400": 1.0
+     }
+    },
+    "paired": {
+     "n": 33,
+     "mean_first": 0.6363636363636364,
+     "mean_second": 0.30303030303030304,
+     "mean_diff": 0.3333333333333333,
+     "n_first_greater": 10,
+     "n_first_less": 3,
+     "n_tie": 20,
+     "bca95": [
+      0.06060606060606061,
+      0.696969696969697
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 20,
+      "statistic": 18.0,
+      "p": 0.03886925483971224,
+      "p_approx": 0.03886925483971224,
+      "p_exact": "not available (zero differences or tied |differences|)",
+      "rank_biserial": 0.6043956043956044
+     }
+    }
+   }
+  }
+ }
+}

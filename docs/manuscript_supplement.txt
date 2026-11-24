@@ -76,3 +76,16 @@ Record of pre-specification. The rules referred to in this paper are files in th
 Dates of the runs. First pass of `Golden-6400` and `Flooded-6400`: 17 to 19 November 2026. Decoupling checkpoint: 19 and 20 November. Second pass of both checkpoints: 20 and 21 November. Runs without the standstill gate: 21 to 23 November. `Golden-1600`: 23 November. `Flooded-1600`: 23 and 24 November. History-swap test: 24 November. `Base-Rerun`: 15 and 16 November.
 
 Statistics. Route-level differences are paired over the 44 routes. Tests are two-sided Wilcoxon signed-rank tests (`scipy.stats.wilcoxon` defaults: zero differences dropped, exact p-value when there are no zeros and n ≤ 50, normal approximation otherwise). Intervals are two-sided 95 % BCa bootstrap intervals (20,000 resamples, seed 0); the result files also hold the statistic $W$, the number of zero differences and the matched-pairs rank-biserial correlation. Absolute differences in percentages are given in percentage points (pp). Holm adjustment is made over the two tests named with each rule (F1 and F2; R2 and R3; N2 and N3). All other p-values are unadjusted. Each condition is one trained checkpoint (seed 42), so every test compares two specific checkpoints across routes and says nothing about variation between training runs.
+
+## S4.2 Collision Events on the Routes with Blocked Time
+
+Post hoc and descriptive (ANALYSIS_ADDENDUM §35, written before the values were computed). For each pass of the 6,400-sample pair, the routes with blocked time are those on which `Golden-6400` had blocked time above zero in that pass; `Flooded-6400` had none on any route. Table S2 gives the collision events of both checkpoints on these routes and on the remaining routes. On the routes with blocked time `Golden-6400` had more collision events than `Flooded-6400` in both passes. On the remaining routes it had fewer in the first pass and more in the second. The table does not give the order of contact and stop, and no statement on harm follows from it (Section 4.3).
+
+Table S2: Collision events of `Golden-6400` and `Flooded-6400` on the routes with and without blocked time of `Golden-6400`, per pass. Events are leaderboard collision records merged by actor. Entries with a slash are `Golden-6400` / `Flooded-6400`. The last column is the paired difference per route (`Golden-6400` minus `Flooded-6400`) with its 95 % BCa interval.
+
+| Pass | Routes | Number of routes | Collision events | Events per route | Difference per route |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| First pass | Routes with blocked time | 10 | 14 / 8 | 1.40 / 0.80 | +0.60 [0.20, 0.80] |
+| First pass | Remaining routes | 34 | 14 / 20 | 0.41 / 0.59 | −0.18 [−0.59, 0.09] |
+| Second pass | Routes with blocked time | 11 | 15 / 5 | 1.36 / 0.45 | +0.91 [0.45, 1.45] |
+| Second pass | Remaining routes | 33 | 21 / 10 | 0.64 / 0.30 | +0.33 [0.06, 0.70] |

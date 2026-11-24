@@ -73,7 +73,7 @@ def selection_check():
     mean_d = float(np.mean(list(d.values())))
     typical = min(cand, key=lambda s: (abs(d[s] - mean_d), s))
     largest = min(cand, key=lambda s: (-d[s], s))
-    return {"candidate_states": len(cand), "mean_d": mean_d, "typical_state": typical, "d_typical": d[typical],
+    return {"candidate_states": len(cand), "mean_d": mean_d, "pooled_stay_put_difference_pp": 100.0 * mean_d / 16.0, "typical_state": typical, "d_typical": d[typical],
             "largest_state": largest, "d_largest": d[largest],
             "matches_figure": [typical, largest] == [s for s, _ in STATES]}
 
