@@ -1,6 +1,6 @@
 # Project summary
 
-Written 21 November 2026, 12:09; results updated 23 Nov 2026, 22:37. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
+Written 21 November 2026, 12:09; results updated 24 Nov 2026, 13:58. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
 
 ## What the project is
 
@@ -59,15 +59,17 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 - **Efficiency (added 23 Nov, post hoc).** Golden-6400 is about twice as fast: 45.62 s against 76.51 s on the routes both completed, and a Bench2Drive Driving Efficiency of 102.50 and 102.25 against 77.18 and 81.98 (+22.89 points, interval [6.14, 34.89]). Faster is not reported as better: blocked time and, in the second pass, the infraction penalty go the other way.
 - **Blocked time (post hoc).** Nearly all blocked steps lie at a recorded collision position, with forward plans, so a controller rule would not remove them.
 
+- **1,600-sample pair (added 24 Nov).** The difference in near-stationary plans is present by a small margin (4.92 % against 8.34 %; −3.42 pp, interval [−7.74, −0.11], p 0.047) and is smaller than at 6,400 samples. Standstill time is inconclusive (−8.49 pp, interval [−17.19, 0.46]) and Driving Efficiency does not differ detectably (97.83 against 102.30). So at 1,600 samples the difference in plans is not shown to reach the motion of the vehicle.
+
 ## What is still running or open
 
 | Item | Status |
 |---|---|
 | Second pass of both 6,400 checkpoints; decoupling checkpoint | Done (21 Nov) |
 | Runs without the standstill gate (both 6,400 checkpoints) | Done (23 Nov) |
-| 1,600-sample pair | Golden-1600 done (23 Nov 20:58); Flooded-1600 running, ends about 24 Nov midday |
+| 1,600-sample pair | Done (24 Nov 13:52) |
 | History-swap test on fully loaded checkpoints | Queue not yet prepared; runs after the suite |
-| Rewrite of the manuscript | Restructure done 23 Nov (fully loaded runs are the main Section 4; first series in Supplementary Section S6). Open: results of the 1,600-sample pair and the history-swap test, qualitative figure, re-review |
+| Rewrite of the manuscript | Restructure done 23 Nov (fully loaded runs are the main Section 4; first series in Supplementary Section S6). 1,600-sample pair written in on 24 Nov (Section 4.6). Open: history-swap test, qualitative figure, re-review |
 
 Tests for the 1,600-sample pair are fixed in addendum section 31 (near-stationary plans as the primary test, standstill time and Driving Efficiency as secondary tests).
 
