@@ -26,7 +26,8 @@ STATES = [(7, "(a) typical state"), (120, "(b) largest difference")]
 EXPERTS = [("Golden-6400-Full", "Golden-6400", "#0072B2"), ("Flooded-6400-Matched-Full", "Flooded-6400", "#D55E00"),
            ("Balanced-6400-Full", "Decoupling-6400", "#009E73")]
 STAY = 0.64
-FRONT_CAMERA_INDEX = 1   # front wide camera of the model's camera rig
+FRONT_CAMERA_INDEX = 1   # front wide camera of the model's camera rig (checked on the saved frames: ego hood visible)
+DISPLAY_GAMMA = {120: 0.45}   # night scene: frame brightened for print only (stated in the caption); the model input is unchanged
 plt.rcParams.update({"font.size": 10, "axes.spines.top": False, "axes.spines.right": False, "savefig.dpi": 300})
 
 
@@ -34,7 +35,7 @@ def extent(xyz):
     return np.linalg.norm(np.diff(xyz[..., :2], axis=1), axis=-1).sum(1)
 
 
-def front_frame(npz):
+def front_frame(npz, gamma=1.0):
     """Last frame of the front camera as an (H, W, 3) uint8 image."""
     img, cams = npz["images"], [int(c) for c in npz["camera_indices"].reshape(-1)]
     n_cam = len(cams)
@@ -46,6 +47,7 @@ def front_frame(npz):
     f = f.astype(np.float32)
     if f.max() <= 1.5:
         f = f * 255.0
+    f = 255.0 * (np.clip(f, 0, 255) / 255.0) ** gamma
     return np.clip(f, 0, 255).astype(np.uint8)
 
 
@@ -81,7 +83,7 @@ def main():
             plans[name] = (xyz, L_new, z)
         lim = max(2.0, max(float(np.abs(p[0][..., :2]).max()) for p in plans.values()) * 1.05)
         ax = axes[row, 0]
-        ax.imshow(front_frame(plans[EXPERTS[0][0]][2]))
+        ax.imshow(front_frame(plans[EXPERTS[0][0]][2], DISPLAY_GAMMA.get(state, 1.0)))
         ax.set_xticks([]), ax.set_yticks([])
         for s in ax.spines.values():
             s.set_visible(False)
