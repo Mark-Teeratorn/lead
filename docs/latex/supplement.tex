@@ -1,0 +1,129 @@
+\documentclass[11pt,a4paper]{article}
+% Built by scripts/paper/build_supplement_tex.py from the supplement .txt source. Do not edit by hand:
+% edit the .txt and rebuild, so that the .docx and the .tex stay identical in content.
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,rotating}
+\usepackage{xcolor}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\graphicspath{{figures/}}
+\newcommand{\pending}[1]{\textcolor{red}{\textbf{#1}}}
+\setlength{\emergencystretch}{3em}
+
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\title{Supplementary Material for "The Inertia Problem in a Fine-Tuned Vision-Language-Action Driving Policy: A Closed-Loop Comparison of Checkpoints Trained on Different Data Mixes"}
+\author{\pending{[[PENDING: authors and affiliations]]}}
+\date{}
+
+\begin{document}
+\maketitle
+
+This supplement gives further detail on the methods of the main text. Sections S3.1 to S3.4 extend Section 3, and Section S4.1 holds the evaluation protocol and the record of pre-specification with its dates. Table S1 is in this supplement; tables, figures and sections without the prefix S are those of the main text, and reference numbers in square brackets refer to its reference list. ANALYSIS\_ADDENDUM is a file in the project repository.
+
+\subsection*{S3.1 The Trajectory Extent}
+
+We call $L = \sum_{k=2}^{K} \lVert (x_k, y_k) - (x_{k-1}, y_{k-1}) \rVert_2$ the predicted trajectory extent: the planar path length from the first to the last waypoint (63 segments; the first segment, from the ego position to the first waypoint and about $v_0 \Delta t$ long, is not included, in the controller and in every analysis). We use $L / 6.4\text{ s}$ as the mean speed the plan implies; over the $6.3\text{ s}$ that the 63 segments cover, the exact mean is $1.6\,\%$ higher. Because the integration starts at $v_0$, $L$ depends on the current speed as well as on the learned controls: with every control at its training mean, a plan from rest has $L = 0.59\text{ m}$, and a plan from $v_0 = 0.4\text{ m/s}$ has $L = 3.1\text{ m}$. Statements about $L$ at low speed therefore condition on speed (Section 4.3). We checked the equations of Section 3.1 numerically against the released action-space code (\nolinkurl{scripts/paper/check_action_space_equations.py}): on random controls the waypoints agree to within $10^{-5}\text{ m}$.
+
+\subsection*{S3.2 The Sampling Conjecture in Full}
+
+The minimiser of $\mathcal{L}_{\text{CFM}}$ is the marginal velocity field $v^*(\mathbf{A}, s \mid \mathbf{c}) = \mathbb{E}[\mathbf{A}_1 - \mathbf{A}_0 \mid \mathbf{A}_s = \mathbf{A}, \mathbf{c}]$, with $\mathbf{c} = \mathbf{e}_t$. Integrating this field from Gaussian noise transports the noise distribution to the training conditional $p_{\text{train}}(\mathbf{A}_1 \mid \mathbf{c})$, in the limit of exact fit and exact integration [8]. In that limit each inference call returns a sample from the conditional distribution, not its mean. The deployed sampler is far from the limit: it evaluates the expert four times per call (Section 3.4), and a coarse integration can pull samples toward the conditional mean. That is a rival mechanism for short plans, and we did not test it. If, in a given context, the training data contain a mixture of futures,
+
+\[
+p_{\text{train}}(\mathbf{A}_1 \mid \mathbf{c}) = \sum_{z} \alpha_z(\mathbf{c})\, p_z(\mathbf{A}_1 \mid \mathbf{c}),
+\]
+
+then a well-fitted expert returns a future from mode $z$ with probability close to $\alpha_z(\mathbf{c})$. Changing the data composition changes the mixture weights, and therefore how often each mode is sampled. It does not shift every sample toward an average.
+
+The relevant contexts are low-speed ones. When the ego vehicle is at or near rest, the camera image and the ego history are often compatible with two kinds of future: staying put (waiting at a queue, a signal or behind an obstacle) and starting to move. Define, for training samples with ego speed $\le 0.5\text{ m/s}$ at the current frame, three classes of ground-truth future, by the path length $L$ of its $6.4\text{ s}$ trajectory (the quantity defined in Section 3.1): stays put ($L < 0.64\text{ m}$ over $6.4\text{ s}$, i.e. a planned mean speed below $0.1\text{ m/s}$), starts moving ($L \ge 2\text{ m}$), and in between. Our conjecture is:
+
+\textbf{Conjecture (stay-put sampling).} A flow-matching expert trained on data in which a larger share of low-speed samples stay put will, in low-speed closed-loop contexts, sample stay-put trajectories more often. Because the vehicle then remains at low speed, the next query again sees a low-speed context, so repeated stay-put samples extend the time at rest after the reason for stopping has gone. This conjecture is not one of the tests of this study. It was formulated after first closed-loop results of these checkpoints were known, so their agreement with it is not a test of it.
+
+The relevant share is the conditional share among low-speed samples, not the global stationary share of the dataset. Table 1 gives both. Among low-speed samples, 31.0 \% stay put in the obstacle-heavy 6,400-sample set and 10.9 \% in the balanced one; at 1,600 samples the shares are 30.6 \% and 11.4 \%. The conjecture implies that the obstacle-heavy checkpoint returns more plans with $L < 0.64\text{ m}$ at rest, which Table 3 shows, and more such plans on identical low-speed inputs, which the same-input replay shows (Section 4.2). It does not, on its own, predict the 1,600-sample result. There the conditional shares differ almost as much, yet the difference in near-stationary plans is \ensuremath{-}3.42 pp against \ensuremath{-}26.83 pp at 6,400 samples (Section 4.6). The conjecture is therefore at most part of the explanation. How closely the expert fits the low-speed conditional may depend on the amount of data or on the number of optimizer steps, which differ fourfold between the two sizes.
+
+The lateral asymmetry of the obstacle-heavy mix is a rival explanation for stay-put plans on obstacle-bypass routes: a model trained mostly on left swerves may be less able to plan a bypass that the route requires. The design bundles both factors, so it cannot separate them (Section 3.3).
+
+\subsection*{S3.3 Dataset Construction and Train--Evaluation Overlap}
+
+Demonstrations come from the LEAD [10] privileged expert, recorded in CARLA 0.9.16 and converted to the PhysicalAI-AV layout. The expert drives with LEAD's own sensor rig unchanged; the four cameras that Alpamayo reads are recorded alongside it at 10 Hz as capture-only cameras, at the mount poses and fields of view of the model's camera rig. A route enters the verified pool only if the expert completed it fully and without a disqualifying infraction (collision, red light, stop sign, route deviation, blockage or timeout); clips shorter than 17.5 s or with less than 5 m of motion are dropped, and a navigation label is kept only if the driven path confirms it. All four Matrix datasets are drawn from one verified training pool (\texttt{lead\_multirig\_pai\_v4}, 34,132 samples at a 0.4 s stride; 1,840 clips over 646 routes). Nothing was collected separately for either regime. Each sample is labelled with a scenario group (A--F; obstacle avoidance and construction, junctions, hazards and emergencies, highway and merging, vulnerable road users and dynamic conflicts, baseline and signal compliance) and a navigation manoeuvre (straight, swerve left, swerve right, turn left, turn right). A sample is stationary if the ego vehicle moves less than 0.5 m over its 6.4 s future.
+
+Each regime is specified by target marginals: the group shares, the manoeuvre shares and the stationary share. The group \ensuremath{\times} manoeuvre allocation is the minimum-divergence point, an iterative proportional fit of the pool's own group \ensuremath{\times} manoeuvre counts onto the target marginals, integerised with every bucket divisible by four. Within each bucket the stationary target is met as a preference, so it moves no group or manoeuvre marginal. Samples are then selected deterministically, by SHA-1 order salted with seed 0 and spread over as many clips as possible. Each 1,600-sample set is the exact per-bucket first quarter of the 6,400-sample set of the same regime. Brake and hazard shares are outcomes of the draw, not targets. The balanced and obstacle-heavy 6,400-sample sets share 4,284 samples (67 \% of each). All cells share one validation split of 1,567 samples.
+
+The two regimes differ in three factors at once (group mix, lateral balance and stationary share), and in this pool the factors are coupled: groups A and C hold 88 \% of all left swerves but 58 \% of right swerves, so raising the hazard share pushes the lateral balance left. Comparisons between regimes therefore estimate the effect of the bundle. A fifth dataset, \texttt{floodedgroups\_balanced\_6400} (the scenario-group shares of the obstacle-heavy mix with the manoeuvre shares and the 2 \% stationary share of the balanced mix; we call it the decoupling mix), separates the group mix from the lateral-plus-stationary bundle. It has been built and published, and one model, \texttt{Decoupling\mbox{-}6400}, was trained on it with the recipe and schedule of the other 6,400-sample models (ANALYSIS\_ADDENDUM \S{}6); its evaluation is reported in Section 4.5.
+
+Training and evaluation routes overlap. The LEAD datasets are exempt from the evaluation-overlap filter, so 7.1--7.5 \% of each training set's samples lie on a route that overlaps one of the 220 Bench2Drive evaluation routes (lower bounds; 39 log names could not be resolved to a route). Mapped exactly to the 44 evaluation routes we use, training samples in the Matrix sets touch seven routes: 1852 (AccidentTwoWays), 1825 (ConstructionObstacleTwoWays), 2286 (HighwayCutIn), 23901 (InterurbanActorFlow), 23695 (InterurbanAdvancedActorFlow), 3464 (VehicleOpensDoorTwoWays) and 2164 (VehicleTurningRoutePedestrian). The number of touching samples is 20 (golden\_1600), 19 (flooded\_1600), 78 (golden\_6400) and 87 (flooded\_6400). Four more of the 44 routes are flagged at pool level but are not touched by any selected sample. The validation split has no overlap. Because the overlap is of similar size in both regimes, it bears mainly on comparisons against \texttt{Base}. Section 4.3 gives the two main contrasts on the 37 routes not touched by training samples.
+
+\subsection*{S3.4 Fine-Tuning, Inference and Controller in Full}
+
+Parameter isolation. The VLM backbone is frozen during fine-tuning (\texttt{cotrain\_vlm = false}, gradients stopped at the trajectory token) [2, 20]. For deployment on one 24 GB GPU the frozen VLM language layers are quantized to 4-bit weights with pairwise rotation quantization (ParoQuant) [14] and run with 8-bit activations in the FlashDrive streaming server [15] (W4A8); the action expert runs in \texttt{bfloat16}. Only the action expert is trained: 416 parameter tensors, 2,280,592,386 trainable parameters according to the trainer artifacts. Fine-tuning ran on an NVIDIA A100 machine; inference and closed-loop evaluation ran on one 24 GB GPU. Noisy actions and flow time are embedded by \texttt{PerWaypointActionInProjV2} (20 Fourier features, maximum frequency 100) and projected into the 2,048-dimensional expert hidden space [19]. Training follows the Alpamayo Stage-2 recipe [20]: AdamW (fused; $\beta = (0.9, 0.999)$, $\epsilon = 10^{-8}$, weight decay 0), gradient-norm clipping at 1.0, \texttt{bfloat16}, cosine schedule from $10^{-4}$ to $10^{-6}$, no exponential moving average.
+
+Schedules. Table S1 is rebuilt from the trainer artifacts (\texttt{trainer\_state.json}, \texttt{training\_args.bin}, Hydra configurations) and training logs. All four Matrix models and the decoupling model used per-device batch 1 with gradient accumulation 8 (effective batch 8), 10 epochs and seed 42. This gives 2,000 optimizer steps at 1,600 samples and 8,000 at 6,400 samples. The configurations of the two 6,400-sample Matrix models are identical except for the dataset name, and both trained without interruption. The two 1,600-sample models share a schedule but were each interrupted and resumed from a saved checkpoint. A different model (\texttt{model\_v4}, 16,040 samples, 20,050 steps), which is not part of this study, was used to tune the controller (see below).
+
+\begin{table}[htbp]
+\centering
+\caption{Training and evaluation provenance of every evaluated checkpoint (one seed per condition). Evaluation dates are those of the evaluation log, in local time (UTC+7).}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llllllllllll}
+\toprule
+\textbf{Checkpoint} & \textbf{Dataset} & \textbf{Samples} & \parbox[b]{4.4em}{\raggedright\textbf{Per-device batch \ensuremath{\times} grad. accum.}} & \parbox[b]{4.4em}{\raggedright\textbf{Epochs}} & \parbox[b]{4.4em}{\raggedright\textbf{Optimizer steps}} & \parbox[b]{4.4em}{\raggedright\textbf{Warmup}} & \textbf{Seed} & \textbf{Resume events} & \textbf{Training (UTC)} & \textbf{Closed-loop evaluation} & \textbf{Role} \\
+\midrule
+\texttt{Base\mbox{-}Rerun} & none (pretrained) & 0 & --- & --- & 0 & --- & --- & --- & --- & 15--16 Nov 2026 & unadapted reference \\
+\texttt{Flooded\mbox{-}1600} & \texttt{matrix\_flooded\_1600} & 1,600 & 1 \ensuremath{\times} 8 & 10 & 2,000 & 100 & 42 & first attempt stopped at step 215; resumes from step 250 (log of two attempts missing) & 17 Oct 06:39 \ensuremath{\rightarrow} 16:49 & 23--24 Nov 2026 & 1,600-sample pair \\
+\texttt{Golden\mbox{-}1600} & \texttt{matrix\_golden\_1600} & 1,600 & 1 \ensuremath{\times} 8 & 10 & 2,000 & 100 & 42 & several resumes from step 800 (one CUDA out-of-memory); final run 800 \ensuremath{\rightarrow} 2,000 & 16 Oct 11:07 \ensuremath{\rightarrow} 17 Oct 01:43 & 23 Nov 2026 & 1,600-sample pair \\
+\texttt{Flooded\mbox{-}6400} & \texttt{matrix\_flooded\_6400} & 6,400 & 1 \ensuremath{\times} 8 & 10 & 8,000 & 200 & 42 & none & 19 Oct 07:52 \ensuremath{\rightarrow} 20 Oct 12:25 & 18--19 Nov (first pass), 20--21 Nov (second pass), 22--23 Nov 2026 (without the gate) & matched pair \\
+\texttt{Golden\mbox{-}6400} & \texttt{matrix\_golden\_6400} & 6,400 & 1 \ensuremath{\times} 8 & 10 & 8,000 & 200 & 42 & none & 17 Oct 18:49 \ensuremath{\rightarrow} 18 Oct 23:05 & 17--18 Nov (first pass), 20 Nov (second pass), 21--22 Nov 2026 (without the gate) & matched pair \\
+\texttt{Decoupling\mbox{-}6400} & \texttt{matrix\_floodedgroups\_balanced\_6400} & 6,400 & 1 \ensuremath{\times} 8 & 10 & 8,000 & 200 & 42 & \pending{[[PENDING: authors to confirm resume events from the trainer log]]} & 12 Nov 16:40 \ensuremath{\rightarrow} 13 Nov (end time not in the provenance bundle) & 19--20 Nov 2026 & decoupling checkpoint \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Inference. The FlashDrive server [15] keeps a sliding-window key-value cache and integrates the learned field in $S = 8$ uniform steps ($\Delta s = 0.125$). In the server code we ran, the integrator is forward Euler and the velocity is reused, not recomputed, on four of the eight steps (zero-based indices 3 to 6), so the expert is evaluated four times per call:
+
+\[
+\mathbf{A}_{s + \Delta s} = \mathbf{A}_s + \Delta s \cdot v_\theta(\mathbf{A}_s, s \mid \mathbf{e}_t)
+\]
+
+Eight steps is the server's configuration, not a choice justified by path straightness; with independent coupling the paths need not be straight [31, 32], and we did not measure the discretisation error. The model server does not seed its noise draws, so each inference call uses fresh noise and closed-loop runs are not reproducible step for step (Section 4.1). CARLA runs synchronously at 20 Hz.
+
+Controller. All runs except those of Sections 4.4 and 4.8 use the same bridge controller (\texttt{alpamayo\_bridge\_agent.py}, SHA-256 \texttt{082c6ecc\ldots{}10d3}); Figure 1 shows the pipeline. The predicted trajectory is tracked by CARLA's \texttt{VehiclePIDController} (lateral $K_P = 1.95, K_I = 0.05, K_D = 0.20$; longitudinal $K_P = 1.0, K_I = 0.05, K_D = 0.0$) towards a target waypoint chosen by a lookahead distance along the trajectory, $\text{clip}(5.5 + 0.3 v, 5.0, 8.5)$ m when the near-horizon turn angle $\phi$ exceeds 0.087 rad and $\text{clip}(5.0 + 0.4 v, 5.0, 12.0)$ m otherwise, with $v$ the current speed in m/s. Here $\phi$ is the largest $\arctan(\lvert y_k \rvert / \max(x_k, 1\text{ m}))$ over waypoints 6 to 35 ($0.6$ to $3.5\text{ s}$ ahead). Like the gate and every extent-based measure in this paper, the target speed is read from the predicted waypoints, a representation whose speed information Jaeger et al. [40] found to be ambiguous for multimodal plans. The target speed follows the trajectory: it is the planned speed to the lookahead waypoint, the path length to that waypoint divided by its time along the plan (for a plan shorter than the lookahead distance this is $L / 6.4\text{ s}$). When the planned speed over the first $2.5\text{ s}$ is lower, the target is $0.6$ times that speed plus $0.4$ times the speed to the lookahead waypoint. It is capped by the stopping-distance limit $3.6\sqrt{2 \cdot 1.8 \cdot L}$ km/h, by 35 km/h and, when $\phi > 0.06$ rad, by $\max(10, 35 - 100\,\phi)$ km/h. A standstill gate sets the target speed and the throttle to zero and the brake to 0.45 ($0.45 + 0.15 v$ above 0.3 m/s, at most 1) whenever
+
+\[
+(L < 1.5\text{ m}) \;\lor\; (v < 0.5\text{ m/s} \land L < 2.0\text{ m}).
+\]
+
+The gate keeps no internal state. Its second clause makes it harder to leave rest: below 0.5 m/s a trajectory up to 2.0 m long is still treated as a stop, and the holding brake keeps the vehicle at rest while the clause holds. When the gate does not fire, the speed is below 1.5 m/s, the target speed exceeds 4 km/h and $L \ge 2.5\text{ m}$, the throttle is raised to at least 0.35 and the brake released (a starting torque). The PID output is limited to throttle 0.6, brake 1.0 and steering 0.8. Steering and pedal commands are smoothed by exponential moving averages ($\alpha_{\text{steer}} = 0.85$ when turning, $0.60$ otherwise; $\alpha_{\text{pedal}} = 0.25$), with throttle and brake mutually exclusive. No controller threshold is configurable.
+
+The PID gains and lookahead were tuned before this comparison on 20 of the 44 evaluation routes (14842, 17563, 1773, 1790, 1825, 1852, 1956, 2050, 2144, 2204, 23695, 2416, 2513, 2534, 2664, 2709, 3364, 3436, 3561, 3936), using \texttt{model\_v4} (checkpoint-20050). Section 4.3 gives the two main contrasts on the 24 routes not used for tuning. The controller and the model therefore act together, and standstill is a property of the pair. Section 4.4 separates their contributions in closed loop with a run without the gate.
+
+\subsection*{S4.1 Evaluation Protocol and Record of Pre-Specification}
+
+Routes. We use 44 Bench2Drive routes, one per scenario type. With a 10B-parameter policy one route takes about 22 minutes on an RTX 4090, which is why the full 220-route suite was not run for every model. Because of this subset and the custom controller, the Driving Scores reported here are not comparable with published 220-route Bench2Drive results.
+
+Simulator settings. CARLA 0.9.15 (evaluation), synchronous mode at 20 Hz, client timeout 180 s. The launcher sets rendering quality Low on every route outside Town02 and Town03; all 44 routes lie in other towns, so every model ran at Low.
+
+Termination rule and censoring. The harness ends a route after 4,000 ticks (200 s) or after 1,200 consecutive ticks (60 s) with ego speed below 0.1 m/s. Both are logged as \texttt{Failed \mbox{-} TickRuntime}. The standstill fraction is therefore censored: a model that stops for good accrues at most 60 s of final standstill. The unadapted policy was evaluated under the same rule (\texttt{Base\mbox{-}Rerun}), and every comparison with it uses that run.
+
+Non-determinism. The model server does not seed its noise draws, so two runs of the same checkpoint differ from the first step. Per-route comparisons and small strata are therefore descriptive only, and the route-level tests treat each route's run as one draw. Between the two passes of each 6,400-sample checkpoint the standard deviation of the per-route difference was 24.73 pp (\texttt{Golden\mbox{-}6400}) and 18.29 pp (\texttt{Flooded\mbox{-}6400}) for standstill time, 23.36 and 22.43 points for Driving Score, and 1.42 pp and 13.92 pp for the share of near-stationary plans; the intraclass correlations were 0.67 and 0.84, 0.70 and 0.68, and 0.68 and 0.80 (ANALYSIS\_ADDENDUM \S{}34, post hoc).
+
+Collisions. The leaderboard merges repeated contacts with the same actor (within 5 s or 5 m) before logging, so logged collisions are not per-tick counts. We additionally merge, within each route, entries with the same actor identifier and report these as collision events next to the logged counts.
+
+Rerun rule and deviations. A route that ended without a score was launched again, up to three launches; no route was relaunched once it had a score, and no route was scored twice. Four routes were scored at their second launch: one of \texttt{Flooded\mbox{-}6400} in the first pass, one of \texttt{Golden\mbox{-}6400} in the second pass, and one in each run without the gate. A route counted only if the full-loading server, with a clean loading report, served it from start to end.
+
+Record of pre-specification. The rules referred to in this paper are files in the project repository, and their times are commit times in that repository; they were not time-stamped by a third party, and the repository is released with the paper. All times are local (UTC+7). (i) The tests of the first pass (F1, F2), the repeat rule for the second pass (R1 to R3) and the reading of the run without the gate (ANALYSIS\_ADDENDUM \S{}25, with \S{}9 and \S{}4c) were committed on 17 November 2026 at 22:17, before the evaluation queue started at 23:29. The checkpoints, the routes and the measures had been used in preliminary evaluations before that, so these are pre-specified tests on new runs, not a registration prior to all data, and the route set was not held out. (ii) The rule of the same-input replay (\S{}21, \S{}24) was committed before any inference of the replay. The readings of the decoupling checkpoint (\S{}6, \S{}15) were fixed before that checkpoint had run any route. (iii) The tests of the 1,600-sample pair (N1 to N3; \S{}31) were committed on 23 November at 22:29, after \texttt{Golden\mbox{-}1600} had finished and while \texttt{Flooded\mbox{-}1600} was running, before any value of either run was computed. (iv) The rules of the history-swap test (\S{}11-B, \S{}32) were fixed before any run with a replaced history existed and were not changed afterwards; a preliminary evaluation with this test preceded the runs of Section 4.8. (v) Post hoc analyses, each written down before its values were computed: comparison with the unadapted policy (\S{}26, 19 November), blocked-time diagnosis (\S{}28, 22 November), driving efficiency (\S{}29, \S{}30, 23 November), comparison rate of the position match and Success Rate (\S{}33, 24 November), route subsets and pass-to-pass variation (\S{}34, 24 November). Interim looks at incomplete or single runs (decoupling checkpoint, second pass, runs without the gate) are recorded in the addendum; no decision rule was changed after them.
+
+Dates of the runs. First pass of \texttt{Golden\mbox{-}6400} and \texttt{Flooded\mbox{-}6400}: 17 to 19 November 2026. Decoupling checkpoint: 19 and 20 November. Second pass of both checkpoints: 20 and 21 November. Runs without the standstill gate: 21 to 23 November. \texttt{Golden\mbox{-}1600}: 23 November. \texttt{Flooded\mbox{-}1600}: 23 and 24 November. History-swap test: 24 November. \texttt{Base\mbox{-}Rerun}: 15 and 16 November.
+
+Statistics. Route-level differences are paired over the 44 routes. Tests are two-sided Wilcoxon signed-rank tests (\texttt{scipy.stats.wilcoxon} defaults: zero differences dropped, exact p-value when there are no zeros and n \ensuremath{\leq} 50, normal approximation otherwise). Intervals are two-sided 95 \% BCa bootstrap intervals (20,000 resamples, seed 0); the result files also hold the statistic $W$, the number of zero differences and the matched-pairs rank-biserial correlation. Absolute differences in percentages are given in percentage points (pp). Holm adjustment is made over the two tests named with each rule (F1 and F2; R2 and R3; N2 and N3). All other p-values are unadjusted. Each condition is one trained checkpoint (seed 42), so every test compares two specific checkpoints across routes and says nothing about variation between training runs.
+
+\end{document}

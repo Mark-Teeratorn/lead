@@ -1,0 +1,181 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{ref26}
+\citation{ref1}
+\citation{ref2,ref19}
+\citation{ref8}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{ref12}
+\citation{ref13}
+\citation{ref25,ref28}
+\citation{ref12,ref27,ref28}
+\citation{ref44,ref45}
+\citation{ref38}
+\citation{ref33,ref39}
+\citation{ref34}
+\citation{ref3}
+\citation{ref12}
+\citation{ref15}
+\citation{ref21}
+\citation{ref22}
+\citation{ref4}
+\citation{ref5}
+\citation{ref23}
+\citation{ref6}
+\citation{ref7}
+\citation{ref24}
+\citation{ref2}
+\citation{ref19}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}{section.2}\protected@file@percent }
+\citation{ref29}
+\citation{ref30}
+\citation{ref26}
+\citation{ref8}
+\citation{ref31,ref32}
+\citation{ref12}
+\citation{ref13}
+\citation{ref25}
+\citation{ref28}
+\citation{ref27}
+\citation{ref11}
+\citation{ref17,ref18}
+\citation{ref40}
+\citation{ref44}
+\citation{ref45}
+\citation{ref49,ref42}
+\citation{ref43}
+\citation{ref40}
+\citation{ref41}
+\citation{ref36}
+\citation{ref35}
+\citation{ref46}
+\citation{ref38}
+\citation{ref39}
+\citation{ref37}
+\citation{ref33}
+\citation{ref34}
+\citation{ref48}
+\citation{ref16}
+\citation{ref17,ref18}
+\citation{ref9}
+\citation{ref47}
+\citation{ref3}
+\citation{ref10}
+\citation{ref19}
+\citation{ref2,ref19}
+\citation{ref19}
+\citation{ref2,ref19}
+\citation{ref2,ref19}
+\citation{ref2,ref19}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Methodology}{5}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Problem Formulation and Dual-System Architecture}{5}{subsection.3.1}\protected@file@percent }
+\citation{ref8}
+\citation{ref20}
+\citation{ref2}
+\citation{ref8}
+\citation{ref10}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Why Data Composition Could Change Low-Speed Plans: A Sampling Conjecture}{6}{subsection.3.2}\protected@file@percent }
+\citation{ref2,ref20}
+\citation{ref20}
+\citation{ref14}
+\citation{ref15}
+\citation{ref15}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Fine-Tuning Datasets}{7}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Fine-Tuning, Inference and Controller}{7}{subsection.3.4}\protected@file@percent }
+\citation{ref40}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Composition of the fine-tuning datasets (targets equal realised values for the Matrix sets). The low-speed counts of the decoupling set are taken from its published annotations. Pool v4 is \texttt  {lead\_multirig\_pai\_v4}; dataset names are the last part of the Hugging Face names in Section 6.}}{8}{table.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Results}{9}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Evaluation Protocol and Disclosures}{9}{subsection.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Inference and control pipeline in closed loop: camera images, ego history and navigation command; frozen VLM backbone; fine-tuned flow-matching action expert; 64-waypoint trajectory with extent L; target speed and standstill gate; PID controller; CARLA vehicle, with ego-state feedback.}}{10}{figure.1}\protected@file@percent }
+\citation{ref3}
+\citation{ref3}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Same-Input Replay}{11}{subsection.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces The measures used in this paper: what each counts, at which level, and where it is defined.}}{12}{table.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}The Matched Pair at 6,400 Samples}{13}{subsection.4.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces \texttt  {Golden\mbox  {-}6400} / \texttt  {Flooded\mbox  {-}6400} on 44 routes with the default controller, first pass. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. F1 and F2 were specified before the runs; all other rows are descriptive. The three plan rows at 0.5 m/s or less use the 35 routes with at least 20 such steps in both arms.}}{14}{table.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Empirical cumulative distribution of the predicted trajectory extent L over all logged steps of the 44 routes: Golden-6400 and Flooded-6400 (both passes pooled), Decoupling-6400 and the unadapted policy (Base-Rerun; one pass each). Logarithmic axis; values below 0.1 m are shown at 0.1 m. Dotted lines mark 0.64, 1.5 and 2.0 m.}}{14}{figure.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Share of steps with a near-stationary plan (L \ensuremath  {<} 1.5 m) on each of the 44 routes for Golden-6400 and Flooded-6400 as the mean of the two passes, sorted by the paired difference. Dashed lines are the 44-route means. An asterisk marks the 7 routes touched by training samples and a dagger the 20 controller-tuning routes.}}{16}{figure.3}\protected@file@percent }
+\citation{ref3}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces \texttt  {Golden\mbox  {-}6400} / \texttt  {Flooded\mbox  {-}6400} on 44 routes with the default controller: first pass, second pass and the per-route mean of the two passes. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. R1 to R3 are the measures of the repeat rule, which is decided on the second pass alone; all other entries are descriptive.}}{17}{table.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}The Matched Pair without the Standstill Gate}{18}{subsection.4.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces The 6,400-sample checkpoints on 44 routes without the standstill gate (one pass each). Columns 2 and 3: gate-off run / per-route mean of the two default passes of the same checkpoint. Column 4: \texttt  {Golden\mbox  {-}6400} / \texttt  {Flooded\mbox  {-}6400}, both without the gate. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. Exploratory.}}{19}{table.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Mean standstill time of Golden-6400 and Flooded-6400 on the 44 routes under the default controller (mean of the two passes) and the gate-off controller (one pass). The hatched part of each bar is blocked time (at least 5 s commanded to accelerate without moving); the solid part is all other standstill. Error bars are 95 \% percentile bootstrap intervals over routes for the whole bar.}}{20}{figure.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}The Decoupling Checkpoint}{21}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}The 1,600-Sample Pair}{21}{subsection.4.6}\protected@file@percent }
+\citation{ref12}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}The Fine-Tuned Checkpoints against the Unadapted Policy (Post Hoc)}{22}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Motion-History Swap Test (Exploratory)}{23}{subsection.4.8}\protected@file@percent }
+\citation{ref12}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion and Limitations}{24}{section.5}\protected@file@percent }
+\citation{ref48}
+\citation{ref27}
+\citation{ref12}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion, Availability and Disclosures}{26}{section.6}\protected@file@percent }
+\citation{ref20}
+\bibcite{ref1}{{1}{}{{}}{{}}}
+\bibcite{ref2}{{2}{}{{}}{{}}}
+\bibcite{ref3}{{3}{}{{}}{{}}}
+\bibcite{ref4}{{4}{}{{}}{{}}}
+\bibcite{ref5}{{5}{}{{}}{{}}}
+\bibcite{ref6}{{6}{}{{}}{{}}}
+\bibcite{ref7}{{7}{}{{}}{{}}}
+\bibcite{ref8}{{8}{}{{}}{{}}}
+\bibcite{ref9}{{9}{}{{}}{{}}}
+\bibcite{ref10}{{10}{}{{}}{{}}}
+\bibcite{ref11}{{11}{}{{}}{{}}}
+\bibcite{ref12}{{12}{}{{}}{{}}}
+\bibcite{ref13}{{13}{}{{}}{{}}}
+\bibcite{ref14}{{14}{}{{}}{{}}}
+\bibcite{ref15}{{15}{}{{}}{{}}}
+\bibcite{ref16}{{16}{}{{}}{{}}}
+\bibcite{ref17}{{17}{}{{}}{{}}}
+\bibcite{ref18}{{18}{}{{}}{{}}}
+\bibcite{ref19}{{19}{}{{}}{{}}}
+\bibcite{ref20}{{20}{}{{}}{{}}}
+\bibcite{ref21}{{21}{}{{}}{{}}}
+\bibcite{ref22}{{22}{}{{}}{{}}}
+\bibcite{ref23}{{23}{}{{}}{{}}}
+\bibcite{ref24}{{24}{}{{}}{{}}}
+\bibcite{ref25}{{25}{}{{}}{{}}}
+\bibcite{ref26}{{26}{}{{}}{{}}}
+\bibcite{ref27}{{27}{}{{}}{{}}}
+\bibcite{ref28}{{28}{}{{}}{{}}}
+\bibcite{ref29}{{29}{}{{}}{{}}}
+\bibcite{ref30}{{30}{}{{}}{{}}}
+\bibcite{ref31}{{31}{}{{}}{{}}}
+\bibcite{ref32}{{32}{}{{}}{{}}}
+\bibcite{ref33}{{33}{}{{}}{{}}}
+\bibcite{ref34}{{34}{}{{}}{{}}}
+\bibcite{ref35}{{35}{}{{}}{{}}}
+\bibcite{ref36}{{36}{}{{}}{{}}}
+\bibcite{ref37}{{37}{}{{}}{{}}}
+\bibcite{ref38}{{38}{}{{}}{{}}}
+\bibcite{ref39}{{39}{}{{}}{{}}}
+\bibcite{ref40}{{40}{}{{}}{{}}}
+\bibcite{ref41}{{41}{}{{}}{{}}}
+\bibcite{ref42}{{42}{}{{}}{{}}}
+\bibcite{ref43}{{43}{}{{}}{{}}}
+\bibcite{ref44}{{44}{}{{}}{{}}}
+\bibcite{ref45}{{45}{}{{}}{{}}}
+\bibcite{ref46}{{46}{}{{}}{{}}}
+\bibcite{ref47}{{47}{}{{}}{{}}}
+\bibcite{ref48}{{48}{}{{}}{{}}}
+\bibcite{ref49}{{49}{}{{}}{{}}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\gdef \@abspage@last{31}

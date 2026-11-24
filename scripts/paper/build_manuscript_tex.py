@@ -100,11 +100,19 @@ def table_tex(caption, rows, n_refs, stats):
     ncol = max(len(r) for r in rows)
     rows = [r + [""] * (ncol - len(r)) for r in rows]
     width = [max(len(r[c]) for r in rows) for c in range(ncol)]
+    data_width = [max((len(r[c]) for r in rows[1:]), default=8) for c in range(ncol)]
     body = []
     for k, r in enumerate(rows):
         cells = [inline(c, n_refs, stats) for c in r]
         if k == 0:
-            cells = ["\\textbf{" + c + "}" if c else "" for c in cells]
+            if ncol > 6:
+                cells = [
+                    f"\\parbox[b]{{{max(data_width[idx], 8) * 0.55:.1f}em}}{{\\raggedright\\textbf{{{cell}}}}}"
+                    if (idx > 0 and len(r[idx]) > data_width[idx] + 2) else ("\\textbf{" + cell + "}" if cell else "")
+                    for idx, cell in enumerate(cells)
+                ]
+            else:
+                cells = ["\\textbf{" + c + "}" if c else "" for c in cells]
         body.append(" & ".join(cells) + " \\\\")
         if k == 0:
             body.append("\\midrule")
@@ -117,8 +125,7 @@ def table_tex(caption, rows, n_refs, stats):
         return "\n".join(["\\begin{table}[htbp]", "\\small", cap, *inner, "\\end{table}"])
     inner = ["\\resizebox{\\linewidth}{!}{%", "\\begin{tabular}{" + "l" * ncol + "}", "\\toprule", *body, "\\bottomrule",
              "\\end{tabular}}"]
-    env = "sidewaystable" if ncol >= 12 else "table"
-    return "\n".join(["\\begin{" + env + "}[htbp]", "\\centering", cap, *inner, "\\end{" + env + "}"])
+    return "\n".join(["\\begin{table}[htbp]", "\\centering", cap, *inner, "\\end{table}"])
 
 
 PREAMBLE = r"""\documentclass[11pt,a4paper]{article}
