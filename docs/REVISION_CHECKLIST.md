@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 24 Nov 2026, 15:32. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 24 Nov 2026, 15:36. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -41,7 +41,7 @@ Updated 24 Nov 2026, 15:32. `[x]` = done and committed. `[ ]` = not done; the no
 
 ## 4. Manuscript text
 
-Restructured on 23 and 24 November: the main text reports the fully loaded runs only (Sections 4.2 to 4.8; 4.6 is the 1,600-sample pair, 4.8 the history-swap test). The earlier runs with partly loaded models, with their registered tests, are in Supplementary Section S6 and are disclosed in Sections 3.4, 4.1 and 5. Section numbers in the items below that were written before that date are the old ones.
+Restructured on 23 and 24 November: the main text reports the fully loaded runs only (Sections 4.2 to 4.8; 4.6 is the 1,600-sample pair, 4.8 the history-swap test). The earlier runs with partly loaded models are not part of the paper (author's instruction of 24 November); their account is archived in `docs/archive/` and the runs stay in the repository. Section numbers in the items below that were written before that date are the old ones.
 
 - [x] New title in the manuscript and the supplement (20 November: main title "The Inertia Problem in a Fine-Tuned Vision-Language-Action Driving Policy", subtitle unchanged; body text on the inertia mechanism to be aligned in the rewrite)
 - [x] Section 3.4: loading fault and corrected server; Section 4.1: the two evaluation series
@@ -67,6 +67,8 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 - [ ] Suggested review items still to check against the final text: S1, S3 to S13, S15, S18, S21 (S9 and S12 need the author; S19 is optional)
 
 - [x] 24 November, at the author's request: the main text reports the runs with full loading only. Section 4.8 (first series) and Table 6 removed; H1 to H3 replaced in the introduction by the four tests of these runs; partly loaded values removed from Table 3 and Section 4.2; historical checkpoint removed from Table 1. Disclosure kept: paragraph "Earlier runs" in Sections 4.1 and 5, full account with the registered tests in Supplementary Section S6 (new Table S6). Route-subset sensitivity and pass-to-pass variation recomputed on the fully loaded runs (addendum 34). Section 4.8 is now the history-swap test
+
+- [x] 24 November, author's instruction: the earlier runs are not mentioned in the paper. The paragraphs "Earlier runs" and Supplementary Sections S4.2 to S4.11, S5 and S6 are removed; the Supplement now holds S3.1 to S3.4 and S4.1 (6 pages). One clause in Section 4.1 and one limitation say that the tests were fixed after preliminary evaluations of the same checkpoints and routes. Removed text archived in `docs/archive/`
 
 ## 5. Rest of the pipeline
 

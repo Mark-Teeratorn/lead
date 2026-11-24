@@ -1,6 +1,6 @@
 # Project summary
 
-Written 21 November 2026, 12:09; results updated 24 Nov 2026, 15:32. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
+Written 21 November 2026, 12:09; results updated 24 Nov 2026, 15:36. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
 
 ## What the project is
 
@@ -31,7 +31,7 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 4. **Corrected server.** A wrapper that loads all tensors and refuses to start otherwise (`scripts/evaluation/flashdrive_server_fullpatch.py`). The stock server and the default agent are unchanged.
 5. **Second evaluation series (running).** All closed-loop runs are being repeated with the checkpoints loaded in full. The two series are never pooled.
 
-6. **Main text on the corrected runs only (24 Nov, author's decision).** The first series is no longer used for any statement in the main text. It is disclosed in Sections 3.4, 4.1 and 5 and reported in full, with the registered tests H1 to H3, in Supplementary Section S6.
+6. **Main text on the corrected runs only (24 Nov, author's decision).** The first series is no longer used for any statement in the main text. By the author's instruction it is not mentioned in the paper; the paper says only that the tests were fixed after preliminary evaluations of the same checkpoints and routes. The old account is archived in `docs/archive/`.
 
 ## Results so far, checkpoints loaded in full
 
