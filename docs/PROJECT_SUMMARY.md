@@ -1,6 +1,6 @@
 # Project summary
 
-Written 21 November 2026, 12:09; results updated 24 Nov 2026, 15:36. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
+Written 21 November 2026, 12:09; results updated 24 Nov 2026, 22:40. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
 
 ## What the project is
 
@@ -63,6 +63,9 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 
 - **1,600-sample pair (added 24 Nov).** The difference in near-stationary plans is present by a small margin (4.92 % against 8.34 %; −3.42 pp, interval [−7.74, −0.11], p 0.047) and is smaller than at 6,400 samples. Standstill time is inconclusive (−8.49 pp, interval [−17.19, 0.46]) and Driving Efficiency does not differ detectably (97.83 against 102.30). So at 1,600 samples the difference in plans is not shown to reach the motion of the vehicle.
 
+- **History-swap test (added 24 Nov, exploratory).** At low speed the ego history of Flooded-6400 was replaced by one that reports motion at 4 m/s. It then planned to hold its speed more often (84.29 % against 52.29 %; +32.00 pp, interval [22.63, 36.04]) and never planned to brake to rest. So its controls depend on the ego history. The rule fixed in advance ties stay-put plans to an at-rest history only if the hold-speed share falls; it rose, so the paper reports the dependence without claiming the mechanism is demonstrated. Golden-6400 was too rarely at low speed for a reading.
+- **Efficiency wording (24 Nov).** The abstract, discussion and conclusion now say that Golden-6400 was more efficient at a Driving Score that was not detectably different; labelled post hoc.
+
 ## What is still running or open
 
 | Item | Status |
@@ -70,8 +73,8 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 | Second pass of both 6,400 checkpoints; decoupling checkpoint | Done (21 Nov) |
 | Runs without the standstill gate (both 6,400 checkpoints) | Done (23 Nov) |
 | 1,600-sample pair | Done (24 Nov 13:52) |
-| History-swap test on fully loaded checkpoints | Queue not yet prepared; runs after the suite |
-| Rewrite of the manuscript | Restructure done 23 Nov (fully loaded runs are the main Section 4; first series in Supplementary Section S6). 1,600-sample pair written in on 24 Nov (Section 4.6). Open: history-swap test, qualitative figure, re-review |
+| History-swap test on fully loaded checkpoints | Done (24 Nov 22:31) |
+| Rewrite of the manuscript | All results written in (24 Nov): Sections 4.2 to 4.8 report the fully loaded runs only. Open: qualitative figure, re-review, final checks |
 
 Tests for the 1,600-sample pair are fixed in addendum section 31 (near-stationary plans as the primary test, standstill time and Driving Efficiency as secondary tests).
 
