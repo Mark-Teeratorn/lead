@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 24 Nov 2026, 13:58. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 24 Nov 2026, 14:06. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -35,7 +35,7 @@ Updated 24 Nov 2026, 13:58. `[x]` = done and committed. `[ ]` = not done; the no
 - [x] Stage 2, second pass of both checkpoints (ended 21 Nov 22:01): repeat test R1, R2, R3 all replicated; the Driving Score lead of the first pass did not recur (+3.96 [−3.06, 11.67] over both passes)
 - [x] Stage 2, gate-off runs (ended 22 Nov 10:31 and 23 Nov 06:43): without the gate the difference in full stops is no longer established (−4.65 pp [−11.44, 3.20], against −23.54 pp with the gate; interaction +18.89 pp [11.29, 27.16]); the difference in near-stationary plans remains (−13.99 pp [−20.27, −9.52])
 - [x] Stage 2, 1,600-sample pair (ended 24 Nov 13:52; tests of addendum section 31): S1 met narrowly (near-stationary plans 4.92 % against 8.34 %, −3.42 pp [−7.74, −0.11], p 0.047); S2 inconclusive (standstill −8.49 pp [−17.19, 0.46]); S3 not met (Driving Efficiency −4.47 [−16.61, 2.29]); the difference is smaller than at 6,400 on all three
-- [ ] Stage 2, still to run: history-swap runs (queue not yet prepared)
+- [ ] Stage 2, history-swap runs with full loading: rules in addendum 32, queue started 24 Nov 14:00 (8 routes for each of 2 checkpoints)
 - [x] Post hoc, descriptive: blocked-time diagnosis (addendum 28), driving efficiency (29) and Bench2Drive Driving Efficiency (30); each rule committed before computing
 - [ ] Analysis script run on the new results; every number, table and figure updated
 
@@ -51,9 +51,9 @@ Restructured on 23 November: the fully loaded runs are the main Section 4 (4.2 t
 - [x] R3: decoupling set in Table 1, with its low-speed stay-put share; Section 4.5 compares it with the conjecture
 - [x] R4: new Section 4.12 on the same-input replay (as served and loaded in full)
 - [x] Restructure: first series (old 4.2 to 4.11) moved to Supplementary Section S6; new Section 4.7 with Table 6; new Figures 2 to 4 for the fully loaded runs; limitations condensed to four paragraphs; question-led wording in all of Section 4
-- [ ] Still open in the text: result of the history-swap test with full loading; qualitative same-input figure (needs a short GPU run); citation of LOWP (arXiv 2611.10264) after reading it; simulated re-review
+- [ ] Still open in the text: result of the history-swap test with full loading; qualitative same-input figure (needs a short GPU run); simulated re-review; trim of the main text once the journal is known
 - [x] R5: H1 reported as inconclusive (Table 6, Section 4.7, Sections 1 and 6; four-test value 0.097 with Base-Rerun; harness changes named)
-- [x] R6–R8: blocked time (exact tests with non-zero pairs, comparison rate 64 of 71 and collision counts in Supplementary Section S6.7; co-location wording in 4.3, S4.10, S6.10; no "not an additional cost"). Not done for the fully loaded runs: a comparison rate for the position match (stated as a limit in 4.3)
+- [x] R6–R8: blocked time (exact tests with non-zero pairs, comparison rate 64 of 71 and collision counts in Supplementary Section S6.7; co-location wording in 4.3, S4.10, S6.10; no "not an additional cost"). Comparison rate for the fully loaded runs added 24 November (addendum 33: 91 of 119 long stops on routes with a collision record, 76.5 %)
 - [x] R9, R10: history-swap test as inconclusive; outcome cannot separate a history-ignoring from a history-continuing expert; visual route not tested; conjecture as a data-side reading of inertia (4.7, 5, S4.11, S6.11)
 - [x] R11, R12: decoupling overlap (86.3 %) in 3.3, 4.5 and 5; three-of-four-cells wording in 4.5, 5 and 6
 - [ ] Abstract, discussion, conclusion (rewritten 22 November for the second series; the statements on the motion history still rest on the first series and carry placeholders)
@@ -62,6 +62,9 @@ Restructured on 23 November: the fully loaded runs are the main Section 4 (4.2 t
 - [x] Disclosure of the loading fault and of the server cache not cleared between routes (Sections 3.4, 4.1; limitations 12, 13); rendering quality of the data collection (limitation 10)
 - [ ] Word files (main and supplement) and LaTeX rebuilt on 24 November with the 1,600-sample pair; 31 pages (LaTeX file and the author's change to its build script are not committed)
 - [ ] Number check: zero unsupported numbers (24 November: 0 of 1,132 in the main text and 0 of 780 in Supplementary Section S6; to be repeated on the final text)
+
+- [x] Suggested review items written in on 24 November: S2 (abstract as a summary), S14, S16, S17 (query rate), S20 (Success Rate), S22, S23; LOWP cited as reference [48] after reading it
+- [ ] Suggested review items still to check against the final text: S1, S3 to S13, S15, S18, S21 (S9 and S12 need the author; S19 is optional)
 
 ## 5. Rest of the pipeline
 
