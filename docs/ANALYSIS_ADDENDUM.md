@@ -713,3 +713,13 @@ Computed from the stored replays `Golden-6400-Full`, `Flooded-6400-Matched-Full`
 - **Panel B (largest difference):** state 120 (d = 16, the only state with this value; scenario `PedestrianCrossing`, speed 0.03 m/s, instruction "Turn right in 25m"). Stay-put plans of 16: Golden 0, Flooded 16, decoupling 8; median plan length 1.50 m, 0.23 m and 0.64 m.
 - Not chosen by eye, and reported as found: Panel B is a pedestrian-crossing scenario, in which staying put may be the required behaviour. The caption says so. No state had to be skipped.
 - The camera frames and, if drawn, the plan paths are produced after the history-swap queue has ended (one GPU job at a time; no dataset loading while routes run).
+
+## 34. Sensitivity and pass-to-pass variation of the fully loaded 6,400-sample pair, written 24 Nov 2026, 15:27 (UTC+7), before computing
+
+Post hoc, descriptive, no decision rule, no new runs. Reason: at the author's request of 24 November the main text reports the runs with full loading only, and the first series is kept as a disclosure in the Supplement. The main text so far took three items from the first series that have a direct counterpart in the fully loaded runs. None of the values below has been computed or viewed.
+
+**(a) Route subsets.** The contrasts F1 (share of steps with L < 1.5 m) and F2 (standstill time), `Golden-6400` minus `Flooded-6400`, on the first pass, the second pass and the per-route mean of the two passes, (i) on the 37 routes not touched by training samples (Section 2 list of seven routes left out) and (ii) on the 24 routes not used to tune the controller (the route list of analysis Z, manifest key `H.tuning_routes_union`). Paired, BCa interval and Wilcoxon test as in Section 25. Reported as sensitivity rows; the decisions of F1 and F2 are not changed by them.
+
+**(b) Pass-to-pass variation.** For each fully loaded 6,400-sample checkpoint: the standard deviation over the 44 routes of the difference between its two passes, and the intraclass correlation ICC(1,1) of analysis N (`icc_1_1`, unchanged), for standstill time, the share of steps with L < 1.5 m and Driving Score.
+
+Script `scripts/evaluation/fullload_sensitivity.py`, result file `docs/provenance/fullload_sensitivity.json`.
