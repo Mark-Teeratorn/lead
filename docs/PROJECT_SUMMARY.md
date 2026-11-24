@@ -1,6 +1,6 @@
 # Project summary
 
-Written 21 November 2026, 12:09; results updated 24 Nov 2026, 13:58. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
+Written 21 November 2026, 12:09; results updated 24 Nov 2026, 15:32. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
 
 ## What the project is
 
@@ -30,6 +30,8 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 3. **Loading fault found (17 Nov).** The model server had loaded every fine-tuned checkpoint only in part: 180 of 396 expert-layer tensors stayed at their base values. The whole first series therefore describes partly loaded models.
 4. **Corrected server.** A wrapper that loads all tensors and refuses to start otherwise (`scripts/evaluation/flashdrive_server_fullpatch.py`). The stock server and the default agent are unchanged.
 5. **Second evaluation series (running).** All closed-loop runs are being repeated with the checkpoints loaded in full. The two series are never pooled.
+
+6. **Main text on the corrected runs only (24 Nov, author's decision).** The first series is no longer used for any statement in the main text. It is disclosed in Sections 3.4, 4.1 and 5 and reported in full, with the registered tests H1 to H3, in Supplementary Section S6.
 
 ## Results so far, checkpoints loaded in full
 
