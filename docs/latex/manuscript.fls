@@ -814,6 +814,11 @@ INPUT ./figures//figure_4.png
 INPUT figures//figure_4.png
 INPUT ./figures//figure_4.png
 INPUT ./figures//figure_4.png
+INPUT ./figures//figure_5.png
+INPUT ./figures//figure_5.png
+INPUT figures//figure_5.png
+INPUT ./figures//figure_5.png
+INPUT ./figures//figure_5.png
 INPUT manuscript.aux
 INPUT ./manuscript.out
 INPUT ./manuscript.out

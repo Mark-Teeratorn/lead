@@ -126,4 +126,23 @@ Dates of the runs. First pass of \texttt{Golden\mbox{-}6400} and \texttt{Flooded
 
 Statistics. Route-level differences are paired over the 44 routes. Tests are two-sided Wilcoxon signed-rank tests (\texttt{scipy.stats.wilcoxon} defaults: zero differences dropped, exact p-value when there are no zeros and n \ensuremath{\leq} 50, normal approximation otherwise). Intervals are two-sided 95 \% BCa bootstrap intervals (20,000 resamples, seed 0); the result files also hold the statistic $W$, the number of zero differences and the matched-pairs rank-biserial correlation. Absolute differences in percentages are given in percentage points (pp). Holm adjustment is made over the two tests named with each rule (F1 and F2; R2 and R3; N2 and N3). All other p-values are unadjusted. Each condition is one trained checkpoint (seed 42), so every test compares two specific checkpoints across routes and says nothing about variation between training runs.
 
+\subsection*{S4.2 Collision Events on the Routes with Blocked Time}
+
+Post hoc and descriptive (ANALYSIS\_ADDENDUM \S{}35, written before the values were computed). For each pass of the 6,400-sample pair, the routes with blocked time are those on which \texttt{Golden\mbox{-}6400} had blocked time above zero in that pass; \texttt{Flooded\mbox{-}6400} had none on any route. Table S2 gives the collision events of both checkpoints on these routes and on the remaining routes. On the routes with blocked time \texttt{Golden\mbox{-}6400} had more collision events than \texttt{Flooded\mbox{-}6400} in both passes. On the remaining routes it had fewer in the first pass and more in the second. The table does not give the order of contact and stop, and no statement on harm follows from it (Section 4.3).
+
+\begin{table}[htbp]
+\small
+\caption{Collision events of \texttt{Golden\mbox{-}6400} and \texttt{Flooded\mbox{-}6400} on the routes with and without blocked time of \texttt{Golden\mbox{-}6400}, per pass. Events are leaderboard collision records merged by actor. n is the number of routes; "Events" and "Per route" are collision events and events per route, \texttt{Golden\mbox{-}6400} / \texttt{Flooded\mbox{-}6400}. The last column is the paired difference per route (\texttt{Golden\mbox{-}6400} minus \texttt{Flooded\mbox{-}6400}) with its 95 \% BCa interval.}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xlllll}
+\toprule
+\textbf{Pass} & \textbf{Routes} & \textbf{n} & \textbf{Events} & \textbf{Per route} & \textbf{Difference} \\
+\midrule
+First & With blocked time & 10 & 14 / 8 & 1.40 / 0.80 & +0.60 [0.20, 0.80] \\
+First & Remaining & 34 & 14 / 20 & 0.41 / 0.59 & \ensuremath{-}0.18 [\ensuremath{-}0.59, 0.09] \\
+Second & With blocked time & 11 & 15 / 5 & 1.36 / 0.45 & +0.91 [0.45, 1.45] \\
+Second & Remaining & 33 & 21 / 10 & 0.64 / 0.30 & +0.33 [0.06, 0.70] \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \end{document}
