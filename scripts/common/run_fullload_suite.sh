@@ -32,6 +32,7 @@ GOLDEN_1600_DIR="/home/aimslab/checkpoints/action_experts/Alpamayo-1.5-10B-Matri
 FLOODED_1600_DIR="/home/aimslab/checkpoints/action_experts/Alpamayo-1.5-10B-Matrix-Flooded-1600-A15"
 AGENT_DEFAULT="src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent.py"
 AGENT_NOGATE="src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent_nogate.py"
+AGENT_HISTSWAP="src/lead/evaluation/agents/alpamayo/alpamayo_bridge_agent_histswap.py"
 
 CANONICAL_44="2534 1852 2204 2513 1825 3561 3086 17752 2201 3540 1790 3436 2286 23687 23901 23695 2790 2283 23771 2084 28087 2115 2082 2127 1773 2664 3248 1711 1956 14194 17563 3936 28099 2050 2709 26458 2390 2416 14842 3144 3464 2144 2164 3364"
 REPLICATE_8="2534 3561 1790 23695 28087 2664 17563 26458"   # every 5th canonical route from index 0
@@ -206,6 +207,39 @@ run_job model_matrix_flooded_6400_nogate_full "$FLOODED_DIR"      "$AGENT_NOGATE
 # 1,600-sample pair
 run_job model_matrix_golden_1600_full         "$GOLDEN_1600_DIR"  "$AGENT_DEFAULT" "$CANONICAL_44" "$G16"
 run_job model_matrix_flooded_1600_full        "$FLOODED_1600_DIR" "$AGENT_DEFAULT" "$CANONICAL_44" "$F16"
+
+# motion-history swap test (docs/ANALYSIS_ADDENDUM.md sections 11, 11-B and 32), eight replicate routes.
+# The first route runs alone as the check that the server used the replaced history; it is that route's run.
+HS_F="model_matrix_flooded_6400_histswap_full"; HS_G="model_matrix_golden_6400_histswap_full"
+run_job "$HS_F" "$FLOODED_DIR" "$AGENT_HISTSWAP" "2534" "$F"
+if { [ -z "$SUITE_ONLY" ] || echo ",$SUITE_ONLY," | grep -q ",$HS_F,"; } && [ -z "$ROUTES_OVERRIDE" ]; then
+    check=$(python3 - "outputs/local_evaluation/${HS_F}_2534/predicted_trajectories.jsonl" <<'PY'
+import json, math, statistics, sys
+try:
+    rows = [json.loads(l) for l in open(sys.argv[1]) if l.strip()]
+    kinds = [r.get('hist_kind') for r in rows]
+    ok = len(rows) > 100 and all(k in ('true', 'moving', 'stationary') for k in kinds) \
+        and all(r.get('controller_variant') == 'histswap' for r in rows) and sum(k != 'true' for k in kinds) >= 10
+    # The plan is integrated from the speed the model reads from the history it was given, so the distance to the
+    # first waypoint shows whether the server used the replaced history: about 0.40 m for 4.0 m/s, about 0 at rest.
+    med, checked = {}, 0
+    for kind, lo, hi in (('moving', 0.30, 0.50), ('stationary', 0.0, 0.05)):
+        d = [math.hypot(r['pred_waypoints'][0][0], r['pred_waypoints'][0][1]) for r in rows if r.get('hist_kind') == kind]
+        if len(d) >= 10:
+            med[kind] = round(statistics.median(d), 3)
+            checked += 1
+            ok = ok and lo <= med[kind] <= hi
+    ok = ok and checked >= 1
+    print('ok' if ok else 'bad', len(rows), {k: kinds.count(k) for k in set(kinds)}, 'median first-waypoint distance (m):', med)
+except Exception as e:
+    print('bad', repr(e))
+PY
+)
+    audit "2534 | agent check | $check"
+    case "$check" in ok*) ;; *) audit "- | fullload suite abort | history-swap log check FAILED"; pkill -9 -f "CarlaUE4" 2>/dev/null || true; exit 1 ;; esac
+fi
+run_job "$HS_F" "$FLOODED_DIR" "$AGENT_HISTSWAP" "$REPLICATE_8" "$F"
+run_job "$HS_G" "$GOLDEN_DIR"  "$AGENT_HISTSWAP" "$REPLICATE_8" "$G"
 
 pkill -9 -f "CarlaUE4" 2>/dev/null || true
 audit "- | fullload suite end | all jobs processed"
