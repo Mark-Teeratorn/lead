@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 25 Nov 2026, 00:45. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 24 Nov 2026, 23:32. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -53,9 +53,9 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 - [x] Restructure: first series (old 4.2 to 4.11) moved to Supplementary Section S6; new Section 4.7 with Table 6; new Figures 2 to 4 for the fully loaded runs; limitations condensed to four paragraphs; question-led wording in all of Section 4
 - [x] History-swap result written in (24 November): new Section 4.8 and the sentences in the abstract, introduction, discussion and conclusion
 - [x] Driving efficiency stated in the abstract, discussion and conclusion (24 November; post hoc result of Section 4.3, with the 1,600-sample test that was not met)
-- [x] Qualitative same-input figure: Figure 2 in Section 4.2 (24 November, 23:20); former Figures 2 to 4 are Figures 3 to 5
+- [x] Qualitative same-input figure: Figure 2 in Section 4.2 (24 November, 23:08); former Figures 2 to 4 are Figures 3 to 5
 - [x] Re-review (Stage 3', 24 November, simplified: the checker of the review tool could not be run): Major Revision. Required items: 6 of 12 fully addressed, 6 partly (one with a required gap, the collision table). Suggested items: 20 of 22 addressed in full or in part. New points: wording and disclosure only; no numerical inconsistency. Record in `outputs/pipeline_20261124_rereview/`
-- [x] Re-revision (Stage 4', 25 November): wording fixes in the abstract, introduction, Sections 4.2 to 4.8, discussion and conclusion; Supplementary Table S2 (collision events on the routes with blocked time, addendum 35)
+- [x] Re-revision (Stage 4', 24 November): wording fixes in the abstract, introduction, Sections 4.2 to 4.8, discussion and conclusion; Supplementary Table S2 (collision events on the routes with blocked time, addendum 35)
 - [ ] Decision of the author: whether the paper discloses the earlier evaluation series in three sentences (all four seats of the re-review flagged its absence; the cited rules 25 and 32 say it is reported)
 - [ ] Not done from the re-review (minor or needing the author): table for Sections 4.5 to 4.7; naming (S5); references (S18); frame spacing at each query; trim of the main text once the journal is known
 - [x] R5: H1 reported as inconclusive (Table 6, Section 4.7, Sections 1 and 6; four-test value 0.097 with Base-Rerun; harness changes named)
@@ -66,8 +66,8 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 - [x] Section 4.13 extended to both passes (Table 6, repeat rule); new Sections 4.14 (decoupling checkpoint loaded in full) and 4.15 (against the unadapted policy, post hoc)
 - [x] New Section 4.16 with Table 7 (run without the gate, loaded in full); gate statements in the abstract, Sections 1, 5 and 6 now rest on the second series
 - [x] Disclosure of the loading fault and of the server cache not cleared between routes (Sections 3.4, 4.1; limitations 12, 13); rendering quality of the data collection (limitation 10)
-- [ ] Word files (main and supplement) and LaTeX rebuilt on 25 November, 00:40; main text 33 pages, Supplement 6 pages (LaTeX files and the author's change to the build script are not committed)
-- [ ] Number check: zero unsupported numbers (25 November, 00:40: 0 of 1,153 in the main text and 0 of 90 in the Supplement; to be repeated on the final text)
+- [ ] Word files (main and supplement) and LaTeX rebuilt on 24 November, 23:30; main text 33 pages, Supplement 6 pages (LaTeX files and the author's change to the build script are not committed)
+- [ ] Number check: zero unsupported numbers (24 November, 23:30: 0 of 1,153 in the main text and 0 of 90 in the Supplement; to be repeated on the final text)
 
 - [x] Suggested review items written in on 24 November: S2 (abstract as a summary), S14, S16, S17 (query rate), S20 (Success Rate), S22, S23; LOWP cited as reference [48] after reading it
 - [x] Suggested review items checked against the restructured text (24 November): S1, S2, S5, S7, S11, S13, S14, S16 to S18, S20 to S23 written in; S3, S6, S8, S10, S15 no longer apply (they concern the removed material); S4 covered by the record in Supplementary Section S4.1; S19 optional and not done
