@@ -1,0 +1,563 @@
+{
+ "label": "ANALYSIS_ADDENDUM section 34; post hoc, descriptive",
+ "tags": {
+  "G1": "model_matrix_golden_6400_full",
+  "F1": "model_matrix_flooded_6400_full",
+  "G2": "model_matrix_golden_6400_run2_full",
+  "F2": "model_matrix_flooded_6400_run2_full"
+ },
+ "a_route_subsets": {
+  "44 routes": {
+   "n_routes": 44,
+   "routes": [
+    "2534",
+    "1852",
+    "2204",
+    "2513",
+    "1825",
+    "3561",
+    "3086",
+    "17752",
+    "2201",
+    "3540",
+    "1790",
+    "3436",
+    "2286",
+    "23687",
+    "23901",
+    "23695",
+    "2790",
+    "2283",
+    "23771",
+    "2084",
+    "28087",
+    "2115",
+    "2082",
+    "2127",
+    "1773",
+    "2664",
+    "3248",
+    "1711",
+    "1956",
+    "14194",
+    "17563",
+    "3936",
+    "28099",
+    "2050",
+    "2709",
+    "26458",
+    "2390",
+    "2416",
+    "14842",
+    "3144",
+    "3464",
+    "2144",
+    "2164",
+    "3364"
+   ],
+   "F1 share of steps with L < 1.5 m": {
+    "first pass": {
+     "n": 44,
+     "mean_first": 1.3131584514527457,
+     "mean_second": 26.803524723090128,
+     "mean_diff": -25.490366271637377,
+     "n_first_greater": 0,
+     "n_first_less": 44,
+     "n_tie": 0,
+     "bca95": [
+      -31.68609551038727,
+      -19.629244407217882
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1368683772161603e-13,
+      "p_approx": 7.615942892424528e-09,
+      "p_exact": 1.1368683772161603e-13,
+      "rank_biserial": -1.0
+     }
+    },
+    "second pass": {
+     "n": 44,
+     "mean_first": 1.118179763632056,
+     "mean_second": 29.283122928651768,
+     "mean_diff": -28.16494316501971,
+     "n_first_greater": 0,
+     "n_first_less": 44,
+     "n_tie": 0,
+     "bca95": [
+      -34.8103390799774,
+      -21.74823258423313
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1368683772161603e-13,
+      "p_approx": 7.615942892424528e-09,
+      "p_exact": 1.1368683772161603e-13,
+      "rank_biserial": -1.0
+     }
+    },
+    "mean of the two passes": {
+     "n": 44,
+     "mean_first": 1.2156691075424007,
+     "mean_second": 28.04332382587095,
+     "mean_diff": -26.82765471832855,
+     "n_first_greater": 0,
+     "n_first_less": 44,
+     "n_tie": 0,
+     "bca95": [
+      -32.83272348050415,
+      -20.929483606745876
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1368683772161603e-13,
+      "p_approx": 7.615942892424528e-09,
+      "p_exact": 1.1368683772161603e-13,
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "F2 standstill time": {
+    "first pass": {
+     "n": 44,
+     "mean_first": 22.969368376601327,
+     "mean_second": 46.6576858781304,
+     "mean_diff": -23.688317501529067,
+     "n_first_greater": 8,
+     "n_first_less": 36,
+     "n_tie": 0,
+     "bca95": [
+      -33.480096091689845,
+      -15.08397971106672
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 123.0,
+      "p": 3.33105924710253e-06,
+      "p_approx": 1.4163467047975986e-05,
+      "p_exact": 3.33105924710253e-06,
+      "rank_biserial": -0.7515151515151515
+     }
+    },
+    "second pass": {
+     "n": 44,
+     "mean_first": 25.04965131500595,
+     "mean_second": 48.44067709427736,
+     "mean_diff": -23.39102577927142,
+     "n_first_greater": 10,
+     "n_first_less": 34,
+     "n_tie": 0,
+     "bca95": [
+      -34.17685250551025,
+      -12.110555323523032
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 175.0,
+      "p": 9.716973011109076e-05,
+      "p_approx": 0.00018811717317028444,
+      "p_exact": 9.716973011109076e-05,
+      "rank_biserial": -0.6464646464646465
+     }
+    },
+    "mean of the two passes": {
+     "n": 44,
+     "mean_first": 24.009509845803642,
+     "mean_second": 47.54918148620388,
+     "mean_diff": -23.539671640400243,
+     "n_first_greater": 9,
+     "n_first_less": 35,
+     "n_tie": 0,
+     "bca95": [
+      -32.98149299997369,
+      -14.885373066492791
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 131.0,
+      "p": 5.938543836236931e-06,
+      "p_approx": 2.1573543395721745e-05,
+      "p_exact": 5.938543836236931e-06,
+      "rank_biserial": -0.7353535353535353
+     }
+    }
+   }
+  },
+  "37 routes not touched by training samples": {
+   "n_routes": 37,
+   "routes": [
+    "2534",
+    "2204",
+    "2513",
+    "3561",
+    "3086",
+    "17752",
+    "2201",
+    "3540",
+    "1790",
+    "3436",
+    "23687",
+    "2790",
+    "2283",
+    "23771",
+    "2084",
+    "28087",
+    "2115",
+    "2082",
+    "2127",
+    "1773",
+    "2664",
+    "3248",
+    "1711",
+    "1956",
+    "14194",
+    "17563",
+    "3936",
+    "28099",
+    "2050",
+    "2709",
+    "26458",
+    "2390",
+    "2416",
+    "14842",
+    "3144",
+    "2144",
+    "3364"
+   ],
+   "F1 share of steps with L < 1.5 m": {
+    "first pass": {
+     "n": 37,
+     "mean_first": 1.422908435848526,
+     "mean_second": 26.553123408525757,
+     "mean_diff": -25.13021497267723,
+     "n_first_greater": 0,
+     "n_first_less": 37,
+     "n_tie": 0,
+     "bca95": [
+      -31.617551222890658,
+      -19.058452548380522
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.4551915228366852e-11,
+      "p_approx": 1.140214479510659e-07,
+      "p_exact": 1.4551915228366852e-11,
+      "rank_biserial": -1.0
+     }
+    },
+    "second pass": {
+     "n": 37,
+     "mean_first": 1.2210469192058602,
+     "mean_second": 29.471078976234576,
+     "mean_diff": -28.250032057028722,
+     "n_first_greater": 0,
+     "n_first_less": 37,
+     "n_tie": 0,
+     "bca95": [
+      -35.5082700875437,
+      -21.4780202746603
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.4551915228366852e-11,
+      "p_approx": 1.140214479510659e-07,
+      "p_exact": 1.4551915228366852e-11,
+      "rank_biserial": -1.0
+     }
+    },
+    "mean of the two passes": {
+     "n": 37,
+     "mean_first": 1.321977677527193,
+     "mean_second": 28.01210119238017,
+     "mean_diff": -26.690123514852978,
+     "n_first_greater": 0,
+     "n_first_less": 37,
+     "n_tie": 0,
+     "bca95": [
+      -33.08915075111655,
+      -20.66988117963213
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.4551915228366852e-11,
+      "p_approx": 1.140214479510659e-07,
+      "p_exact": 1.4551915228366852e-11,
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "F2 standstill time": {
+    "first pass": {
+     "n": 37,
+     "mean_first": 19.827396389051295,
+     "mean_second": 47.36089147739652,
+     "mean_diff": -27.533495088345227,
+     "n_first_greater": 5,
+     "n_first_less": 32,
+     "n_tie": 0,
+     "bca95": [
+      -38.14384997789576,
+      -17.914268202297947
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 68.0,
+      "p": 3.3629185054451227e-06,
+      "p_approx": 1.8946112482199574e-05,
+      "p_exact": 3.3629185054451227e-06,
+      "rank_biserial": -0.8065433854907539
+     }
+    },
+    "second pass": {
+     "n": 37,
+     "mean_first": 22.2634546783805,
+     "mean_second": 48.9818254587409,
+     "mean_diff": -26.718370780360384,
+     "n_first_greater": 8,
+     "n_first_less": 29,
+     "n_tie": 0,
+     "bca95": [
+      -38.973730586796215,
+      -13.210347160577061
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 116.0,
+      "p": 0.00020262791076675057,
+      "p_approx": 0.00038112473736910506,
+      "p_exact": 0.00020262791076675057,
+      "rank_biserial": -0.6699857752489331
+     }
+    },
+    "mean of the two passes": {
+     "n": 37,
+     "mean_first": 21.0454255337159,
+     "mean_second": 48.17135846806872,
+     "mean_diff": -27.12593293435281,
+     "n_first_greater": 7,
+     "n_first_less": 30,
+     "n_tie": 0,
+     "bca95": [
+      -37.3546462615371,
+      -17.18873685221854
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 75.0,
+      "p": 6.7362707341089845e-06,
+      "p_approx": 3.0278971569105205e-05,
+      "p_exact": 6.7362707341089845e-06,
+      "rank_biserial": -0.786628733997155
+     }
+    }
+   }
+  },
+  "24 routes not used to tune the controller": {
+   "n_routes": 24,
+   "routes": [
+    "3086",
+    "17752",
+    "2201",
+    "3540",
+    "2286",
+    "23687",
+    "23901",
+    "2790",
+    "2283",
+    "23771",
+    "2084",
+    "28087",
+    "2115",
+    "2082",
+    "2127",
+    "3248",
+    "1711",
+    "14194",
+    "28099",
+    "26458",
+    "2390",
+    "3144",
+    "3464",
+    "2164"
+   ],
+   "F1 share of steps with L < 1.5 m": {
+    "first pass": {
+     "n": 24,
+     "mean_first": 1.1776170136177742,
+     "mean_second": 26.04330859662846,
+     "mean_diff": -24.865691583010687,
+     "n_first_greater": 0,
+     "n_first_less": 24,
+     "n_tie": 0,
+     "bca95": [
+      -33.625175790441844,
+      -17.16942190370124
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1920928955078125e-07,
+      "p_approx": 1.821529714896801e-05,
+      "p_exact": 1.1920928955078125e-07,
+      "rank_biserial": -1.0
+     }
+    },
+    "second pass": {
+     "n": 24,
+     "mean_first": 1.2154429605997097,
+     "mean_second": 28.884197865993638,
+     "mean_diff": -27.66875490539393,
+     "n_first_greater": 0,
+     "n_first_less": 24,
+     "n_tie": 0,
+     "bca95": [
+      -36.01721043123136,
+      -19.5717578784866
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1920928955078125e-07,
+      "p_approx": 1.821529714896801e-05,
+      "p_exact": 1.1920928955078125e-07,
+      "rank_biserial": -1.0
+     }
+    },
+    "mean of the two passes": {
+     "n": 24,
+     "mean_first": 1.196529987108742,
+     "mean_second": 27.463753231311046,
+     "mean_diff": -26.267223244202302,
+     "n_first_greater": 0,
+     "n_first_less": 24,
+     "n_tie": 0,
+     "bca95": [
+      -34.34937039794669,
+      -18.55553173824858
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 0.0,
+      "p": 1.1920928955078125e-07,
+      "p_approx": 1.821529714896801e-05,
+      "p_exact": 1.1920928955078125e-07,
+      "rank_biserial": -1.0
+     }
+    }
+   },
+   "F2 standstill time": {
+    "first pass": {
+     "n": 24,
+     "mean_first": 17.279104977615052,
+     "mean_second": 44.39838705310864,
+     "mean_diff": -27.11928207549359,
+     "n_first_greater": 4,
+     "n_first_less": 20,
+     "n_tie": 0,
+     "bca95": [
+      -41.39561456923384,
+      -14.344720810808603
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 40.0,
+      "p": 0.0009626150131225586,
+      "p_approx": 0.0016730747221523166,
+      "p_exact": 0.0009626150131225586,
+      "rank_biserial": -0.7333333333333333
+     }
+    },
+    "second pass": {
+     "n": 24,
+     "mean_first": 19.642273043836557,
+     "mean_second": 48.75982203240307,
+     "mean_diff": -29.11754898856651,
+     "n_first_greater": 5,
+     "n_first_less": 19,
+     "n_tie": 0,
+     "bca95": [
+      -43.58515367578959,
+      -14.399208397193776
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 43.0,
+      "p": 0.0013997554779052734,
+      "p_approx": 0.002234577508303178,
+      "p_exact": 0.0013997554779052734,
+      "rank_biserial": -0.7133333333333334
+     }
+    },
+    "mean of the two passes": {
+     "n": 24,
+     "mean_first": 18.460689010725805,
+     "mean_second": 46.57910454275586,
+     "mean_diff": -28.118415532030053,
+     "n_first_greater": 4,
+     "n_first_less": 20,
+     "n_tie": 0,
+     "bca95": [
+      -41.61825403417893,
+      -16.145984306742115
+     ],
+     "wilcoxon": {
+      "n_zero_differences": 0,
+      "statistic": 31.0,
+      "p": 0.00027811527252197266,
+      "p_approx": 0.0006738585313537617,
+      "p_exact": 0.00027811527252197266,
+      "rank_biserial": -0.7933333333333333
+     }
+    }
+   }
+  }
+ },
+ "b_pass_to_pass": {
+  "Golden-6400": {
+   "F1 share of steps with L < 1.5 m": {
+    "sd_of_route_difference": 1.4154734990993465,
+    "icc_1_1": 0.6810004787115631,
+    "mean_first_pass": 1.3131584514527457,
+    "mean_second_pass": 1.118179763632056
+   },
+   "F2 standstill time": {
+    "sd_of_route_difference": 24.734437682779525,
+    "icc_1_1": 0.6729920854080205,
+    "mean_first_pass": 22.969368376601327,
+    "mean_second_pass": 25.04965131500595
+   },
+   "Driving Score": {
+    "sd_of_route_difference": 23.363148188703526,
+    "icc_1_1": 0.7015045908816941,
+    "mean_first_pass": 54.02265284090909,
+    "mean_second_pass": 49.01020600000001
+   }
+  },
+  "Flooded-6400": {
+   "F1 share of steps with L < 1.5 m": {
+    "sd_of_route_difference": 13.921993461077426,
+    "icc_1_1": 0.8030188183913661,
+    "mean_first_pass": 26.803524723090128,
+    "mean_second_pass": 29.283122928651768
+   },
+   "F2 standstill time": {
+    "sd_of_route_difference": 18.288719368809552,
+    "icc_1_1": 0.8384839493996402,
+    "mean_first_pass": 46.6576858781304,
+    "mean_second_pass": 48.44067709427736
+   },
+   "Driving Score": {
+    "sd_of_route_difference": 22.42794470685883,
+    "icc_1_1": 0.6785500894283272,
+    "mean_first_pass": 43.50615770454545,
+    "mean_second_pass": 51.59871895454546
+   }
+  }
+ }
+}

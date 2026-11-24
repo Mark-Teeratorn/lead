@@ -723,3 +723,10 @@ Post hoc, descriptive, no decision rule, no new runs. Reason: at the author's re
 **(b) Pass-to-pass variation.** For each fully loaded 6,400-sample checkpoint: the standard deviation over the 44 routes of the difference between its two passes, and the intraclass correlation ICC(1,1) of analysis N (`icc_1_1`, unchanged), for standstill time, the share of steps with L < 1.5 m and Driving Score.
 
 Script `scripts/evaluation/fullload_sensitivity.py`, result file `docs/provenance/fullload_sensitivity.json`.
+
+**Outcome of Section 34 (24 Nov 2026, 15:28).** Result file `docs/provenance/fullload_sensitivity.json`.
+
+- **(a) 37 routes not touched by training samples**, mean of the two passes: near-stationary plans 1.32 % against 28.01 %, −26.69 pp [−33.09, −20.67]; standstill time 21.05 % against 48.17 %, −27.13 pp [−37.35, −17.19]. First pass −25.13 pp [−31.62, −19.06] and −27.53 pp [−38.14, −17.91]; second pass −28.25 pp [−35.51, −21.48] and −26.72 pp [−38.97, −13.21].
+- **(a) 24 routes not used to tune the controller**, mean of the two passes: near-stationary plans 1.20 % against 27.46 %, −26.27 pp [−34.35, −18.56]; standstill time 18.46 % against 46.58 %, −28.12 pp [−41.62, −16.15]. First pass −24.87 pp [−33.63, −17.17] and −27.12 pp [−41.40, −14.34]; second pass −27.67 pp [−36.02, −19.57] and −29.12 pp [−43.59, −14.40].
+- Both contrasts keep their sign and size on both subsets, with intervals below 0 in every row.
+- **(b) Pass-to-pass variation.** Standard deviation of the per-route difference between the two passes: standstill time 24.73 pp (`Golden-6400`) and 18.29 pp (`Flooded-6400`); Driving Score 23.36 and 22.43 points; near-stationary plans 1.42 pp and 13.92 pp. ICC(1,1): standstill 0.67 and 0.84; Driving Score 0.70 and 0.68; near-stationary plans 0.68 and 0.80.
