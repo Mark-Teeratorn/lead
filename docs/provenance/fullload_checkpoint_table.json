@@ -1,0 +1,125 @@
+{
+ "label": "Means per checkpoint over the 44 routes (two-pass mean for the main 6,400-sample pair); descriptive compilation",
+ "checkpoints": {
+  "Golden-6400": {
+   "tags": [
+    "model_matrix_golden_6400_full",
+    "model_matrix_golden_6400_run2_full"
+   ],
+   "n_routes": 44,
+   "passes": 2,
+   "near_stationary_plans_pct": 1.2156691075424007,
+   "standstill_time_pct": 24.009509845803642,
+   "blocked_time_pct": 14.294941582608983,
+   "route_completion": 71.24420454545454,
+   "driving_score": 51.51642942045455,
+   "collision_events_per_route": 0.7272727272727273,
+   "b2d_driving_efficiency_per_pass": [
+    102.5048216305828,
+    102.24686349880231
+   ],
+   "b2d_routes_with_a_record_per_pass": [
+    43,
+    43
+   ]
+  },
+  "Flooded-6400": {
+   "tags": [
+    "model_matrix_flooded_6400_full",
+    "model_matrix_flooded_6400_run2_full"
+   ],
+   "n_routes": 44,
+   "passes": 2,
+   "near_stationary_plans_pct": 28.04332382587095,
+   "standstill_time_pct": 47.54918148620388,
+   "blocked_time_pct": 0.0,
+   "route_completion": 64.40261363636363,
+   "driving_score": 47.55243832954546,
+   "collision_events_per_route": 0.48863636363636365,
+   "b2d_driving_efficiency_per_pass": [
+    77.18371788541863,
+    81.98211182016666
+   ],
+   "b2d_routes_with_a_record_per_pass": [
+    41,
+    42
+   ]
+  },
+  "Decoupling-6400": {
+   "tags": [
+    "model_matrix_fgbalanced_6400_full"
+   ],
+   "n_routes": 44,
+   "passes": 1,
+   "near_stationary_plans_pct": 1.5777628894616778,
+   "standstill_time_pct": 27.791624812568035,
+   "blocked_time_pct": 15.385344587287557,
+   "route_completion": 71.46295454545455,
+   "driving_score": 47.68847943181818,
+   "collision_events_per_route": 0.8409090909090909,
+   "b2d_driving_efficiency_per_pass": [
+    102.44526400003086
+   ],
+   "b2d_routes_with_a_record_per_pass": [
+    43
+   ]
+  },
+  "Golden-1600": {
+   "tags": [
+    "model_matrix_golden_1600_full"
+   ],
+   "n_routes": 44,
+   "passes": 1,
+   "near_stationary_plans_pct": 4.92280391826196,
+   "standstill_time_pct": 24.92781260406211,
+   "blocked_time_pct": 1.262595434652951,
+   "route_completion": 69.92477272727272,
+   "driving_score": 52.83005161363637,
+   "collision_events_per_route": 0.6590909090909091,
+   "b2d_driving_efficiency_per_pass": [
+    97.83300283997727
+   ],
+   "b2d_routes_with_a_record_per_pass": [
+    43
+   ]
+  },
+  "Flooded-1600": {
+   "tags": [
+    "model_matrix_flooded_1600_full"
+   ],
+   "n_routes": 44,
+   "passes": 1,
+   "near_stationary_plans_pct": 8.33947267858583,
+   "standstill_time_pct": 33.41316923061636,
+   "blocked_time_pct": 1.9042547945576833,
+   "route_completion": 74.32954545454545,
+   "driving_score": 46.56228025,
+   "collision_events_per_route": 0.8636363636363636,
+   "b2d_driving_efficiency_per_pass": [
+    102.30367828745679
+   ],
+   "b2d_routes_with_a_record_per_pass": [
+    43
+   ]
+  },
+  "Base-Rerun": {
+   "tags": [
+    "base_run2"
+   ],
+   "n_routes": 44,
+   "passes": 1,
+   "near_stationary_plans_pct": 13.239095584764671,
+   "standstill_time_pct": 36.27799930216923,
+   "blocked_time_pct": 0.367973886344593,
+   "route_completion": 71.9259090909091,
+   "driving_score": 42.59997390909091,
+   "collision_events_per_route": 1.1136363636363635,
+   "b2d_driving_efficiency_per_pass": [
+    88.5590348688639
+   ],
+   "b2d_routes_with_a_record_per_pass": [
+    43
+   ]
+  }
+ }
+}
