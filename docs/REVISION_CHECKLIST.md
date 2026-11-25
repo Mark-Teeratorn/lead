@@ -1,6 +1,6 @@
 # Revision checklist (second revision, after the review of 17 November 2026)
 
-Updated 24 Nov 2026, 23:32. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
+Updated 25 Nov 2026, 10:21. `[x]` = done and committed. `[ ]` = not done; the note says how far it is.
 
 ## 1. Analyses and checks
 
@@ -94,3 +94,15 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 - [ ] Trainer log details of the decoupling model
 - [ ] Whether the expert weights are released, and where the repository is hosted
 - [ ] 219-route check of Golden-1600 (deferred by the author until the plan is done)
+
+## 7. Work of 25 November (after the re-review)
+
+- [x] Final integrity check, data and claims: about 389 statements and 16 rule verdicts checked against the result files; all numbers agree. Two points of wording and reporting corrected (collision wording; statements on pre-specification), with 12 medium and 25 minor points
+- [x] Final integrity check, references: all 49 exist; one co-author added; the loading fault is now attributed to our own serving script, not to the FlashDrive release
+- [x] Author's decisions: the earlier evaluation series stays out of the paper; names `Balanced` and `Hazard-heavy` replace `Golden` and `Flooded` in text, tables and figures; delivery by push to the fork
+- [x] Main text shortened from about 18,000 to about 13,800 words; detail moved to Supplementary Sections S4.3 to S4.11; repeated intervals removed from the introduction, discussion and conclusion; Table 6 (means of the six checkpoints) added
+- [x] Rebuilt and pushed (commit 7cfb7a61): main text 29 pages, Supplement 13 pages, 0 unsupported numbers in both
+- [ ] Last consistency read of the shortened text (running), then its corrections
+- [ ] Formatting: references in order of first citation, published versions of four preprints, style of the reference list
+- [ ] Process record (being compiled; kept outside git because the fork is public)
+- [ ] Open for the author: title (the integrity check finds "The Inertia Problem in ..." stronger than the body), target journal, statements, DOI, weights, trainer log

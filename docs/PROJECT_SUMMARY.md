@@ -1,6 +1,6 @@
 # Project summary
 
-Written 21 November 2026, 12:09; results updated 24 Nov 2026, 22:40. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
+Written 21 November 2026, 12:09; results updated 25 Nov 2026, 10:21. Branch `revision-round1`. For the day-to-day state see `docs/REVISION_CHECKLIST.md`.
 
 ## What the project is
 
@@ -65,6 +65,8 @@ Main measures: share of steps with a near-stationary plan (planned path shorter 
 
 - **History-swap test (added 24 Nov, exploratory).** At low speed the ego history of Flooded-6400 was replaced by one that reports motion at 4 m/s. It then planned to hold its speed more often (84.29 % against 52.29 %; +32.00 pp, interval [22.63, 36.04]) and never planned to brake to rest. So its controls depend on the ego history. The rule fixed in advance ties stay-put plans to an at-rest history only if the hold-speed share falls; it rose, so the paper reports the dependence without claiming the mechanism is demonstrated. Golden-6400 was too rarely at low speed for a reading.
 - **Efficiency wording (24 Nov).** The abstract, discussion and conclusion now say that Golden-6400 was more efficient at a Driving Score that was not detectably different; labelled post hoc.
+
+- **State on 25 Nov.** Re-review (Major Revision, wording and disclosure only) and final integrity check are done and their corrections applied. The paper now calls the mixes Balanced (dataset name golden) and Hazard-heavy (flooded). Main text about 13,800 words on 29 pages with Tables 1 to 6 and Figures 1 to 5; Supplement 13 pages (S3.1 to S3.4, S4.1 to S4.11). All evaluation runs are finished; nothing is running on the GPU.
 
 ## What is still running or open
 
