@@ -7,6 +7,9 @@ import sys
 from pathlib import Path
 import docx
 from docx.shared import Pt, Inches, RGBColor
+
+# Display width of a figure relative to the text width (author's request: Figure 1 smaller).
+FIG_SCALE = {"1": 0.8}
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
@@ -223,7 +226,7 @@ def main(txt_path=TXT_PATH, docx_path=DOCX_PATH):
             if img_path.exists():
                 p = doc.add_paragraph()
                 format_paragraph_spacing(p, space_before=8, space_after=4, line_spacing=1.0, align=WD_ALIGN_PARAGRAPH.CENTER)
-                p.add_run().add_picture(str(img_path), width=Inches(6))
+                p.add_run().add_picture(str(img_path), width=Inches(6 * FIG_SCALE.get(fig_n, 1.0)))
             else:
                 print(f"Warning: figure file missing: {img_path}")
                 caption_text = "[figure file missing] " + caption_text

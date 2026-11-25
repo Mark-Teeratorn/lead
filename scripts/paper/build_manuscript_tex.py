@@ -11,6 +11,14 @@ The .txt conventions are those of build_manuscript_docx.py: first line = title, 
 and a "%%% REVISION NOTES ... %%% END NOTES" block that is skipped.
 """
 import argparse
+
+# Display width of a figure relative to the text width (author's request: Figure 1 smaller).
+FIG_SCALE = {1: 0.8}
+
+
+def bm_scale(k):
+    s = FIG_SCALE.get(k, 1.0)
+    return "" if s == 1.0 else f"{s:g}"
 import re
 import shutil
 from pathlib import Path
@@ -200,7 +208,7 @@ def build(txt_path=TXT_PATH, out_dir=OUT_DIR):
             if not src.exists():
                 raise SystemExit(f"figure file missing: {src}")
             shutil.copyfile(src, out_dir / "figures" / src.name)
-            out += ["\\begin{figure}[htbp]", "\\centering", f"\\includegraphics[width=\\linewidth,height=0.8\\textheight,keepaspectratio]{{{src.name}}}",
+            out += ["\\begin{figure}[htbp]", "\\centering", f"\\includegraphics[width={bm_scale(k)}\\linewidth,height=0.8\\textheight,keepaspectratio]{{{src.name}}}",
                     "\\caption{" + inline(cap, n_refs, stats) + "}", "\\end{figure}", ""]
             stats["figures"] += 1
             i += 1
