@@ -1,0 +1,15 @@
+{
+ "label": "Position match of long non-blocked stops, restricted to the seven runs of the 6,400-sample checkpoints reported in the manuscript (subset sum of fullload_review_additions.json; no new analysis)",
+ "runs": [
+  "G1",
+  "G2",
+  "F1",
+  "F2",
+  "D",
+  "GN",
+  "FN"
+ ],
+ "at_collision_position": 54,
+ "on_route_with_collision": 76,
+ "match_rate_on_routes_with_a_collision_pct": 71.05263157894737
+}
