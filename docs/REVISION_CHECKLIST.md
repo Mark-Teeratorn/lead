@@ -81,7 +81,7 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 ## 5. Rest of the pipeline
 
 - [x] Final integrity check (24 and 25 November; see section 7)
-- [ ] Formatting, including LaTeX for the supplement
+- [x] Formatting in a generic layout, including LaTeX for the supplement (25 November); journal template when the journal is chosen
 - [ ] Process record: compiled on 25 November, kept outside git (`outputs/pipeline_20261124_final/paper_creation_process_en.md`); the author decides whether it is added
 
 ## 6. Needed from the author
@@ -102,7 +102,7 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 - [x] Author's decisions: the earlier evaluation series stays out of the paper; names `Balanced` and `Hazard-heavy` replace `Golden` and `Flooded` in text, tables and figures; delivery by push to the fork
 - [x] Main text shortened from about 18,000 to about 13,800 words; detail moved to Supplementary Sections S4.3 to S4.11; repeated intervals removed from the introduction, discussion and conclusion; Table 6 (means of the six checkpoints) added
 - [x] Rebuilt and pushed (commit 7cfb7a61): main text 29 pages, Supplement 13 pages, 0 unsupported numbers in both
-- [ ] Last consistency read of the shortened text (running), then its corrections
-- [ ] Formatting: references in order of first citation, published versions of four preprints, style of the reference list
+- [x] Last consistency read of the shortened text: no number or caveat lost; 57 corrections applied (two restored rules that the text invokes)
+- [x] Formatting: references numbered in order of first citation; three preprints cited with their published versions; LaTeX builds without layout warnings (main text 30 pages, about 14,400 words; Supplement 13 pages). Left for the journal stage: style of the reference list, abstract length (373 words), journal template
 - [ ] Process record (being compiled; kept outside git because the fork is public)
 - [ ] Open for the author: title (the integrity check finds "The Inertia Problem in ..." stronger than the body), target journal, statements, DOI, weights, trainer log
