@@ -64,10 +64,10 @@
 \citation{ref22}
 \citation{ref4}
 \citation{ref3,ref4}
+\citation{ref4}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Methodology}{3}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Problem Formulation and Dual-System Architecture}{3}{subsection.3.1}\protected@file@percent }
-\citation{ref4}
 \citation{ref3,ref4}
 \citation{ref3,ref4}
 \citation{ref3,ref4}
@@ -97,25 +97,25 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}The Matched Pair}{12}{subsection.4.3}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces \texttt  {Balanced\mbox  {-}6400} / \texttt  {Hazard\mbox  {-}heavy\mbox  {-}6400} on 44 routes with the default controller, first pass. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. We specified F1 and F2 before the runs; all other rows are descriptive. For reference, the unadapted policy (\texttt  {Base\mbox  {-}Rerun}, one pass) had near-stationary plans in 13.24 \% of steps and a standstill time of 36.28 \%. The three plan rows at 0.5 m/s or less use the 35 routes with at least 20 such steps in both arms.}}{12}{table.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Empirical cumulative distribution of the predicted trajectory extent L over all logged steps of the 44 routes: Balanced-6400 and Hazard-heavy-6400 (both passes pooled), Decoupling-6400 and the unadapted policy (Base-Rerun; one pass each). Logarithmic axis; values below 0.1 m are shown at 0.1 m. Dotted lines mark 0.64, 1.5 and 2.0 m. The curves pool the steps of all routes, so their values at 1.5 m differ from the means of per-route shares given in the text (28.04 \% and 13.24 \%), in which every route has the same weight.}}{13}{figure.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces \texttt  {Balanced\mbox  {-}6400} / \texttt  {Hazard\mbox  {-}heavy\mbox  {-}6400} on 44 routes with the default controller: first pass, second pass and the per-route mean of the two passes. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. R1 to R3 are the measures of the repeat rule, which is decided on the second pass alone; all other entries are descriptive. \texttt  {Base\mbox  {-}Rerun} (one pass): near-stationary plans 13.24 \%, standstill time 36.28 \%, Driving Score 42.60.}}{14}{table.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Share of steps with a near-stationary plan (L \ensuremath  {<} 1.5 m) on each of the 44 routes for Balanced-6400 and Hazard-heavy-6400 as the mean of the two passes, sorted by the paired difference. Dashed lines are the 44-route means. An asterisk marks the 7 routes touched by training samples and a dagger the 20 controller-tuning routes.}}{15}{figure.4}\protected@file@percent }
 \citation{ref22}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces \texttt  {Balanced\mbox  {-}6400} / \texttt  {Hazard\mbox  {-}heavy\mbox  {-}6400} on 44 routes with the default controller: first pass, second pass and the per-route mean of the two passes. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. R1 to R3 are the measures of the repeat rule, which is decided on the second pass alone; all other entries are descriptive. \texttt  {Base\mbox  {-}Rerun} (one pass): near-stationary plans 13.24 \%, standstill time 36.28 \%, Driving Score 42.60.}}{15}{table.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Share of steps with a near-stationary plan (L \ensuremath  {<} 1.5 m) on each of the 44 routes for Balanced-6400 and Hazard-heavy-6400 as the mean of the two passes, sorted by the paired difference. Dashed lines are the 44-route means. An asterisk marks the 7 routes touched by training samples and a dagger the 20 controller-tuning routes.}}{16}{figure.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}The Matched Pair without the Standstill Gate}{17}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}The Matched Pair without the Standstill Gate}{16}{subsection.4.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces The two checkpoints of the main pair on 44 routes without the standstill gate (one pass each). Columns 2 and 3: gate-off run / per-route mean of the two default passes of the same checkpoint. Column 4: \texttt  {Balanced\mbox  {-}6400} / \texttt  {Hazard\mbox  {-}heavy\mbox  {-}6400}, both without the gate. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. Exploratory.}}{17}{table.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.5}The Decoupling Checkpoint}{17}{subsection.4.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces The two checkpoints of the main pair on 44 routes without the standstill gate (one pass each). Columns 2 and 3: gate-off run / per-route mean of the two default passes of the same checkpoint. Column 4: \texttt  {Balanced\mbox  {-}6400} / \texttt  {Hazard\mbox  {-}heavy\mbox  {-}6400}, both without the gate. Mean of per-route values, with the paired difference and its 95 \% BCa interval in parentheses. Exploratory.}}{18}{table.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Mean standstill time of Balanced-6400 and Hazard-heavy-6400 on the 44 routes under the default controller (mean of the two passes) and the gate-off controller (one pass). The hatched part of each bar is blocked time (at least 5 s commanded to accelerate without moving); the solid part is all other standstill. Error bars are 95 \% percentile bootstrap intervals over routes for the whole bar.}}{19}{figure.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Means over the 44 routes for the three fine-tuned checkpoints and the unadapted policy (descriptive). Plans: share of steps with a near-stationary plan. Still and Blocked: standstill time and blocked time. RC: route completion. DS: Driving Score. Coll.: collision events per route. DE: Bench2Drive Driving Efficiency per pass, on the routes with a record (41 to 43). For the two checkpoints of the main pair the values are means of their two passes (for DE, the value of each pass); the other rows have one pass. Every row is one training run, and a difference between rows with one pass includes pass-to-pass variation. Tests and intervals are in Sections 4.3 to 4.6 and in Supplementary Sections S4.4 to S4.9.}}{20}{table.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}The Fine-Tuned Checkpoints against the Unadapted Policy (Post Hoc)}{20}{subsection.4.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Mean standstill time of Balanced-6400 and Hazard-heavy-6400 on the 44 routes under the default controller (mean of the two passes) and the gate-off controller (one pass). The hatched part of each bar is blocked time (at least 5 s commanded to accelerate without moving); the solid part is all other standstill. Error bars are 95 \% percentile bootstrap intervals over routes for the whole bar.}}{18}{figure.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Means over the 44 routes for the three fine-tuned checkpoints and the unadapted policy (descriptive). Plans: share of steps with a near-stationary plan. Still and Blocked: standstill time and blocked time. RC: route completion. DS: Driving Score. Coll.: collision events per route. DE: Bench2Drive Driving Efficiency per pass, on the routes with a record (41 to 43). For the two checkpoints of the main pair the values are means of their two passes (for DE, the value of each pass); the other rows have one pass. Every row is one training run, and a difference between rows with one pass includes pass-to-pass variation. Tests and intervals are in Sections 4.3 to 4.6 and in Supplementary Sections S4.4 to S4.9.}}{19}{table.6}\protected@file@percent }
 \citation{ref5,ref7,ref9}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Motion-History Swap Test (Exploratory)}{21}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}The Fine-Tuned Checkpoints against the Unadapted Policy (Post Hoc)}{20}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Motion-History Swap Test (Exploratory)}{20}{subsection.4.7}\protected@file@percent }
 \citation{ref5}
 \citation{ref40}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion and Limitations}{22}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion and Limitations}{21}{section.5}\protected@file@percent }
 \citation{ref9}
 \citation{ref5}
 \bibcite{ref1}{{1}{}{{}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{23}{section.6}\protected@file@percent }
 \bibcite{ref2}{{2}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{24}{section.6}\protected@file@percent }
 \bibcite{ref3}{{3}{}{{}}{{}}}
 \bibcite{ref4}{{4}{}{{}}{{}}}
 \bibcite{ref5}{{5}{}{{}}{{}}}
@@ -164,4 +164,4 @@
 \bibcite{ref48}{{48}{}{{}}{{}}}
 \bibcite{ref49}{{49}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\gdef \@abspage@last{28}
+\gdef \@abspage@last{27}
