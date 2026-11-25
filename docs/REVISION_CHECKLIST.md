@@ -80,9 +80,9 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 
 ## 5. Rest of the pipeline
 
-- [ ] Final integrity check
+- [x] Final integrity check (24 and 25 November; see section 7)
 - [ ] Formatting, including LaTeX for the supplement
-- [ ] Process summary
+- [ ] Process record: compiled on 25 November, kept outside git (`outputs/pipeline_20261124_final/paper_creation_process_en.md`); the author decides whether it is added
 
 ## 6. Needed from the author
 
@@ -90,7 +90,7 @@ Restructured on 23 and 24 November: the main text reports the fully loaded runs 
 - [ ] Author contributions, funding, competing interests
 - [ ] Sentence on verification of AI-assisted work
 - [x] Rendering quality used for data collection: Epic, from the code (lead2alpa `scripts/multirig_collect_budget.sh` passes no `--quality`; the default of `collect_multirig.py` has been `Epic` in every version). No CARLA log of the collection machine is on this machine
-- [ ] Permission to push to GitHub and create a DOI archive
+- [ ] DOI archive (the branch was pushed to the author's fork on 25 November at the author's request; the DOI needs a release by the author)
 - [ ] Trainer log details of the decoupling model
 - [ ] Whether the expert weights are released, and where the repository is hosted
 - [ ] 219-route check of Golden-1600 (deferred by the author until the plan is done)
