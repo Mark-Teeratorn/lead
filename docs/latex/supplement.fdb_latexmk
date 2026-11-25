@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1795603192 "supplement.tex" "supplement.pdf" "supplement" 1795603193
+["pdflatex"] 1795614626 "supplement.tex" "supplement.pdf" "supplement" 1795614626
   "/etc/texmf/web2c/texmf.cnf" 1794651069 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm1095.tfm" 1136768653 3584 929cdff2b7a8c11bd4d49fd68cb0ae70 ""
@@ -139,9 +139,9 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1794651073 128028 f533b797fba58d231669ea19e894e23e ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1794651074 1405658 7e8cbe3885173bd5b81786dfb104309c ""
-  "supplement.aux" 1795603193 1699 5018f78eb8be2f901e76655c95b7162b "pdflatex"
-  "supplement.out" 1795603193 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "supplement.tex" 1795603181 55832 a304047de22c97a1f5cace7b272fc0ca ""
+  "supplement.aux" 1795614626 1699 5018f78eb8be2f901e76655c95b7162b "pdflatex"
+  "supplement.out" 1795614626 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "supplement.tex" 1795614623 55742 e2538b0b2a11393b8605631e4c54571c ""
   (generated)
   "supplement.aux"
   "supplement.log"
