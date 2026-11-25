@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 
 ROOT = Path("/home/aimslab/lead")
 STATES = [(7, "(a) typical state"), (120, "(b) largest difference")]
-EXPERTS = [("Golden-6400-Full", "Golden-6400", "#0072B2"), ("Flooded-6400-Matched-Full", "Flooded-6400", "#D55E00"),
+EXPERTS = [("Golden-6400-Full", "Balanced-6400", "#0072B2"), ("Flooded-6400-Matched-Full", "Hazard-heavy-6400", "#D55E00"),   # paper names; files keep the dataset names
            ("Balanced-6400-Full", "Decoupling-6400", "#009E73")]
 STAY = 0.64     # stay-put plan: L < 0.64 m (dotted line)
 GATE = 1.5      # near-stationary plan, first clause of the standstill gate: L < 1.5 m (dashed line)

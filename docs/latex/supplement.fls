@@ -748,6 +748,11 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmbx12.tfm
+INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
+INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
+INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
+INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
+INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmtt10.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmr10.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/lmmi10.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/lmsy10.tfm
@@ -755,11 +760,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmr8.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmr6.tfm
-INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
-INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
-INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
-INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
-INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmtt10.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmbx10.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmbx8.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmbx6.tfm

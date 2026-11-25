@@ -3,7 +3,7 @@
 
 figure_1.png   fig_pipeline: inference/control pipeline schematic
 Second series (checkpoints loaded in full; main text):
-figure_3.png   fig_full_extent_cdf: empirical CDFs of the predicted extent L (Golden-6400, Flooded-6400, Decoupling-6400, Base-Rerun)
+figure_3.png   fig_full_extent_cdf: empirical CDFs of the predicted extent L (Balanced-6400 = golden_6400, Hazard-heavy-6400 = flooded_6400, Decoupling-6400, Base-Rerun)
 figure_4.png   fig_full_paired_plans: per-route share of near-stationary plans, mean of the two passes (dumbbell)
 figure_5.png   fig_full_by_controller: checkpoint x controller standstill, split into blocked time and the rest
 First series (partly loaded models; supplement):
@@ -255,7 +255,7 @@ def load_full():
 
 def fig_full_extent_cdf(arms):
     fig, ax = plt.subplots(figsize=(6.5, 4.2))
-    for keys, name, c, ls in ((("G1", "G2"), "Golden-6400", C_GOLD, "-"), (("F1", "F2"), "Flooded-6400", C_FLOOD, "-"),
+    for keys, name, c, ls in ((("G1", "G2"), "Balanced-6400", C_GOLD, "-"), (("F1", "F2"), "Hazard-heavy-6400", C_FLOOD, "-"),
                               (("D",), "Decoupling-6400", C_DEC, "-"), (("B",), "Base-Rerun", C_BASE, "--")):
         L = np.concatenate([np.asarray(arms[k][r]["L"], float) for k in keys for r in CANONICAL_44])
         print(f"fig_full_extent_cdf: {name}: {len(L)} steps, share L<1.5 m pooled over steps {100 * np.mean(L < 1.5):.2f} %")
@@ -288,8 +288,8 @@ def fig_full_paired_plans(arms):
     y = np.arange(len(routes))
     fig, ax = plt.subplots(figsize=(6.5, 9))
     ax.hlines(y, vg, vf, color="0.7", lw=1.5, zorder=1)
-    ax.scatter(vg, y, color=C_GOLD, s=28, zorder=2, label="Golden-6400")
-    ax.scatter(vf, y, color=C_FLOOD, s=28, zorder=2, label="Flooded-6400")
+    ax.scatter(vg, y, color=C_GOLD, s=28, zorder=2, label="Balanced-6400")
+    ax.scatter(vf, y, color=C_FLOOD, s=28, zorder=2, label="Hazard-heavy-6400")
     ax.axvline(vg.mean(), color=C_GOLD, ls="--", lw=1.2)
     ax.axvline(vf.mean(), color=C_FLOOD, ls="--", lw=1.2)
     tuning = {str(r) for r in json.loads(MANIFEST.read_text())["H"]["tuning_routes_union"]}
@@ -315,7 +315,7 @@ def fig_full_by_controller(arms):
             v, b = val(keys, ss), val(keys, blk).mean()
             m, (lo, hi) = v.mean(), route_bootstrap_ci(v)
             c, xpos = (C_GOLD, C_FLOOD)[i], x[j] + (i - 0.5) * w
-            ax.bar(xpos, m - b, w, color=c, edgecolor="white", label=("Golden-6400", "Flooded-6400")[i] if j == 0 else None)
+            ax.bar(xpos, m - b, w, color=c, edgecolor="white", label=("Balanced-6400", "Hazard-heavy-6400")[i] if j == 0 else None)
             ax.bar(xpos, b, w, bottom=m - b, color=c, alpha=0.45, hatch="///", edgecolor="white")
             ax.errorbar(xpos, m, yerr=[[m - lo], [hi - m]], color="k", capsize=3, lw=1)
             print(f"fig_full_by_controller: {'+'.join(keys)}: standstill {m:.2f} %, of which blocked {b:.2f} %")

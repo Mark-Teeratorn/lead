@@ -788,3 +788,7 @@ All 49 references exist; 48 are bibliographically correct and one lacked a co-au
 ### Summary table of the checkpoints (recorded 25 Nov 2026, 09:46; `scripts/evaluation/fullload_checkpoint_table.py`, `docs/provenance/fullload_checkpoint_table.json`)
 
 A descriptive compilation for a new table of the manuscript, asked for in the re-review: the mean over the 44 routes of six measures and the Bench2Drive Driving Efficiency for the six checkpoints (two-pass mean for the main 6,400-sample pair). No test and no new comparison. Every value is a mean that the result files of Sections 25 to 31 already hold, with one exception: the blocked time of `Base-Rerun` (0.37 %) had not been reported before.
+
+### Names used in the manuscript from 25 Nov 2026, 10:19
+
+At the author's request the manuscript, its tables and its figures name the mixes and checkpoints by description: `Balanced` for the datasets and checkpoints called `Golden` in this addendum, in the result files and in the code, and `Hazard-heavy` for those called `Flooded`. The decoupling checkpoint keeps its name in the manuscript; in the result files it appears as `Balanced-6400` or `fgbalanced`. No result is affected. The main text was shortened on the same day from about 18,000 to about 13,800 words by moving detail to Supplementary Sections S4.3 to S4.11; no number was removed from the paper, and a table of the means of the six checkpoints was added (Table 6).
