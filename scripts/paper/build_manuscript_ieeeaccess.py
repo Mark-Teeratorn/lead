@@ -172,7 +172,7 @@ def build(txt_path, out_dir=OUT_DIR):
         "",
         "\\title{" + title + "}",
         "\\author{" + ieee_authors() + "}",
-        "\\address[1]{" + authors.AFFILIATION + " (e-mail: " + "; ".join(authors.emails()) + ")}",
+        "\\address[1]{" + authors.AFFILIATION + "}",   # e-mail only in the corresponding-author line, as in most IEEE Access papers
         "",
         "\\markboth",
         "{" + header_name() + " \\headeretal: " + SHORT_TITLE + "}",
