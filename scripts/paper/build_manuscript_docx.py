@@ -264,8 +264,7 @@ def main(txt_path=TXT_PATH, docx_path=DOCX_PATH):
             format_paragraph_spacing(p, space_before=0, space_after=12, line_spacing=1.15, align=WD_ALIGN_PARAGRAPH.CENTER)
             add_formatted_text_and_math(p, line, size_pt=16, default_bold=True)
             for text, size, italic in ((authors.name_list(), 12, False), (authors.AFFILIATION, 11, True),
-                                       ("; ".join(authors.emails()), 10, False),
-                                       ("Corresponding author: " + authors.names()[authors.CORRESPONDING], 10, False)):
+                                       (authors.corresponding_line(), 10, False)):
                 p = doc.add_paragraph()
                 format_paragraph_spacing(p, space_before=0, space_after=2, line_spacing=1.0, align=WD_ALIGN_PARAGRAPH.CENTER)
                 r = p.add_run(text)

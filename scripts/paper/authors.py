@@ -2,9 +2,11 @@
 
 AUTHORS = [
     ("Teeratorn", "Kanjanarajit", "teeratorn6810@gmail.com"),
-    ("Noppawit", "Tharakittikirati", "n.tharakittikirati@gmail.com"),
-    ("Paveetas", "Anantachaimontree", "tuntpavee@gmail.com"),
+    ("Noppawit", "Tharakittikirati", None),
+    ("Paveetas", "Anantachaimontree", None),
+    ("Poom", "Konghuayrob", None),     # advisor (Assistant Professor); IEEE bylines carry no academic titles
 ]
+# Only the corresponding author's e-mail is printed.
 AFFILIATION = "King Mongkut's Institute of Technology Ladkrabang, Bangkok 10520, Thailand"
 CORRESPONDING = 0          # index into AUTHORS
 # ORCID iDs (entered in the IEEE submission system; IEEE adds the icon at publication)
@@ -24,11 +26,19 @@ def name_list():
 
 
 def emails():
-    return [e for _, _, e in AUTHORS]
+    return [e for _, _, e in AUTHORS if e]
+
+
+def corresponding_line():
+    return "Corresponding author: " + names()[CORRESPONDING] + " (e-mail: " + AUTHORS[CORRESPONDING][2] + ")"
 
 
 def latex_author_block():
     """\\author{...} body for the article class."""
-    mails = ", ".join("\\nolinkurl{" + e + "}" for e in emails())
-    return (name_list() + "\\\\[4pt]\n\\normalsize " + AFFILIATION.replace("'", "'") + "\\\\\n\\small " + mails
-            + "\\\\\n\\small Corresponding author: " + names()[CORRESPONDING])
+    # the article class sets \\author in a tabular, which does not wrap: two lines of names
+    n = names()
+    k = (len(n) + 1) // 2
+    byline = ", ".join(n[:k]) + ",\\\\\n" + (", ".join(n[k:-1]) + " and " + n[-1] if len(n) - k > 1 else "and " + n[-1]) \
+        if len(n) > 2 else name_list()
+    return (byline + "\\\\[4pt]\n\\normalsize " + AFFILIATION + "\\\\\n\\small Corresponding author: "
+            + names()[CORRESPONDING] + " (e-mail: \\nolinkurl{" + AUTHORS[CORRESPONDING][2] + "})")

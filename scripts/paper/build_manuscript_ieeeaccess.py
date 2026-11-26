@@ -178,8 +178,7 @@ def build(txt_path, out_dir=OUT_DIR):
         "{" + header_name() + " \\headeretal: " + SHORT_TITLE + "}",
         "{" + header_name() + " \\headeretal: " + SHORT_TITLE + "}",
         "",
-        "\\corresp{Corresponding author: " + authors.names()[authors.CORRESPONDING]
-        + " (e-mail: " + authors.emails()[authors.CORRESPONDING] + ").}",
+        "\\corresp{" + authors.corresponding_line() + ".}",
         "",
         "\\begin{abstract}",
         abstract.strip(),
