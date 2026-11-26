@@ -23,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_manuscript_tex as bm  # noqa: E402
+import authors  # noqa: E402
 
 ROOT = Path("/home/aimslab/lead")
 OUT_DIR = ROOT / "docs/latex_ieeeaccess"
@@ -69,6 +70,25 @@ def convert_section_refs(tex, n_sections):
 def split(tex, start, end):
     i, j = tex.index(start), tex.index(end)
     return tex[i + len(start):j], tex[j + len(end):]
+
+
+def ieee_authors():
+    up = ["\\uppercase{" + n + "}\\authorrefmark{1}" for n in authors.names()]
+    return up[0] if len(up) == 1 else ", ".join(up[:-1]) + ", and " + up[-1]
+
+
+def header_name():
+    g, f, _ = authors.AUTHORS[0]
+    return g[0] + ". " + f
+
+
+def biographies(pend):
+    out = []
+    for n in authors.names():
+        out += ["\\begin{IEEEbiographynophoto}{" + n + "}",
+                pend + "biography of " + n + "; IEEE Access asks for one (and usually a photo) for every author]]}",
+                "\\end{IEEEbiographynophoto}", ""]
+    return out
 
 
 def build(txt_path, out_dir=OUT_DIR):
@@ -151,15 +171,15 @@ def build(txt_path, out_dir=OUT_DIR):
         "\\doi{10.1109/ACCESS.0000.DOI}",
         "",
         "\\title{" + title + "}",
-        "\\author{" + pend + "AUTHORS]]}\\authorrefmark{1}}",
-        "\\address[1]{" + pend + "department, institution, city, postcode, country (e-mail)]]}}",
-        "\\tfootnote{" + pend + "funding statement, or delete this line]]}}",
+        "\\author{" + ieee_authors() + "}",
+        "\\address[1]{" + authors.AFFILIATION + " (e-mail: " + "; ".join(authors.emails()) + ")}",
         "",
         "\\markboth",
-        "{" + pend + "Author]]} \\headeretal: " + SHORT_TITLE + "}",
-        "{" + pend + "Author]]} \\headeretal: " + SHORT_TITLE + "}",
+        "{" + header_name() + " \\headeretal: " + SHORT_TITLE + "}",
+        "{" + header_name() + " \\headeretal: " + SHORT_TITLE + "}",
         "",
-        "\\corresp{" + pend + "Corresponding author: name (e-mail)]]}.}",
+        "\\corresp{Corresponding author: " + authors.names()[authors.CORRESPONDING]
+        + " (e-mail: " + authors.emails()[authors.CORRESPONDING] + ").}",
         "",
         "\\begin{abstract}",
         abstract.strip(),
@@ -180,10 +200,7 @@ def build(txt_path, out_dir=OUT_DIR):
         "",
         biblio,
         "",
-        "\\begin{IEEEbiographynophoto}{" + pend + "Author name]]}}",
-        pend + "biography; IEEE Access asks for a biography (and usually a photo) of every author]]}",
-        "\\end{IEEEbiographynophoto}",
-        "",
+        *biographies(pend),
         "\\EOD",
         "",
         "\\end{document}",

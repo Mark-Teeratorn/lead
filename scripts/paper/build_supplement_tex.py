@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+import authors  # noqa: E402
 import build_manuscript_tex as bm  # noqa: E402
 
 TXT_PATH = bm.ROOT / "docs/manuscript_supplement.txt"
@@ -30,7 +31,7 @@ def build(txt_path=TXT_PATH, out_dir=bm.OUT_DIR):
     (out_dir / "figures").mkdir(parents=True, exist_ok=True)
     out = [bm.PREAMBLE.replace("build_manuscript_tex.py from the manuscript .txt source", "build_supplement_tex.py from the supplement .txt source"),
            "\\renewcommand{\\thetable}{S\\arabic{table}}", "\\renewcommand{\\thefigure}{S\\arabic{figure}}",
-           "\\title{" + bm.inline(lines[0], 0, stats) + "}", "\\author{\\pending{[[PENDING: authors and affiliations]]}}",
+           "\\title{" + bm.inline(lines[0], 0, stats) + "}", "\\author{" + authors.latex_author_block() + "}",
            "\\date{}", "", "\\begin{document}", "\\maketitle", ""]
     body, i, pending_caption, fig_seen, tab_seen = lines[1:], 0, None, [], []
     n = len(body)
@@ -101,7 +102,7 @@ def build(txt_path=TXT_PATH, out_dir=bm.OUT_DIR):
     (out_dir / "supplement.tex").write_text("\n".join(out), encoding="utf-8")
     print(f"Saved {out_dir / 'supplement.tex'}")
     print(f"sections {stats['sections']}, subsections {stats['subsections']}, tables {stats['tables']}, figures {stats['figures']}")
-    print(f"PENDING placeholders: {stats['pending']} (plus the author line)")
+    print(f"PENDING placeholders: {stats['pending']} ")
 
 
 if __name__ == "__main__":

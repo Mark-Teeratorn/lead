@@ -7,6 +7,10 @@ import sys
 from pathlib import Path
 import docx
 from docx.shared import Pt, Inches, RGBColor
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import authors  # noqa: E402
 
 # Display width of a figure relative to the text width (author's request: Figure 1 smaller).
 FIG_SCALE = {"1": 0.8}
@@ -204,6 +208,7 @@ def main(txt_path=TXT_PATH, docx_path=DOCX_PATH):
 
     i = 0
     n = len(lines)
+    title_done = False
     while i < n:
         line = lines[i].strip()
         if not line or line == "---":
@@ -253,10 +258,20 @@ def main(txt_path=TXT_PATH, docx_path=DOCX_PATH):
             continue
 
         # Title (first non-empty line)
-        if i == 0:
+        if not title_done:
+            title_done = True
             p = doc.add_paragraph(style="Title")
             format_paragraph_spacing(p, space_before=0, space_after=12, line_spacing=1.15, align=WD_ALIGN_PARAGRAPH.CENTER)
             add_formatted_text_and_math(p, line, size_pt=16, default_bold=True)
+            for text, size, italic in ((authors.name_list(), 12, False), (authors.AFFILIATION, 11, True),
+                                       ("; ".join(authors.emails()), 10, False),
+                                       ("Corresponding author: " + authors.names()[authors.CORRESPONDING], 10, False)):
+                p = doc.add_paragraph()
+                format_paragraph_spacing(p, space_before=0, space_after=2, line_spacing=1.0, align=WD_ALIGN_PARAGRAPH.CENTER)
+                r = p.add_run(text)
+                r.font.size = Pt(size)
+                r.italic = italic
+            p.paragraph_format.space_after = Pt(12)
             i += 1
             continue
 

@@ -22,6 +22,10 @@ def bm_scale(k):
 import re
 import shutil
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import authors  # noqa: E402
 
 ROOT = Path("/home/aimslab/lead")
 TXT_PATH = ROOT / "docs/manuscript_revision_draft.txt"
@@ -187,7 +191,7 @@ def build(txt_path=TXT_PATH, out_dir=OUT_DIR):
     n_refs = len(refs)
     stats = {"pending": 0, "tables": 0, "figures": 0, "sections": 0, "subsections": 0}
 
-    out = [PREAMBLE, "\\title{" + inline(title, 0, stats) + "}", "\\author{\\pending{[[PENDING: authors and affiliations]]}}",
+    out = [PREAMBLE, "\\title{" + inline(title, 0, stats) + "}", "\\author{" + authors.latex_author_block() + "}",
            "\\date{}", "", "\\begin{document}", "\\maketitle", ""]
     body = lines[1:ref_start]
     i, n, pending_caption, expect_sec, cites = 0, len(body), None, 1, 0
@@ -279,7 +283,7 @@ def build(txt_path=TXT_PATH, out_dir=OUT_DIR):
     print(f"Saved {out_dir / 'manuscript.tex'}")
     print(f"sections {stats['sections']}, subsections {stats['subsections']}, tables {stats['tables']}, "
           f"figures {stats['figures']}, references {n_refs}, citation commands {cites}")
-    print(f"PENDING placeholders: {stats['pending']} (plus the author line)")
+    print(f"PENDING placeholders: {stats['pending']} ")
 
 
 if __name__ == "__main__":
