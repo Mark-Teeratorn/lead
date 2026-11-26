@@ -1,0 +1,17 @@
+% Maps the font family "times" that ieeeaccess.cls asks for onto standard Times (psnfss ptm), because the
+% template's own Times font files are not available here. Series "n" (used by the class) = medium.
+\ProvidesFile{t1times.fd}[2026/11/26 times -> ptm for ieeeaccess.cls]
+\DeclareFontFamily{T1}{times}{}
+\DeclareFontShape{T1}{times}{m}{n}{<->ssub * ptm/m/n}{}
+\DeclareFontShape{T1}{times}{m}{it}{<->ssub * ptm/m/it}{}
+\DeclareFontShape{T1}{times}{m}{sl}{<->ssub * ptm/m/sl}{}
+\DeclareFontShape{T1}{times}{m}{sc}{<->ssub * ptm/m/sc}{}
+\DeclareFontShape{T1}{times}{n}{n}{<->ssub * ptm/m/n}{}
+\DeclareFontShape{T1}{times}{n}{it}{<->ssub * ptm/m/it}{}
+\DeclareFontShape{T1}{times}{n}{sl}{<->ssub * ptm/m/sl}{}
+\DeclareFontShape{T1}{times}{n}{sc}{<->ssub * ptm/m/sc}{}
+\DeclareFontShape{T1}{times}{b}{n}{<->ssub * ptm/b/n}{}
+\DeclareFontShape{T1}{times}{b}{it}{<->ssub * ptm/b/it}{}
+\DeclareFontShape{T1}{times}{bx}{n}{<->ssub * ptm/b/n}{}
+\DeclareFontShape{T1}{times}{bx}{it}{<->ssub * ptm/b/it}{}
+\endinput

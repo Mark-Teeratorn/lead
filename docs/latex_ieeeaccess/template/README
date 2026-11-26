@@ -1,0 +1,5 @@
+Place the files of the IEEE Access LaTeX template here (ACCESS_latex_template_20240429:
+ieeeaccess.cls, IEEEtran.cls, IEEEtran.bst, spotcolor.sty, bullet.png, logo.png, notaglinelogo.png and the
+t1-formata-* font files). The official download is linked from
+https://ieeeaccess.ieee.org/authors/submission-guidelines/ ; build_manuscript_ieeeaccess.py copies them next to
+the .tex before compiling.

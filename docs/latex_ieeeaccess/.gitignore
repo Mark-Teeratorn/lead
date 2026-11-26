@@ -1,0 +1,14 @@
+# IEEE Access template files (class, fonts, logos) are IEEE's and are not committed; see template/README
+template/*
+!template/README
+/*.cls
+/*.bst
+/*.sty
+/*.png
+/t1-*
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
