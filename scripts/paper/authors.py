@@ -7,6 +7,10 @@ AUTHORS = [
 ]
 AFFILIATION = "King Mongkut's Institute of Technology Ladkrabang, Bangkok 10520, Thailand"
 CORRESPONDING = 0          # index into AUTHORS
+# ORCID iDs (entered in the IEEE submission system; IEEE adds the icon at publication)
+ORCID = {"Teeratorn Kanjanarajit": "0009-0000-7369-0477"}
+# Disclosure of AI use (IEEE policy: in the Acknowledgment)
+AI_DISCLOSURE = "The authors used AI tools for text editing and grammar assistance."
 
 
 def names():

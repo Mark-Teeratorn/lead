@@ -196,7 +196,7 @@ def build(txt_path, out_dir=OUT_DIR):
         body,
         "",
         "\\section*{Acknowledgment}",
-        pend + "funding, data and code availability, and the disclosure of AI use that IEEE requires]]}",
+        authors.AI_DISCLOSURE + " " + pend + "funding, and data and code availability]]}",
         "",
         biblio,
         "",
