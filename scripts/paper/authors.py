@@ -10,7 +10,8 @@ CORRESPONDING = 0          # index into AUTHORS
 # ORCID iDs (entered in the IEEE submission system; IEEE adds the icon at publication)
 ORCID = {"Teeratorn Kanjanarajit": "0009-0000-7369-0477"}
 # Disclosure of AI use (IEEE policy: in the Acknowledgment)
-AI_DISCLOSURE = "The authors used AI tools for text editing and grammar assistance."
+AI_DISCLOSURE = ("The authors used Claude (Anthropic) for text editing and to improve the grammar and readability "
+                 "of this article. The authors reviewed and edited all output and take full responsibility for the content.")
 
 
 def names():
